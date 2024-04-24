@@ -1,0 +1,115 @@
+#
+# $Id: encoding.properties 07-nov-2005.13:54:52 giglee Exp $
+#
+
+#nested
+nestedSerializationError=serialization error: {0}
+nestedDeserializationError=deserialization error: {0}
+nestedEncodingError=encoding error: {0}
+
+#soap
+soap.malformedArrayType=malformed array type: {0}
+soap.tooManyArrayElements=serialized array has too many elements
+soap.illegalArrayElementPosition=illegal array element position: {0}
+soap.missingArrayElementPosition=missing array element position
+soap.outOfBoundsArrayElementPosition=array element position is out of bounds: {0}
+soap.unexpectedNull=unexpected null
+soap.unexpectedReference=unexpected reference
+soap.unexpectedReferenceElement=unexpected reference element during deserialization; the element \"{0}\" is not defined as a referenceable type
+soap.unexpectedElementType=unexpected element type during deserialization: expected={0], actual={1}
+soap.unexpectedElementName=unexpected element name: expected={0}, actual={1}
+soap.unexpectedElementType=unexpected element type: expected={0}, actual={1}
+soap.unexpectedArrayElementType=unexpected array element type: expected={0}, actual={1}
+soap.nonLocalReference=non-local reference (href): {0}
+soap.context.not.soapSerialization=non-SOAP serialization context
+soap.context.not.soapDeserialization=non-SOAP deserialization context
+soap.missingTrailingBlockID=trailing block elements must have an id attribute
+soap.missingContentID=attachments must have a Content-ID attribute
+soap.malformedArrayDimensions=malformed array dimensions: {0}
+soap.irregularMultiDimensionalArray=multi-dimensional array is not regular
+soap.illegalArrayOffset=illegal array offset: {0}
+soap.unexpectedArrayRank=array has unexpected rank: expected={0}, actual={1}, arrayType={2}
+soap.unexpectedArrayDimensions=array has unexpected dimensions: expected={0}, actual={1}, arrayType={2}
+soap.unexpectedEncodingStyle=unexpected encoding style: expected={0}, actual={1}
+soap.unspecifiedType=cannot encode XML type because it was not specified
+soap.duplicate.data.member=member {0} has already been defined
+soap.incompleteObject=incomplete object encountered while deserializing
+soap.circularReferenceDetected=circular reference detected while serializing: {0}
+soap.missing.attachment.for.id=no attachment with id \"{0}\" found in message
+soap.multiple.attachments.for.id=multiple attachments with the same id \"{0}\" found in message
+soap.missing.id=missing cid for attachment
+soap.nonLocalCID=non \"cid:\" reference: {0}
+soap.invalid.contentID.1=invalid Content-ID: {0}.  Must begin with \"<\".
+soap.invalid.contentID.2=invalid Content-ID: {0}.  Must end with \">\".
+soap.invalid.contentID.3=invalid Content-ID: {0}.  Must end with \"@part-name>\", where \"part-name\" is the name of the local part of the element.
+soap.no.attachment.encoder.and.serializeAsAttachment=serializeAsAttachment specified but no AttachmentEncoder was provided for type: \"{0}\"
+soap.state.wont.notify.without.deserializer=internal error: a deserializer must be registered with a deserialization state before it will accept listeners
+soap.unsupportedType=cannot decode XML type \"{0}\"
+soap.cannot.serialize.type=cannot serialize type \"{0}\"
+soap.null.version=null soap version not allowed.
+soap.id.and.ref=cannot have enc:id and enc:ref attributes on the same element.
+
+# xsd
+xsd.unexpectedElementName=unexpected element name: expected={0}, actual={1}
+xsd.unexpectedElementType=unexpected element type: expected={0}, actual={1}
+xsd.unexpectedNull=unexpected null
+xsd.unknownPrefix=unknown prefix in QName literal: {0}
+xsd.invalid.date=invalid date: {0}
+xsd.invalid.boolean=invalid boolean value: {0}
+xsd.location.att.not.found=location at not found on element
+xsd.attachment.not.found=attachment with id {0} not found in message
+
+#msgs for new types
+xsd.invalid.time=invalid time value: {0}
+xsd.invalid.positiveInteger=invalid positiveInteger value: {0}
+xsd.invalid.nonNegativeInteger=invalid nonNegativeInteger value: {0}
+xsd.invalid.negativeInteger=invalid negativeInteger value: {0}
+xsd.invalid.nonPositiveInteger=invalid nonPositiveInteger value: {0}
+xsd.invalid.unsignedLong=invalid unsignedLong value: {0}
+xsd.invalid.unsignedInt=invalid unsignedInt value: {0}
+xsd.invalid.unsignedShort=invalid unsignedShort value: {0}
+xsd.invalid.unsignedByte=invalid unsignedByte value: {0}
+xsd.invalid.listType=invalid simple tpye in xsd\:list value: {0}
+
+
+# typemapping
+typemapping.nested.exception=type mapping error: {0}
+typemapping.nested.exception.initialization=standard type mapping initialization error: {0}
+typemapping.mechanism.unsupported={0} : is not a supported (de)serialization mechanism
+typemapping.registration.failed.nested.exception=type mapping registration failed: {0}
+typemapping.retrieval.failed.nested.exception=type mapping retrieval failed: {0}
+typemapping.mappingDoesNotSupportEncoding=type mapping does not support the specified encoding: {0}
+typemapping.noMappingForEncoding=there is no type mapping for the specified encoding: {0}
+typemapping.serializerNotRegistered=no serializer is registered for ({0}, {1})
+
+typemapping.deserializerNotRegistered=no deserializer is registered for (java type: {0}, schema type: {1})
+typemapping.deserializerNotRegisteredForXmlType=no deserializer is registered for schema type: {0}
+typemapping.deserializerNotRegisteredForJavaType=no deserializer is registered for java type: {0}
+typemapping.serializer.is.dynamic=dynamic resolution failed to find a serializer for java type:{0}, xml type {1}
+typemapping.serializer.definition.recursive=dynamic resolution failed to find a serializer for java type: {0}, xmlType: {1}
+typemapping.deserializer.is.dynamic=dynamic resolution failed to find a deserializer for {0}
+typemapping.not.serializable=Could not serialze registry, type: {0} does not extend Serializable
+typemapping.mapentry.notsupport.object.key=Map entry key cannot be of java type:\"{0}\", xml type \"{1}\"
+typemapping.mapentry.notsupport.object.value=Map entry value cannot be of java type:\"{0}\", xml type \"{1}\"
+typemapping.array.notsupport.object=Item in array cannot be of java type:\"{0}\"
+
+# typemappingregistry
+typemappingregistry.not.serializable=Could not serialze internal registry, type: {0} does not extend Serializable
+
+# literal
+literal.unexpectedNull=unexpected null value for literal data
+literal.unexpectedElementName=unexpected element name: expected={0}, actual={1}
+literal.expectedElementName=expected element is missing: {0}
+literal.missingRequiredAttribute=missing required attribute: {0}
+literal.simpleContentExpected=expected simple content, found element name: {0}
+
+# initializable
+initializable.not.initialized=object not initialized before use
+
+type.is.not.array={0} is not an array type
+
+request.parameter.count.incorrect=expected {0} parameter(s) but received: {1}. Expected parameters: {3} Got parameters:{4}
+deserializationstate.deserialize.no.deserializer=illegal deserialization state: no deserializer is available for the current element
+
+#misc
+invalid.base64.data=Invalid base64 data

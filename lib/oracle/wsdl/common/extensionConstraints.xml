@@ -1,0 +1,28 @@
+<extensionConstraints xmlns="http://www.oracle.com/wsdl/extensionConstraints">
+    <binding type="soapBinding">
+        <extensibleElement name="Binding">
+            <extensibilityElement name="soap:binding" />
+        </extensibleElement>
+        <extensibleElement name="BindingOperation">
+            <extensibilityElement name="soap:operation" minOccurs="0" />
+        </extensibleElement>
+        <extensibleElement name="BindingInput BindingOutput">
+            <extensibilityElement name="soap:body" minOccurs="0"/>
+            <extensibilityElement name="soap:header" minOccurs="0" maxOccurs="unbounded" />
+            <extensibilityElement name="mime:content" minOccurs="0" maxOccurs="unbounded" />
+            <extensibilityElement name="mime:multipartRelated" minOccurs="0"/>
+            <extensibilityElement name="mime:mimeXml" minOccurs="0" maxOccurs="unbounded" />
+        </extensibleElement>
+        <extensibleElement name="BindingFault">
+            <extensibilityElement name="soap:fault" />
+        </extensibleElement>
+        <extensibleElement name="Port">
+            <extensibilityElement name="soap:address" />
+        </extensibleElement>
+    </binding>
+
+    <binding type="httpBinding">
+        <!-- to be added -->
+    </binding>
+
+</extensionConstraints>

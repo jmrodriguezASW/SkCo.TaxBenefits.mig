@@ -1,0 +1,181 @@
+
+package TBPKT_CARGUE_APLICACION;
+
+import sqlj.runtime.*;
+import sqlj.runtime.ref.*;
+import java.sql.*;
+//import funciones_as400.*;
+
+/*Modificado porque no se utilizan
+//import TBPKT_UTILIDADES.TBPKT_FUNCIONES_AS400.*;
+//import com.ibm.as400.access.*;
+*/
+import TBPKT_UTILIDADES.TBPKT_CONEXIONBASEDATOSSQLJ.*;
+import TBPKT_UTILIDADES.TBPKT_FECHAS.*;
+import  TBPKT_UTILIDADES.TBPKT_AS400_APORTES.*;
+
+/**Clase que calcula el numero de unidades retiradas*/
+
+public class TBC_CALCULAR_UNIRETIRADAS extends Object
+{
+ //cursor contratos
+ #sql public static iterator i_contrato(String CIC_PRODUCTO
+                                       ,String CIC_CONTRATO);
+
+
+ i_contrato v_contrato ;
+ public int TBP_CALCULAR_UNIDADES_RETIRADAS(String v_fecha,int v_log)
+ {
+  int v_contadornumuni = 0;
+  try
+  {
+   /**Instancias de clase*/
+   //TBCL_FUNCIONES_AS400_APORTES i_as400 = new  TBCL_FUNCIONES_AS400_APORTES();
+   //TBCL_FuncionesAs400 i_as400_2 = new TBCL_FuncionesAs400();
+   TBCL_ConexionSqlj    i_conexion = new TBCL_ConexionSqlj();/**Instancia de la clase TBCL_ConexionSqlj*/
+   //Conexion base de datos
+   i_conexion.TBCL_ConexionBaseDatos();
+   String vconviejo = "X";
+   String vconnuevo = "X";
+   String v_producto  = "";
+   int contador = 0;
+   //consulta as400 para lea fecha de cargue
+   String   v_csaldoas400 = "";
+   long v_csaldo     = 0;
+   Long  v_ctmp   = null;
+   double v_csaldo2     = 0;
+   double v_calculo = 0;
+
+   //referencias multi
+   String v_sistema = "";
+   String v_usumfund= "";
+   String v_passmfund="";
+   String v_libreria ="";
+   int v_resmulti     = 0;
+
+   int v_indicador = 0;
+   int v_indicador2 = 0;
+   String v_menretiro = "";
+   String v_menaporte = "";
+   //Consultar referencias del sistema Multifund
+   //#sql v_resmulti ={values(TB_FREFERENCIAS_MULTI(:INOUT v_sistema,:INOUT v_usumfund,:INOUT v_passmfund, :INOUT v_libreria))};
+   //AS400 sadc2 = new AS400(""+v_sistema+"");
+   //sadc2.setUserId(""+v_usumfund+"");
+   //sadc2.setPassword(""+v_passmfund+"");
+   //Consultar  contratos cargados para la fecha
+   #sql v_contrato = { SELECT DISTINCT(CIC_CONTRATO)
+                             ,CIC_PRODUCTO
+                         FROM TBCI_CONTRATOS
+                        WHERE CIC_FECHA = TO_DATE(:v_fecha,'RRRR-MM-DD')
+
+                     };
+
+   while(v_contrato.next())
+   {
+     contador++;
+     System.out.println("contrato "+contador+" numero "+ v_contrato.CIC_CONTRATO());
+     vconnuevo = v_contrato.CIC_CONTRATO();
+     v_producto = v_contrato.CIC_PRODUCTO();
+     //Llamado a función que actualiza unidades retiradas
+     #sql  v_indicador = {values(TB_FCALNUMUNIRET( :IN v_producto
+                                                   ,:IN vconnuevo
+                                                   ,:INOUT v_menretiro
+                                                   ,:INOUT v_log ))};
+
+     if(v_indicador != 0)
+     {//si hay error se inserta en el log
+      v_contadornumuni++;
+      String vmen2 = "Error en el proceso de actualizar valor de unidad y numero de unidades retiradas, contrato "+vconnuevo+". Función TB_FCALNUMUNIRET";
+      /*#sql {call TB_PLOG( 'CNUTAX'
+                          ,:vmen2
+                          ,:v_menretiro
+                          ,0
+                          ,:v_log)};
+       v_log++;*/
+     }
+
+     //Consulta del saldo del contrato con fecha DE CARGUE
+     /*v_csaldoas400 = i_as400_2.TBPL_SaldosPorContrato2(vconnuevo,v_fecha,"E",sadc2,v_libreria);
+     if(!v_csaldoas400.trim().equals(""))
+     {
+      if(!v_csaldoas400.substring(0,5).equals("Error"))//error saldos
+      {
+       v_csaldo      = i_as400.TBFL_Saldo_Entero(v_csaldoas400);
+       v_ctmp   = new Long(v_csaldo);
+       v_csaldo2     = v_ctmp.doubleValue();
+       v_csaldo2/=100.00;
+       //Llamado a función que procesa información de aportes*/
+       #sql v_indicador2= {values(TB_FCALNUMAPO( :IN v_producto
+                                                ,:IN vconnuevo
+                                                ,:IN v_fecha
+                                                ,:IN v_csaldo2
+                                                ,:INOUT v_menaporte
+                                                ,:INOUT v_log
+                                                ,:INOUT v_contadornumuni))};
+
+      if(v_indicador2 != 0)
+       {
+        v_contadornumuni++;
+        String vmen3 ="Error en el proceso de actualizar aportes, contrato "+vconnuevo+". Función TB_FCALNUMAPO";
+        /*#sql {call TB_PLOG( 'CNUTAX'
+                           ,:vmen3
+                           ,:v_menaporte
+                           ,0
+                           ,:v_log)};
+        v_log++;*/
+       }
+      /* }
+      else
+      {
+       v_contadornumuni++;
+       String v_men4 = "Error en el proceso de consultar saldo para el contrato "+vconnuevo+". Función TB_FCALNUMAPO";
+       #sql {call TB_PLOG( 'CNUTAX'
+                          ,:v_men4
+                          ,:v_csaldoas400
+                          ,0
+                          ,:v_log)};
+      }
+     }
+     else
+     {
+      v_contadornumuni++;
+      String v_men2 = "Error en el proceso de consultar saldo para el contrato "+vconnuevo+", no devuelve datos. Función TB_FCALNUMAPO";
+      #sql {call TB_PLOG( 'CNUTAX'
+                         ,:v_men2
+                         ,:v_csaldoas400
+                         ,0
+                         ,:v_log)};
+     }*/
+    }//contrato
+
+    v_contrato.close();
+    #sql {commit};
+    //#sql {ROLLBACK};
+    //sadc2.disconnectAllServices();
+    i_conexion.TBCL_DesconectarBaseDatos();
+    java.util.Date g = new java.util.Date();
+    System.out.println("Hora final: "+g);
+
+    return  v_contadornumuni;
+   }
+   catch(Exception ex)
+   {
+   try
+   {
+    System.out.println("error "+ex);
+    String v_men ="Mensaje de error "+ex;
+    v_contadornumuni++;
+    #sql {call TB_PLOG( 'CNUTAX'
+                       ,'Error en el proceso de calcular el numero de unidades retiradas'
+                       ,:v_men
+                       ,0
+                       ,:v_log)};
+   }
+   catch(Exception ex2)
+   {
+   }
+   return  v_contadornumuni;
+  }
+ }
+}
+

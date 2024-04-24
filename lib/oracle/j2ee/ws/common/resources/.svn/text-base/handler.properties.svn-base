@@ -1,0 +1,6 @@
+#
+# $Id: handler.properties 30-sep-2003.19:57:20 sugupta Exp $
+#
+handler.nestedError=handler error: {0}
+handler.chain.contains.handler.only=A HandlerChain can only contain Handler instances: {0}
+handler.cant.instantiate=Unable to instantiate handler: {0} because: {1}

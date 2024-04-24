@@ -1,0 +1,287 @@
+package TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS;
+
+import TBPKT_UTILIDADES.TBPKT_CONEXIONBASEDATOS.TBCL_Validacion;
+
+import java.sql.DriverManager;
+
+import java.text.DecimalFormat;
+
+import sqlj.runtime.ref.DefaultContext;
+import java.sql.Connection;
+
+import java.sql.*;
+
+import oracle.sqlj.runtime.*;
+
+import sqlj.runtime.*;
+import sqlj.runtime.ref.*;
+import javax.servlet.http.*;
+import TBPKT_UTILIDADES.TBPKT_PLANTILLA.*;
+import java.io.*;
+import TBPKT_UTILIDADES.TBPKT_CONEXIONBASEDATOS.*;
+import TBPKT_UTILIDADES.TBPKT_CONSULTA.*;
+import TBPKT_AJUSTES.*;
+
+
+
+public class SQL_PTB_RETIROS_OBLIG extends Object{
+        
+    private String[] v_valusu;            
+    private int v_cod_err = 0;  
+    private String v_men_err;
+    
+    #sql public static iterator i_aportes(double apo_rendimientos);
+    
+    i_aportes v_aportes;     
+    
+    public String[] INSERT_RETPERSSON_OBLIG (String v_codproducto, String v_Nocontrato, double vretconsec, double aporte_actual){                
+        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        String[] resul = new String[2];
+        resul[0] = "0"; 
+        resul[1] = "0";        
+        try {            
+            //Conexion con la base de datos
+            v_valusu = new String[3];
+            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+            DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));
+            #sql {call tbpbd_insretperson_oblig(:vretconsec
+                                     ,:v_codproducto
+                                     ,:v_Nocontrato
+                                     ,:aporte_actual                                                             
+                                     ,:INOUT v_cod_err
+                                     ,:INOUT v_men_err)};            
+        if(v_cod_err == 0) 
+        {            
+            #sql {Commit};
+            return resul;
+        }
+        else
+        {
+            #sql {Rollback};
+            resul[0] = ""+v_cod_err; 
+            resul[1] = v_men_err;
+            return resul;
+        } 
+                                                        
+        }catch( Exception e ) {            
+            resul[1] = ""+e;
+            System.out.println("ERROR SQL_CIERRE: "+e);            
+        }    
+        return resul;
+    }
+    
+     public String[] GENERAR_RETIRO_OBLIG (String v_codproducto, String v_contrato, Double v_valor_r, Double v_comision_pendiente_ava, Double v_comision_pendiente_ave, String v_fecha_efectiva, String v_fecha_proceso, String v_fecha_solicitud,
+                                           String v_tipo_trans,String v_clase_trans, String v_tipo_valor,String v_banco, String v_cuenta, String v_tipodocumentoter, String v_documentoter,
+                                           String v_nombrester, String v_apellidoster, String v_usuario, String v_orden, String v_concepto, Double v_saldoAVA, Double v_saldoAVE,
+                                           Double v_disponible_neto, Double v_cc, Double v_ret_rend, Double v_prov_comi_rend, Double v_prov_comi_cap, int commit){                        
+    
+        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        String v_ret_consec = "0";
+        String[] resul = new String[3];
+        resul[0] = "0"; 
+        resul[1] = "0";        
+        resul[2] = "0";              
+        
+        try {                 
+            //Conexion con la base de datos
+            v_valusu = new String[3];
+            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+            DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false)); 
+            
+            #sql {call TBPBD_GENERAR_RETIRO_OBLIG(:v_codproducto
+                                     ,:v_contrato
+                                     ,:v_valor_r
+                                     ,:v_comision_pendiente_ava
+                                     ,:v_comision_pendiente_ave
+                                     ,:v_fecha_efectiva                                                             
+                                     ,:v_fecha_proceso
+                                     ,:v_fecha_solicitud
+                                     ,:v_tipo_trans
+                                     ,:v_clase_trans
+                                     ,:v_tipo_valor
+                                     ,:v_banco
+                                     ,:v_cuenta
+                                     ,:v_tipodocumentoter
+                                     ,:v_documentoter
+                                     ,:v_nombrester
+                                     ,:v_apellidoster
+                                     ,:v_usuario
+                                     ,:v_orden
+                                     ,:v_concepto
+                                     ,:v_saldoAVA
+                                     ,:v_saldoAVE 
+                                     ,:v_disponible_neto
+                                     ,:v_cc
+                                     ,:v_ret_rend
+                                     ,:v_prov_comi_rend
+                                     ,:v_prov_comi_cap
+                                     ,:INOUT v_ret_consec
+                                     ,:INOUT v_cod_err
+                                     ,:INOUT v_men_err)};            
+        if(v_cod_err == 0) 
+        {
+            if (commit==0)            
+                #sql {Commit};
+            resul[2] = v_ret_consec; 
+            return resul;
+        }
+        else
+        {            
+            #sql {Rollback};
+            resul[0] = ""+v_cod_err; 
+            resul[1] = v_men_err;
+            resul[2] = "0";
+            return resul;
+        } 
+                                                        
+        }catch( Exception e ) { 
+            resul[0] = "1"; 
+            resul[1] = ""+e;
+            System.out.println("ERROR SQL_CIERRE: "+e);            
+        }    
+        return resul;
+    }
+     
+     public String[] UPDATE_RETPERSSON_OBLIG (String v_codproducto, String v_contrato, double v_ret_consec, int parametro){
+           
+        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        String[] resul = new String[3];
+        resul[0] = "0"; 
+        resul[1] = "0";    
+        resul[2] = "" + v_ret_consec;  
+        
+        try {            
+            //Conexion con la base de datos
+            v_valusu = new String[3];
+            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+            DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));            
+            #sql {call TBPBD_UPDRETIRO_PERS_OBLIG(:v_ret_consec
+                                     ,:v_codproducto           
+                                     ,:v_contrato
+                                     ,:parametro
+                                     ,:INOUT v_cod_err
+                                     ,:INOUT v_men_err)};            
+        if(v_cod_err == 0) 
+        {
+            #sql {Commit};
+            return resul;
+        }
+        else
+        {            
+            resul[0] = ""+v_cod_err; 
+            resul[1] = v_men_err;
+            resul[2] = "0";
+            return resul;
+        } 
+                                                        
+        }catch( Exception e ) { 
+            resul[0] = "1"; 
+            resul[1] = ""+e;
+            System.out.println("ERROR SQL_CIERRE: "+e);            
+        }    
+        return resul;
+         }
+     
+     /* public void INSERT_EVENTS_OBLIG (String paso, String contrato, String producto, String nivel, String usuario, String mensaje){                
+        
+        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        
+        try {                    
+            
+            //Conexion con la base de datos
+            v_valusu = new String[3];
+            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+            DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));                        
+            
+            #sql {call TBPBD_INS_TBEVENTLOGS_OBLIG(:paso
+                                     ,:producto
+                                     ,:contrato 
+                                     ,:nivel
+                                     ,:usuario
+                                     ,:mensaje)}; 
+                                                                
+        }catch( Exception e) {   
+            
+            System.out.println("ERROR SQL_LOG_OBLIG: "+e);            
+        }    
+    }*/
+     
+    public String[] ELIMINAR_RETIRO_OBLIG (String producto, String contrato, String conret, String usuario){                
+        
+        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        String[] resul = new String[2];
+        resul[0] = "0"; 
+        resul[1] = "0";   
+        
+        try {                                
+            //Conexion con la base de datos
+            v_valusu = new String[3];
+            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+            DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));                        
+            
+            #sql {call tbpbd_reversar_retiro_oblig(:producto
+                                     ,:contrato 
+                                     ,:conret
+                                     ,:usuario
+                                     ,'SER002'
+                                     ,:INOUT v_cod_err
+                                     ,:INOUT v_men_err)}; 
+                                                                
+        if(v_cod_err == 0) 
+        {                    
+            return resul;
+        }
+        else
+        {                        
+            resul[0] = ""+v_cod_err; 
+            resul[1] = v_men_err;            
+            return resul;
+        } 
+                                                        
+        }catch( Exception e ) { 
+            resul[0] = "1"; 
+            resul[1] = ""+e;
+            System.out.println("ERROR SQL_CIERRE: "+e);            
+        }    
+        return resul;    
+    }
+    
+    public double[] CONSULTA_REND_TRAS_OBLIG (String producto, String contrato, int padre_consecutivo){                
+        
+        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        double[] resul = new double[3000];                
+        int i = 0;                                
+        
+        try {                                
+            //Conexion con la base de datos
+            v_valusu = new String[3];
+            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+            DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));                                                                
+            
+           #sql v_aportes ={select apo_rendimientos
+                                from tbaportes
+                                where apo_con_pro_codigo =:producto
+                                        and apo_con_numero = : contrato
+                                        and apo_apo_consecutivo =:padre_consecutivo
+                                order by apo_consecutivo};                                       
+          
+          while (v_aportes.next())
+          {
+            resul[i] = v_aportes.apo_rendimientos();
+            i = i+1;
+          }
+          v_aportes.close();
+                                                                                                                                
+        }catch( Exception e ) { 
+            System.out.println("ERROR SQL_CIERRE: "+e);            
+        }    
+        return resul;    
+    }
+     
+}

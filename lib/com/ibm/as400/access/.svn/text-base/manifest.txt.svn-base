@@ -1,0 +1,221 @@
+Name: com/ibm/as400/access/AS400.class
+Java-Bean: True
+
+
+Name: com/ibm/as400/access/QSYSObjectPathName.class
+Java-Bean: True
+
+
+Name: com/ibm/as400/access/KeyedDataQueue.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/DataQueue.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/DataQueueAttributes.class
+Java-Bean: True
+
+
+Name: com/ibm/as400/access/ProgramCall.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/ProgramParameter.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/CommandCall.class
+Java-Bean: True
+
+
+Name: com/ibm/as400/access/IFSFile.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/IFSRandomAccessFile.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/IFSTextFileInputStream.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/IFSTextFileOutputStream.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/AS400FileRecordDescription.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/SequentialFile.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/KeyedFile.class
+Java-Bean: True
+
+
+Name: com/ibm/as400/access/RecordFormat.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/Record.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/AS400Structure.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/AS400Array.class
+Java-Bean: True
+
+
+Name: com/ibm/as400/access/AFPResource.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/OutputQueue.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/Printer.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/PrinterFile.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/AFPResourceList.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/OutputQueueList.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/PrinterList.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/PrinterFileList.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/SpooledFileList.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/WriterJobList.class
+Java-Bean: True
+
+
+Name: com/ibm/as400/access/UserSpace.class
+Java-Bean: True
+
+
+Name: com/ibm/as400/access/AS400CertificateUserProfileUtil.class
+Java-Bean: True
+
+Name: com/ibm/as400/access/AS400CertificateVldlUtil.class
+Java-Bean: True
+
+
+Name: com/ibm/as400/vaccess/RecordListFormPane.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/RecordListTableModel.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/RecordListTablePane.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/SQLConnection.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/SQLQueryBuilderPane.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/SQLResultSetFormPane.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/SQLResultSetTableModel.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/SQLResultSetTablePane.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/SQLStatementButton.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/SQLStatementDocument.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/SQLStatementMenuItem.class
+Java-Bean: True
+
+
+
+Name: com/ibm/as400/vaccess/AS400DetailsModel.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/AS400DetailsPane.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/AS400ExplorerPane.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/AS400ListModel.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/AS400ListPane.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/AS400TreeModel.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/AS400TreePane.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/CommandCallButton.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/CommandCallMenuItem.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/DataQueueDocument.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/ErrorDialogAdapter.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/IFSTextFileDocument.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/KeyedDataQueueDocument.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/ProgramCallButton.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/ProgramCallMenuItem.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/VActionAdapter.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/VIFSDirectory.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/VJob.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/VJobList.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/VMessageList.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/VMessageQueue.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/VPrinter.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/VPrinterOutput.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/VPrinters.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/VPropertiesAction.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/VUserList.class
+Java-Bean: True
+
+Name: com/ibm/as400/vaccess/WorkingCursorAdapter.class
+Java-Bean: True
+

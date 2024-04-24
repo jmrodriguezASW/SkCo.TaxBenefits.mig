@@ -1,0 +1,1674 @@
+package TBPKT_AJUSTES;
+import TBPKT_UTILIDADES.TBPKT_CONEXIONBASEDATOS.*;
+import sqlj.runtime.ref.DefaultContext;
+import oracle.jdbc.driver.*;
+import sqlj.runtime.ref.*;
+import java.lang.*;
+import sqlj.runtime.*;
+import javax.servlet.http.*;
+import java.sql.Date;
+import oracle.sql.*;
+import java.util.*;
+import java.sql.*;
+import oracle.jdbc.*;
+import java.io.*;
+
+/**
+*El objetivo de esta clase es manejar todo lo que tiene que ver con la Base de
+*Datos TaxBenefit, según lo que se desee realizar, como consultas, modificaciones
+*o insertar información.
+*/
+
+
+
+public class SQL_AJUSTE extends HttpServlet{
+
+
+#sql public static iterator CONTRATONOMBAPEL(String CON_NOMBRES,String CON_APELLIDOS,Date CON_FECHA_CANCELACION);
+#sql public static iterator TBREFERENCIAS(String REF_DESCRIPCION,String REF_VALOR);
+#sql public static iterator TBFINDRETANU(int RET_CONSECUTIVO,double RET_VALOR_UNIDAD,Date RET_FECHA_EFECTIVA,Date RET_FECHA_PROCESO,String RET_REF_TIPO_VALOR,double RET_VALOR_BRUTO,double RET_VALOR_NETO,String RET_REF_METODO_ORDEN,String RET_REF_METODO_BENEFICIO,String RET_REF_METODO_PENALIZACION,String RET_REF_METODO_CUENTA,String RET_REF_NATURALEZA,String RET_RESPETAR_NATURALEZA,String RET_REF_UNIDAD_PROCESO);
+#sql public static iterator TBFINDRETREV(int RET_CONSECUTIVO,String RET_TRANSACCION,Date RET_FECHA_EFECTIVA,Date RET_FECHA_PROCESO,String RET_REF_TIPO_VALOR,double RET_VALOR_BRUTO,double RET_VALOR_NETO,String RET_REF_UNIDAD_PROCESO,double RET_VALOR_UNIDAD);
+#sql public static iterator CONAPORET(int APR_APO_CONSECUTIVO,double APR_CAPITAL,double APR_RENDIMIENTOS_H,double APR_NUMERO_UNIDADES,double APR_RENDIMIENTOS_P);
+#sql public static iterator CONAPORET1(double APR_CAPITAL,double APR_RENDIMIENTOS,double APR_RENDIMIENTOS_P);
+#sql public static iterator ACTAPORTE(double APO_SALDO_CAPITAL,double APO_PORCENTAJE_RENDIMIENTOS_H,double APO_RENDIMIENTOS_PENALIZADOS,double APO_SALDO_CUENTA_CONTINGENTE,double APO_SALDO_NUMERO_UNIDADES);
+#sql public static iterator CONAPORTE1(int APO_CONSECUTIVO);
+#sql public static iterator CONAPORTE(String APO_APORTE_BENEFICIO);
+#sql public static iterator CONAJUSTES(int AJU_CONSECUTIVO,int AJU_LINEA,Date AJU_FECHA_PROCESO,double AJU_VALOR,String AJU_RAZON_AJUSTE,String AJU_USUARIO,int AJU_RETIRO_ORIGINAL,int AJU_RETIRO_ACTUAL,double AJU_VALOR_UNIDAD);
+#sql public static iterator CONCARGORET(double CAE_VALOR);
+#sql public static iterator CONCARGOAJU(double CAA_VALOR);
+#sql public static iterator CONCARGORET1(double CAE_VALOR,int CAE_APR_APO_CONSECUTIVO);
+#sql public static iterator CONPRODUCTO(int PRO_RETENCION_FUENTE);
+#sql public static iterator CONPRODUCTO1(String PRO_METODO_ORDEN,String PRO_METODO_BENEFICIO,String PRO_METODO_PENALIZACION,String PRO_METODO_CUENTA,String PRO_NATURALEZA_RETIRO);
+#sql public static iterator CONRETIROS(String RET_BANCO,String RET_CUENTA);
+#sql public static iterator CONAJUSTES1(int AJU_CONSECUTIVO,String AJU_CON_PRO_CODIGO,String AJU_CON_NUMERO,int AJU_RETIRO_ORIGINAL,String fecefe,String fecpro,float AJU_VALOR,String AJU_REF_ACCION,String fecaju);
+#sql public static iterator CONAPORAJUS(double APA_CAPITAL,double APA_RENDIMIENTOS,double APA_CUENTA_CONTINGENTE,double APA_NUMERO_UNIDADES);
+#sql public static iterator FECHAACTUAL(java.sql.Date FECACTUAL);
+
+public static String err=new String();
+////////////constructor//////////////////
+public SQL_AJUSTE()
+{
+}
+//////////////////Abrir conexión con la Base de Datos//////////////////////
+public static boolean TBPBD_ConexionBD()
+{
+try
+  {
+   TBCL_Validacion  i_valusu  = new TBCL_Validacion();
+   String[] v_valusu          = new String[3];
+   v_valusu                   = i_valusu.TBFL_ValidarUsuario();
+   DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+   DefaultContext.setDefaultContext(new DefaultContext(v_valusu[0],v_valusu[1],v_valusu[2],false));
+   return true;
+  }
+catch(Exception e)
+ {
+  return false;
+ }
+}
+/////////////////////Devuelve la fecha de Hoy//////////////////////////////////
+public static String TBPBD_FechaHoy()
+{
+ String v_fechaHoy=new String("");
+ try
+ {
+  FECHAACTUAL fecAct1;
+  #sql fecAct1={SELECT SYSDATE AS FECACTUAL FROM DUAL};
+  if(fecAct1.next())
+  {
+    v_fechaHoy=fecAct1.FECACTUAL().toString();
+  }
+ }
+ catch(Exception ex)
+ {
+     String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+             else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                   else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+  return "Exception en TBPBD_FechaHoy por "+v_menex;
+ }
+ return v_fechaHoy;
+}
+
+////////////////Llamar procedimiento en pl/sql que me genere el nuevo retiro/No se utiliza/////////////
+ public static String[] TBPBD_GenerarRetiroPrima(String cod_producto,
+                                                  String num_contrato,
+                                                  java.sql.Date vfproc,
+                                                  java.sql.Date vfefec,
+                                                  String vtiptran,
+                                                  String vclastran,
+                                                  double vvalor,
+                                                  String vtipval,
+                                                  double vvalunid,
+                                                  String vretpen,
+                                                  String vretpro,
+                                                  String vbanco,
+                                                  String vcuenta,
+                                                  String vtransaccion,
+                                                  String vusuario,
+                                                  String vunidproc,
+                                                  String cambiarEstado,
+                                                  String vcodigoafp,
+                                                  String vcodti,
+                                                  String vnumti,
+                                                  String vmetorden,
+                                                  String vmetbenef,
+                                                  String vmetpenal,
+                                                  String vmetcuenta,
+                                                  String vmetnatural,
+                                                  String vmetrespetarn,
+                                                  String vindtrans)
+{
+    String valores[]     = new String[4];
+    String msgErr        = new String("null");
+    Integer codErr       = new Integer(0);
+    String cod_producto1 = new String("");
+    String num_contrato1 = new String("");
+    Integer consecRet    = new Integer(0);
+    Double valneto       = new Double("0");
+    //declaro variables String() para mantener esquema
+    String m_o = new String(" ");    String m_b = new String(" ");
+    String m_p = new String(" ");    String m_c = new String(" ");
+    String nat = new String(" ");    String r_n = new String(" ");
+    //declaro variables String() para mantener esquema
+    try
+     {
+      m_o = vmetorden;
+      m_b = vmetbenef;
+      m_p = vmetpenal;
+      m_c = vmetcuenta;
+      nat = vmetnatural;
+      r_n = vmetrespetarn;
+     }
+    catch(Exception s){}
+    try
+    {
+     if(m_o.equalsIgnoreCase("SMO000")||m_b.equalsIgnoreCase("SMB000")||m_p.equalsIgnoreCase("SMP000")||
+        m_c.equalsIgnoreCase("SMC000")||nat.equalsIgnoreCase("SNR000")||r_n.equals(""))
+        {
+          m_o = null;
+          m_b = null;
+          m_p = null;
+          m_c = null;
+          nat = null;
+          r_n = null;
+        }
+       //valido esuqema
+      if(m_o.equals(null)||m_b.equals(null)||m_p.equals(null)||m_c.equals(null)||nat.equals(null)||r_n.equals(null))
+        {
+          m_o = null;
+          m_b = null;
+          m_p = null;
+          m_c = null;
+          m_o = null;
+          nat = null;
+        }
+    }//try
+   catch(Exception ex)
+   {
+       m_o = null;
+       m_b = null;
+       m_p = null;
+       m_c = null;
+       nat = null;
+       r_n = null;
+   }//catch
+  try{
+  
+  
+        /*Modificación hecha por APC para manejar el nuevo reglamento 2006-06-22*/          
+        String v_libreria= new String();
+        String v_sistema = new String();
+        String v_usumfund = new String();
+        String v_passmfund = new String();
+
+
+        #sql {call TBPBD_Parametros_FuncionesAS(:v_libreria,
+                                                :v_sistema,
+                                                :v_usumfund,
+                                                :v_passmfund)
+                                                };
+        
+        String v_retorno_programa = new String("");
+        
+        #sql v_retorno_programa ={values (TBCL_FuncionesAs400.TBPL_ProgramaContrato(:num_contrato,
+                                                                                    :v_sistema,
+                                                                                    :v_usumfund,
+                                                                                    :v_passmfund,
+                                                                                    :v_libreria))
+                                                                                    };
+        
+        String v_programa = v_retorno_programa.substring(0,v_retorno_programa.indexOf(";",0));
+        /*FIN Modificación hecha por APC para manejar el nuevo reglamento 2006-06-22*/          
+  
+  
+  
+     TBCL_Validacion  i_valusu  = new TBCL_Validacion();
+     String[] v_valusu          = new String[3];
+     v_valusu                   = i_valusu.TBFL_ValidarUsuario();
+     DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+     DefaultContext.setDefaultContext(new DefaultContext(v_valusu[0],v_valusu[1],v_valusu[2],false));
+     String indicador_ng = new String("N");
+      /*
+       * MOS Se quita temporalmente :v_programa
+       * Se vuelve a poner
+       */
+          #sql {call TBPBD_RETIRO(:cod_producto
+                             ,:num_contrato
+                             ,:v_programa
+                             ,NULL
+                             ,:vfproc
+                             ,:vfefec
+                             ,:vtiptran
+                             ,:vclastran
+                             ,:vvalor
+                             ,:vtipval
+                             ,:vvalunid
+                             ,:vretpen
+                             ,:vretpro
+                             ,:vbanco
+                             ,:vcuenta
+                             ,:vtransaccion
+                             ,:vusuario
+                             ,:vunidproc
+                             ,:cambiarEstado
+                             ,:vcodigoafp
+                             ,:vcodti
+                             ,:vnumti
+                             ,:m_o
+                             ,:m_b
+                             ,:m_p
+                             ,:m_c
+                             ,:nat
+                             ,:r_n
+                             ,:vindtrans
+                             ,:indicador_ng
+                             ,:OUT cod_producto1
+                             ,:OUT num_contrato1
+                             ,:OUT consecRet
+                             ,:OUT valneto
+                             ,:INOUT codErr
+                             ,:INOUT msgErr)
+                             };
+
+      try
+      {if(valneto!=null)valores[0]=valneto.toString();}
+      catch(Exception ex){}
+      try
+      {if(consecRet!=null)valores[1]=consecRet.toString();}
+      catch(Exception ex){}
+      try
+      {if(codErr!=null)valores[2]=codErr.toString();}
+      catch(Exception ex){}
+      try
+      {if(msgErr != null) valores[3]=msgErr;}
+      catch(Exception ex){}
+    }
+    catch(Exception ex)
+    {
+     String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error de comunicación no se tiene conexión con el servidor de datos, por favor intente de nuevo.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+      valores[3]="Ocurrio la exception="+v_menex;
+      return valores;
+    }
+    return valores;
+  }
+///////////////////////Calcula Fecha efectiva hacia atras////////////////////
+public static String TBPBD_FechaActual()
+{
+  String v_fecha    = new String();
+  java.sql.Date fec = new java.sql.Date(4);
+  try
+  {
+    #sql fec = {VALUES(TB_FFECHA_SIGUIENTE(-1))};
+    v_fecha  = fec.toString();
+  }
+  catch(Exception ex)
+  {
+  String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+              else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                  else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+   return "Exception en TBPBD_FechaActual "+v_menex;
+  }
+ return v_fecha;
+}
+///////Inserta informacion en Ajustes y Cargos Ajustes cuando aplicamos retiros/no se utiliza/////
+public static String TBPBD_Aplicar(String cod_producto,
+                                     String num_contrato,
+                                     int consecAjus,
+                                     int linea,
+                                     String v_fecha_proc,
+                                     Date v_fecha_choose,
+                                     String v_trans,
+                                     String v_tipTrans,
+                                     String v_clasTrans,
+                                     double val_difNetos,
+                                     String v_razon,
+                                     String usuario,
+                                     double val_unidad,
+                                     int consecRet,
+                                     int consecRetP)
+{
+ String strInsert=new String("NO");
+ try
+  {
+   val_difNetos *= (-1);
+   #sql {INSERT INTO
+                     TBAJUSTES
+                     (AJU_CON_PRO_CODIGO
+                     ,AJU_CON_NUMERO
+                     ,AJU_CONSECUTIVO
+                     ,AJU_LINEA
+                     ,AJU_FECHA_PROCESO
+                     ,AJU_FECHA_EFECTIVA
+                     ,AJU_COT_REF_TRANSACCION
+                     ,AJU_COT_REF_TIPO_TRANSACCION
+                     ,AJU_COT_REF_CLASE_TRANSACCION
+                     ,AJU_VALOR
+                     ,AJU_RAZON_AJUSTE
+                     ,AJU_USUARIO
+                     ,AJU_RETIRO_ORIGINAL
+                     ,AJU_RETIRO_ACTUAL
+                     ,AJU_VALOR_UNIDAD)
+              VALUES
+                  (:cod_producto
+                  ,:num_contrato
+                  ,:consecAjus
+                  ,:linea
+                  ,TO_DATE(:v_fecha_proc,'RRRR-MM-DD')
+                  ,:v_fecha_choose
+                  ,:v_trans
+                  ,:v_tipTrans
+                  ,:v_clasTrans
+                  ,:val_difNetos
+                  ,:v_razon
+                  ,:usuario
+                  ,:consecRet
+                  ,:consecRetP
+                  ,:val_unidad)};
+      strInsert=TBPBD_CargoAjuste(cod_producto,num_contrato,consecRet,consecRetP,consecAjus,linea);
+ }
+ catch(Exception ex)
+ {
+
+ String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error de comunicación no se tiene conexión con el servidor de datos, por favor intente de nuevo.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+ return "Exception al insertar en Aplicar "+v_menex;
+ }
+return strInsert;
+}
+////////////no se utiliza////Resta valores de R y R' de cargos retiros para insertar en cargos_ajustes //
+public static String TBPBD_CargoAjuste(String cod_producto,
+                                         String num_contrato,
+                                         int consecRet,
+                                         int consecRetP,
+                                         int consecAjus,
+                                         int linea){
+    String strInsert = new String("NO");
+    try
+    {
+      CONCARGORET cargoret;
+      CONCARGORET cargoretP;
+      int ii         = 0;
+      String v_ii    = new String("");
+      String v_cargo = new String("");
+      double v_valor  = 0.0,v_valorP=0.0;
+      while(ii<4)
+      {
+        ii++;
+        v_ii = Integer.toString(ii);
+        while(v_ii.length()<3)
+        {v_ii = new String("0"+v_ii);}
+        v_cargo  = "STC"+v_ii;
+        v_valor  = 0.0;
+        v_valorP = 0.0;
+        #sql cargoret={SELECT CAE_VALOR
+                       FROM TBCARGOS_RETIROS
+                       WHERE CAE_APR_RET_CON_PRO_CODIGO =: cod_producto
+                         AND CAE_APR_RET_CON_NUMERO     =: num_contrato
+                         AND CAE_APR_RET_CONSECUTIVO    =: consecRet
+                         AND CAE_REF_CARGO              =: v_cargo};
+        while(cargoret.next())
+        {
+          v_valor+=cargoret.CAE_VALOR();
+        }
+        cargoret.close();
+        #sql cargoretP={SELECT CAE_VALOR
+                        FROM TBCARGOS_RETIROS
+                        WHERE CAE_APR_RET_CON_PRO_CODIGO  =: cod_producto
+                          AND CAE_APR_RET_CON_NUMERO      =: num_contrato
+                          AND CAE_APR_RET_CONSECUTIVO     =: consecRetP
+                          AND CAE_REF_CARGO               =: v_cargo};
+        while(cargoretP.next())
+        {
+          v_valorP+=cargoretP.CAE_VALOR();
+        }
+        cargoretP.close();
+        //proceso de insertar en cargo_ajustes
+        double v_valorDif=v_valor-v_valorP;
+        #sql {INSERT INTO TBCARGOS_AJUSTES
+                    (
+                    CAA_AJU_CON_PRO_CODIGO
+                    ,CAA_AJU_CON_NUMERO
+                    ,CAA_AJU_CONSECUTIVO
+                    ,CAA_AJU_LINEA
+                    ,CAA_REF_CARGO
+                    ,CAA_VALOR
+                    )
+                VALUES
+                    (:cod_producto
+                     ,:num_contrato
+                     ,:consecAjus
+                     ,:linea
+                     ,:v_cargo
+                     ,:v_valorDif)};
+     }
+      strInsert="YES";
+    }
+    catch(Exception ex)
+    {
+    String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+    return "Exception en TBPBD_CargoAjuste por "+v_menex;}
+    return strInsert;
+  }
+//////Selecciona la información de los métodos de referencia de la tabla productos//////////
+//////no se utiliza/////////para indicar los posibles cambios en el esquema de retiro/////////////////
+public static String TBPBD_SelMetCambio(String cod_producto)
+  {
+    String esqCambio=new String("");
+    try
+    {
+      CONPRODUCTO1 prodEsq;
+      #sql prodEsq={SELECT
+                     PRO_METODO_ORDEN
+                     ,PRO_METODO_BENEFICIO
+                     ,PRO_METODO_PENALIZACION
+                     ,PRO_METODO_CUENTA
+                     ,PRO_NATURALEZA_RETIRO
+                   FROM
+                     TBPRODUCTOS
+                   WHERE
+                     PRO_CODIGO=:cod_producto};
+      if(prodEsq.next())
+      {
+        esqCambio="smo='"+prodEsq.PRO_METODO_ORDEN()+"' ";
+        esqCambio+="smb='"+prodEsq.PRO_METODO_BENEFICIO()+"' ";
+        esqCambio+="smp='"+prodEsq.PRO_METODO_PENALIZACION()+"' ";
+        esqCambio+="smc='"+prodEsq.PRO_METODO_CUENTA()+"' ";
+        esqCambio+="snr='"+prodEsq.PRO_NATURALEZA_RETIRO()+"'";
+      }
+      prodEsq.close();
+    }
+    catch(Exception ex)
+    {
+        String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+    return "Exception en TBPBD_SelMetCambio por "+v_menex;}
+    return esqCambio;
+}
+////////no se utiliza//Actualiza la acción y fecha de la acción del ajuste según decisión del cliente////
+  public static String TBPBD_ActAccionAjustes(String cod_producto,
+                                              String num_contrato,
+                                              int consecAjus,
+                                              int linea,
+                                              String accion){
+    String strUpdate=new String("NO");
+    try{
+      #sql {UPDATE
+             TBAJUSTES
+            SET
+              AJU_FECHA_ACCION  =  SYSDATE,
+              AJU_REF_ACCION    =: accion
+            WHERE
+              AJU_CON_NUMERO         =: num_contrato
+              AND AJU_CON_PRO_CODIGO =: cod_producto
+              AND AJU_CONSECUTIVO    =: consecAjus
+              AND AJU_LINEA          =: linea};
+      strUpdate="YES";
+    }catch(Exception ex){
+      String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+      return "Exception en TBPBD_ActAccionAjustes por "+v_menex;
+    }
+    return strUpdate;
+  }
+////no se utiliza///Proceso de Actualización del estado del Retiro y si se reversa el retiro/////////
+  public static String TBPBD_AnulRevRetiro(String cod_producto,
+                                           String num_contrato,
+                                           String estado,
+                                           String ret_consec,
+                                           String fecha_efec,
+                                           double val_unidad,
+                                           int v_update,
+                                           int devValApor){
+    String strUpdate=new String("NO");
+    try{
+      #sql strUpdate={VALUES(TBFBD_REVERSAR_RETIROS(:cod_producto,:num_contrato,:estado,:ret_consec,:val_unidad,:v_update,:devValApor))};
+      //#sql {COMMIT;};
+      if(strUpdate.equalsIgnoreCase("NO"))
+        strUpdate = " No se encontraron Aportes Retiros asociados a su elección. ";
+      else if(!strUpdate.equalsIgnoreCase("YES"))
+        strUpdate = " La producción de un error en el procedimiento de ANULAR("+strUpdate+")";
+    }catch(Exception ex)
+    {
+       String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+      return "Exception en TBPBD_ANULAR_REVERSAR "+v_menex;
+    }
+    return strUpdate;
+  }
+//////////no se utiliza////Registrar transacción por cada retiro modificado///////////////////////////////
+  public static String  TBPBD_TransaccionLog(String v_tipTran,
+                                             String consecRet,
+                                             int linea,
+                                             String v_tipMod,
+                                             String v_razMod,
+                                             String v_usuario){
+    String strInsert="NO";
+    try{
+      #sql {INSERT INTO TBTRANSACCION_LOGS
+                  (TRL_TIPO_TRANSACCION,        TRL_APORTE_RETIRO_PRODUCTO,     TRL_FECHA,
+                   TRL_LINEA,                   TRL_TIPO_MODIFICACION,          TRL_RAZON_MODIFICACION,
+                   TRL_USUARIO)
+              VALUES
+                  (:v_tipTran,                  :consecRet,                     SYSDATE,
+                   :linea,                      :v_tipMod,                      :v_razMod,
+                   :v_usuario)};
+      strInsert="YES";
+    }catch(Exception ex)
+    {
+       String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+      return "Exception en TBPBD_TransaccionLog "+v_menex;
+    }
+    return strInsert;
+  }
+/////////////////////Realizar todos los cambios con la Base de Datos////////////////////////
+  public static boolean TBPBD_Commit(){
+    try{
+      #sql {COMMIT};
+      return true;
+    }catch(Exception e){
+      return false;
+    }
+  }
+/////////////////////No Realizar cambios con la Base de Datos////////////////////////
+  public static boolean TBPBD_RollBack(){
+    try{
+      #sql {ROLLBACK};
+      return true;
+    }catch(Exception e){
+      return false;
+    }
+  }
+
+/////////////////////////Traer nombres y apellidos del contrato-producto//////////////////
+  public static String[] TBPBD_ContratoNomApel(String cod_producto,String num_contrato)
+  {
+    String strNombApel = new String("No existe");
+    String fechaCancel = new String("");
+    String cadena[]    = new String[2];
+    try
+    {
+      CONTRATONOMBAPEL nombApel;
+      #sql nombApel={SELECT
+                     CON_NOMBRES
+                     ,CON_APELLIDOS
+                     ,CON_FECHA_CANCELACION
+                     FROM TBCONTRATOS
+                     WHERE CON_PRO_CODIGO =: cod_producto
+                     AND CON_NUMERO       =: num_contrato};
+      if(nombApel.next())
+       {
+         strNombApel = nombApel.CON_NOMBRES()+" "+nombApel.CON_APELLIDOS();
+         if(nombApel.CON_FECHA_CANCELACION()==null)
+          fechaCancel = "NO";
+         else
+          fechaCancel = "SI";
+       }
+
+      nombApel.close();
+    }
+    catch(Exception ex)
+    {
+      String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+      cadena[0]="Exception en TBPBD_ContratoNomApel "+v_menex;
+      return cadena;
+     }
+    cadena[0] = strNombApel;
+    cadena[1] = fechaCancel;
+    return cadena;
+  }
+/////////////////////traer valores de referencia del esquema retiro////////////////////
+  public static String[] TBPBD_BuildRef(String v_prf,
+                                        String k_ini){
+    int ii=1;
+    String v_ref[]=new String[2];
+    String v_desc=new String("");
+    String v_val=new String("");
+    String v_ii=new String("");
+    if(!k_ini.equals("1"))
+      v_desc+=v_prf.toLowerCase()+k_ini+"='ninguno' ";
+    try{
+     TBREFERENCIAS tbref;
+      while(true){
+        v_ii=Integer.toString(ii);
+        while(v_ii.length()<3)
+          v_ii=new String("0"+v_ii);
+
+        String key=new String(v_prf+v_ii);
+        #sql tbref={SELECT REF_DESCRIPCION,     REF_VALOR
+                      FROM TBREFERENCIAS
+                    WHERE REF_CODIGO=:key};
+        if(tbref.next()){
+          v_desc+=v_prf.toLowerCase()+v_ii+"='"+tbref.REF_DESCRIPCION().toLowerCase()+"' ";
+          v_val+=v_prf.toLowerCase()+v_ii+"='"+tbref.REF_VALOR()+"' ";
+        }else{
+          break;
+        }
+        ii++;
+      }
+      tbref.close();
+    }catch(Exception ex)
+    {
+       String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+
+      v_ref[0]="Exception en TBPBD_BuildRef "+v_menex;
+      return v_ref;
+    }
+    v_ref[0]=v_desc;v_ref[1]=v_val;
+    return v_ref;
+  }
+/////////////////////selecciona todos los retiros reversados///////////////////////////////
+  public static String TBPBD_SelAllRetRev(String num_contrato,
+                                          String cod_producto,
+                                          String estado){
+    String v_retiros=new String("");
+    int ii=1;
+    try{
+      TBFINDRETREV findRetRev;
+      #sql findRetRev={
+                       SELECT
+                       RET_CONSECUTIVO
+                       ,RET_TRANSACCION
+                       ,RET_FECHA_EFECTIVA
+                       ,RET_FECHA_PROCESO
+                       ,RET_REF_TIPO_VALOR
+                       ,RET_VALOR_BRUTO
+                       ,RET_VALOR_NETO
+                       ,RET_REF_UNIDAD_PROCESO
+                       ,RET_VALOR_UNIDAD
+                       FROM
+                       TBRETIROS
+                       WHERE
+                       RET_CON_NUMERO          =: num_contrato
+                       AND RET_CON_PRO_CODIGO  =: cod_producto
+                       AND RET_REF_ESTADO      =: estado
+                       ORDER BY RET_FECHA_EFECTIVA
+                       };
+      while(findRetRev.next())
+      {
+        String v_const      = Integer.toString(findRetRev.RET_CONSECUTIVO());
+        String v_transa     = findRetRev.RET_TRANSACCION();
+        String v_fechafnd   = findRetRev.RET_FECHA_EFECTIVA().toString();
+        String v_fechap     = findRetRev.RET_FECHA_PROCESO().toString();
+        String v_tip_unidad = findRetRev.RET_REF_UNIDAD_PROCESO();
+        String v_fecCargue  = new String("");
+        //llamar lo de johanna
+        String v_valorNeto     = Double.toString(findRetRev.RET_VALOR_NETO());
+        String v_valor         = new String("0");
+        String v_vu            = new String("0");
+        v_valor = Double.toString(findRetRev.RET_VALOR_BRUTO());
+        v_vu    = Double.toString(findRetRev.RET_VALOR_UNIDAD());
+        String v_valor_esquema = new String("");
+        /*if(findRetRev.RET_REF_TIPO_VALOR().equalsIgnoreCase("STV001"))
+          v_valor = Double.toString(findRetRev.RET_VALOR_BRUTO());
+        else
+        {
+         if(findRetRev.RET_REF_TIPO_VALOR().equalsIgnoreCase("STV002"))
+            v_valor = Double.toString(findRetRev.RET_VALOR_NETO());
+        }*/
+        String v_ii = Integer.toString(ii);
+        //guardar en una cadena consecutiva todos los valores por cada retiro reversado
+        v_retiros += "v_vu"+v_ii+"='"+v_vu+"' const"+v_ii+"='"+v_const+"' fechae"+v_ii+"='"+v_fechafnd+"' fechap"+v_ii+"='"+v_fechap+"' valor"+v_ii+"='"+v_valor+"' valneto"+v_ii+"='"+v_valorNeto+"' multif"+v_ii+"='"+v_transa+"' feccargue"+v_ii+"='"+v_fecCargue+"' ";
+        ii++;
+      }
+    findRetRev.close();
+    }
+   catch(Exception ex)
+   {
+
+       String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+
+      return "Exception tomando los retiros reversados por "+v_menex;
+   }
+  return "<"+v_retiros+">";
+}
+////////////////////selecciona y devuelve todos los retiros en estado vigente//////////////////////////
+  public static String TBPBD_SelAllRetAnu(String num_contrato,
+                                          String cod_producto,
+                                          String estado,
+                                          String fechaMax,
+                                          String fechaMin){
+    String v_retiros=new String();
+    int ii=1;
+    try{
+      TBFINDRETANU findRet;
+      #sql findRet={SELECT RET_CONSECUTIVO,       RET_VALOR_UNIDAD,         RET_FECHA_EFECTIVA,       RET_FECHA_PROCESO,
+                           RET_REF_TIPO_VALOR,    RET_VALOR_BRUTO,          RET_VALOR_NETO,
+                           RET_REF_METODO_ORDEN,  RET_REF_METODO_BENEFICIO, RET_REF_METODO_PENALIZACION,
+                           RET_REF_METODO_CUENTA, RET_REF_NATURALEZA,       RET_RESPETAR_NATURALEZA,RET_REF_UNIDAD_PROCESO
+                     FROM TBRETIROS
+                     WHERE RET_CON_NUMERO       =:num_contrato
+                       AND RET_CON_PRO_CODIGO   =:cod_producto
+                       AND RET_REF_ESTADO       =:estado
+                       AND RET_FECHA_EFECTIVA>  =:fechaMin
+                       AND RET_FECHA_EFECTIVA  <=:fechaMax
+                    ORDER BY RET_FECHA_EFECTIVA};
+      while(findRet.next())
+      {
+        String v_const        = Integer.toString(findRet.RET_CONSECUTIVO());
+        String v_valorUnidad1 = Double.toString(findRet.RET_VALOR_UNIDAD());
+        String v_fechafnd     = findRet.RET_FECHA_EFECTIVA().toString();
+        String v_fechaP       = findRet.RET_FECHA_PROCESO().toString();
+        String v_tipo         = findRet.RET_REF_TIPO_VALOR();
+        String tip_unidad     = findRet.RET_REF_UNIDAD_PROCESO();
+        String v_fecCargue    = new String("");
+        //llamar lo de johanna
+        String v_neto  = Double.toString(findRet.RET_VALOR_NETO());
+        String v_bruto = Double.toString(findRet.RET_VALOR_BRUTO());
+        String v_valor = new String("0");
+        String v_valor_esquema = new String("");
+        v_valor = v_bruto;
+        /*if(v_tipo.equalsIgnoreCase("STV001"))
+          v_valor = v_bruto;
+        else
+         {
+          if(v_tipo.equalsIgnoreCase("STV002"))
+            v_valor = v_neto;
+         }*/
+        //verificar si el esquema de retiro es null o con valor
+        if(findRet.RET_REF_METODO_ORDEN()==null) v_valor_esquema+="smo=%SMO000% ";
+          else v_valor_esquema+="smo=%"+findRet.RET_REF_METODO_ORDEN()+"% ";
+        if(findRet.RET_REF_METODO_BENEFICIO()==null) v_valor_esquema+="smb=%SMB000% ";
+          else v_valor_esquema+="smb=%"+findRet.RET_REF_METODO_BENEFICIO()+"% ";
+        if(findRet.RET_REF_METODO_PENALIZACION()==null) v_valor_esquema+="smp=%SMP000% ";
+          else v_valor_esquema+="smp=%"+findRet.RET_REF_METODO_PENALIZACION()+"% ";
+        if(findRet.RET_REF_METODO_CUENTA()==null) v_valor_esquema+="smc=%SMC000% ";
+          else v_valor_esquema+="smc=%"+findRet.RET_REF_METODO_CUENTA()+"% ";
+        if(findRet.RET_REF_NATURALEZA()==null) v_valor_esquema+="snr=%SNR000% ";
+          else v_valor_esquema+="snr=%"+findRet.RET_REF_NATURALEZA()+"% ";
+        if(findRet.RET_RESPETAR_NATURALEZA()==null) v_valor_esquema+="srn=%%";
+          else  v_valor_esquema+="srn=%"+findRet.RET_RESPETAR_NATURALEZA()+"%";
+        String v_ii=Integer.toString(ii);
+        //guardar en una cadena consecutiva todos los valores por cada retiro
+        v_retiros+="const"+v_ii+"='"+v_const+"' fechae"+v_ii+"='"+v_fechafnd+"' fechap"+v_ii+"='"+v_fechaP+"' valor"+v_ii+"='"+v_valor+"' esquema"+v_ii+"='"+v_valor_esquema+"' neto"+v_ii+"='"+v_neto+"' tipo"+v_ii+"='"+v_tipo+"' bruto"+v_ii+"='"+v_bruto+"' unidad"+v_ii+"='"+v_valorUnidad1+"' feccargue"+v_ii+"='"+v_fecCargue+"' ";
+        ii++;
+      }
+      findRet.close();
+    }
+    catch(Exception e)
+    {
+     System.out.println(" ");
+    }
+    return "<"+v_retiros+">";
+  }
+/////////////Selecciona de la tabla ajustes las acciones que desea ver el cliente////////////
+  public static String TBPBD_AllRepAjustes(String v_mostrar,String v_fecDesde,String v_fecHasta,String v_contDesde,String v_contHasta){
+    String valores=new String("");
+    String v_accion=new String("");
+    String v_accion1=new String("");
+    String v_cadena[]=new String[2];
+    CONAJUSTES1 ajustes;
+    int ii=1;String v_ii=new String("");
+    try{
+      ///seleccionar la información de una de las tres acciones
+      if(v_mostrar.equals("1") || v_mostrar.equals("2") || v_mostrar.equals("3"))
+      {//1
+        if(v_mostrar.equals("1"))
+           v_accion="SAC001";
+        if(v_mostrar.equals("2"))
+           v_accion="SAC002";
+        if(v_mostrar.equals("3"))
+          v_accion="SAC003";
+        //si los dos son en blanco
+        if(v_contDesde.trim().equals("") && v_contHasta.trim().equals(""))
+        {
+           #sql ajustes={SELECT  AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
+                                 AJU_CON_NUMERO,     AJU_RETIRO_ORIGINAL,
+                                 TO_CHAR(AJU_FECHA_EFECTIVA,'RRRR/MM/DD')  fecefe,
+                                 TO_CHAR(AJU_FECHA_PROCESO,'RRRR/MM/DD') fecpro,
+                                 AJU_VALOR,
+                                 AJU_REF_ACCION,
+                                 TO_CHAR(AJU_FECHA_ACCION,'RRRR/MM/DD') fecaju
+                          FROM TBAJUSTES
+                         WHERE AJU_REF_ACCION= :v_accion AND
+                              TRUNC(AJU_FECHA_ACCION) >= :v_fecDesde AND
+                              TRUNC(AJU_FECHA_ACCION) <= :v_fecHasta};
+           ii=1;
+           while(ajustes.next())
+           {
+              v_ii=Integer.toString(ii++);
+              v_cadena=TBPBD_ContratoNomApel(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO());
+              valores+="nom"+v_ii+"='"+v_cadena[0]+"' ";
+              valores+="cont"+v_ii+"='"+ajustes.AJU_CON_NUMERO()+"' ";
+              valores+="conse"+v_ii+"='"+ajustes.AJU_CONSECUTIVO()+"' ";
+              valores+="fajs"+v_ii+"='"+ajustes.fecefe()+"' ";
+              valores+="fpro"+v_ii+"='"+ajustes.fecpro()+"' ";
+              valores+="val"+v_ii+"='"+Float.toString(ajustes.AJU_VALOR())+"' ";
+              valores+="fdec"+v_ii+"='"+ajustes.fecaju()+"' ";
+              valores+="accion"+v_ii+"='"+ajustes.AJU_REF_ACCION()+"' ";
+              valores+="bco"+v_ii+"='"+TBPBD_BancoCuenta(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO(),ajustes.AJU_RETIRO_ORIGINAL())+"' ";
+           }
+           ajustes.close();
+        }//si hasta esta vacio solo un contrato
+        else if(v_contHasta.trim().equals(""))
+            {
+               #sql ajustes={SELECT  AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
+                                     AJU_CON_NUMERO,     AJU_RETIRO_ORIGINAL,
+                                     TO_CHAR(AJU_FECHA_EFECTIVA,'RRRR/MM/DD')  fecefe,
+                                     TO_CHAR(AJU_FECHA_PROCESO,'RRRR/MM/DD') fecpro,
+                                     AJU_VALOR,
+                                     AJU_REF_ACCION,
+                                     TO_CHAR(AJU_FECHA_ACCION,'RRRR/MM/DD') fecaju
+                                FROM TBAJUSTES
+                               WHERE AJU_REF_ACCION= :v_accion AND
+                                     AJU_CON_NUMERO = :v_contDesde AND
+                              TRUNC(AJU_FECHA_ACCION) >= :v_fecDesde AND
+                              TRUNC(AJU_FECHA_ACCION) <= :v_fecHasta};
+               ii=1;
+               while(ajustes.next())
+               {
+                  v_ii=Integer.toString(ii++);
+                  v_cadena=TBPBD_ContratoNomApel(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO());
+                  valores+="nom"+v_ii+"='"+v_cadena[0]+"' ";
+                  valores+="cont"+v_ii+"='"+ajustes.AJU_CON_NUMERO()+"' ";
+                  valores+="conse"+v_ii+"='"+ajustes.AJU_CONSECUTIVO()+"' ";
+                  valores+="fajs"+v_ii+"='"+ajustes.fecefe()+"' ";
+                  valores+="fpro"+v_ii+"='"+ajustes.fecpro()+"' ";
+                  valores+="val"+v_ii+"='"+Float.toString(ajustes.AJU_VALOR())+"' ";
+                  valores+="fdec"+v_ii+"='"+ajustes.fecaju()+"' ";
+                  valores+="accion"+v_ii+"='"+ajustes.AJU_REF_ACCION()+"' ";
+                  valores+="bco"+v_ii+"='"+TBPBD_BancoCuenta(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO(),ajustes.AJU_RETIRO_ORIGINAL())+"' ";
+               }
+               ajustes.close();
+            }
+            else//desde hasta
+            {
+               #sql ajustes={SELECT  AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
+                                     AJU_CON_NUMERO,     AJU_RETIRO_ORIGINAL,
+                                     TO_CHAR(AJU_FECHA_EFECTIVA,'RRRR/MM/DD')  fecefe,
+                                     TO_CHAR(AJU_FECHA_PROCESO,'RRRR/MM/DD') fecpro,
+                                     AJU_VALOR,
+                                     AJU_REF_ACCION,
+                                     TO_CHAR(AJU_FECHA_ACCION,'RRRR/MM/DD') fecaju
+                                FROM TBAJUSTES
+                               WHERE AJU_REF_ACCION= :v_accion AND
+                                     AJU_CON_NUMERO >= :v_contDesde AND
+                                    AJU_CON_NUMERO <= :v_contHasta AND
+                              TRUNC(AJU_FECHA_ACCION) >= :v_fecDesde AND
+                              TRUNC(AJU_FECHA_ACCION) <= :v_fecHasta};
+               ii=1;
+               while(ajustes.next())
+               {
+                  v_ii=Integer.toString(ii++);
+                  v_cadena=TBPBD_ContratoNomApel(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO());
+                  valores+="nom"+v_ii+"='"+v_cadena[0]+"' ";
+                  valores+="cont"+v_ii+"='"+ajustes.AJU_CON_NUMERO()+"' ";
+                  valores+="conse"+v_ii+"='"+ajustes.AJU_CONSECUTIVO()+"' ";
+                  valores+="fajs"+v_ii+"='"+ajustes.fecefe()+"' ";
+                  valores+="fpro"+v_ii+"='"+ajustes.fecpro()+"' ";
+                  valores+="val"+v_ii+"='"+Float.toString(ajustes.AJU_VALOR())+"' ";
+                  valores+="fdec"+v_ii+"='"+ajustes.fecaju()+"' ";
+                  valores+="accion"+v_ii+"='"+ajustes.AJU_REF_ACCION()+"' ";
+                  valores+="bco"+v_ii+"='"+TBPBD_BancoCuenta(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO(),ajustes.AJU_RETIRO_ORIGINAL())+"' ";
+               }
+               ajustes.close();
+            }
+      }//1
+      //seleccionar la información de todas las acciones
+      if(v_mostrar.equals("4"))
+      {//2
+
+        if(v_contDesde.trim().equals("") && v_contHasta.trim().equals(""))
+        {
+           #sql ajustes={SELECT AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
+                                AJU_CON_NUMERO,     AJU_RETIRO_ORIGINAL,
+                                TO_CHAR(AJU_FECHA_EFECTIVA,'RRRR/MM/DD')  fecefe,
+                                TO_CHAR(AJU_FECHA_PROCESO,'RRRR/MM/DD') fecpro,
+                                AJU_VALOR,
+                                AJU_REF_ACCION,
+                                TO_CHAR(AJU_FECHA_ACCION,'RRRR/MM/DD') fecaju
+                           FROM TBAJUSTES
+                          WHERE AJU_REF_ACCION IS NOT NULL AND
+                               TRUNC(AJU_FECHA_ACCION) >= :v_fecDesde AND
+                               TRUNC(AJU_FECHA_ACCION) <= :v_fecHasta};
+
+           ii=1;
+           while(ajustes.next()){
+             v_ii=Integer.toString(ii++);
+             v_cadena=TBPBD_ContratoNomApel(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO());
+             valores+="nom"+v_ii+"='"+v_cadena[0]+"' ";
+             valores+="cont"+v_ii+"='"+ajustes.AJU_CON_NUMERO()+"' ";
+             valores+="conse"+v_ii+"='"+ajustes.AJU_CONSECUTIVO()+"' ";
+             valores+="fajs"+v_ii+"='"+ajustes.fecefe()+"' ";
+             valores+="fpro"+v_ii+"='"+ajustes.fecpro()+"' ";
+             valores+="val"+v_ii+"='"+Float.toString(ajustes.AJU_VALOR())+"' ";
+             valores+="fdec"+v_ii+"='"+ajustes.fecaju()+"' ";
+             valores+="accion"+v_ii+"='"+ajustes.AJU_REF_ACCION()+"' ";
+            valores+="bco"+v_ii+"='"+TBPBD_BancoCuenta(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO(),ajustes.AJU_RETIRO_ORIGINAL())+"' ";;
+           }
+           ajustes.close();
+        }
+        else  if(v_contHasta.trim().equals(""))
+              {
+                 #sql ajustes={SELECT AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
+                                      AJU_CON_NUMERO,     AJU_RETIRO_ORIGINAL,
+                                      TO_CHAR(AJU_FECHA_EFECTIVA,'RRRR/MM/DD')  fecefe,
+                                      TO_CHAR(AJU_FECHA_PROCESO,'RRRR/MM/DD') fecpro,
+                                      AJU_VALOR,
+                                      AJU_REF_ACCION,
+                                      TO_CHAR(AJU_FECHA_ACCION,'RRRR/MM/DD') fecaju
+                                      FROM TBAJUSTES
+                                      WHERE AJU_REF_ACCION IS NOT NULL AND
+                                      AJU_CON_NUMERO = :v_contDesde AND
+                                      TRUNC(AJU_FECHA_ACCION) >= :v_fecDesde AND
+                                      TRUNC(AJU_FECHA_ACCION) <= :v_fecHasta};
+
+                 ii=1;
+                 while(ajustes.next()){
+                   v_ii=Integer.toString(ii++);
+                   v_cadena=TBPBD_ContratoNomApel(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO());
+                   valores+="nom"+v_ii+"='"+v_cadena[0]+"' ";
+                   valores+="cont"+v_ii+"='"+ajustes.AJU_CON_NUMERO()+"' ";
+                   valores+="conse"+v_ii+"='"+ajustes.AJU_CONSECUTIVO()+"' ";
+                   valores+="fajs"+v_ii+"='"+ajustes.fecefe()+"' ";
+                   valores+="fpro"+v_ii+"='"+ajustes.fecpro()+"' ";
+                   valores+="val"+v_ii+"='"+Float.toString(ajustes.AJU_VALOR())+"' ";
+                   valores+="fdec"+v_ii+"='"+ajustes.fecaju()+"' ";
+                   valores+="accion"+v_ii+"='"+ajustes.AJU_REF_ACCION()+"' ";
+                   valores+="bco"+v_ii+"='"+TBPBD_BancoCuenta(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO(),ajustes.AJU_RETIRO_ORIGINAL())+"' ";;
+                 }
+                 ajustes.close();
+              }
+              else
+              {
+                #sql ajustes={SELECT AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
+                                      AJU_CON_NUMERO,     AJU_RETIRO_ORIGINAL,
+                                      TO_CHAR(AJU_FECHA_EFECTIVA,'RRRR/MM/DD')  fecefe,
+                                      TO_CHAR(AJU_FECHA_PROCESO,'RRRR/MM/DD') fecpro,
+                                      AJU_VALOR,
+                                      AJU_REF_ACCION,
+                                      TO_CHAR(AJU_FECHA_ACCION,'RRRR/MM/DD') fecaju
+                                      FROM TBAJUSTES
+                                      WHERE AJU_REF_ACCION IS NOT NULL AND
+                                      AJU_CON_NUMERO >= :v_contDesde AND
+                                      AJU_CON_NUMERO <= :v_contHasta AND
+                                      TRUNC(AJU_FECHA_ACCION) >= :v_fecDesde AND
+                                      TRUNC(AJU_FECHA_ACCION) <= :v_fecHasta};
+
+                  ii=1;
+                  while(ajustes.next()){
+                   v_ii=Integer.toString(ii++);
+                   v_cadena=TBPBD_ContratoNomApel(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO());
+                   valores+="nom"+v_ii+"='"+v_cadena[0]+"' ";
+                   valores+="cont"+v_ii+"='"+ajustes.AJU_CON_NUMERO()+"' ";
+                   valores+="conse"+v_ii+"='"+ajustes.AJU_CONSECUTIVO()+"' ";
+                   valores+="fajs"+v_ii+"='"+ajustes.fecefe()+"' ";
+                   valores+="fpro"+v_ii+"='"+ajustes.fecpro()+"' ";
+                   valores+="val"+v_ii+"='"+Float.toString(ajustes.AJU_VALOR())+"' ";
+                   valores+="fdec"+v_ii+"='"+ajustes.fecaju()+"' ";
+                   valores+="accion"+v_ii+"='"+ajustes.AJU_REF_ACCION()+"' ";
+                   valores+="bco"+v_ii+"='"+TBPBD_BancoCuenta(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO(),ajustes.AJU_RETIRO_ORIGINAL())+"' ";;
+                 }
+                 ajustes.close();
+              }
+      }//2
+
+      //seleccionar la información en combinación de las tres acciones
+      if(v_mostrar.equals("5") || v_mostrar.equals("6") || v_mostrar.equals("7")){
+        if(v_mostrar.equals("5")){v_accion="SAC001"; v_accion1="SAC002";}
+        if(v_mostrar.equals("6")){v_accion="SAC001"; v_accion1="SAC003";}
+        if(v_mostrar.equals("7")){v_accion="SAC002";v_accion1="SAC003";}
+
+        if(v_contDesde.trim().equals("") && v_contHasta.trim().equals(""))
+        {
+           #sql ajustes={SELECT AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
+                                AJU_CON_NUMERO,     AJU_RETIRO_ORIGINAL,
+                                TO_CHAR(AJU_FECHA_EFECTIVA,'RRRR/MM/DD')  fecefe,
+                                TO_CHAR(AJU_FECHA_PROCESO,'RRRR/MM/DD') fecpro,
+                                AJU_VALOR,
+                                AJU_REF_ACCION,
+                                TO_CHAR(AJU_FECHA_ACCION,'RRRR/MM/DD') fecaju
+                           FROM TBAJUSTES
+                          WHERE AJU_REF_ACCION=:v_accion
+                             OR AJU_REF_ACCION=:v_accion1 AND
+                                TRUNC(AJU_FECHA_ACCION) >= :v_fecDesde AND
+                               TRUNC(AJU_FECHA_ACCION) <= :v_fecHasta};
+           ii=1;
+           while(ajustes.next()){
+            v_ii=Integer.toString(ii++);
+            v_cadena=TBPBD_ContratoNomApel(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO());
+            valores+="nom"+v_ii+"='"+v_cadena[0]+"' ";
+            valores+="cont"+v_ii+"='"+ajustes.AJU_CON_NUMERO()+"' ";
+            valores+="conse"+v_ii+"='"+ajustes.AJU_CONSECUTIVO()+"' ";
+            valores+="fajs"+v_ii+"='"+ajustes.fecefe()+"' ";
+            valores+="fpro"+v_ii+"='"+ajustes.fecpro()+"' ";
+            valores+="val"+v_ii+"='"+Float.toString(ajustes.AJU_VALOR())+"' ";
+            valores+="fdec"+v_ii+"='"+ajustes.fecaju()+"' ";
+            valores+="accion"+v_ii+"='"+ajustes.AJU_REF_ACCION()+"' ";
+            valores+="bco"+v_ii+"='"+TBPBD_BancoCuenta(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO(),ajustes.AJU_RETIRO_ORIGINAL())+"' ";;
+           }
+           ajustes.close();
+        }
+        else if(v_contHasta.trim().equals(""))
+             {
+                #sql ajustes={SELECT AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
+                                     AJU_CON_NUMERO,     AJU_RETIRO_ORIGINAL,
+                                     TO_CHAR(AJU_FECHA_EFECTIVA,'RRRR/MM/DD')  fecefe,
+                                     TO_CHAR(AJU_FECHA_PROCESO,'RRRR/MM/DD') fecpro,
+                                     AJU_VALOR,
+                                     AJU_REF_ACCION,
+                                     TO_CHAR(AJU_FECHA_ACCION,'RRRR/MM/DD') fecaju
+                                FROM TBAJUSTES
+                               WHERE AJU_REF_ACCION=:v_accion
+                                  OR AJU_REF_ACCION=:v_accion1 AND
+                                     AJU_CON_NUMERO = :v_contDesde AND
+                                     TRUNC(AJU_FECHA_ACCION) >= :v_fecDesde AND
+                                     TRUNC(AJU_FECHA_ACCION) <= :v_fecHasta};
+                ii=1;
+                while(ajustes.next()){
+                  v_ii=Integer.toString(ii++);
+                  v_cadena=TBPBD_ContratoNomApel(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO());
+                  valores+="nom"+v_ii+"='"+v_cadena[0]+"' ";
+                  valores+="cont"+v_ii+"='"+ajustes.AJU_CON_NUMERO()+"' ";
+                  valores+="conse"+v_ii+"='"+ajustes.AJU_CONSECUTIVO()+"' ";
+                  valores+="fajs"+v_ii+"='"+ajustes.fecefe()+"' ";
+                  valores+="fpro"+v_ii+"='"+ajustes.fecpro()+"' ";
+                  valores+="val"+v_ii+"='"+Float.toString(ajustes.AJU_VALOR())+"' ";
+                  valores+="fdec"+v_ii+"='"+ajustes.fecaju()+"' ";
+                  valores+="accion"+v_ii+"='"+ajustes.AJU_REF_ACCION()+"' ";
+                  valores+="bco"+v_ii+"='"+TBPBD_BancoCuenta(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO(),ajustes.AJU_RETIRO_ORIGINAL())+"' ";;
+                }
+                ajustes.close();
+             }
+             else
+             {
+                #sql ajustes={SELECT AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
+                                     AJU_CON_NUMERO,     AJU_RETIRO_ORIGINAL,
+                                     TO_CHAR(AJU_FECHA_EFECTIVA,'RRRR/MM/DD')  fecefe,
+                                     TO_CHAR(AJU_FECHA_PROCESO,'RRRR/MM/DD') fecpro,
+                                     AJU_VALOR,
+                                     AJU_REF_ACCION,
+                                     TO_CHAR(AJU_FECHA_ACCION,'RRRR/MM/DD') fecaju
+                                FROM TBAJUSTES
+                               WHERE AJU_REF_ACCION=:v_accion
+                                  OR AJU_REF_ACCION=:v_accion1 AND
+                                     AJU_CON_NUMERO >= :v_contDesde AND
+                                     AJU_CON_NUMERO <= :v_contHasta AND
+                                     TRUNC(AJU_FECHA_ACCION) >= :v_fecDesde AND
+                                     TRUNC(AJU_FECHA_ACCION) <= :v_fecHasta};
+                ii=1;
+                while(ajustes.next()){
+                  v_ii=Integer.toString(ii++);
+                  v_cadena=TBPBD_ContratoNomApel(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO());
+                  valores+="nom"+v_ii+"='"+v_cadena[0]+"' ";
+                  valores+="cont"+v_ii+"='"+ajustes.AJU_CON_NUMERO()+"' ";
+                  valores+="conse"+v_ii+"='"+ajustes.AJU_CONSECUTIVO()+"' ";
+                  valores+="fajs"+v_ii+"='"+ajustes.fecefe()+"' ";
+                  valores+="fpro"+v_ii+"='"+ajustes.fecpro()+"' ";
+                  valores+="val"+v_ii+"='"+Float.toString(ajustes.AJU_VALOR())+"' ";
+                  valores+="fdec"+v_ii+"='"+ajustes.fecaju()+"' ";
+                  valores+="accion"+v_ii+"='"+ajustes.AJU_REF_ACCION()+"' ";
+                  valores+="bco"+v_ii+"='"+TBPBD_BancoCuenta(ajustes.AJU_CON_PRO_CODIGO(),ajustes.AJU_CON_NUMERO(),ajustes.AJU_RETIRO_ORIGINAL())+"' ";;
+                }
+                ajustes.close();
+             }
+      }//3
+
+    }catch(Exception ex)
+    {
+       String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+      return "Exception en TBPBD_AllRepAjustes por "+v_menex;
+    }
+    return valores;
+  }
+/////////////////selecciona banco y cuenta del egreso original de un retiro/////////////////
+  public static String TBPBD_BancoCuenta(String cod_producto,
+                                         String num_contrato,
+                                         int consecRet){
+    String v_cadena=new String("");
+    try{
+      CONRETIROS bcoRet;
+      #sql bcoRet={SELECT
+                  DECODE(RET_BANCO,NULL,' ',RET_BANCO)    RET_BANCO
+                  ,DECODE(RET_CUENTA,NULL,' ',RET_CUENTA) RET_CUENTA
+                  FROM
+                  TBRETIROS
+                  WHERE
+                  RET_CON_PRO_CODIGO  =: cod_producto
+                  AND RET_CON_NUMERO  =: num_contrato
+                  AND RET_CONSECUTIVO =: consecRet};
+      if(bcoRet.next()){
+        v_cadena="("+bcoRet.RET_BANCO()+")"+bcoRet.RET_CUENTA();
+      }
+      bcoRet.close();
+    }catch(Exception ex)
+    {
+
+      String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+      return "Exception en TBPBD_BancoCuenta por "+v_menex;
+    }
+    return v_cadena;
+  }
+////////////////////fecha -1 //////////////////////////////////
+
+public static String TBPBD_FECHA_VALUNI(String v_fecha_choose)
+{
+ try
+ {
+     #sql  {  SELECT TO_CHAR(TO_DATE(:v_fecha_choose,'RRRR-MM-DD') - 1,'RRRRMMDD') into :v_fecha_choose FROM DUAL };
+    return  v_fecha_choose;
+
+ }
+ catch(Exception ex){
+  String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+   return "Mensaje de error "+v_menex;
+    }
+
+
+
+}
+
+
+
+////////////////////selecciona todos los ajustes sin acción///////////////////////////////
+  public static String[] TBPBD_SelAllRetDec(String num_contrato,
+                                            String cod_producto,
+                                            String consecAjusOnly1){
+    String v_retNDec=new String("");
+    String v_consec=new String("");
+    String v_NDec[]=new String[2];
+    try{
+      int ii=1;
+      String v_cons=new String("");
+      String v_cons1=new String("-1");
+      String v_lin=new String("");
+      double val_TC=0;
+      CONAJUSTES ajusNoDec;
+      if(!consecAjusOnly1.equals("")){
+      int consecAjusOnly=Integer.parseInt(consecAjusOnly1);
+         #sql ajusNoDec={SELECT AJU_CONSECUTIVO,AJU_LINEA,AJU_FECHA_PROCESO,AJU_VALOR,AJU_RAZON_AJUSTE,AJU_USUARIO,AJU_RETIRO_ORIGINAL, AJU_RETIRO_ACTUAL,AJU_VALOR_UNIDAD FROM TBAJUSTES WHERE AJU_CON_PRO_CODIGO=:cod_producto AND AJU_CON_NUMERO=:num_contrato AND AJU_CONSECUTIVO=:consecAjusOnly AND AJU_REF_ACCION IS NULL AND AJU_FECHA_ACCION IS NULL};
+        while(ajusNoDec.next()){
+          v_cons=Integer.toString(ajusNoDec.AJU_CONSECUTIVO());
+          v_lin=Integer.toString(ajusNoDec.AJU_LINEA());
+          v_retNDec+="val"+v_cons+v_lin+"='"+ajusNoDec.AJU_VALOR()+"' "+
+                    "orig"+v_cons+v_lin+"='"+ajusNoDec.AJU_RETIRO_ORIGINAL()+"' "+
+                   "act"+v_cons+v_lin+"='"+ajusNoDec.AJU_RETIRO_ACTUAL()+"' "+
+                   "und"+v_cons+v_lin+"='"+ajusNoDec.AJU_VALOR_UNIDAD()+"' ";
+          if(!v_cons.equals(v_cons1)){//cuando es primer vez el consecutivo primer linea
+            val_TC=0;
+            v_retNDec+="raz"+v_cons+"='"+ajusNoDec.AJU_RAZON_AJUSTE()+"' user"+v_cons+"='"+ajusNoDec.AJU_USUARIO()+"' "+
+                       "fec"+v_cons+"='"+ajusNoDec.AJU_FECHA_PROCESO()+"' ";
+            v_consec+="cons"+Integer.toString(ii++)+"='"+v_cons+"' ";
+            val_TC=ajusNoDec.AJU_VALOR();
+            v_retNDec+=" vtot"+v_cons+"='"+val_TC+"' max"+v_cons+"='"+v_lin+"' ";
+          }else{//cuando hay dos ó más líneas por consecutivo
+            val_TC+=ajusNoDec.AJU_VALOR();
+            if(v_retNDec.indexOf("vtot"+v_cons)!=-1){//valor total del consecutivo
+              int vt=v_retNDec.indexOf("vtot"+v_cons);int vt1=v_retNDec.indexOf(" ",vt);
+              v_retNDec=v_retNDec.substring(0,vt-1)+v_retNDec.substring(vt1)+" vtot"+v_cons+"='"+val_TC+"' ";
+            }
+            if(v_retNDec.indexOf("max"+v_cons)!=-1){//guardar el max de linea del consecutivo
+              int vt=v_retNDec.indexOf("max"+v_cons);int vt1=v_retNDec.indexOf(" ",vt);
+              v_retNDec=v_retNDec.substring(0,vt-1)+v_retNDec.substring(vt1)+" max"+v_cons+"='"+v_lin+"' ";
+            }
+          }
+          v_cons1=v_cons;
+        }//while
+        ajusNoDec.close();
+      }else{
+        #sql ajusNoDec={SELECT AJU_CONSECUTIVO,     AJU_LINEA,        AJU_FECHA_PROCESO,
+                             AJU_VALOR,           AJU_RAZON_AJUSTE, AJU_USUARIO,
+                             AJU_RETIRO_ORIGINAL, AJU_RETIRO_ACTUAL,AJU_VALOR_UNIDAD
+                         FROM TBAJUSTES
+                       WHERE AJU_CON_PRO_CODIGO=:cod_producto
+                         AND AJU_CON_NUMERO=:num_contrato
+                         AND AJU_REF_ACCION IS NULL
+                         AND AJU_FECHA_ACCION IS NULL
+                       ORDER BY AJU_CONSECUTIVO};
+        while(ajusNoDec.next()){
+          v_cons=Integer.toString(ajusNoDec.AJU_CONSECUTIVO());
+          v_lin=Integer.toString(ajusNoDec.AJU_LINEA());
+          v_retNDec+="val"+v_cons+v_lin+"='"+ajusNoDec.AJU_VALOR()+"' "+
+                    "orig"+v_cons+v_lin+"='"+ajusNoDec.AJU_RETIRO_ORIGINAL()+"' "+
+                   "act"+v_cons+v_lin+"='"+ajusNoDec.AJU_RETIRO_ACTUAL()+"' "+
+                   "und"+v_cons+v_lin+"='"+ajusNoDec.AJU_VALOR_UNIDAD()+"' ";
+          if(!v_cons.equals(v_cons1)){//cuando es primer vez el consecutivo primer linea
+            val_TC=0;
+            v_retNDec+="raz"+v_cons+"='"+ajusNoDec.AJU_RAZON_AJUSTE()+"' user"+v_cons+"='"+ajusNoDec.AJU_USUARIO()+"' "+
+                       "fec"+v_cons+"='"+ajusNoDec.AJU_FECHA_PROCESO()+"' ";
+            v_consec+="cons"+Integer.toString(ii++)+"='"+v_cons+"' ";
+            val_TC=ajusNoDec.AJU_VALOR();
+            v_retNDec+=" vtot"+v_cons+"='"+val_TC+"' max"+v_cons+"='"+v_lin+"' ";
+          }else{//cuando hay dos ó más líneas por consecutivo
+            val_TC+=ajusNoDec.AJU_VALOR();
+            if(v_retNDec.indexOf("vtot"+v_cons)!=-1){//valor total del consecutivo
+              int vt=v_retNDec.indexOf("vtot"+v_cons);int vt1=v_retNDec.indexOf(" ",vt);
+              v_retNDec=v_retNDec.substring(0,vt-1)+v_retNDec.substring(vt1)+" vtot"+v_cons+"='"+val_TC+"' ";
+            }
+            if(v_retNDec.indexOf("max"+v_cons)!=-1){//guardar el max de linea del consecutivo
+              int vt=v_retNDec.indexOf("max"+v_cons);int vt1=v_retNDec.indexOf(" ",vt);
+              v_retNDec=v_retNDec.substring(0,vt-1)+v_retNDec.substring(vt1)+" max"+v_cons+"='"+v_lin+"' ";
+            }
+          }
+          v_cons1=v_cons;
+        }//while
+        ajusNoDec.close();
+      }
+    }catch(Exception ex)
+    {
+        String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+
+
+      v_NDec[0]="Exception en SellAllRetDec por "+v_menex;
+      return v_NDec;
+    }
+    v_NDec[0]="<"+v_retNDec+">";v_NDec[1]="<"+v_consec+">";
+    return v_NDec;
+  }
+
+/*******************************************/
+//CONSULTAR UNIDAD
+
+public static String TBPL_BuscarUnidad(String v_unidad)
+{
+ String v_coduni = "";
+ try
+ {
+ #sql v_coduni ={values(TBFBD_REFERENCIAS(:v_unidad,'UUP'))};
+ return v_coduni;
+ }
+ catch(Exception  ex)
+ {
+  return "XXXXXX";
+ }
+}
+/*******************************************/
+//CONSULTAR tipo de usuario
+
+public static String TBPL_BuscarTipoUsuario(String v_tipousu)
+{
+ String v_codusu = "";
+ try
+ {
+  #sql v_codusu ={values(TBFBD_REFERENCIAS(:v_tipousu,'UTU'))};
+ return v_codusu;
+ }
+ catch(Exception  ex)
+ {
+  return "XXXXXX";
+ }
+}
+
+    public void TBPBD_CerrarConexionBD(){
+        try
+          {
+           DefaultContext.getDefaultContext().close();
+          }
+        catch(Exception e)
+         {
+          e.printStackTrace();
+         }
+    }
+}//fin
+///

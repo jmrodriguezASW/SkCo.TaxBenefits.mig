@@ -1,0 +1,296 @@
+// Copyright (c) 2000 Sk
+package TBPKT_MODULO_RETIROS.TBPKT_INTERFACE_RETIROS;
+
+import sqlj.runtime.*;
+import sqlj.runtime.ref.*;
+import java.sql.*;
+import java.io.*;
+import java.sql.Date;
+import java.lang.String.*;
+import TBPKT_UTILIDADES.TBPKT_CONEXIONBASEDATOS.*;
+import TBPKT_UTILIDADES.TBPKT_VALOR_UNIDAD.*;
+import com.ibm.as400.access.*;
+
+public class SQL_CIERRE_SALDOS extends Object {
+
+ /*
+  Metodo que realiza el cierre mensual de saldos de contratos
+  insertando en la tabla TBSALDOS
+ */
+
+ //Interector o cursor de la tabla TBCONTRATOS con los canpos seleccionados
+ #sql public static iterator vint_contrato (String con_pro_codigo, String con_numero);
+
+ public static int TB_CIERRE_SALDOS_CONTRATO(String v_fecha)
+ {
+   Date              v_max_fecha;
+   vint_contrato     vreg_contrato         = null;
+   int               v_cod_err             = 0;
+   String            v_cadena_t;
+   String            v_contrato;
+   String            v_producto;
+   String            v_men_err = " ";
+   String            v_log_mensaje = " ";
+   String            v_log_datos = " ";
+   String            v_cierre = "N";
+   double            v_saldo_unidades;
+   Double            v_saldo_cuenta_conting_d;
+   Double            v_saldo_unidades_d;
+   double            v_saldo_cuenta_conting = 0;
+   double            v_valor_unidad;
+   Double            v_saldo_contrato_d;
+   double            v_saldo_contrato = 0;
+   Double            v_saldo_unidad_max_fec;
+   Double            v_cuenta_conting_max_fec;
+   String[]          v_valusu;
+   TBCL_Validacion   i_valusu = new TBCL_Validacion();
+   Date              v_fecha_d;
+   int               sw = 0;
+   int               v_sw = 1;
+   Integer           v_cta_contingente = null;
+   String            v_existe;
+   Double           v_saldo_disponible;
+   String            v_sistema         = " ";
+   String            v_usuario         = " ";
+   String            v_password        = " ";
+   String            v_libreria        = " ";
+
+   try{
+     //Conexion con la base de datos
+     v_valusu = new String[3];
+     v_valusu = i_valusu.TBFL_ValidarUsuario();
+     DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+     DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));
+     //Validar si es fin de mes para realizar el proceso de cierre
+     //Si no es fin de mes realizar el proceso solo si para el mes anterior no se
+     //realizo el cierre de saldos
+     System.out.println("Fecha en  cierre saldo "+v_fecha);
+     #sql v_cierre = { values ( TBFBD_VALIDAR_CIERRE_SALDO (:INOUT v_fecha, :INOUT v_cod_err,:INOUT v_men_err))};
+     System.out.println("Paso validar cierre saldo "+v_cierre+" Fecha nueva"+v_fecha+" v_cod_err"+v_cod_err);
+     if (v_cod_err == 0){
+       if (v_cierre.charAt(0) == 'S'){
+         //Conexion al AS400
+         //Buscar elementos de conexion al As400 en referncias
+         #sql v_sw = { values(TB_FREFERENCIAS_MULTI(:INOUT v_sistema,
+                                                    :INOUT v_usuario,
+                                                    :INOUT v_password,
+                                                    :INOUT v_libreria ))};
+         if (v_sw == 0){
+           //Conectarse al AS400
+           AS400 as400 = new AS400(""+v_sistema+"");
+           try{
+            //se conecta con usuario y password
+            as400.setUserId(""+v_usuario+"");
+            as400.setPassword(""+v_password+"");
+            System.out.println("Se conectó al As400 ");
+           }//No Hubo error al conectarse al AS400
+           catch (Exception e){
+             System.out.println("Error al conectarse al As400 "+e);
+             v_cod_err = -1;
+           }//Hubo error al conectarse al AS400
+           if (v_cod_err == 0){
+             System.out.println("Se conectó al As400 ");
+             //Para cada contrato vigente o existente los saldos para el producto-contrato en caso
+             //de que existan y la cuenta contingente sea Null procesar los saldos y actualizar TBSALDOS
+             //En caso de no existir los saldos procesar e insertar en TBSALDOS
+             //Si existen los saldos pero la cuenta contigente es distinta de Null significa
+             //que un cierre mensual anterior proceso este producto-contrato y no se
+             //debe procesar. Calcular saldo_contrato = AS400, saldo_unidades y valor_unidad
+             #sql vreg_contrato = {SELECT con_pro_codigo, con_numero
+                                     FROM tbcontratos, tbsaldos
+                                     WHERE sal_con_pro_codigo (+) = con_pro_codigo
+                                       AND sal_con_numero     (+) = con_numero
+                                       AND sal_fecha          (+) = to_date(:v_fecha,'RRRR-MM-DD')
+                                       AND sal_saldo_cuenta_contingente  IS NULL
+                                       AND ( con_fecha_cancelacion       IS NULL OR
+                                            con_fecha_cancelacion > to_date(:v_fecha,'RRRR-MM-DD')
+                                            )
+                                        };
+             while (vreg_contrato.next() ){
+               //Seguir proceso de cierre aunque ocurra un error al calcular los
+               //saldos para cualquier contrato. Si ocurre un error insertar en el LOG
+               v_cod_err = 0;
+               v_men_err = " ";
+               sw = 0;
+               v_contrato = vreg_contrato.con_numero();
+               v_producto = vreg_contrato.con_pro_codigo();                 
+               System.out.println("Contrato número "+v_contrato);
+               //Llamado a funcion que devuelve el saldo de contrato
+               //OJO EL SALDO DEL CONTRATO DEVULVE -1 SI HAY ERROR
+               try {
+                  if (v_producto.equals("OMPEV")){
+                      TBCL_AS400 ias400 = new TBCL_AS400();
+                      v_saldo_contrato = ias400.saldosOMPEV(v_contrato, v_fecha, as400, v_libreria);
+                   }
+                   else
+                  {
+                         TBCL_AS400 ias400 = new TBCL_AS400();
+                         v_saldo_contrato  = ias400.TBF_SALDO_CONTRATO_P(v_contrato, v_fecha, as400, v_libreria);
+                  }
+                  if (v_saldo_contrato == -1){
+                           v_cod_err = 0; // para que siga con el siguiente contrato.
+                           v_men_err = "Error en la funcion del AS400";
+                           System.out.println("Error en la funcion del AS400. Contrato número "+v_contrato);
+                  }
+               }catch(Exception e){v_cod_err = 1;}
+               //Si hubo error al calcular el saldo de contrato no realizar proceso
+               //para el contrato
+               if (v_cod_err == 0){
+                 if (v_saldo_contrato > 0){
+                   //Seleccionar los saldos de unidades y cuenta contingente de los saldos
+                   //mas recientes en TBSALDOS o del aporte vigente mas antiguo en caso
+                   //de no existir saldos anteriores en TBSALDOS
+                   #sql {call TBPBD_ULTIMOS_SALDOS(:v_fecha,
+                                                   :v_contrato,
+                                                   :v_producto,
+                                                   :OUT v_max_fecha,
+                                                   :OUT v_saldo_unidad_max_fec,
+                                                   :OUT v_cuenta_conting_max_fec,
+                                                   :INOUT v_cod_err,
+                                                   :INOUT v_men_err)};
+                   if (v_cod_err == 0){
+                     v_saldo_unidades = 0;
+                     //Calcular el saldo_unidades y el saldo de cuenta contingente
+                     #sql {call TBPBD_SALUNI_SALCTACONT(:v_fecha,
+                                                        :v_contrato,
+                                                        :v_producto,
+                                                        :v_max_fecha,
+                                                        :v_cuenta_conting_max_fec,
+                                                        :v_saldo_unidad_max_fec,
+                                                        :OUT v_saldo_cuenta_conting,
+                                                        :OUT v_saldo_unidades,
+                                                        :INOUT v_cod_err,
+                                                        :INOUT v_men_err)};
+                     if (v_cod_err == 0 ){
+                       if ((v_saldo_unidades > 0) && (v_saldo_cuenta_conting >= 0)) {
+                         //calculo el valor de la unidad
+                         v_valor_unidad     = v_saldo_contrato / v_saldo_unidades;
+                         //Calcular el saldo disponible del contrato
+                         #sql {call TBPBD_CONTRATO_DISPONIBLE(:v_fecha,
+                                                              :v_contrato,
+                                                              :v_producto,
+                                                              :v_saldo_contrato,
+                                                              :v_valor_unidad,
+                                                              :OUT v_saldo_disponible,
+                                                              :INOUT v_cod_err,
+                                                              :INOUT v_men_err)};
+                         if (v_cod_err == 0 ){
+                           //Llama al procedimiento que inserta en la tabla TBSALDOS
+                           #sql {call TBPBD_INS_TBSALDOS(:v_producto,
+                                                         :v_contrato,
+                                                         :v_fecha,
+                                                         :v_saldo_contrato,
+                                                         :v_saldo_disponible,
+                                                         :v_saldo_cuenta_conting,
+                                                         :v_saldo_unidades,
+                                                         :v_valor_unidad,
+                                                         :INOUT v_cod_err,
+                                                         :INOUT v_men_err)};
+                           //Si este saldo existe en la tabla TBSALDOS se actualiza la tabla
+                           if (v_cod_err == -0001){
+                             #sql {call TBPBD_UPDATE_SALDOS(to_date(:v_fecha,'RRRR-MM-DD'),
+                                                            :v_producto,
+                                                            :v_contrato,
+                                                            :v_saldo_contrato,
+                                                            :v_saldo_disponible,
+                                                            :v_saldo_cuenta_conting,
+                                                            :v_saldo_unidades,
+                                                            :v_valor_unidad,
+                                                            :INOUT v_cod_err,
+                                                            :INOUT v_men_err)};
+                             if (v_cod_err != 0 ){
+                               sw = 1;
+                               v_log_mensaje = v_men_err;
+                               v_log_datos   = "Fecha: "+v_fecha+" Contrato: "+v_contrato;
+                               #sql { ROLLBACK };//De la actualizacion
+                             }//Hubo error al actualizar en TBSALDOS
+                             else{
+                               #sql { COMMIT };//De la actualizacion
+                             }//No hubo error al actualizar
+                           }//Existia saldos en TBSALDOS actualizar
+                           else{
+                             if (v_cod_err != 0 ){
+                               sw = 1;
+                               v_log_mensaje = v_men_err;
+                               v_log_datos   = "Fecha: "+v_fecha+" Contrato: "+v_contrato;
+                               System.out.println("Error al insertar en tbsaldos "+v_men_err);
+                               System.out.println("Contrato "+v_contrato);
+                               #sql { ROLLBACK };//De la insercion
+                             }//Hubo error al insertar en TBSALDOS
+                             else{
+                               #sql { COMMIT };//De la insercion
+                             }//No hubo error al insertar
+                           }//No existian saldos en TBSALDOS insertó o error
+                         }//No hubo error al calcular el saldo disponible de contrato
+                         else{
+                           sw = 1;
+                           v_log_mensaje = v_men_err;
+                           v_log_datos   = "Fecha: "+v_fecha+" Contrato: "+v_contrato;
+                           System.out.println("Error al calcular saldo de contrato disponible "+v_men_err);
+                           System.out.println("Contrato "+v_contrato);
+                         }//Error al calcular saldo disponible del contrato
+                       }//Saldos son positivos
+                       else{
+                         sw = 1;
+                         v_log_mensaje = "Saldo de cuenta contingente "+v_saldo_cuenta_conting+
+                                         "o Saldo de Unidades "+v_saldo_unidades+
+                                         "es negativo o igual a cero";
+                         v_log_datos   = "Fecha: "+v_fecha+" Contrato: "+v_contrato;
+                         System.out.println("Saldos de unidades y cuenta contigente negativos o igual a cero "+v_saldo_unidades+" Cuenta Cont"+v_saldo_cuenta_conting);
+                         System.out.println("Contrato "+v_contrato);
+                       }//Saldos son negativos o cero
+                     }//No hubo error al calcular los saldos
+                     else{
+                       sw = 1;
+                       v_log_mensaje = v_men_err;
+                       v_log_datos   = "Fecha: "+v_fecha+" Contrato: "+v_contrato;
+                       System.out.println("Error al calcular los saldos de unidades y cuenta contigente "+v_men_err);
+                       System.out.println("Contrato "+v_contrato);
+                     }//Hubo error al calcular los saldos
+                   }//No hubo error al selecionar los ultimos saldos en TBSALDOS
+                   else{
+                     sw = 1;
+                     v_log_mensaje = v_men_err;
+                     v_log_datos   = "Fecha: "+v_fecha+" Contrato: "+v_contrato;
+                     System.out.println("Error al selecionar los ultimos saldos en TBSALDOS"+v_men_err);
+                     System.out.println("Contrato "+v_contrato);
+                   }//Hubo error al selecionar los ultimos saldos en TBSALDOS
+                 }//Saldo de contrato es positivo
+                 else{
+                   sw = 1;
+                   v_log_mensaje = "Saldo del contrato es negativo o igual a cero";
+                   v_log_datos   = "Fecha: "+v_fecha+" Contrato: "+v_contrato;
+                   System.out.println("Saldo del contrato es negativo o cero"+v_saldo_contrato);
+                   System.out.println("Contrato "+v_contrato);
+                 }//Saldo de contrato es negativo o cero
+               }//No hubo error al calcular el saldo de contrato en el AS400
+               else{
+                 sw = 1;
+                 v_log_mensaje = "Error al calcular el saldo del contrato en el AS400";
+                 v_log_datos   = "Fecha: "+v_fecha+" Contrato: "+v_contrato;
+                 System.out.println("Saldo del contrato as400 error"+v_men_err);
+                 System.out.println("Contrato "+v_contrato);
+               }//Hubo error al calcular el saldo de contrato en el AS400
+               if (sw == 1){
+                 //Procedimiento que inserta en la tabla de Log
+                 #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG', to_date(:v_fecha,'RRRR-MM-DD'), 'CM', :v_log_mensaje,
+                                                        :v_log_datos, :v_producto, 0)};
+                 #sql {COMMIT};
+               }//Insertar en el log
+             }//While
+             //Desconectarse del AS400
+             as400.disconnectService(AS400.COMMAND);
+           }//No Hubo error al conectarse al AS400
+           System.out.println("Cierre Terminado.");
+         }//No hubo error al buscar las referencias de conexion a MF
+       }//Se puede realizar el cierre
+     }//No hubo error al validar el proceso de cierre
+      return v_cod_err;
+  }
+   catch( Exception e ) {
+     System.out.println("ERROR SQL_CIERRE: "+e);
+     return -1;
+  }
+ }//Metodo TB_CIERRE_SALDOS_CONTRATO
+}
+

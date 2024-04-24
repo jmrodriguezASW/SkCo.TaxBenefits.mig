@@ -1,0 +1,163 @@
+/*********************************************************************************/
+/* Global                                                                        */
+/*********************************************************************************/
+
+/* Basic */
+
+body
+{
+        background-color: #ffffff;
+        margin: 0;
+}
+
+.table
+{
+        border:0;
+        width:100%;
+        height:100%;
+        border-spacing:0;
+        border-collapse:collapse;
+        padding: 0;
+}
+
+.table2
+{
+        border:0;
+        width:540px;
+        border-color: #aaaaaa;
+        border-width: 2px;
+        border-style: solid;
+}
+
+.table3
+{
+        background-color: #8cc63f;
+        border:0;
+        width:100%;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+}
+
+.table4
+{
+        background-color: #ffffff;
+        border:0;
+        width:161px;
+}
+
+.tr1
+{
+  vertical-align: top;
+  
+}
+
+.td1
+{
+        width:23px;
+}
+
+.td2
+{
+        width:492px;
+}
+
+.td3
+{
+        width:24px;
+}
+
+.td4
+{
+        width:1px;
+}
+
+.td5
+{
+        background: url('../imagenes/bg_top.gif');
+        width:492px;
+}
+
+.td6
+{
+        background: url('../imagenes/bg_left.gif');
+        width:23px;
+}
+
+.td7
+{
+        background-color: #FFFFFF;
+        width:492px;
+}
+
+.td8
+{
+        background: url('../imagenes/bg_right.gif');
+        width:24px;
+}
+
+.td9
+{
+        background-color: #FFFFFF;
+        width:23px;
+}
+
+.td10
+{
+        background: url('../imagenes/bg_botton.gif');
+        width:492px;
+}
+
+.td11
+{
+        background-color: #008765;
+}
+
+.td12
+{
+        background-color: #008765;
+}
+
+
+.td13
+{
+        background-color: #008765;
+        width:100%;
+}
+
+.subtitulo
+{
+    /*<CENTER>
+    <FONT color=white face=Verdana size=2><B>"+subtitulo+"</B>
+    </FONT>
+    </CENTER>*/
+    color: #FFFFFF;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.mensaje
+{
+    /*<CENTER>
+    <FONT color=white face=Verdana size=2><B>"+subtitulo+"</B>
+    </FONT>
+    </CENTER>*/
+    color: #008765;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.error
+{
+    /*<CENTER><b><FONT color=blue face=verdana size=1>
+    </font></b></CENTER>*/
+    color: #008765;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    text-align: center;
+    font-weight: bold;
+}

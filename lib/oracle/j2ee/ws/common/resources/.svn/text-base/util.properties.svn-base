@@ -1,0 +1,4 @@
+#
+# $Id: util.properties 30-sep-2003.19:57:30 sugupta Exp $
+#
+holder.valuefield.not.found=Could not find the field in the Holder that contains the Holder's value: {0}

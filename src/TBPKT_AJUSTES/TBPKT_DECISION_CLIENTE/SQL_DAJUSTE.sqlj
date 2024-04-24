@@ -1,0 +1,1255 @@
+/*
+El objetivo de esta clase es manejar todo lo que tiene que ver con la Base de
+Datos TaxBenefit, según lo que se desee realizar, como consultas, modificaciones
+o insertar información.
+*/
+package TBPKT_AJUSTES.TBPKT_DECISION_CLIENTE;
+
+import oracle.jdbc.*;
+import oracle.sql.*;
+import oracle.jdbc.driver.*;
+import sqlj.runtime.*;
+import sqlj.runtime.ref.*;
+import sqlj.runtime.ref.DefaultContext;
+import java.sql.*;
+import java.sql.Date;
+import java.io.*;
+import java.util.*;
+import TBPKT_UTILIDADES.TBPKT_CONEXIONBASEDATOS.*;
+
+
+public class SQL_DAJUSTE extends Object{
+
+#sql public static iterator CONTOTRETCARGO(double CAPREN, int LON);
+#sql public static iterator CONRETCARGO(double APR_APO_CONSECUTIVO, double APR_CAPITAL, double APR_RENDIMIENTOS, double APR_PORCENTAJE_PENALIZACION, double CAE_VALOR, String CAE_REF_CARGO, double APO_SALDO_NUMERO_UNIDADES, double  APO_SALDO_CUENTA_CONTINGENTE);
+#sql public static iterator CONCARGORET(double SUM_CAE_VALOR, String CAE_REF_CARGO);
+#sql public static iterator CONAPORTE2(double APO_SALDO_CUENTA_CONTINGENTE);
+#sql public static iterator ITVALORDB(double VALORDB);
+#sql public static iterator ITVALORINT(int VALORINT);
+#sql public static iterator ITAPORTE(double APO_SALDO_CAPITAL,double APO_SALDO_CUENTA_CONTINGENTE,double APO_SALDO_NUMERO_UNIDADES);
+#sql public static iterator ITAPORET(int APR_APO_CONSECUTIVO,double APR_CAPITAL,double APR_RENDIMIENTOS,int APR_PORCENTAJE_PENALIZACION,double APO_SALDO_NUMERO_UNIDADES,double APO_SALDO_CUENTA_CONTINGENTE);
+#sql public static iterator ITAPOCAR(int CAE_APR_APO_CONSECUTIVO,double CAE_VALOR,String CAE_REF_CARGO);
+#sql public static iterator ITAPORTE1(int APO_CONSECUTIVO);
+
+#sql public static iterator CONAJUSTES(int AJU_CONSECUTIVO,int AJU_LINEA,Date AJU_FECHA_PROCESO,double AJU_VALOR,String AJU_RAZON_AJUSTE,String AJU_USUARIO,int AJU_RETIRO_ORIGINAL,int AJU_RETIRO_ACTUAL,double AJU_VALOR_UNIDAD);
+#sql public static iterator CONCARGOAJU(double CAA_VALOR);
+#sql public static iterator CONAPORAJUS(double APA_CAPITAL,double APA_RENDIMIENTOS,double APA_CUENTA_CONTINGENTE,double APA_NUMERO_UNIDADES);
+#sql public static iterator CONTRATONOMBAPEL(String CON_NOMBRES,String CON_APELLIDOS,Date CON_FECHA_CANCELACION);
+#sql public static iterator I_DECISIONAJUSTE(String DECISION);
+#sql public static iterator I_INTERFACERET(String INL_PASO);
+
+
+
+public static String err=new String();
+
+//////////////////Llamado principal en la Decision de Ajustar contrato///////////////////////
+/*
+  modificado Noviembre 27 de 2001
+  por Diego V
+*/
+public static String TBPBD_AjustarContrato(String cod_producto,
+                                           String num_contrato,
+                                           int consecRet,
+                                           int consecRetP,
+                                           int consecAjus,
+                                           int linea,
+                                           double valUnidad){
+    String strProp = "NO";
+    if (valUnidad == 0) return "EL VALOR DE LA UNIDAD ES CERO";
+    try{
+      CONCARGORET cargoret;
+      CONTOTRETCARGO  tot_aportes_retiros;
+      ITVALORINT  por_retencion;
+      ITAPORET aportes_retiros;
+      ITAPOCAR aportes_cargos;
+      int ii = 1,jj = 0;
+      String v_ii    = "";
+      String v_cargo = "";
+      double sumCargos[][] = new double [2][4];     //guarda sumatoria de cargos para r y r'
+      double matrizAjustes[][]  = null;               //guardar c/u de cargos r' y proporcionalidad
+      double ajustes[][]  = null;               //guardar c/u de los ajustes
+
+
+      // Porcentaje de beneficio para el cálculo de los ajustes
+      #sql por_retencion ={
+                    SELECT PRO_RETENCION_FUENTE VALORINT
+                    FROM TBPRODUCTOS
+                    WHERE PRO_CODIGO = :cod_producto};
+      double porBeneficio = 0;
+      if (por_retencion.next()){
+        porBeneficio = por_retencion.VALORINT();
+        porBeneficio /= 100;
+      }
+      por_retencion.close();
+
+      //sumatoria de r de los cargos retiros para calcular proporcionalidad
+      #sql cargoret={SELECT NVL(SUM(CAE_VALOR),0) SUM_CAE_VALOR
+     	                    , CAE_REF_CARGO
+                       FROM
+                        TBCARGOS_RETIROS
+                       WHERE
+                         CAE_APR_RET_CON_PRO_CODIGO  =:cod_producto
+                         AND CAE_APR_RET_CON_NUMERO  =:num_contrato
+                         AND CAE_APR_RET_CONSECUTIVO =:consecRet
+                       GROUP BY CAE_REF_CARGO};
+
+      while(cargoret.next())
+        sumCargos[0][Integer.parseInt(cargoret.CAE_REF_CARGO().substring(cargoret.CAE_REF_CARGO().length() - 1))-1] = cargoret.SUM_CAE_VALOR();
+      cargoret.close();
+
+      //sumatoria de r' de los cargos retiros para calcular proporcionalidad
+      #sql cargoret={SELECT NVL(SUM(CAE_VALOR),0) SUM_CAE_VALOR
+     	                    , CAE_REF_CARGO
+                       FROM
+                        TBCARGOS_RETIROS
+                       WHERE
+                         CAE_APR_RET_CON_PRO_CODIGO  =:cod_producto
+                         AND CAE_APR_RET_CON_NUMERO  =:num_contrato
+                         AND CAE_APR_RET_CONSECUTIVO =:consecRetP
+                       GROUP BY CAE_REF_CARGO};
+
+      while(cargoret.next())
+        sumCargos[1][Integer.parseInt(cargoret.CAE_REF_CARGO().substring(cargoret.CAE_REF_CARGO().length() - 1))-1] = cargoret.SUM_CAE_VALOR();
+      cargoret.close();
+
+      // retiros por aporte
+      #sql aportes_retiros ={
+            SELECT	APR_APO_CONSECUTIVO
+            			, APR_CAPITAL
+            			, APR_RENDIMIENTOS
+                  , APR_PORCENTAJE_PENALIZACION
+                  , APO_SALDO_NUMERO_UNIDADES
+                  , APO_SALDO_CUENTA_CONTINGENTE
+            FROM 		TBAPORTES_RETIROS
+                  , TBAPORTES
+            WHERE 	APR_RET_CON_PRO_CODIGO = :cod_producto
+            		AND APR_RET_CON_NUMERO     = :num_contrato
+            		AND APR_RET_CONSECUTIVO    = :consecRetP
+                AND APO_CON_PRO_CODIGO = APR_RET_CON_PRO_CODIGO
+		            AND APO_CON_NUMERO     = APR_RET_CON_NUMERO
+            		AND APO_CONSECUTIVO    = APR_APO_CONSECUTIVO
+            ORDER BY APR_APO_CONSECUTIVO};
+
+      // total de capital + rendimientos para retiros por aporte
+      #sql tot_aportes_retiros ={
+                SELECT NVL(SUM(APR_CAPITAL +APR_RENDIMIENTOS), 0)  CAPREN
+ 						          , COUNT(APR_CAPITAL) LON
+                FROM 		TBAPORTES_RETIROS
+                    , TBAPORTES
+                WHERE  APR_RET_CON_PRO_CODIGO =  :cod_producto
+                          AND APR_RET_CON_NUMERO     = :num_contrato
+                          AND APR_RET_CONSECUTIVO    = :consecRetP
+                          AND APO_CON_PRO_CODIGO = APR_RET_CON_PRO_CODIGO
+                          AND APO_CON_NUMERO     = APR_RET_CON_NUMERO
+                          AND APO_CONSECUTIVO    = APR_APO_CONSECUTIVO};
+      double sumKR = 1;
+      int lonmatrizAjustes = 0;
+      if(tot_aportes_retiros.next()){
+        sumKR = tot_aportes_retiros.CAPREN();
+        lonmatrizAjustes = tot_aportes_retiros.LON();
+      }
+      tot_aportes_retiros.close();
+      if (sumKR == 0) sumKR = 1;
+
+      matrizAjustes = new double[lonmatrizAjustes][13];
+
+      int filaAp = 0;
+      int conPro, posCargo;
+      double proporcion = 0.0;
+
+//  Se llena la matriz para calcular los ajustes
+      // Datos del aporte
+      while(aportes_retiros.next()){
+        matrizAjustes[filaAp][0] = aportes_retiros.APR_APO_CONSECUTIVO(); // Columna 0 aporte
+        matrizAjustes[filaAp][1] = aportes_retiros.APR_CAPITAL();         // Columna 1 capital
+        matrizAjustes[filaAp][2] = aportes_retiros.APR_RENDIMIENTOS();    //  Columna 2 rendimientos
+        // Columna 11 Porcentaje de Penalización
+        matrizAjustes[filaAp][11] = aportes_retiros.APR_PORCENTAJE_PENALIZACION();
+        matrizAjustes[filaAp][11] /= 100;
+        // Columna 12 Saldo Cuenta contingente
+        matrizAjustes[filaAp][12] = aportes_retiros.APO_SALDO_CUENTA_CONTINGENTE();
+        filaAp++;
+      }
+      aportes_retiros.close();
+
+      // cargos por aporte
+      #sql aportes_cargos ={
+            SELECT	CAE_APR_APO_CONSECUTIVO
+                  , CAE_VALOR
+            			, CAE_REF_CARGO
+            FROM 		TBCARGOS_RETIROS
+            WHERE 	CAE_APR_RET_CON_PRO_CODIGO  = :cod_producto
+                AND CAE_APR_RET_CON_NUMERO      = :num_contrato
+                AND CAE_APR_RET_CONSECUTIVO     = :consecRetP
+            ORDER BY CAE_APR_APO_CONSECUTIVO};
+      // Datos de cargos
+      while (aportes_cargos.next()){
+        filaAp = 0;
+        while(matrizAjustes[filaAp][0] != aportes_cargos.CAE_APR_APO_CONSECUTIVO()) filaAp++;
+        posCargo = Integer.parseInt(aportes_cargos.CAE_REF_CARGO().substring(aportes_cargos.CAE_REF_CARGO().length() - 1))+2;
+        matrizAjustes[filaAp][posCargo] = aportes_cargos.CAE_VALOR(); // Columnas 3-6 Valor cargo
+      }
+      aportes_cargos.close();
+
+      // Datos preajustes calculados
+      for (filaAp=0; filaAp<lonmatrizAjustes; filaAp++){
+        // Fila 7-10 Proporcionalidad de cargos ajustes
+        for (int colAp=7; colAp<11; colAp++){
+          if (sumCargos[1][colAp-7] != 0.0){
+            proporcion = (sumCargos[0][colAp-7] - sumCargos[1][colAp-7]) * matrizAjustes[filaAp][colAp-4]/sumCargos[1][colAp-7];
+          }else{
+            proporcion = sumCargos[0][colAp-7] * (matrizAjustes[filaAp][1]+matrizAjustes[filaAp][2])/sumKR;
+            }
+          matrizAjustes[filaAp][colAp] = proporcion;
+        }
+      }
+
+      aportes_cargos.close();
+      ajustes = new double [lonmatrizAjustes][8];
+      double division;
+      // Calculo de los ajustes
+      for (filaAp=0; filaAp<lonmatrizAjustes; filaAp++){
+        // 0 Aporte
+        ajustes[filaAp][0] = matrizAjustes[filaAp][0];
+        // 1 Ajuste a capital
+        if (matrizAjustes[filaAp][1] != 0.0){
+          division = matrizAjustes[filaAp][4];
+          division /= matrizAjustes[filaAp][1];
+        }else{
+          division = 0.0;
+        };
+        ajustes[filaAp][1] = (matrizAjustes[filaAp][8]+matrizAjustes[filaAp][10]);
+        ajustes[filaAp][1] /=(1-(division+matrizAjustes[filaAp][11]));
+        // 2 Ajuste a rendimientos
+        ajustes[filaAp][2] = (matrizAjustes[filaAp][7]+matrizAjustes[filaAp][9]);
+        if(matrizAjustes[filaAp][5] != 0)
+          ajustes[filaAp][2] /=(1-(porBeneficio+matrizAjustes[filaAp][11]));
+        else
+          ajustes[filaAp][2] /=(1-(porBeneficio));
+        // 3 Ajuste a STC001
+        ajustes[filaAp][3] = ajustes[filaAp][2]* porBeneficio;
+        // 4 Ajuste a STC002
+        ajustes[filaAp][4] = division * ajustes[filaAp][1];
+        // 5 Ajuste a STC003
+        if(matrizAjustes[filaAp][5] != 0)
+          ajustes[filaAp][5] = ajustes[filaAp][2]*matrizAjustes[filaAp][11];
+        // 6 Ajuste a STC004
+        ajustes[filaAp][6] = ajustes[filaAp][1]*matrizAjustes[filaAp][11];
+        // 7 Cuenta Contingente del aporte
+        ajustes[filaAp][7] = matrizAjustes[filaAp][12];
+      }
+
+//  Ajuste para cada aporte
+      String v_rta  = "";
+      int consecApo;
+      double deltaC, deltaR, deltaRetCap;
+      double[] salApor = new double[2];
+      double  retRend = 0, retCap = 0, penRend = 0, penCap = 0;
+
+
+      for (filaAp=0; filaAp<lonmatrizAjustes; filaAp++){
+        consecApo = (int) ajustes[filaAp][0];
+        salApor = TBPBD_CalSalAporte(num_contrato,cod_producto,consecApo,valUnidad);
+//  Cargosn ajustes
+        retRend += ajustes[filaAp][3];
+        retCap += ajustes[filaAp][4];
+        penRend += ajustes[filaAp][5];
+        penCap += ajustes[filaAp][6];
+
+        if(ajustes[filaAp][1] >= 0 && ajustes[filaAp][2] >= 0){ // Capital>=0 & Rendimientos>=0
+          v_rta = TBPBD_ActualizarBD(cod_producto, num_contrato, consecApo, consecAjus, linea
+                          , ajustes[filaAp][1]  // Capital
+                          , ajustes[filaAp][2]  // rendimientos
+                          , ajustes[filaAp][4]  // retCap
+                          , valUnidad );        // Valor de la unidad
+          if(!v_rta.equalsIgnoreCase("YES"))
+                      return v_rta;
+        }
+        else
+          if(ajustes[filaAp][1] >= 0 && ajustes[filaAp][2] < 0){ // Capital>=0 & Rendimientos < 0
+            deltaR = ajustes[filaAp][2]+ salApor[1];
+            if (deltaR >= 0){ // Rendimientos a retirar + Rendimientos del aporte >= 0
+                v_rta = TBPBD_ActualizarBD(cod_producto, num_contrato, consecApo, consecAjus, linea
+                          , ajustes[filaAp][1]  // Capital
+                          , ajustes[filaAp][2]  // rendimientos
+                          , ajustes[filaAp][4]  // retCap
+                          , valUnidad );        // Valor de la unidad
+                if(!v_rta.equalsIgnoreCase("YES"))
+                      return v_rta;
+            }
+            else{
+              if (salApor[1] > 0)
+                v_rta = TBPBD_ActualizarBD(cod_producto, num_contrato, consecApo, consecAjus, linea
+                          , ajustes[filaAp][1]  // Capital
+                          , salApor[1]*(-1)  // rendimientos
+                          , ajustes[filaAp][4]  // retCap
+                          , valUnidad  );       // Valor de la unidad
+              else {
+                v_rta = "YES";
+                deltaR = ajustes[filaAp][2];
+              }
+              // Busca otros aportes para sacar lo que falta de RendimientosS
+              if(v_rta.equalsIgnoreCase("YES"))
+                v_rta = TBPBD_BuscarOtroAporte( cod_producto, num_contrato, consecApo, consecAjus, linea
+                          , 0  // Capital
+                          , deltaR  // rendimientos
+                          , ajustes[filaAp][4]  // retCap
+                          , valUnidad           // Valor de la unidad
+                          , false);              // Respetar cuenta contingente
+              if(!v_rta.equalsIgnoreCase("YES"))
+                      return v_rta;
+            }
+          }else
+            if(ajustes[filaAp][1] < 0 && ajustes[filaAp][2] >= 0){ //  Capital<0 & Rendimientos >= 0
+              deltaC = ajustes[filaAp][1]+ salApor[0];
+              deltaRetCap = ajustes[filaAp][7] + ajustes[filaAp][4];
+              if (deltaC >= 0){ // Capital a retirar + Capital del aporte >= 0
+                v_rta = TBPBD_ActualizarBD(cod_producto, num_contrato, consecApo, consecAjus, linea
+                          , ajustes[filaAp][1]  // Capital
+                          , ajustes[filaAp][2]  // rendimientos
+                          , ajustes[filaAp][4]  // retCap
+                          , valUnidad );        // Valor de la unidad
+                if(!v_rta.equalsIgnoreCase("YES"))
+                      return v_rta;
+              }
+              else{
+                v_rta = TBPBD_ActualizarBD(cod_producto, num_contrato, consecApo, consecAjus, linea
+                          , salApor[0]*(-1)  // Capital
+                          , ajustes[filaAp][2]  // rendimientos
+                          , ajustes[filaAp][7]*(-1)  // retCap
+                          , valUnidad );        // Valor de la unidad
+              if(v_rta.equalsIgnoreCase("YES"))
+                // Busca otros aportes para sacar lo que falta de Capital
+                v_rta = TBPBD_BuscarOtroAporte( cod_producto, num_contrato, consecApo, consecAjus, linea
+                          , deltaC  // Capital
+                          , 0  // rendimientos
+                          , deltaRetCap         // retCap
+                          , valUnidad           // Valor de la unidad
+                          , true);              // Respetar cuenta contingente
+              if(!v_rta.equalsIgnoreCase("YES"))
+                      return v_rta;
+              }
+            }else
+              if(ajustes[filaAp][1] < 0 && ajustes[filaAp][2] < 0){ // Capital < 0 & Rendimientos < 0
+                deltaC = ajustes[filaAp][1]+ salApor[0];
+                deltaR = ajustes[filaAp][2]+ salApor[1];
+                deltaRetCap = ajustes[filaAp][7] + ajustes[filaAp][4];
+                if (deltaC >= 0){ // Capital a retirar + Capital del aporte >= 0
+                  if (deltaR >= 0){ // Rendimientos a retirar + Rendimientos del aporte >= 0
+                    v_rta = TBPBD_ActualizarBD(cod_producto, num_contrato, consecApo, consecAjus, linea
+                          , ajustes[filaAp][1]  // Capital
+                          , ajustes[filaAp][2]  // rendimientos
+                          , ajustes[filaAp][4]  // retCap
+                          , valUnidad );        // Valor de la unidad
+                    if(!v_rta.equalsIgnoreCase("YES"))
+                      return v_rta;
+                  }
+                  else{
+                  //***************
+                    if (salApor[1] > 0)
+                      v_rta = TBPBD_ActualizarBD(cod_producto, num_contrato, consecApo, consecAjus, linea
+                          , ajustes[filaAp][1]  // Capital
+                          , salApor[1]*(-1)  // rendimientos
+                          , ajustes[filaAp][4]  // retCap
+                          , valUnidad );        // Valor de la unidad
+                    else {
+                      v_rta = "YES";
+                      deltaR = ajustes[filaAp][2];
+                    }
+                    // Busca otros aportes para sacar lo que falta de RendimientosS
+                    if(v_rta.equalsIgnoreCase("YES"))
+                      v_rta = TBPBD_BuscarOtroAporte( cod_producto, num_contrato, consecApo, consecAjus, linea
+                          , 0  // Capital
+                          , deltaR  // rendimientos
+                          , ajustes[filaAp][4]  // retCap
+                          , valUnidad           // Valor de la unidad
+                          , true);              // Respetar cuenta contingente
+                    if(!v_rta.equalsIgnoreCase("YES"))
+                      return v_rta;
+                  }
+                }else{ // Capital a retirar + Capital del aporte < 0
+                  if (deltaR >= 0){ // Rendimientos a retirar + Rendimientos del aporte >= 0
+                    v_rta = TBPBD_ActualizarBD(cod_producto, num_contrato, consecApo, consecAjus, linea
+                          , salApor[0]*(-1)  // Capital
+                          , ajustes[filaAp][2]  // rendimientos
+                          , ajustes[filaAp][7]*(-1)  // retCap
+                          , valUnidad );        // Valor de la unidad
+                    // Busca otros aportes para sacar lo que falta de capital
+                    if(v_rta.equalsIgnoreCase("YES"))
+                        v_rta = TBPBD_BuscarOtroAporte( cod_producto, num_contrato, consecApo, consecAjus, linea
+                          , deltaC  // Capital
+                          , 0  // rendimientos
+                          , deltaRetCap         // retCap
+                          , valUnidad           // Valor de la unidad
+                          , true);              // Respetar cuenta contingente
+                    if(!v_rta.equalsIgnoreCase("YES"))
+                      return v_rta;
+                  }
+                  else{
+                                      //***************
+                    if (salApor[1] > 0)
+                      v_rta = TBPBD_ActualizarBD(cod_producto, num_contrato, consecApo, consecAjus, linea
+                          , salApor[0]*(-1)  // Capital
+                          , salApor[1]*(-1)  // rendimientos
+                          , ajustes[filaAp][7]*(-1)  // retCap
+                          , valUnidad );        // Valor de la unidad
+                    else {
+                      v_rta = "YES";
+                      deltaR = ajustes[filaAp][2];
+                    }
+                    // Busca otros aportes para sacar lo que falta de Capital y RendimientosS
+                    if(v_rta.equalsIgnoreCase("YES"))
+                        v_rta = TBPBD_BuscarOtroAporte( cod_producto, num_contrato, consecApo, consecAjus, linea
+                          , deltaC  // Capital
+                          , deltaR  // rendimientos
+                          , deltaRetCap         // retCap
+                          , valUnidad           // Valor de la unidad
+                          , true);              // Respetar cuenta contingente
+                    if(!v_rta.equalsIgnoreCase("YES"))
+                      return v_rta;
+                    }
+                  }
+              }
+      } // for
+      //actualizar cargos ajustes del aporte
+      v_rta = TBPBD_UpdateCargosAjustes(cod_producto, num_contrato, consecAjus, linea
+                            , retRend
+                            , retCap
+                            , penRend
+                            , penCap);
+      if(!v_rta.equalsIgnoreCase("YES"))
+        return v_rta;
+ strProp="YES";
+}
+catch(Exception ex)
+{
+ String v_menex = "";
+   String error = ex.toString();
+   if(ex.equals("java.sql.SQLException: found null connection context"))
+   {
+    v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+   }
+   else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+      {
+        v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+      }
+      else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+
+return "Exception en TBPBD_AjustarContrato por "+v_menex;}
+return strProp;
+}
+
+/*
+  Actualiza:  aportes ajustes
+              y saldos del aporte
+*/
+ public static String TBPBD_ActualizarBD( String cod_producto
+                                        , String num_contrato
+                                        , int consecApo
+                                        , int consecAjus
+                                        , int linea
+                                        , double capital
+                                        , double rendimientos
+                                        , double retCap
+                                        , double valUnidad){
+    String v_rta  = "YES";
+    double numUnidades = (capital+rendimientos);
+    numUnidades /= valUnidad;
+
+    if (capital != 0.0 || rendimientos != 0.0){
+      v_rta = TBPBD_AportesAjustes(cod_producto,num_contrato,consecApo,consecAjus,linea
+                      , capital, rendimientos, numUnidades, retCap);
+      if(v_rta.equalsIgnoreCase("YES")){//Actualizar saldos del aporte
+        v_rta = TBPBD_SaldosApor(cod_producto,num_contrato,consecApo,capital,numUnidades, retCap);
+        if(!v_rta.equalsIgnoreCase("YES"))
+          return "Exception en CalcAjustes actualizando saldosAportes por "+v_rta;
+      }else
+          return "Exception en CalcAjustes insertando en aportesajustes por "+v_rta;
+    }
+    return "YES";
+  }
+
+  
+  public static boolean TBPBD_Condicionado( String cod_producto
+                                        , String num_contrato
+                                        , int consecApo){
+    boolean retCon = false;
+    try{
+        CONAPORTE2 condicion;
+        #sql condicion = {SELECT APO_SALDO_CUENTA_CONTINGENTE
+                        FROM TBAPORTES
+                        WHERE APO_CON_PRO_CODIGO = :cod_producto
+                          AND APO_CON_NUMERO = :num_contrato
+		                      AND APO_CONSECUTIVO    = :consecApo};
+        condicion.next();
+        if (condicion.APO_SALDO_CUENTA_CONTINGENTE() > 0)
+          retCon = true;
+        else
+          retCon = false;
+    }catch(Exception e){return false;}
+    return retCon;
+  }
+
+/*
+    Busca otro aporte y actualiza
+*/
+  public static String TBPBD_BuscarOtroAporte( String cod_producto
+                                        , String num_contrato
+                                        , int consecApo
+                                        , int consecAjus
+                                        , int linea
+                                        , double capital
+                                        , double rendimientos
+                                        , double retCap
+                                        , double valUnidad
+                                        , boolean resCondicion){
+
+    double deltaC, deltaR;
+    int consecApoO;
+    String v_rta = "";
+
+    try{
+        ITAPORTE1 aportes;
+        //Selecciona otros aportes del contrato que no sean aportes padre 
+        if (resCondicion && TBPBD_Condicionado(cod_producto, num_contrato, consecApo))
+          #sql aportes = {SELECT APO_CONSECUTIVO
+                         FROM TBAPORTES
+                         WHERE APO_CON_PRO_CODIGO=:cod_producto
+                           AND APO_CON_NUMERO=:num_contrato
+                           AND APO_SALDO_CUENTA_CONTINGENTE > 0
+                           AND APO_REF_ESTADO = 'SEA001'
+                           AND APO_INFORMACION_TRASLADO = 'N'
+                         ORDER BY APO_FECHA_EFECTIVA DESC};
+        else
+          #sql aportes = {SELECT APO_CONSECUTIVO
+                         FROM TBAPORTES
+                         WHERE APO_CON_PRO_CODIGO=:cod_producto
+                           AND APO_CON_NUMERO=:num_contrato
+                           AND  APO_REF_ESTADO = 'SEA001'
+                           AND APO_INFORMACION_TRASLADO = 'N'                           
+                         ORDER BY APO_FECHA_EFECTIVA DESC};
+        deltaC = capital;
+        deltaR = rendimientos;
+        double[] salApor = new double[2];
+        while(aportes.next() && (deltaC < 0 || deltaR < 0)){//quitar  capital y/o rendimientos hasta que
+          consecApoO = aportes.APO_CONSECUTIVO();
+          salApor = TBPBD_CalSalAporte(num_contrato,cod_producto,consecApoO,valUnidad);
+          // Sacar del capital
+          if(deltaC != 0)
+            if(deltaC + salApor[0] >= 0 ){
+              v_rta = TBPBD_ActualizarBD(cod_producto, num_contrato, consecApoO, consecAjus, linea
+                          , deltaC     // Capital
+                          , 0           // rendimientos
+                          , retCap      // retCap
+                          , valUnidad );// Valor de la unidad
+              deltaC = 0;
+            }
+            else{
+              if (salApor[0] >0){
+              deltaC += salApor[0];
+              v_rta = TBPBD_ActualizarBD(cod_producto, num_contrato, consecApoO, consecAjus, linea
+                          , salApor[0]*(-1)  // Capital
+                          , 0               // rendimientos
+                          , retCap          // retCap
+                          , valUnidad );    // Valor de la unidad
+              }
+            }
+          // Sacar de los rendimientos
+          if(deltaR != 0)
+            if(deltaR + salApor[1] >= 0){
+              v_rta = TBPBD_ActualizarBD(cod_producto, num_contrato, consecApoO, consecAjus, linea
+                          , 0  // Capital
+                          , deltaR  // rendimientos
+                          , retCap          // retCap
+                          , valUnidad );    // Valor de la unidad
+             deltaR = 0;
+            }
+            else{
+              if(salApor[1] > 0){
+                deltaR += salApor[1];
+                v_rta = TBPBD_ActualizarBD(cod_producto, num_contrato, consecApoO, consecAjus, linea
+                          , 0 // Capital
+                          , salApor[1]*(-1) // rendimientos
+                          , retCap          // retCap
+                          , valUnidad );    // Valor de la unidad
+              }
+            }
+          }
+        aportes.close();
+      }catch(Exception ex)
+      {
+       String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+
+      return "Exception en TBPBD_BuscarOtroAporte por "+v_menex;
+      }
+    if (deltaC < 0 || deltaR < 0)
+      return "NO ALCANZA EL CAPITAL O LOS RENDIMIENTOS DE LOS APORTES DEL CONTRATO";
+    return "YES";
+  }
+
+////////////constructor//////////////////
+  public SQL_DAJUSTE(){
+  }
+  //////////////////Abrir conexión con la Base de Datos//////////////////////
+  public static boolean TBPBD_ConexionBD(){
+    try{
+       TBCL_Validacion  i_valusu = new     TBCL_Validacion ();
+       String[] v_valusu = new String[3];
+       v_valusu=i_valusu.TBFL_ValidarUsuario();
+
+       DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+       DefaultContext.setDefaultContext(new DefaultContext(v_valusu[0],v_valusu[1],v_valusu[2],false));
+       return true;
+     }
+    catch(Exception e){
+      System.out.print("");
+      return false;
+    }
+  }
+
+////Actualiza valores en cargos_ajustes despues de calcular el ajuste de cada retiro-aporte
+ public static String TBPBD_UpdateCargosAjustes(String cod_producto,
+                                                String num_contrato,
+                                                int consecAjus,
+                                                int linea,
+                                                double retRend,
+                                                double retCap,
+                                                double penRend,
+                                                double penCap){
+    int ii=0;
+    int colAj=0;
+    String v_ii= "";
+    String v_cargo= "";
+    double cargos[]=new double[4];
+    cargos[0]=retRend;cargos[1]=retCap;cargos[2]=penRend;cargos[3]=penCap;
+    for(ii=0; ii<4; ii++){
+      colAj=ii;
+      v_ii="000"+(ii+1);
+      v_ii = v_ii.substring(v_ii.length()-3);
+      v_cargo="STC"+v_ii;
+      try{
+        boolean exist=false;
+        double valor=0;
+        CONCARGOAJU cargoAju;
+        #sql cargoAju={SELECT CAA_VALOR
+                          FROM TBCARGOS_AJUSTES
+                       WHERE CAA_AJU_CON_PRO_CODIGO=:cod_producto
+                         AND CAA_AJU_CON_NUMERO=:num_contrato
+                         AND CAA_REF_CARGO=:v_cargo
+                         AND CAA_AJU_CONSECUTIVO=:consecAjus
+                         AND CAA_AJU_LINEA=:linea};
+        if(cargoAju.next()){
+          valor=cargoAju.CAA_VALOR();
+          valor+=cargos[colAj];
+          exist=true;
+        }else
+          exist=false;
+        cargoAju.close();
+        if(exist){//si existe el cargo  a actualizar
+          #sql {UPDATE TBCARGOS_AJUSTES
+                    SET CAA_VALOR=:valor
+               WHERE CAA_AJU_CON_PRO_CODIGO=:cod_producto
+                  AND CAA_AJU_CON_NUMERO=:num_contrato
+                  AND CAA_REF_CARGO=:v_cargo
+                  AND CAA_AJU_CONSECUTIVO=:consecAjus
+                  AND CAA_AJU_LINEA=:linea};
+       }
+      }catch(Exception ex){
+       String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+
+        return "Exception en TBPBD_UPDATECARGOS_AJUSTES por "+ v_menex;
+      }
+    }
+    return "YES";
+  }
+ ////////////////////////registrar el ajuste en aportes_ajustes /////////////////
+  public static String TBPBD_AportesAjustes(String cod_producto,
+                                            String num_contrato,
+                                            int consecApo,
+                                            int consecAjus,
+                                            int linea,
+                                            double capital,
+                                            double rendimientos,
+                                            double nUnid,
+                                            double conting){
+    //realizar el insert en aportes_ajustes
+    double apo_cap=0,apo_conting=0;
+    boolean v_exist=false;
+    try{
+      double v_cap=0,v_rend=0,v_conting=0,v_unid=0;
+      CONAPORAJUS AporAjus;
+      #sql AporAjus={SELECT APA_CAPITAL,            APA_RENDIMIENTOS,
+                            APA_CUENTA_CONTINGENTE, APA_NUMERO_UNIDADES
+                        FROM TBAPORTES_AJUSTES
+                     WHERE APA_APO_CON_PRO_CODIGO=:cod_producto
+                       AND APA_APO_CON_NUMERO=:num_contrato
+                       AND APA_APO_CONSECUTIVO=:consecApo
+                       AND APA_AJU_CONSECUTIVO=:consecAjus
+                       AND APA_AJU_LINEA=:linea};
+      if(AporAjus.next()){//si existe guarda valores anteriores y suma con lo que venga
+        v_cap=capital+AporAjus.APA_CAPITAL();
+        v_rend=rendimientos+AporAjus.APA_RENDIMIENTOS();
+        v_unid=nUnid+AporAjus.APA_NUMERO_UNIDADES();
+        v_conting=conting+AporAjus.APA_CUENTA_CONTINGENTE();
+        v_exist=true;
+      }
+      AporAjus.close();
+      if(v_exist){//si existe actualiza valores
+       #sql {UPDATE TBAPORTES_AJUSTES
+                SET APA_CAPITAL=:v_cap,
+                    APA_RENDIMIENTOS=:v_rend,
+                    APA_NUMERO_UNIDADES=:v_unid,
+                    APA_CUENTA_CONTINGENTE=:v_conting
+                WHERE APA_APO_CON_PRO_CODIGO=:cod_producto
+                  AND APA_APO_CON_NUMERO=:num_contrato
+                  AND APA_APO_CONSECUTIVO=:consecApo
+                  AND APA_AJU_CONSECUTIVO=:consecAjus
+                  AND APA_AJU_LINEA=:linea};
+                  
+      }else{//si no existe inserta
+        #sql {INSERT INTO TBAPORTES_AJUSTES
+                      (APA_APO_CON_PRO_CODIGO,        APA_APO_CON_NUMERO,       APA_APO_CONSECUTIVO,
+                       APA_AJU_CONSECUTIVO,           APA_AJU_LINEA,            APA_CAPITAL,
+                       APA_RENDIMIENTOS,              APA_NUMERO_UNIDADES,      APA_CUENTA_CONTINGENTE)
+                 VALUES
+                      (:cod_producto,                 :num_contrato,            :consecApo,
+                       :consecAjus,                   :linea,                   :capital,
+                       :rendimientos,                 :nUnid,                   :conting)};
+      }
+     }catch(Exception ex)
+     {
+       String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+      return "Exception en TBPBD_AportesAjustes por "+v_menex;
+    }
+    return "YES";
+  }
+
+//////////////////////////Actualizar saldos en  aportes//////////////////////////////////
+  public static String TBPBD_SaldosApor(String cod_producto,
+                                        String num_contrato,
+                                        int consecApo,
+                                        double capital,
+                                        double nUnid,
+                                        double conting){
+    try{
+      double sal_cap = 0.0, sal_conting = 0.0, sal_nUnid = 0.0;
+      ITAPORTE aporte;
+      #sql aporte={SELECT APO_SALDO_CAPITAL
+                      , APO_SALDO_CUENTA_CONTINGENTE
+                      , APO_SALDO_NUMERO_UNIDADES
+                    FROM TBAPORTES
+                   WHERE APO_CON_PRO_CODIGO=:cod_producto
+                     AND APO_CON_NUMERO=:num_contrato
+                     AND APO_CONSECUTIVO=:consecApo};
+       //sacar saldos anteriores para sumar con los valores que venga
+       if(aporte.next()){
+        sal_cap=aporte.APO_SALDO_CAPITAL()+capital;
+        sal_conting=aporte.APO_SALDO_CUENTA_CONTINGENTE()+conting;
+        sal_nUnid=aporte.APO_SALDO_NUMERO_UNIDADES()+nUnid;
+       }else{
+          return "NO";
+       }
+       //actualizar saldos
+       aporte.close();
+       if (sal_conting < 0) sal_conting = 0;
+       #sql {UPDATE TBAPORTES
+                SET APO_SALDO_CAPITAL=:sal_cap,
+                    APO_SALDO_CUENTA_CONTINGENTE=:sal_conting,
+                    APO_SALDO_NUMERO_UNIDADES=:sal_nUnid
+             WHERE APO_CON_NUMERO=:num_contrato
+               AND APO_CON_PRO_CODIGO=:cod_producto
+               AND APO_CONSECUTIVO=:consecApo};
+    }catch(Exception ex)
+    {
+       String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+      return "Exception en TBPBD_SaldosApor por "+v_menex ;
+    }
+    return "YES";
+  }
+//////////Actualiza la acción y fecha de la acción del ajuste según decisión del cliente////
+  public static String TBPBD_ActAccionAjustes(String cod_producto,
+                                              String num_contrato,
+                                              int consecAjus,
+                                              int linea,
+                                              String accion){
+    String strUpdate = "NO";
+    try{
+      ITVALORDB ajuste;
+      I_INTERFACERET v_interface;
+      boolean        v_paso    = false;
+      String         v_paso_52  = "";
+      java.sql.Date  v_fecha   = new  java.sql.Date(4);
+      //consultar fecha de proceso
+
+      #sql  v_interface =   {select  INL_PASO
+                                from tbinterface_logs
+                               where trunc(INL_FECHA) = trunc(sysdate)
+                                 and INL_PASO like '52%'
+                              };
+
+      if(v_interface.next())
+      {
+        v_paso_52 = v_interface.INL_PASO();
+        v_paso    = true;
+      }
+
+      if(v_paso)
+      {
+        #sql v_fecha = {values(TB_FFECHA_SIGUIENTE(1))};
+      }
+      else
+      {
+        #sql  {SELECT  TRUNC(SYSDATE)  INTO :v_fecha FROM DUAL };
+      }
+
+       double val_ajuste = 0;
+       if(accion.equals("SAC002"))
+       {
+          #sql ajuste = {SELECT NVL(SUM(CAA_VALOR),0) VALORDB
+                           FROM TBCARGOS_AJUSTES
+                          WHERE CAA_AJU_CON_PRO_CODIGO = :cod_producto
+                             AND CAA_AJU_CON_NUMERO = :num_contrato
+                             AND CAA_AJU_CONSECUTIVO = : consecAjus
+                             AND CAA_AJU_LINEA = :linea};
+          if(ajuste.next())
+            val_ajuste = ajuste.VALORDB();
+
+         #sql {UPDATE
+             TBAJUSTES
+            SET AJU_FECHA_ACCION  = trunc(Sysdate)
+              , AJU_REF_ACCION    = :accion
+              , AJU_VALOR         = :val_ajuste
+              , AJU_FECHA_PROCESO = :v_fecha
+            WHERE
+              AJU_CON_NUMERO         = :num_contrato
+              AND AJU_CON_PRO_CODIGO = :cod_producto
+              AND AJU_CONSECUTIVO    = :consecAjus
+              AND AJU_LINEA          = :linea};
+
+       }
+       else
+       {
+         #sql {UPDATE
+             TBAJUSTES
+            SET AJU_FECHA_ACCION  = trunc(sysdate)
+              , AJU_REF_ACCION    = :accion
+              , AJU_FECHA_PROCESO = :v_fecha
+            WHERE
+              AJU_CON_NUMERO         = :num_contrato
+              AND AJU_CON_PRO_CODIGO = :cod_producto
+              AND AJU_CONSECUTIVO    = :consecAjus
+              AND AJU_LINEA          = :linea};
+
+       }
+      strUpdate="YES";
+    }catch(Exception ex)
+    {
+       String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+      return "Exception en TBPBD_ActAccionAjustes por "+v_menex;
+    }
+    return strUpdate;
+  }
+
+/////////////////////////Traer nombres y apellidos del contrato-producto//////////////////
+  public static String[] TBPBD_ContratoNomApel(String cod_producto,
+                                             String num_contrato){
+    String strNombApel=new String("NO EXISTE ESTA PERSONA");
+    String fechaCancel=new String("");
+    String cadena[]=new String[2];
+    try{
+      CONTRATONOMBAPEL nombApel;
+      #sql nombApel={SELECT CON_NOMBRES,    CON_APELLIDOS,CON_FECHA_CANCELACION
+                        FROM TBCONTRATOS
+                     WHERE CON_PRO_CODIGO=:cod_producto
+                       AND CON_NUMERO=:num_contrato};
+      if(nombApel.next()){
+         strNombApel=nombApel.CON_NOMBRES()+" "+nombApel.CON_APELLIDOS();
+         if(nombApel.CON_FECHA_CANCELACION()==null)
+          fechaCancel="NO";
+         else
+          fechaCancel="SI";
+      }
+      nombApel.close();
+    }catch(Exception ex)
+    {
+       String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+
+
+
+      cadena[0]="Excepcion en TBPBD_ContratoNomApel "+v_menex;
+      return cadena;
+    }
+    cadena[0]=strNombApel;
+    cadena[1]=fechaCancel;
+    return cadena;
+  }
+  
+////////////////////selecciona todos los ajustes sin acción///////////////////////////////
+  public static String[] TBPBD_SelAllRetDec(String num_contrato,
+                                            String cod_producto,
+                                            String consecAjusOnly1){
+    String v_retNDec=new String("");
+    String v_consec=new String("");
+    String v_NDec[]=new String[2];
+    try{
+      int ii=1;
+      String v_cons=new String("");
+      String v_cons1=new String("-1");
+      String v_lin=new String("");
+      double val_TC=0;
+      CONAJUSTES ajusNoDec;
+      if(!consecAjusOnly1.equals("")){
+      int consecAjusOnly=Integer.parseInt(consecAjusOnly1);
+         #sql ajusNoDec={SELECT AJU_CONSECUTIVO,AJU_LINEA,AJU_FECHA_PROCESO,AJU_VALOR,AJU_RAZON_AJUSTE,AJU_USUARIO,AJU_RETIRO_ORIGINAL, AJU_RETIRO_ACTUAL,AJU_VALOR_UNIDAD FROM TBAJUSTES WHERE AJU_CON_PRO_CODIGO=:cod_producto AND AJU_CON_NUMERO=:num_contrato AND AJU_CONSECUTIVO=:consecAjusOnly AND AJU_REF_ACCION IS NULL AND AJU_FECHA_ACCION IS NULL};
+        while(ajusNoDec.next()){
+          v_cons=Integer.toString(ajusNoDec.AJU_CONSECUTIVO());
+          v_lin=Integer.toString(ajusNoDec.AJU_LINEA());
+          v_retNDec+="val"+v_cons+v_lin+"='"+ajusNoDec.AJU_VALOR()+"' "+
+                    "orig"+v_cons+v_lin+"='"+ajusNoDec.AJU_RETIRO_ORIGINAL()+"' "+
+                   "act"+v_cons+v_lin+"='"+ajusNoDec.AJU_RETIRO_ACTUAL()+"' "+
+                   "und"+v_cons+v_lin+"='"+ajusNoDec.AJU_VALOR_UNIDAD()+"' ";
+          if(!v_cons.equals(v_cons1)){//cuando es primer vez el consecutivo primer linea
+            val_TC=0;
+            v_retNDec+="raz"+v_cons+"='"+ajusNoDec.AJU_RAZON_AJUSTE()+"' user"+v_cons+"='"+ajusNoDec.AJU_USUARIO()+"' "+
+                       "fec"+v_cons+"='"+ajusNoDec.AJU_FECHA_PROCESO()+"' ";
+            v_consec+="cons"+Integer.toString(ii++)+"='"+v_cons+"' ";
+            val_TC=ajusNoDec.AJU_VALOR();
+            v_retNDec+=" vtot"+v_cons+"='"+val_TC+"' max"+v_cons+"='"+v_lin+"' ";
+          }else{//cuando hay dos ó más líneas por consecutivo
+            val_TC+=ajusNoDec.AJU_VALOR();
+            if(v_retNDec.indexOf("vtot"+v_cons)!=-1){//valor total del consecutivo
+              int vt=v_retNDec.indexOf("vtot"+v_cons);int vt1=v_retNDec.indexOf(" ",vt);
+              v_retNDec=v_retNDec.substring(0,vt-1)+v_retNDec.substring(vt1)+" vtot"+v_cons+"='"+val_TC+"' ";
+            }
+            if(v_retNDec.indexOf("max"+v_cons)!=-1){//guardar el max de linea del consecutivo
+              int vt=v_retNDec.indexOf("max"+v_cons);int vt1=v_retNDec.indexOf(" ",vt);
+              v_retNDec=v_retNDec.substring(0,vt-1)+v_retNDec.substring(vt1)+" max"+v_cons+"='"+v_lin+"' ";
+            }
+          }
+          v_cons1=v_cons;
+        }//while
+        ajusNoDec.close();
+      }else{
+        #sql ajusNoDec={SELECT AJU_CONSECUTIVO,     AJU_LINEA,        AJU_FECHA_PROCESO,
+                             AJU_VALOR,           AJU_RAZON_AJUSTE, AJU_USUARIO,
+                             AJU_RETIRO_ORIGINAL, AJU_RETIRO_ACTUAL,AJU_VALOR_UNIDAD
+                         FROM TBAJUSTES
+                       WHERE AJU_CON_PRO_CODIGO=:cod_producto
+                         AND AJU_CON_NUMERO=:num_contrato
+                         AND AJU_REF_ACCION IS NULL
+                         AND AJU_FECHA_ACCION IS NULL
+                       ORDER BY AJU_CONSECUTIVO};
+        while(ajusNoDec.next()){
+          v_cons=Integer.toString(ajusNoDec.AJU_CONSECUTIVO());
+          v_lin=Integer.toString(ajusNoDec.AJU_LINEA());
+          v_retNDec+="val"+v_cons+v_lin+"='"+ajusNoDec.AJU_VALOR()+"' "+
+                    "orig"+v_cons+v_lin+"='"+ajusNoDec.AJU_RETIRO_ORIGINAL()+"' "+
+                   "act"+v_cons+v_lin+"='"+ajusNoDec.AJU_RETIRO_ACTUAL()+"' "+
+                   "und"+v_cons+v_lin+"='"+ajusNoDec.AJU_VALOR_UNIDAD()+"' ";
+          if(!v_cons.equals(v_cons1)){//cuando es primer vez el consecutivo primer linea
+            val_TC=0;
+            v_retNDec+="raz"+v_cons+"='"+ajusNoDec.AJU_RAZON_AJUSTE()+"' user"+v_cons+"='"+ajusNoDec.AJU_USUARIO()+"' "+
+                       "fec"+v_cons+"='"+ajusNoDec.AJU_FECHA_PROCESO()+"' ";
+            v_consec+="cons"+Integer.toString(ii++)+"='"+v_cons+"' ";
+            val_TC=ajusNoDec.AJU_VALOR();
+            v_retNDec+=" vtot"+v_cons+"='"+val_TC+"' max"+v_cons+"='"+v_lin+"' ";
+          }else{//cuando hay dos ó más líneas por consecutivo
+            val_TC+=ajusNoDec.AJU_VALOR();
+            if(v_retNDec.indexOf("vtot"+v_cons)!=-1){//valor total del consecutivo
+              int vt=v_retNDec.indexOf("vtot"+v_cons);int vt1=v_retNDec.indexOf(" ",vt);
+              v_retNDec=v_retNDec.substring(0,vt-1)+v_retNDec.substring(vt1)+" vtot"+v_cons+"='"+val_TC+"' ";
+            }
+            if(v_retNDec.indexOf("max"+v_cons)!=-1){//guardar el max de linea del consecutivo
+              int vt=v_retNDec.indexOf("max"+v_cons);int vt1=v_retNDec.indexOf(" ",vt);
+              v_retNDec=v_retNDec.substring(0,vt-1)+v_retNDec.substring(vt1)+" max"+v_cons+"='"+v_lin+"' ";
+            }
+          }
+          v_cons1=v_cons;
+        }//while
+        ajusNoDec.close();
+      }
+    }catch(Exception ex){
+       String v_menex = "";
+       String error = ex.toString();
+       if(ex.equals("java.sql.SQLException: found null connection context"))
+       {
+        v_menex = "Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.";
+       }
+       else if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+           {
+           v_menex = "No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.";
+           }
+          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+           {
+             v_menex = "Se reinicio la base de datos por favor ingrese nuevamente.";
+           }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_menex = "Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.";
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_menex =  "Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.";
+                     }
+                     else
+                     {
+                       v_menex = "Mensaje de error: "+ex;
+                     }
+      v_NDec[0]="Exception en SellAllRetDec por "+v_menex;
+      return v_NDec;
+    }
+    v_NDec[0]="<"+v_retNDec+">";v_NDec[1]="<"+v_consec+">";
+    return v_NDec;
+  }
+
+  //////////devuelve saldo capital y saldo rendimientos de un aporte//////////
+  public static double[] TBPBD_CalSalAporte(String num_contrato,
+                                           String cod_producto,
+                                           int consecApo,
+                                           double valUnidad){
+    double salApor[] = new double[2];
+    double cap,rend;
+    String msgErr = "";
+    int codErr=0;
+    try{
+        #sql {call TBPBD_SaldoBrutoAporte(:cod_producto,:num_contrato,:consecApo,:valUnidad, 'S',:OUT cap,:OUT rend,:INOUT codErr,:INOUT msgErr)};
+        salApor[0] = cap;
+        salApor[1] = rend;
+      }catch(Exception e){
+        salApor[0] = 0;
+        salApor[1] = 0;
+      }
+    return salApor;
+  }
+///////////////////////////////////////////
+  //////////devuelve saldo capital y saldo rendimientos de un aporte//////////
+  public static boolean TBPL_Verdecision
+  (String cod_producto
+   ,String num_contrato
+   ,int consecAjus
+   ,int linea)
+   {
+    I_DECISIONAJUSTE  DECISIONAJUSTE;
+    try{
+        #sql DECISIONAJUSTE = {SELECT DECODE(AJU_REF_ACCION,NULL,'1','0') DECISION
+                               FROM   TBAJUSTES
+                              WHERE    AJU_CON_PRO_CODIGO  = :cod_producto
+                                AND    AJU_CON_NUMERO      = :num_contrato
+                                AND    AJU_CONSECUTIVO     = :consecAjus
+                                AND    AJU_LINEA           = :linea };
+        if(DECISIONAJUSTE.next())
+        {
+          if(DECISIONAJUSTE.DECISION().equals("1"))
+             return false;
+           else
+             return true;
+       }
+       else
+       {
+         return false;
+       }
+
+
+      }catch(Exception e){
+
+         return false;
+      }
+
+  }
+
+  /////////////////////Realizar todos los cambios con la Base de Datos////////////////////////
+  public static boolean TBPBD_Commit(){
+    try{
+      #sql {COMMIT};
+      return true;
+    }catch(Exception e){
+      return false;
+    }
+  }
+/////////////////////No Realizar cambios con la Base de Datos////////////////////////~
+  public static boolean TBPBD_RollBack(){
+    try{
+      #sql {ROLLBACK};
+      return true;
+    }catch(Exception e){
+      return false;
+    }
+  }
+  
+  public static boolean TBPBD_CerrarConexionBD(){
+    try{
+       DefaultContext.getDefaultContext().close();
+       return true;
+     }
+    catch(Exception e){
+      return false;
+    }
+  }
+
+}//fin
+

@@ -1,0 +1,433 @@
+  // Copyright (c) 2000 Sk
+package TBPKT_UTILIDADES.TBPKT_VALOR_UNIDAD;
+
+import sqlj.runtime.*;
+import sqlj.runtime.ref.*;
+import java.sql.*;
+import com.ibm.as400.access.*;
+import java.io.*;
+
+
+/**
+ * A Sqlj class.
+ * <P>
+ * @author Skandia
+ */
+public class SQL_CALCULO_VALOR_UNIDAD extends Object {
+
+
+    public static double TBF_CALCULO_VALOR_UNIDAD_N(String v_fecha_contrato, String v_fecha_unidad, String v_contrato, String v_producto, String v_update, int v_retiro, int v_index)
+    {
+        boolean v_bupdate = Boolean.valueOf(v_update).booleanValue();
+        double v_vunidad[] = new double[3];
+        v_vunidad = TBF_CALCULO_VALOR_UNIDAD(v_fecha_contrato, v_fecha_unidad, v_contrato, v_producto, v_bupdate, v_retiro);
+        return v_vunidad[v_index];
+    }
+
+    public static String TBF_CALCULO_VALOR_UNIDAD_S(String v_fecha_contrato, String v_fecha_unidad, String v_contrato, String v_producto, String v_update, int v_retiro, int v_index)
+    {
+        String v_unidadTokenized = "";
+        boolean v_bupdate = Boolean.valueOf(v_update).booleanValue();
+        double v_vunidad[] = new double[v_index];
+        v_vunidad = TBF_CALCULO_VALOR_UNIDAD(v_fecha_contrato, v_fecha_unidad, v_contrato, v_producto, v_bupdate, v_retiro);
+        int i = 0;
+        v_unidadTokenized = String.valueOf(v_vunidad[i]);
+        do
+            v_unidadTokenized = v_unidadTokenized + "\\" + String.valueOf(v_vunidad[++i]);
+        while(i < v_vunidad.length - 1);
+        return v_unidadTokenized;
+    }
+
+  /*
+  Función que devuelve el valor de la unidad para una fecha,
+  contrato y producto especifico. Ademas actualiza la tabla
+  TBSALDOS si se desea (v_update=true)
+  La fecha debe venir en el formato YYYYMMDD.
+  El campo retiro debe ser enviado en 1 cuando se desea que se
+  calcule el valor de la unidad pero que no se consulte en TBSALDOS
+  */
+  public static double[] TBF_CALCULO_VALOR_UNIDAD
+    ( String v_fecha_contrato, String v_fecha_unidad, String v_contrato, String v_producto, boolean v_update, int v_retiro)
+  {
+    Date              v_max_fecha;
+    double            v_saldo_contrato = 0;
+    double            v_saldo_unidades = 1;
+    double            v_valor_unidad   = 0;
+    double            v_saldo_unidad_max_fec;
+    double            v_cuenta_conting_max_fec;
+    int               v_cod_err        = 0;
+    String            v_men_err        = " ";
+    String            v_fecha;
+    String[]          v_valusu;
+    double            v_salida[] = new double[3];
+    //Connection c = null;
+
+    try{
+    
+/*      DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+      c = DriverManager.getConnection("jdbc:oracle:thin:@10.49.28.34:1521:orc1", "tbenefit", "produccion");
+      DefaultContext.setDefaultContext( new DefaultContext(c));*/
+    
+      /* Borrar los saldos mayores a la fecha de contrato enviada existentes en
+         TBSALDOS para evitar los caLculos erroneos originados por los BACK DATE */
+      #sql {call TBPBD_DEL_TBSALDOS(:v_fecha_contrato,:v_contrato,:v_producto, :INOUT v_cod_err, :INOUT v_men_err)};
+      if (v_cod_err != 0){
+        v_salida[0] = 0;
+        v_salida[1] = 0;
+        v_salida[2] = v_cod_err;
+      }//Error al borrar los saldos existentes en tbsaldos
+      else{
+        //Llamado a un metodo que devuelve el saldo de contrato
+        try{
+          TBCL_AS400 ias400 = new TBCL_AS400();
+
+          System.out.println("caso 1017 sin P v_contrato "+v_contrato);
+          System.out.println("caso 1017 sin P v_fecha_contrato "+v_fecha_contrato);
+
+          v_saldo_contrato = ias400.TBF_SALDO_CONTRATO(v_contrato, v_fecha_contrato);
+
+          /*
+          Modificacion:
+          Se añade el procedimiento de invocacion a un procedimiento del AS400
+          */
+          
+//          #sql v_saldo_contrato ={values (TBCL_AS400.TBF_SALDO_CONTRATO(:v_contrato,:v_fecha_contrato))};
+
+          /* Final de la modificacion */
+
+
+
+          System.out.println("caso 1017 sin P v_saldo_contrato "+v_saldo_contrato);
+
+          if (v_saldo_contrato == -1.0)
+            v_cod_err = -1;
+          else if(v_saldo_contrato == -2.0)
+            v_cod_err = -2;
+          }catch(Exception e){ v_cod_err = -2;}
+        //Si ocurre un error al calcular el saldo del contrato en el AS400
+        //retornar -1 y no seguir proceso
+        if (v_cod_err == 0){
+          //Si el saldo del contrato calculado es negativo o cero retornar un error
+          //Sino calcular el saldo de unidades
+          if (v_saldo_contrato > 0 ){
+            //Llamado a procedimiento que devuelve el saldo de unidades para
+            //la fecha, contrato y producto deseado calculando primero los
+            //ultimos saldos existentes en TBSALDOS
+            //Seleccionar los saldos de unidades y cuenta contingente a la maxima
+            //fecha en TBSALDOS
+            #sql {call TBPBD_ULTIMOS_SALDOS(:v_fecha_contrato,             :v_contrato,
+                                            :v_producto,                   :OUT v_max_fecha,
+                                            :OUT v_saldo_unidad_max_fec,   :OUT v_cuenta_conting_max_fec,
+                                            :INOUT v_cod_err,              :INOUT v_men_err)};
+
+            //Si hubo error al calcular los ultimos saldos no seguir proceso
+            //y retornar el codigo de error sino seguir con el calculo de unidades a la fecha deseada
+            if (v_cod_err == 0){
+              #sql v_saldo_unidades = {values (TBFBD_CALC_SALDO_UNIDAD_P(:v_fecha_unidad,
+                                                                         :v_contrato,
+                                                                         :v_producto,
+                                                                         :v_max_fecha,
+                                                                         :v_saldo_unidad_max_fec,
+                                                                         :INOUT v_cod_err,
+                                                                         :INOUT v_men_err))};
+              System.out.println("v_saldo_unidades "+v_saldo_unidades);
+
+              //Si no hubo error al calcular el saldo de unidades seguir proceso
+              //Sino retornar el codigo de error
+              if (v_cod_err == 0){
+                //Si el saldo de unidades es menor o igual a cero retornar error
+                if (v_saldo_unidades > 0 ){
+                  v_valor_unidad = v_saldo_contrato/v_saldo_unidades;
+                  v_salida[0] = v_valor_unidad;//Valor de la Unidad
+                  v_salida[1] = v_saldo_contrato;//Saldo del Contrato
+                  v_salida[2] = 0;//Codigo de error
+                  //Si v_update = true llamar al proc de insercion a TBSALDOS
+                  if (v_update){
+                    //Llama al procedimiento que inserta en la tabla TBSALDOS
+                    #sql {call TBPBD_INS_TBSALDOS(:v_producto,       :v_contrato,
+                                                  :v_fecha_contrato, :v_saldo_contrato,
+                                                  null,              null,
+                                                  :v_saldo_unidades, :v_valor_unidad,
+                                                  :INOUT v_cod_err,  :INOUT v_men_err)};
+
+                    //Si este saldo existe en la tabla TBSALDOS se actualiza la tabla
+                    if (v_cod_err == -0001){
+                      #sql { UPDATE  tbsaldos
+                               SET   sal_saldo_contrato            = :v_saldo_contrato,
+                                     sal_saldo_contrato_disponible = null,
+                                     sal_saldo_cuenta_contingente  = null ,
+                                     sal_saldo_unidades            = :v_saldo_unidades,
+                                     sal_valor_unidad              = :v_valor_unidad
+                               WHERE sal_con_pro_codigo            = :v_producto
+                                 AND sal_con_numero                = :v_contrato
+                                 AND TRUNC(sal_fecha)              = TO_DATE(:v_fecha_contrato)};
+
+                      v_cod_err = 0;
+                    }// fin si error de constraint
+                  }// fin si quiere actualizar
+                }//Saldo de unidades es mayor a cero
+                else{
+                  v_salida[0] = 0;//Valor de la Unidad
+                  v_salida[1] = v_saldo_contrato;//Saldo del Contrato
+                  v_salida[2] = -5;//Codigo de error
+                }//Saldo de unidades es menor a cero
+              }// fin si no hubo error al calcular saldo de unidades
+              else{
+                v_salida[0] = 0;//Valor de la Unidad
+                v_salida[1] = 0;//Saldo del Contrato
+                v_salida[2] = v_cod_err;//Codigo de error
+              }//hubo error al calcular saldos de unidades
+            }//No hubo error al calcular los saldos a maxima fecha
+            else{
+              v_salida[0] = 0;//Valor de la Unidad
+              v_salida[1] = 0;//Saldo del Contrato
+              v_salida[2] = v_cod_err;//Codigo de error
+            }//Hubo error al calcular los saldos a maxima fecha
+          }//Saldo del contrato es positivo
+          else{
+            v_salida[0] = 0;//Valor de la Unidad
+            v_salida[1] = 0;//Saldo del Contrato
+            v_salida[2] = -3;//Codigo de error
+          }//Saldo del contrato es negativo o igual a cero retornar error
+        }//No hubo error al calcular saldo del contrato en el AS400
+        else{
+          v_salida[0] = 0;//Valor de la Unidad
+          v_salida[1] = 0;//Saldo del Contrato
+          v_salida[2] = v_cod_err;//Codigo de error
+        }//Hubo error al calcular saldo del contrato en el AS400
+      }//No error al borrar los saldos existentes en tbsaldos
+    }catch(Exception e)
+    {
+      try{
+      PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("c:\\TaxBenefits\\Taxb\\Pasos_logs\\error.log", true)));
+      DefaultContext.setDefaultContext(null);                                                
+      out.println("HP Error=" + e.toString());
+      out.close();
+      }
+      catch(Exception ex)
+      {
+        
+      }
+       v_salida[0] = 0;       
+       v_salida[1] = 0;
+       v_salida[2] = -4;
+      return v_salida;
+   }
+
+    return v_salida;
+  }//fin metodo
+
+    /*
+     Valor Unidad con parametros de conexion
+    */
+  public static double[] TBF_CALCULO_VALOR_UNIDAD_P
+    ( String v_fecha_contrato, String v_fecha_unidad, String v_contrato, String v_producto, boolean v_update,  AS400 as400, String v_libreria)
+  {
+    Date              v_max_fecha;
+    double            v_saldo_contrato = 0;
+    double            v_saldo_unidades = 1;
+    double            v_valor_unidad   = 0;
+    double            v_saldo_unidad_max_fec;
+    double            v_cuenta_conting_max_fec;
+    int               v_cod_err        = 0;
+    String            v_men_err        = " ";
+    String            v_fecha;
+    String[]          v_valusu;
+    String            v_log_datos;
+    double            v_salida[] = new double[3];
+    try{
+      v_log_datos = "Contrato: "+v_contrato+"Producto: "+v_producto+"Fecha Contrato: "+v_fecha_contrato+
+                    "Fecha Unidad: "+v_fecha_unidad;
+      /* Borrar los saldos mayores a la fecha de contrato enviada existentes en
+         TBSALDOS para evitar los caLculos erroneos originados por los BACK DATE */
+      #sql {call TBPBD_DEL_TBSALDOS(:v_fecha_contrato,:v_contrato,:v_producto, :INOUT v_cod_err, :INOUT v_men_err)};
+      if (v_cod_err != 0){
+        v_salida[0] = 0;
+        v_salida[1] = 0;
+        v_salida[2] = v_cod_err;
+
+      }//Error al borrar los saldos existentes en tbsaldos
+      else{
+        //Llamado a un metodo que devuelve el saldo de contrato
+        try{
+          TBCL_AS400 ias400 = new TBCL_AS400();
+          System.out.println("caso 1017 con P v_contrato "+v_contrato);
+          System.out.println("caso 1017 con P v_fecha_contrato "+v_fecha_contrato);
+          v_saldo_contrato = ias400.TBF_SALDO_CONTRATO_P(v_contrato, v_fecha_contrato, as400, v_libreria);
+          System.out.println("caso 1017 con P v_saldo_contrato "+v_saldo_contrato);
+          if (v_saldo_contrato == -1.0)
+             v_cod_err = -1;
+          else if(v_saldo_contrato == -2.0)
+                v_cod_err = -2;
+          /*if (v_saldo_contrato == -1){
+            v_cod_err = -1;
+            v_men_err = "Error en Calculo de saldo del Contrato en el AS400";*/
+
+         // }
+        }catch(Exception e){
+           v_cod_err = -2;
+           v_men_err = e.toString();
+
+        }
+        //Si ocurre un error al calcular el saldo del contrato en el AS400
+        //retornar -1 y no seguir proceso
+        if (v_cod_err == 0){
+          //Si el saldo del contrato calculado es negativo o cero retornar un error
+          //Sino calcular el saldo de unidades
+          if (v_saldo_contrato > 0 ){
+            //Llamado a procedimiento que devuelve el saldo de unidades para
+            //la fecha, contrato y producto deseado calculando primero los
+            //ultimos saldos existentes en TBSALDOS
+            //Seleccionar los saldos de unidades y cuenta contingente a la maxima
+            //fecha en TBSALDOS
+            #sql {call TBPBD_ULTIMOS_SALDOS(:v_fecha_contrato,             :v_contrato,
+                                            :v_producto,                   :OUT v_max_fecha,
+                                            :OUT v_saldo_unidad_max_fec,   :OUT v_cuenta_conting_max_fec,
+                                            :INOUT v_cod_err,              :INOUT v_men_err)};
+            //Si hubo error al calcular los ultimos saldos no seguir proceso
+            //y retornar el codigo de error sino seguir con el calculo de unidades a la fecha deseada
+            if (v_cod_err == 0){
+              #sql v_saldo_unidades = {values (TBFBD_CALC_SALDO_UNIDAD_P(:v_fecha_unidad,
+                                                                         :v_contrato,
+                                                                         :v_producto,
+                                                                         :v_max_fecha,
+                                                                         :v_saldo_unidad_max_fec,
+                                                                         :INOUT v_cod_err,
+                                                                         :INOUT v_men_err))};
+           System.out.println("v_saldo_unidades "+v_saldo_unidades);
+              //Si no hubo error al calcular el saldo de unidades seguir proceso
+              //Sino retornar el codigo de error
+              if (v_cod_err == 0){
+                //Si el saldo de unidades es menor o igual a cero retornar error
+                if (v_saldo_unidades > 0 ){
+                  v_valor_unidad = v_saldo_contrato/v_saldo_unidades;
+                  v_salida[0] = v_valor_unidad;//Valor de la Unidad
+                  v_salida[1] = v_saldo_contrato;//Saldo del Contrato
+                  v_salida[2] = 0;//Codigo de error
+                  //Si v_update = true llamar al proc de insercion a TBSALDOS
+                  if (v_update){
+                    //Llama al procedimiento que inserta en la tabla TBSALDOS
+                    #sql {call TBPBD_INS_TBSALDOS(:v_producto,       :v_contrato,
+                                                  :v_fecha_contrato, :v_saldo_contrato,
+                                                  null,              null,
+                                                  :v_saldo_unidades, :v_valor_unidad,
+                                                  :INOUT v_cod_err,  :INOUT v_men_err)};
+                    //Si este saldo existe en la tabla TBSALDOS se actualiza la tabla
+                    if (v_cod_err == -0001){
+                      v_cod_err = 0;
+                      #sql {call TBPBD_UPDATE_SALDOS(to_date(:v_fecha_contrato,'RRRR-MM-DD'),
+                                                     :v_producto,
+                                                     :v_contrato,
+                                                     :v_saldo_contrato,
+                                                     null,
+                                                     null,
+                                                     :v_saldo_unidades,
+                                                     :v_valor_unidad,
+                                                     :INOUT v_cod_err,
+                                                     :INOUT v_men_err)};
+                      if (v_cod_err == 0){
+                        #sql {COMMIT};
+                      }
+                      else{
+                        #sql {ROLLBACK};
+                        #sql { call TBPBD_INS_TBINTERFACE_LOGS( 'EG'
+                               ,TO_DATE(:v_fecha_contrato,'RRRR-MM-DD')
+                               , 'VU'
+                               , :v_men_err
+                               , :v_log_datos
+                               , :v_producto
+                               , null)};
+                        #sql {COMMIT};
+                      }
+
+                    }// fin si error de constraint
+                    else{
+                      if (v_cod_err == 0){
+                        #sql {COMMIT};
+                      }
+                      else{
+                        #sql {ROLLBACK};
+                        #sql { call TBPBD_INS_TBINTERFACE_LOGS( 'EG'
+                                                                ,TO_DATE(:v_fecha_contrato,'RRRR-MM-DD')
+                                                                , 'VU'
+                                                                , :v_men_err
+                                                                , :v_log_datos
+                                                                , :v_producto
+                                                                , null)};
+                        #sql {COMMIT};
+                      }
+                    }
+                  }// fin si quiere actualizar
+                }//Saldo de unidades es mayor a cero
+                else{
+                  v_salida[0] = 0;//Valor de la Unidad
+                  v_salida[1] = v_saldo_contrato;//Saldo del Contrato
+                  v_salida[2] = -5;//Codigo de error
+                  v_cod_err   = -5;
+                  v_men_err   = "Saldo de unidades negativa o igual a cero "+v_saldo_unidades;
+
+                }//Saldo de unidades es menor a cero
+              }// fin si no hubo error al calcular saldo de unidades
+              else{
+                v_salida[0] = 0;//Valor de la Unidad
+                v_salida[1] = 0;//Saldo del Contrato
+                v_salida[2] = v_cod_err;//Codigo de error
+
+              }//hubo error al calcular saldos de unidades
+            }//No hubo error al calcular los saldos a maxima fecha
+            else{
+              v_salida[0] = 0;//Valor de la Unidad
+              v_salida[1] = 0;//Saldo del Contrato
+              v_salida[2] = v_cod_err;//Codigo de error
+
+            }//Hubo error al calcular los saldos a maxima fecha
+          }//Saldo del contrato es positivo
+          else{
+            v_salida[0] = 0;//Valor de la Unidad
+            v_salida[1] = 0;//Saldo del Contrato
+            v_salida[2] = -3;//Codigo de error
+            v_cod_err   = -3;
+            v_men_err   = "Saldo contrato es negativo o igual a cero "+v_saldo_contrato;
+
+          }//Saldo del contrato es negativo o igual a cero retornar error
+        }//No hubo error al calcular saldo del contrato en el AS400
+        else{
+          v_salida[0] = 0;//Valor de la Unidad
+          v_salida[1] = 0;//Saldo del Contrato
+          v_salida[2] = v_cod_err;//Codigo de error
+        }//Hubo error al calcular saldo del contrato en el AS400
+      }//No error al borrar los saldos existentes en tbsaldos
+      if (v_cod_err != 0){
+        //Procedimiento que inserta en la tabla de Log
+        #sql { call TBPBD_INS_TBINTERFACE_LOGS( 'EG'
+                                                ,TO_DATE(:v_fecha_contrato,'RRRR-MM-DD')
+                                                , 'VU'
+                                                , :v_men_err
+                                                , :v_log_datos
+                                                , :v_producto
+                                                , null)};
+        #sql {COMMIT};
+      }
+    }catch(Exception e){
+
+      try{
+      PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("c:\\TaxBenefits\\Taxb\\Pasos_logs\\errorpaso5.log", true)));
+      DefaultContext.setDefaultContext(null);                                                
+      out.println("HP Error=" + e.toString());
+      out.close();
+      }
+      catch(Exception ex)
+      {
+        
+      }
+
+         v_salida[0] = 0;
+         v_salida[1] = 0;
+         v_salida[2] = -4;
+      return v_salida;
+   }
+    return v_salida;
+  }//fin metodo
+
+}//fin de la clase
+

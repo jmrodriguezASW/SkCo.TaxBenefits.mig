@@ -1,0 +1,240 @@
+// Decompiled by DJ v3.0.0.63 Copyright 2002 Atanas Neshkov  Date: 2002/05/07 5:19:53 PM
+// Home Page : http://members.fortunecity.com/neshkov/dj.html  - Check often for new version!
+// Decompiler options: packimports(3) 
+// Source File Name:   PortMapper.java
+
+package com.ibm.as400.access;
+
+import com.ms.security.PermissionID;
+import com.ms.security.PolicyEngine;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.*;
+import java.util.Hashtable;
+import netscape.security.PrivilegeManager;
+
+// Referenced classes of package com.ibm.as400.access:
+//            AS400, AS400PortMapDS, AS400PortMapReplyDS, Copyright, 
+//            ServerStartupException, SocketContainer, Trace
+
+class PortMapper
+{
+
+    private static String getCopyright()
+    {
+        return "(C)Copyright IBM Corp. 1997, 1998";
+    }
+
+    private PortMapper()
+    {
+    }
+
+    static int getServiceId(String s)
+    {
+        if(s.equals("as-file"))
+            return 0;
+        if(s.equals("as-netprt"))
+            return 1;
+        if(s.equals("as-rmtcmd"))
+            return 2;
+        if(s.equals("as-dtaq"))
+            return 3;
+        if(s.equals("as-ddm"))
+            return 5;
+        if(s.equals("as-database"))
+            return 4;
+        if(s.equals("as-central"))
+            return 6;
+        if(s.equals("as-signon"))
+        {
+            return 7;
+        } else
+        {
+            Trace.log(2, "Invalid service - " + s);
+            throw new IllegalArgumentException("serviceName");
+        }
+    }
+
+    static void setServicePortsToDefault(String s)
+    {
+        int ai[] = {
+            8473, 8474, 8475, 8472, 8471, 446, 8470, 8476, 9473, 9474, 
+            9475, 9472, 9471, 448, 9470, 9476
+        };
+        systemList.put(s, ai);
+    }
+
+    static void setServicePort(String s, int i, int j, boolean flag)
+    {
+        if(flag)
+            i += 8;
+        int ai[] = (int[])systemList.get(s);
+        if(ai == null)
+        {
+            int ai1[] = {
+                -1, -1, -1, -1, -1, 446, -1, -1, -1, -1, 
+                -1, -1, -1, 448, -1, -1
+            };
+            ai1[i] = j;
+            systemList.put(s, ai1);
+            return;
+        } else
+        {
+            ai[i] = j;
+            return;
+        }
+    }
+
+    static int getServicePort(String s, int i, boolean flag)
+    {
+        if(flag)
+            i += 8;
+        int ai[] = (int[])systemList.get(s);
+        if(ai == null)
+        {
+            if(i == 5)
+                return 446;
+            return i != 13 ? -1 : 448;
+        } else
+        {
+            return ai[i];
+        }
+    }
+
+    static SocketContainer getServerSocket(String s, String s1, boolean flag)
+        throws ServerStartupException, UnknownHostException, IOException
+    {
+        SocketContainer socketcontainer = null;
+        int i = getServiceId(s1);
+        if(AS400.isSysLocal(s) && i != 4 && i != 0)
+            try
+            {
+                if(Trace.isTraceOn())
+                    Trace.log(1, "Starting a local socket to " + s1);
+                socketcontainer = AS400.loadSocketContainer("com.ibm.as400.access.SocketContainerUnix");
+                socketcontainer.setServiceName(s1);
+                return socketcontainer;
+            }
+            catch(IOException _ex)
+            {
+                socketcontainer = null;
+            }
+        Trace.log(1, "Loading browser security classes");
+        Class class1 = null;
+        Class class2 = null;
+        Class class3 = null;
+        try
+        {
+            class1 = Class.forName("netscape.security.PrivilegeManager");
+            Trace.log(1, "Loaded Netscape browser security classes");
+        }
+        catch(Exception _ex)
+        {
+            Trace.log(1, "Netscape browser security classes not loaded");
+        }
+        try
+        {
+            class2 = Class.forName("com.ms.security.PermissionID");
+            class3 = Class.forName("com.ms.security.PolicyEngine");
+            Trace.log(1, "Loaded IE browser security classes");
+        }
+        catch(Exception _ex)
+        {
+            Trace.log(1, "IE browser security classes not loaded");
+        }
+        if(class1 != null)
+            try
+            {
+                Trace.log(1, "Enabling connect privileges for Navigator");
+                PrivilegeManager.enablePrivilege("UniversalConnect");
+                Trace.log(1, "Enabled connect privileges for Navigator");
+            }
+            catch(Exception exception)
+            {
+                Trace.log(2, "Desired Netscape security method error", exception);
+            }
+        if(class2 != null && class3 != null)
+            try
+            {
+                Trace.log(1, "Enabling connect privileges for IE");
+                PolicyEngine.assertPermission(PermissionID.NETIO);
+                Trace.log(1, "Enabled connect privileges for IE");
+            }
+            catch(Exception exception1)
+            {
+                Trace.log(2, "Desired IE security method error", exception1);
+            }
+        int j = getServicePort(s, i, flag);
+        if(j == -1)
+        {
+            Trace.log(1, "Connecting to port mapper...");
+            Socket socket = new Socket(s, 449);
+            java.io.InputStream inputstream = socket.getInputStream();
+            OutputStream outputstream = socket.getOutputStream();
+            String s2 = flag ? s1 + "-s" : s1;
+            AS400PortMapDS as400portmapds = new AS400PortMapDS(s2);
+            as400portmapds.write(outputstream);
+            outputstream.flush();
+            AS400PortMapReplyDS as400portmapreplyds = new AS400PortMapReplyDS();
+            as400portmapreplyds.read(inputstream);
+            try
+            {
+                j = as400portmapreplyds.getPort();
+            }
+            catch(ServerStartupException serverstartupexception)
+            {
+                Trace.log(2, "Failed to map a port for " + s2, serverstartupexception);
+                throw (ServerStartupException)serverstartupexception.fillInStackTrace();
+            }
+            if(Trace.isTraceOn())
+                Trace.log(1, "Adding entry to Service Port table: system " + s + ", service " + s2 + ", port " + j);
+            setServicePort(s, i, j, flag);
+            socket.close();
+        }
+        Trace.log(1, "Opening socket to server...");
+        try
+        {
+            SocketContainer socketcontainer1;
+            if(flag)
+            {
+                if(Trace.isTraceOn())
+                    Trace.log(1, "Starting a secure socket to " + s1);
+                socketcontainer1 = AS400.loadSocketContainer("com.ibm.as400.access.SocketContainerSSL");
+            } else
+            {
+                if(Trace.isTraceOn())
+                    Trace.log(1, "Starting an inet socket to " + s1);
+                socketcontainer1 = AS400.loadSocketContainer("com.ibm.as400.access.SocketContainerInet");
+            }
+            Socket socket1 = new Socket(s, j);
+            try
+            {
+                socket1.setTcpNoDelay(true);
+            }
+            catch(SocketException socketexception)
+            {
+                Trace.log(2, "Socket exception setting no delay: ", socketexception);
+            }
+            try
+            {
+                if(socket1.getSoLinger() != -1)
+                    socket1.setSoLinger(true, 60);
+            }
+            catch(SocketException socketexception1)
+            {
+                Trace.log(2, "Socket exception setting so linger: ", socketexception1);
+            }
+            socketcontainer1.setSocket(socket1);
+            socketcontainer1.setServiceName(s1);
+            return socketcontainer1;
+        }
+        catch(IOException ioexception)
+        {
+            Trace.log(2, "Failed to start the server...", ioexception);
+        }
+        throw new ServerStartupException(3);
+    }
+
+    private static Hashtable systemList = new Hashtable();
+
+}

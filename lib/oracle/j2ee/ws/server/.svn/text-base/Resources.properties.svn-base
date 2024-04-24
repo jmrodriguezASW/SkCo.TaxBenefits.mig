@@ -1,0 +1,35 @@
+msg.servlet.initialized=The JAXRPC servlet has been initialized for port :{0}.
+msg.servlet.destroyed=The JAXRPC servlet has been destroyed for port :{0}.
+msg.servlet.ioexception=An I/O exception occured for port :{0} :{1}.
+msg.servlet.exception=An exception occured for port:{0} :{1}. 
+msg.servlet.request=The SOAP request for port:{0} is :\n {1}
+msg.servlet.response=The SOAP response for port:{0} is :\n {1}
+msg.servlet.oneway=The webservice invocation was one way.
+msg.servlet.trace=The error stack trace :
+msg.processor.ejbservice=The webservice is an ejb webservice
+msg.processor.fault=Inserted fault message for exception {0}
+msg.processor.interceptor-handled-request=The Management Interceptor ran the request chain
+msg.processor.interceptor-handled-response=The Management Interceptor ran the response chain
+msg.processor.interceptor-handled-fault=The Management Interceptor ran the fault chain
+msg.processor.interceptor-fault-exception=The Management Interceptor generated an exception during fault handling: {0}
+
+
+msg.servlet.unregister.error=Failed to unregister the web service MBeans {0}
+msg.servlet.register.error=Failed to register the web service MBeans for endpoint :{0} the error is  :{1}
+msg.servlet.testpage.error=Error occured while trying to display the test page : {0}
+#pre and post handler messages
+msg.pre-invoke.exception=Error during handler invocation :
+msg.ejb.pre-handler=System configured ejb prehandler:{0}
+msg.ejb.pre-handler.error=Error in system configured ejb prehandler: {0}
+msg.ejb.post-handler=System configured ejb post-handler:{0}
+msg.ejb.post-handler.error=Error in system configured ejb post-handler: {0}
+msg.servlet.pre-handler=System configured servlet pre-handler:{0}
+msg.servlet.pre-handler.error=Error in system configured servlet pre-handler: {0}
+msg.servlet.post-handler=System configured servlet post-handler:{0}
+msg.servlet.post-handler.error=Error in system configured servlet post-handler: {0}
+#URLPatternregistry
+msg.endpoint.failed.register=Error in resolving the webservice endpoint :{0}
+#JMSTransportListener
+msg.jms.listener.error.init=Error initialising jms listeners : {0}
+msg.jms.listener.error.processing=Error processing soap message over jms : {0}
+msg.jms.listener.resolving.endpoint=Resolving endpoint location : {0}

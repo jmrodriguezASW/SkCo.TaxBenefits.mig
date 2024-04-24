@@ -1,0 +1,426 @@
+
+package TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS;
+
+import sqlj.runtime.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.io.*;
+import java.sql.*;
+
+/*
+ Modificacion:
+ Se elimina el import debido a que la conexion
+ al AS400 se hace desde la base de datos
+ import TBPKT_UTILIDADES.TBPKT_FUNCIONES_AS400.*;
+*/
+
+import TBPKT_UTILIDADES.TBPKT_CONEXIONBASEDATOS.*;
+import TBPKT_UTILIDADES.TBPKT_FECHAS.*;
+import sqlj.runtime.ref.DefaultContext ;
+import TBPKT_UTILIDADES.TBPKT_PLANTILLA.*;
+import java.util.Date;
+import java.util.Vector;
+import TBPKT_UTILIDADES.TBPKT_VALOR_UNIDAD.*;
+/**Clase que muestra al usuario la fecha efectiva y  de proceso del retio,tambien
+*permite escojer el tipo de retiro a realizar.*/
+public class TBCL_RetiroFechaCliente extends HttpServlet
+{
+ /**Iterator de la información del contrato.*/
+ #sql public static iterator i_cumple2(String CON_NOMBRES
+                                       ,String CON_APELLIDOS
+                                       ,String v_fecha_cancelacion
+                                       ,double pro_retiro_minimo
+                                       ,int PRO_DIAS_CANJE
+                                       ,String CON_REF_TIPO_IDENTIFICACION
+                                       ,String CON_NUMERO_IDENTIFICACION );
+ /**Iterator de los tipos de retiro.*/
+ #sql public static iterator i_tipo2(String COT_DESCRIPCION,String COT_REF_TIPO_TRANSACCION,String COT_REF_CLASE_TRANSACCION, String PRC_RETIRO_PENALIZADO,String PRC_TRASLADO,String  PRC_RETIRO_TOTAL ,String v_diasmenor,String v_diasmayor);
+
+ /**Variable tipo iterator i_cumple2*/
+ i_cumple2 v_cum;
+ /**Variable tipo iterator i_tipo2*/
+ i_tipo2 v_tipo;
+
+ /**Procedimiento muestra al usuario las fechas del retiro y consulta los tipos de retiro para el cliente*/
+ public void TBPL_FechaCliente(PrintWriter out,HttpSession session,HttpServletRequest request,String nuevaCadena,String v_contrato,String v_producto,String v_unidad ,String v_tipousu)
+ {
+  /**Instancias de clase*/
+  STBCL_GenerarBaseHTML   i_pagina = new STBCL_GenerarBaseHTML();/**Instancia de la clase TBCL_GenerarBaseHTML*/
+  TBCL_Validacion     i_valusu = new  TBCL_Validacion ();/**Instancia de la clase TBCL_Validacion*/
+  //TBCL_ConexionSqlj    i_conexion = new TBCL_ConexionSqlj();/**Instancia de la clase TBCL_ConexionSqlj*/
+
+  //TBCL_FuncionesAs400    i_fondos = new TBCL_FuncionesAs400 ();/**Instancia de la clase TBCL_FuncionesAs400*/
+
+  TBCL_Fecha              i_fecha = new TBCL_Fecha();/**Instancia de la clase TBCL_Fecha*/
+  try
+  {
+   String[] v_valusu = new String[3];
+   v_valusu=i_valusu.TBFL_ValidarUsuario();
+   DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+   Connection t_tax =DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
+   DefaultContext ctx9 = new DefaultContext(v_valusu[0],v_valusu[1],v_valusu[2],false);
+   DefaultContext.setDefaultContext(ctx9);
+   /**Conectar base de datos*/
+
+
+   /**Definicion de variables*/
+   /**Tipo Date*/
+   java.sql.Date v_fecha = new java.sql.Date(4);/**Fecha de proceso del retiro*/
+
+   /**Tipo String */
+   String v_valmin    = "";/**Variable valor minimo del retiro*/
+   String v_codusu    = "";/**Variable código tipo de usuario Taxbenefits*/
+   String v_coduni    = "";/**Variable código unidad Taxbenefits*/
+   String v_feccan    = "";/**Variable fecha cancelación del contrato*/
+   String v_hora      = "";/**Variable hora actual*/
+   String v_nombre    = "";/**Variable nombre del afiliado*/
+   String v_apellidos = "";/**Variable apellido del afiliado*/
+   String v_sistema   = "";/**Variable nombre del sistema multifund*/
+   String v_usumfund  = "";/**Variable usuario multifund*/
+   String v_passmfund = "";/**Variable password de usuario multifund*/
+   String v_libreria  = "";/**Variable nombre de libreria multifund*/
+   String v_tipoci    = "";/**Variable tipo cierre de unidad*/
+   String v_horacie   = "";/**Variable hora cierre de unidad*/
+   String v_bloqueo   = "";/**Variable bloqueo de egresos del contrato*/
+   String v_canje2    = "";/**Variable días de canje de un aporte*/
+   String v_tipoiden  = "";/**Variable tipo de identificación afiliado*/
+   String v_identificacion = "";/**Variable número de identificación*/
+   String v_pie       = "";/**Variable dibujar final página*/
+   String v_pintar    = "";   /**Variable dibujar inicio página*/
+   String v_fechasol  = "";/**Fecha de proceso del retiro en string*/
+   //String v_contra    = (java.lang.String)session.getValue("s_contrato");/**Variable numero del contrato*/
+  // String v_pro       = (java.lang.String)session.getValue("s_producto");/**Variable código del producto*/
+  // String v_tusu      = (java.lang.String)session.getValue("s_usuario");/**Variable código tipo de usuario As400*/
+  //String v_tuni      = (java.lang.String)session.getValue("s_unidad");/**Variable código unidad As400*/
+   /**Tipo int */
+   int v_resmulti     = 0;/**Indicador de exito o fracaso */
+   /**Tipo boolean */
+   boolean v_validafecha = false;/**Indicador de que se encuentra fecha de proceso*/
+   boolean v_validacontrato = false;/**Indicador de que se encuntran datos para el contrato*/
+
+   /**Validar tipo de uisuario y unidad de proceso*/
+   #sql v_codusu ={values(TBFBD_REFERENCIAS(:v_tipousu,'UTU'))};
+   #sql v_coduni ={values(TBFBD_REFERENCIAS(:v_unidad,'UUP'))};
+   /**Variable de session tipo de uisuario y unidad de proceso */
+   session.removeValue("s_usuariotax");
+   session.removeValue("s_unidadtax");
+   session.putValue("s_usuariotax",(java.lang.Object)v_codusu);
+   session.putValue("s_unidadtax",(java.lang.Object)v_coduni);
+   /**Si el tipo de usuario es valido*/
+   if(!v_codusu.equals("XXXXXX"))
+   {//if usuario
+    /**Si la unidad de proceso es valida*/
+    if(!v_coduni.equals("XXXXXX"))
+    {
+     /**Consultar el tipo de cierre para la unidad*/
+     #sql v_tipoci = {values(TB_FTIPO_CIERRE(:v_coduni))};
+     if(v_tipoci.equals("T"))
+     {
+      /**Es cierre total entonces la fecha efectiva del retiro es proxima fecha habil*/
+      #sql v_fecha = {values(TB_FFECHA_SIGUIENTE(1))};
+      v_validafecha = true;
+     }
+     else
+     {
+      /**Si el cierre es parcial o aun no se ha hecho ningun tipo de cierre para el dia de hoy
+      * se averigua que hora de cierre hay para la unidad y tipo de usuario*/
+      #sql {select to_char(sysdate,'HH24MI')into :v_hora FROM DUAL};
+      #sql v_horacie = {values(TB_FHORA_CIERRE(:v_producto,:v_coduni,:v_codusu))};
+      if(!v_horacie.equals("ERROR"))
+      {
+       if( new Integer(v_hora).intValue() > new Integer(v_horacie).intValue())
+       {
+        /**Si se ha pasado la hora de cierre la fecha efectiva del retiro es proxima fecha habil*/
+        #sql v_fecha = {values(TB_FFECHA_SIGUIENTE(1))};
+        v_validafecha = true;
+       }
+       else
+       {
+        /**Queda el dia habil*/
+        #sql v_fecha = {values(TB_FFECHA_SIGUIENTE(0))};
+        v_validafecha = true;
+       }
+      }
+      else
+      {
+       /**Si no esta parametrizada la hora de cierre para la unidad de proceso*/
+       v_validafecha = false;
+       v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>No esta parametrizada la hora de cierre para el tipo de usuario "+v_tipousu+"</center>",false);
+       out.println(""+v_pintar+"");
+       v_pie = i_pagina.TBFL_PIE;
+       out.println("<br>");
+       out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
+       out.println(""+v_pie+"");
+       out.close();
+      }
+     }
+     /**Se encontro fecha de proceso*/
+     if(v_validafecha)
+     {
+      v_fechasol = v_fecha.toString();
+      /**Variable de session fecha proceso y efectiva */
+      session.removeValue("s_fecpro");
+      session.removeValue("s_fecefectiva");
+      session.putValue("s_fecpro",(java.lang.Object)v_fechasol);
+      session.putValue("s_fecefectiva",(java.lang.Object)v_fechasol);
+      /**Consultar datos del contrato*/
+      #sql v_cum ={ SELECT  CON_NOMBRES
+                           ,CON_APELLIDOS
+                           ,to_char(CON_FECHA_CANCELACION,'YYYY-MM-DD') as v_fecha_cancelacion
+                           ,pro_retiro_minimo
+                           ,PRO_DIAS_CANJE
+                           ,CON_REF_TIPO_IDENTIFICACION
+                           ,CON_NUMERO_IDENTIFICACION
+                      FROM tbproductos,tbcontratos
+                     WHERE PRO_CODIGO=CON_PRO_CODIGO
+                       AND CON_PRO_CODIGO = :v_producto
+                       AND CON_NUMERO = :v_contrato
+                    };
+
+
+      while (v_cum.next())
+      {
+       v_nombre= v_cum.CON_NOMBRES().trim();
+       session.removeValue("s_nombres");
+       session.putValue("s_nombres",(java.lang.Object)v_nombre);
+       v_apellidos = v_cum.CON_APELLIDOS().trim();
+       session.removeValue("s_apellidos");
+       session.putValue("s_apellidos",(java.lang.Object)v_apellidos);
+       v_feccan = v_cum.v_fecha_cancelacion();
+       session.removeValue("s_feccan");
+       session.putValue("s_feccan",(java.lang.Object)v_feccan);
+       v_valmin = new Double(v_cum.pro_retiro_minimo()).toString();
+       session.removeValue("s_valmin");
+       session.putValue("s_valmin",(java.lang.Object)v_valmin);
+       v_canje2 =  new Integer(v_cum.PRO_DIAS_CANJE()).toString();
+       session.removeValue("s_diascanje");
+       session.putValue("s_diascanje",(java.lang.Object)v_canje2);
+       v_tipoiden = v_cum.CON_REF_TIPO_IDENTIFICACION();
+       session.removeValue("s_tipoidentificacion");
+       session.putValue("s_tipoidentificacion",(java.lang.Object)v_tipoiden);
+       v_identificacion = v_cum.CON_NUMERO_IDENTIFICACION();
+       session.removeValue("s_identificacion");
+       session.putValue("s_identificacion",(java.lang.Object)v_identificacion);
+       v_validacontrato = true;
+      }
+      v_cum.close();
+      /**Si no hay error al consultar contrato*/
+      if (v_validacontrato)
+      {//1
+       /**Si el contrato no esta cancelado*/
+       if(v_feccan == null)
+       {
+        /**Consultar  variables de conexion del as400*/
+        #sql v_resmulti ={values(TB_FREFERENCIAS_MULTI( :INOUT v_sistema
+                                                       ,:INOUT v_usumfund
+                                                       ,:INOUT v_passmfund
+                                                       ,:INOUT v_libreria
+                                                       )
+                                 )
+                          };
+         /**Variable de session de conexion del as400*/
+        session.removeValue("s_sistema");
+        session.removeValue("s_usumfund");
+        session.removeValue("s_passmfund");
+        session.removeValue("s_libreria");
+        session.putValue("s_sistema",(java.lang.Object)v_sistema);
+        session.putValue("s_usumfund",(java.lang.Object)v_usumfund);
+        session.putValue("s_passmfund",(java.lang.Object)v_passmfund);
+        session.putValue("s_libreria",(java.lang.Object)v_libreria);
+        /**Consultar bloqueo de egresos para el contrato*/
+        //v_bloqueo = i_fondos.TBFL_BloqueoEgresos(v_contrato,v_sistema,v_usumfund,v_passmfund,v_libreria);
+        /*
+        Modificacion:
+        Se añade el procedimiento de invocacion a un procedimiento del AS400
+        */
+
+        CallableStatement cs = t_tax.prepareCall ( "{? = call TBCL_FUNCIONESAS400.TBFL_BloqueoEgresos(?,?,?,?,?)}");
+        cs.registerOutParameter(1,Types.CHAR);
+        cs.setString(2,v_contrato);
+        cs.setString(3,v_sistema);
+        cs.setString(4,v_usumfund);
+        cs.setString(5,v_passmfund);
+        cs.setString(6,v_libreria);
+        cs.executeUpdate();
+        v_bloqueo = cs.getString(1);
+        cs.close();
+        t_tax.close();
+
+        /* Final de la modificacion */
+
+        /**Si el contrano no tiene bloqueo de egresos*/
+        if(v_bloqueo.equals("N"))
+        {//3
+         /**Dibbujar pagina de respuesta*/
+         v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Solicitud de Retiro","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_Retiros","",true,"modulo_retiros.js","return validar_fecha(this)");
+         out.println(""+v_pintar+"");
+         /*Cambio para manejo de referencia unica 2009/03/30 MOS */
+         String v_contrato_unif = "";
+         #sql v_contrato_unif = {values(TBFBD_obtener_ref_unica(:v_producto,:v_contrato))};
+         out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_producto+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
+         out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nombre+"  <b> Apellidos </b>"+v_apellidos+" </CENTER></font>");
+         out.println("<br>");
+         out.println("<pre>");
+         out.println("<font face='Verdana, Arial, Helvetica, sans-serif' size='2' color='#000000'><b>Fecha de Proceso de la Solicitud de Retiro </b>              "+v_fechasol+"        </font>");
+         out.println("<font face='Verdana, Arial, Helvetica, sans-serif' size='2' color='#000000'><b>Fecha Efectiva de la Solicitud de Retiro                     </b> "+v_fechasol+"  <input name=obligatoriov_fecefectiva type=hidden  value='"+v_fechasol+"'></font>");
+         out.println("</pre>");
+         out.println("</pre>");
+         out.println("<font face='Verdana, Arial, Helvetica, sans-serif' size='2' color='#000000'><b>Tipo de Retiro</b>                   <select name=v_retiro ></font>");
+         #sql v_tipo ={SELECT COT_DESCRIPCION
+                             ,COT_REF_TIPO_TRANSACCION
+                             ,COT_REF_CLASE_TRANSACCION
+                             ,PRC_RETIRO_PENALIZADO
+                             ,PRC_TRASLADO
+                             ,PRC_RETIRO_TOTAL
+                             ,TO_CHAR(PRC_DIAS_MENOR) v_diasmenor
+                             ,TO_CHAR(PRC_DIAS_MAYOR) v_diasmayor
+                         FROM TBPRODUCTOS_CONCEPTOS,TBCONCEPTOS_TRANSACCION
+                        WHERE PRC_PRO_CODIGO                = :v_producto
+                          AND PRC_COT_REF_TRANSACCION       = 'STR001'
+                          AND PRC_COT_REF_TRANSACCION       = COT_REF_TRANSACCION
+                          AND PRC_COT_REF_TIPO_TRANSACCION  = COT_REF_TIPO_TRANSACCION
+                          AND PRC_COT_REF_CLASE_TRANSACCION = COT_REF_CLASE_TRANSACCION
+                          AND TBPRODUCTOS_CONCEPTOS.PRC_ORIGEN_TAXB ='S'
+                          AND TBPRODUCTOS_CONCEPTOS.PRC_TRASLADO    = 'N'
+                     ORDER BY COT_DESCRIPCION};
+                 out.println("               <option VALUE ='  '>                         ");
+         while (v_tipo.next())
+         {
+          out.println("     <option value='"+v_tipo.COT_REF_TIPO_TRANSACCION()+v_tipo.COT_REF_CLASE_TRANSACCION()+v_tipo.PRC_RETIRO_PENALIZADO()+v_tipo.PRC_TRASLADO()+v_tipo.PRC_RETIRO_TOTAL()+v_tipo.v_diasmenor()+"-"+v_tipo.v_diasmayor()+"'>"+ v_tipo.COT_DESCRIPCION());
+         }
+         v_tipo.close();
+         out.println("</OPTION></SELECT></FONT>");
+         out.println("<br>");
+         out.println("<br>");
+         out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
+         out.println("<center><input type=submit value='Aceptar'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
+         v_pie = i_pagina.TBFL_PIE;
+         out.println(""+v_pie+"");
+         out.println("<br>");
+         out.close();
+        }
+        else
+        {/**El contrato tiene bloqueo de egresos o hubo error al consultar en el as400*/
+         if(v_bloqueo.equals("Y"))
+         {
+          v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El contrato "+v_contrato+" tiene bloqueo de egresos, no es posible realizar la solicitud.</center>",false);
+          out.println(""+v_pintar+"");
+          v_pie = i_pagina.TBFL_PIE;
+          out.println("<br>");
+          out.println("<br>");
+          out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
+          out.println(""+v_pie+"");
+          out.close();
+         }
+         else
+         {
+          v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>No se establecio comunicación con el AS/400.</center>",false);
+          out.println(""+v_pintar+"");
+          v_pie = i_pagina.TBFL_PIE;
+          out.println("<br>");
+          out.println("<br>");
+          out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
+          out.println(""+v_pie+"");
+          out.close();
+         }
+        }
+       }
+       else
+       {/**Si el contrato tiene fecha de cancelación*/
+        v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El contrato "+v_contrato+" ,tiene fecha de cancelación "+v_feccan+".</center>",false);
+        out.println(""+v_pintar+"");
+        v_pie = i_pagina.TBFL_PIE;
+        out.println("<br>");
+        out.println("<br>");
+        out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
+        out.println(""+v_pie+"");
+        out.close();
+       }
+      }
+      else
+      {/**Si no se encuantran datos para el contrato*/
+       v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El contrato "+v_contrato+" ,no existe en el sistema.</center>",false);
+       out.println(""+v_pintar+"");
+       v_pie = i_pagina.TBFL_PIE;
+       out.println("<br>");
+       out.println("<br>");
+       out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
+       out.println(""+v_pie+"");
+       out.close();
+      }
+     }
+     else
+     {/**Error al consultar fecha de proceso del retiro*/
+      v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro" ,"","<center>Error al consultar fecha de proceso para la solicitud de retiro.</center>",false);
+      out.println(""+v_pintar+"");
+      v_pie = i_pagina.TBFL_PIE;
+      out.println("<br>");
+      out.println("<br>");
+      out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
+      out.println(""+v_pie+"");
+      out.close();
+     }
+    }
+    else
+    {/**Código de unidad de proceso invalido*/
+     v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro" ,"","<center>La Unidad de Proceso "+v_unidad+" es desconocido por el sistema.</center>",false);
+     out.println(""+v_pintar+"");
+     v_pie = i_pagina.TBFL_PIE;
+     out.println("<br>");
+     out.println("<br>");
+     out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
+     out.println(""+v_pie+"");
+     out.close();
+    }
+   }
+   else
+   {/**Código tipo de usuario invalido*/
+     v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El tipo de usuariop "+v_tipousu+" es desconocido por el sistema.</center>",false);
+     out.println(""+v_pintar+"");
+     v_pie = i_pagina.TBFL_PIE;
+     out.println("<br>");
+     out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
+     out.println(""+v_pie+"");
+     out.close();
+   }
+   /**Desconectar base de datos*/
+   //i_conexion.TBCL_DesconectarBaseDatos();
+
+  ctx9.getConnection().close();
+  }
+  catch(Exception ex)
+  {/**Manejo de errores*/
+   String v_pintar="";
+   String error = ex.toString();
+   if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
+   {
+    v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
+   }
+   else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
+        {
+         v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
+        }
+           else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
+                {
+                 v_pintar = i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
+                }
+                else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
+                     {
+                       v_pintar =  i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
+                     }
+                  else
+                  {
+                   v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Mensaje de Error :"+ex+".</center>",false);
+                  }
+   out.println(""+v_pintar+"");
+   out.println("<BR>");
+   out.println("<center><input type=button value='Cancelar' onclick=' history.go(-1)'></center>");
+   String v_pie = i_pagina.TBFL_PIE;
+   out.println("<br>");
+   out.println("<br>");
+   out.println(""+v_pie+"");
+   out.close();
+  }
+ }
+}
+

@@ -1,0 +1,52 @@
+10
+
+dir
+1
+file:///C:/Repositorio/lib/oracle
+file:///C:/Repositorio
+
+
+
+2019-02-18T17:08:00.394000Z
+1
+rflorez
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+08a18f01-6901-0010-bb3e-e7190e199de1
+
+j2ee
+dir
+
+jdbc
+dir
+
+jsp
+dir
+
+net
+dir
+
+ojc
+dir
+
+util
+dir
+
+wsdl
+dir
+
+xml
+dir
+

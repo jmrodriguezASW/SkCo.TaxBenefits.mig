@@ -1,0 +1,154 @@
+package TBPKT_INFORMATIVO.TBPKT_CONSULTAPORTE;
+
+
+import TBPKT_UTILIDADES.TBPKT_CONEXIONBASEDATOS.TBCL_Validacion;
+
+import java.sql.DriverManager;
+
+import java.text.DecimalFormat;
+
+import sqlj.runtime.ref.DefaultContext;
+
+
+public class SQL_PTB_DISPONIBLE_OBLIG extends Object{
+        
+    private String[]        v_valusu;        
+    private double v_aportes_sin_cert_AVA = 0; 
+    private double v_aportes_sin_cert_AVE = 0;   
+    private double v_aportes_hist_pend_AVA = 0;   
+    private double v_aportes_hist_pend_AVE = 0;   
+    private double v_ret_pend_procesar_AVA = 0;   
+    private double v_ret_pend_procesar_AVE = 0;   
+    private double v_retencion_cont_AVA = 0;      
+    private double v_retencion_cont_AVE = 0;     
+    private double v_retencion_rend_AVA = 0;     
+    private double v_retencion_rend_AVE = 0;  
+    private double v_disponibleTOblig = 0;
+    private double v_disponibleAVA = 0;
+    private double v_disponibleAVE = 0;  
+    private double v_valor_unidad_AVA = 0;
+    private double v_valor_unidad_AVE = 0;
+    private double v_prov_comi_rend_AVA = 0;
+    private double v_prov_comi_capital_AVA = 0;
+    private double v_prov_comi_rend_AVE = 0;
+    private double v_prov_comi_capital_AVE = 0;
+    private double v_prov_comi_total_AVA = 0;
+    private double v_prov_comi_total_AVE = 0;
+    private int v_cod_err = 0;  
+    private String v_men_err;
+    
+    public String[] GET_DISPONIBLE_OBLIG (String v_codproducto, String v_Nocontrato, double v_saldoAVA, double v_saldoAVE, String v_fecha, String[] comisiones, double Credito){
+        String[] SaldosFinales = new String[23];
+        Modelo_TB_Referencias objModelo_TB_Referencias = new Modelo_TB_Referencias();
+        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        double v_comision_AVA = Double.parseDouble(comisiones[0]) + Credito;
+        double v_comision_AVE = Double.parseDouble(comisiones[1]);
+        double prov_credito = 0;        
+        
+        try {            
+            //Conexion con la base de datos
+            v_valusu = new String[3];
+            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+            DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));
+            v_Nocontrato = ""+Integer.parseInt(v_Nocontrato);
+                        
+            #sql {call TBPBD_DISPONIBLE_OBLIG(:v_codproducto
+                                     ,:v_Nocontrato
+                                     ,:v_saldoAVA
+                                     ,:v_saldoAVE
+                                     ,:v_comision_AVA  
+                                     ,:v_comision_AVE 
+                                     ,:v_fecha
+                                     ,:INOUT v_aportes_sin_cert_AVA
+                                     ,:INOUT v_aportes_sin_cert_AVE
+                                     ,:INOUT v_aportes_hist_pend_AVA
+                                     ,:INOUT v_aportes_hist_pend_AVE
+                                     ,:INOUT v_ret_pend_procesar_AVA
+                                     ,:INOUT v_ret_pend_procesar_AVE
+                                     ,:INOUT v_retencion_cont_AVA
+                                     ,:INOUT v_retencion_cont_AVE
+                                     ,:INOUT v_retencion_rend_AVA
+                                     ,:INOUT v_retencion_rend_AVE
+                                     ,:INOUT v_valor_unidad_AVA
+                                     ,:INOUT v_valor_unidad_AVE
+                                     ,:INOUT v_prov_comi_rend_AVA
+                                     ,:INOUT v_prov_comi_capital_AVA
+                                     ,:INOUT v_prov_comi_rend_AVE
+                                     ,:INOUT v_prov_comi_capital_AVE
+                                     ,:INOUT v_cod_err
+                                     ,:INOUT v_men_err)};
+            
+        if(v_cod_err == 0) 
+        {            
+            v_disponibleAVA = v_saldoAVA - v_aportes_sin_cert_AVA - v_aportes_hist_pend_AVA - v_ret_pend_procesar_AVA - v_retencion_cont_AVA - 
+                              v_retencion_rend_AVA - v_prov_comi_rend_AVA - v_prov_comi_capital_AVA;
+            
+            v_disponibleAVE = v_saldoAVE - v_aportes_sin_cert_AVE - v_aportes_hist_pend_AVE - v_ret_pend_procesar_AVE - v_retencion_cont_AVE - 
+                              v_retencion_rend_AVE - v_prov_comi_rend_AVE - v_prov_comi_capital_AVE;     
+            
+            if (v_prov_comi_rend_AVA + v_prov_comi_capital_AVA>=-0.01 && v_prov_comi_rend_AVA + v_prov_comi_capital_AVA<=0.01) {
+                v_prov_comi_total_AVA = 0;
+                prov_credito = 0;
+            }
+            else {
+                if (v_prov_comi_rend_AVA + v_prov_comi_capital_AVA>=Credito-0.01)
+                   v_prov_comi_total_AVA =  v_prov_comi_rend_AVA + v_prov_comi_capital_AVA - Credito;
+                else
+                   v_prov_comi_total_AVA = 0; 
+                
+                if (v_prov_comi_total_AVA > 0)
+                   prov_credito =  Credito;
+                else
+                   prov_credito = v_prov_comi_rend_AVA + v_prov_comi_capital_AVA; 
+                }
+            
+            v_prov_comi_total_AVE = v_prov_comi_rend_AVE + v_prov_comi_capital_AVE;   
+            
+            if(v_disponibleAVA<0)
+             {
+                 v_disponibleAVA=0;
+             }
+            if(v_disponibleAVE<0)
+            {
+                v_disponibleAVE=0;
+            }
+            v_disponibleTOblig = v_disponibleAVA + v_disponibleAVE;
+         
+            DecimalFormat v_format = new  DecimalFormat("¤###,###,###,###,###,###.##");            
+            SaldosFinales[0] = String.valueOf(v_format.format(v_saldoAVA));
+            SaldosFinales[1] = String.valueOf(v_format.format(v_saldoAVE));
+            SaldosFinales[2] = String.valueOf(v_format.format(v_aportes_sin_cert_AVA));
+            SaldosFinales[3] = String.valueOf(v_format.format(v_aportes_sin_cert_AVE));
+            SaldosFinales[4] = String.valueOf(v_format.format(v_aportes_hist_pend_AVA));
+            SaldosFinales[5] = String.valueOf(v_format.format(v_aportes_hist_pend_AVE));
+            SaldosFinales[6] = String.valueOf(v_format.format(v_ret_pend_procesar_AVA));
+            SaldosFinales[7] = String.valueOf(v_format.format(v_ret_pend_procesar_AVE));
+            SaldosFinales[8] = String.valueOf(v_format.format(v_retencion_cont_AVA));
+            SaldosFinales[9] = String.valueOf(v_format.format(v_retencion_cont_AVE));
+            SaldosFinales[10] = String.valueOf(v_format.format(v_retencion_rend_AVA));
+            SaldosFinales[11] = String.valueOf(v_format.format(v_retencion_rend_AVE));
+            SaldosFinales[12] = String.valueOf(v_format.format(v_disponibleAVA));
+            SaldosFinales[13] = String.valueOf(v_format.format(v_disponibleAVE));  
+            SaldosFinales[14] = String.valueOf(v_format.format(v_prov_comi_rend_AVA));
+            SaldosFinales[15] = String.valueOf(v_format.format(v_prov_comi_capital_AVA));
+            SaldosFinales[16] = String.valueOf(v_format.format(v_prov_comi_rend_AVE));
+            SaldosFinales[17] = String.valueOf(v_format.format(v_prov_comi_capital_AVE));
+            SaldosFinales[18] = String.valueOf(v_format.format(v_prov_comi_total_AVA));
+            SaldosFinales[19] = String.valueOf(v_format.format(v_prov_comi_total_AVE));
+            SaldosFinales[20] = String.valueOf(v_format.format(prov_credito));
+            SaldosFinales[21] = String.valueOf(v_format.format(v_valor_unidad_AVA));
+            SaldosFinales[22] = String.valueOf(v_format.format(v_valor_unidad_AVE));                        
+        }
+        else
+        {
+            return null;
+        } 
+                                                        
+        }catch( Exception e ) {
+            System.out.println("ERROR SQL_CIERRE: "+e);            
+        }    
+        return (SaldosFinales);
+    }
+    
+}

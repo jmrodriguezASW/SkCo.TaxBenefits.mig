@@ -1,0 +1,50 @@
+package TBPKT_INFORMATIVO.TBPKT_CONSULTAPORTE;
+
+import java.sql.*;
+import oracle.sqlj.runtime.*;
+import sqlj.runtime.*;
+import sqlj.runtime.ref.*;
+import TBPKT_UTILIDADES.TBPKT_CONEXIONBASEDATOS.*;
+
+public class SQL_TB_FREFERENCIAS_FPOB extends Object{
+    
+    private int             v_sw            = 1;
+    private String          v_sistema       = " ";
+    private String          v_usuario       = " ";
+    private String          v_password      = " ";
+    private String          v_libreria      = " ";  
+    private String          v_libd          = " ";
+    private String[]        v_valusu;    
+    
+    public Modelo_TB_Referencias GET_TB_FREFERENCIAS_FPOB (String producto){
+        
+        Modelo_TB_Referencias objModelo_TB_Referencias = new Modelo_TB_Referencias();
+        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        
+        try {            
+            //Conexion con la base de datos
+            v_valusu = new String[3];
+            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+            DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));
+            
+            #sql v_sw = { values(TB_FREFERENCIAS_FPOB(:IN producto,
+                                                        :INOUT v_sistema,
+                                                        :INOUT v_usuario,
+                                                        :INOUT v_password,
+                                                        :INOUT v_libreria,
+                                                        :INOUT v_libd))};
+           if (v_sw == 0){                
+                objModelo_TB_Referencias.setSistema(""+v_sistema+"");
+                objModelo_TB_Referencias.setUsuario(""+v_usuario+"");
+                objModelo_TB_Referencias.setPassword(""+v_password+"");
+                objModelo_TB_Referencias.setLibreria(""+v_libreria+"");                
+                objModelo_TB_Referencias.setlibreriadatos(""+v_libd+"");
+            }                        
+        }catch( Exception e ) {
+            System.out.println("ERROR SQL_CIERRE: "+e);            
+        }    
+        return (objModelo_TB_Referencias);
+    }
+    
+}

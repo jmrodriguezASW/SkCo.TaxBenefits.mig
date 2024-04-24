@@ -1,0 +1,1644 @@
+// Decompiled by DJ v3.0.0.63 Copyright 2002 Atanas Neshkov  Date: 2002/05/07 4:59:08 PM
+// Home Page : http://members.fortunecity.com/neshkov/dj.html  - Check often for new version!
+// Decompiler options: packimports(3) 
+// Source File Name:   AS400.java
+
+package com.ibm.as400.access;
+
+import java.beans.*;
+import java.io.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.*;
+
+// Referenced classes of package com.ibm.as400.access:
+//            AS400SecurityException, AS400Server, AS400StrSvrDS, AS400StrSvrReplyDS, 
+//            AS400XChgRandSeedDS, AS400XChgRandSeedReplyDS, ConnectionDroppedException, ConnectionEvent, 
+//            ConnectionListener, ConvTable, Converter, Copyright, 
+//            CurrentUser, DDMDataStream, DDMRequestDataStream, DDMTerm, 
+//            DataStream, ExecutionEnvironment, ExtendedIllegalArgumentException, ExtendedIllegalStateException, 
+//            InternalErrorException, NLSImpl, PortMapper, ResourceBundleLoader, 
+//            Security400, SecurityManager400, ServerStartupException, ServerVersion, 
+//            SignonInfo, SocketContainer, Trace, xlate
+
+public class AS400
+    implements Serializable
+{
+
+    private static String getCopyright()
+    {
+        return "(C)Copyright IBM Corp. 1997, 1998";
+    }
+
+    private void construct()
+    {
+        Trace.log(1, "Initializing server table");
+        existingServers_.put("as-file", new Vector());
+        existingServers_.put("as-netprt", new Vector());
+        existingServers_.put("as-rmtcmd", new Vector());
+        existingServers_.put("as-dtaq", new Vector());
+        existingServers_.put("as-database", new Vector());
+        existingServers_.put("as-ddm", new Vector());
+        existingServers_.put("as-central", new Vector());
+        if(onAS400)
+        {
+            Trace.log(1, "Running on AS/400");
+            prompt_ = false;
+        }
+    }
+
+    public AS400()
+    {
+        existingServers_ = new Hashtable(7);
+        systemName_ = new String("");
+        userId_ = new String("");
+        password_ = new String("");
+        clientSeed_ = new byte[8];
+        serverSeed_ = new byte[8];
+        prompt_ = true;
+        useCache_ = true;
+        useDefUser_ = true;
+        showCheckboxes = true;
+        eventList = new Vector();
+        propertyList = new PropertyChangeSupport(this);
+        vetos_ = new VetoableChangeSupport(this);
+        useSSLConnection = false;
+        canUseNativeOptimization = true;
+        Trace.log(1, "Constructing AS400 object");
+        construct();
+        systemName_ = resolveSystem(systemName_);
+        userId_ = resolveUserId(userId_);
+        password_ = resolvePassword(userId_, password_);
+    }
+
+    public AS400(String s)
+    {
+        existingServers_ = new Hashtable(7);
+        systemName_ = new String("");
+        userId_ = new String("");
+        password_ = new String("");
+        clientSeed_ = new byte[8];
+        serverSeed_ = new byte[8];
+        prompt_ = true;
+        useCache_ = true;
+        useDefUser_ = true;
+        showCheckboxes = true;
+        eventList = new Vector();
+        propertyList = new PropertyChangeSupport(this);
+        vetos_ = new VetoableChangeSupport(this);
+        useSSLConnection = false;
+        canUseNativeOptimization = true;
+        Trace.log(1, "Constructing AS400 object");
+        if(s == null)
+        {
+            Trace.log(2, "System name is null");
+            throw new NullPointerException("systemName");
+        } else
+        {
+            construct();
+            systemName_ = resolveSystem(s);
+            userId_ = resolveUserId(userId_);
+            password_ = resolvePassword(userId_, password_);
+            return;
+        }
+    }
+
+    public AS400(String s, String s1)
+    {
+        existingServers_ = new Hashtable(7);
+        systemName_ = new String("");
+        userId_ = new String("");
+        password_ = new String("");
+        clientSeed_ = new byte[8];
+        serverSeed_ = new byte[8];
+        prompt_ = true;
+        useCache_ = true;
+        useDefUser_ = true;
+        showCheckboxes = true;
+        eventList = new Vector();
+        propertyList = new PropertyChangeSupport(this);
+        vetos_ = new VetoableChangeSupport(this);
+        useSSLConnection = false;
+        canUseNativeOptimization = true;
+        Trace.log(1, "Constructing AS400 object.");
+        if(s == null)
+        {
+            Trace.log(2, "System name is null");
+            throw new NullPointerException("systemName");
+        }
+        if(s1 == null)
+        {
+            Trace.log(2, "User ID is null");
+            throw new NullPointerException("userId");
+        } else
+        {
+            construct();
+            systemName_ = resolveSystem(s);
+            userId_ = resolveUserId(s1.toUpperCase());
+            password_ = resolvePassword(userId_, password_);
+            return;
+        }
+    }
+
+    public AS400(String s, String s1, String s2)
+    {
+        existingServers_ = new Hashtable(7);
+        systemName_ = new String("");
+        userId_ = new String("");
+        password_ = new String("");
+        clientSeed_ = new byte[8];
+        serverSeed_ = new byte[8];
+        prompt_ = true;
+        useCache_ = true;
+        useDefUser_ = true;
+        showCheckboxes = true;
+        eventList = new Vector();
+        propertyList = new PropertyChangeSupport(this);
+        vetos_ = new VetoableChangeSupport(this);
+        useSSLConnection = false;
+        canUseNativeOptimization = true;
+        Trace.log(1, "Constructing AS400 object.");
+        if(s == null)
+        {
+            Trace.log(2, "System name is null");
+            throw new NullPointerException("systemName");
+        }
+        if(s1 == null)
+        {
+            Trace.log(2, "User ID is null");
+            throw new NullPointerException("userId");
+        }
+        if(s2 == null)
+        {
+            Trace.log(2, "Password is null");
+            throw new NullPointerException("password");
+        } else
+        {
+            construct();
+            systemName_ = resolveSystem(s);
+            userId_ = resolveUserId(s1.toUpperCase());
+            password_ = resolvePassword(userId_, s2.toUpperCase());
+            return;
+        }
+    }
+
+    public AS400(AS400 as400)
+    {
+        existingServers_ = new Hashtable(7);
+        systemName_ = new String("");
+        userId_ = new String("");
+        password_ = new String("");
+        clientSeed_ = new byte[8];
+        serverSeed_ = new byte[8];
+        prompt_ = true;
+        useCache_ = true;
+        useDefUser_ = true;
+        showCheckboxes = true;
+        eventList = new Vector();
+        propertyList = new PropertyChangeSupport(this);
+        vetos_ = new VetoableChangeSupport(this);
+        useSSLConnection = false;
+        canUseNativeOptimization = true;
+        Trace.log(1, "Constructing AS400 object.");
+        if(as400 == null)
+        {
+            Trace.log(2, "System object is null");
+            throw new NullPointerException("systemObject");
+        } else
+        {
+            construct();
+            systemName_ = as400.systemName_;
+            userId_ = as400.userId_;
+            password_ = as400.password_;
+            prompt_ = as400.prompt_;
+            security400_ = as400.security400_;
+            return;
+        }
+    }
+
+    private void readObject(ObjectInputStream objectinputstream)
+        throws IOException, ClassNotFoundException
+    {
+        Trace.log(1, "De-serializing AS400 object.");
+        objectinputstream.defaultReadObject();
+        existingServers_ = new Hashtable(7);
+        construct();
+        systemName_ = resolveSystem(systemName_);
+        userId_ = resolveUserId(userId_);
+        password_ = resolvePassword(userId_, "");
+        clientSeed_ = new byte[8];
+        serverSeed_ = new byte[8];
+        eventList = new Vector();
+        propertyList = new PropertyChangeSupport(this);
+        vetos_ = new VetoableChangeSupport(this);
+    }
+
+    public synchronized void addConnectionListener(ConnectionListener connectionlistener)
+    {
+        eventList.addElement(connectionlistener);
+    }
+
+    public static void addPasswordCacheEntry(String s, String s1, String s2)
+        throws UnknownHostException, IOException, AS400SecurityException
+    {
+        if(s == null)
+        {
+            Trace.log(2, "System name is null");
+            throw new NullPointerException("systemName");
+        }
+        if(s1 == null)
+        {
+            Trace.log(2, "User ID is null");
+            throw new NullPointerException("userId");
+        }
+        if(s2 == null)
+        {
+            Trace.log(2, "Password is null");
+            throw new NullPointerException("password");
+        }
+        s = resolveSystem(s);
+        s1 = resolveUserId(s1.toUpperCase());
+        s2 = resolvePassword(s1, s2.toUpperCase());
+        Security400 security400 = SecurityManager400.validateSignon(s, s1, s2, false);
+        if(security400 != null)
+            SecurityManager400.addCacheEntry(security400);
+    }
+
+    public synchronized void addPropertyChangeListener(PropertyChangeListener propertychangelistener)
+    {
+        propertyList.addPropertyChangeListener(propertychangelistener);
+    }
+
+    public void addVetoableChangeListener(VetoableChangeListener vetoablechangelistener)
+    {
+        vetos_.addVetoableChangeListener(vetoablechangelistener);
+    }
+
+    boolean canUseNativeOptimizations()
+    {
+        if(canUseNativeOptimization && isSysLocal(systemName_) && userIdMatchesLocal(userId_))
+        {
+            String s = System.getProperty("os.version");
+            if(s.equalsIgnoreCase("v3r2m0") || s.equalsIgnoreCase("v3r7m0") || s.equalsIgnoreCase("v4r1m0") || s.equalsIgnoreCase("v4r2m0"))
+            {
+                if(Trace.isTraceOn())
+                    Trace.log(1, "Native optimizations not available in release: " + s);
+                return false;
+            } else
+            {
+                Trace.log(1, "Using native optimizations");
+                return true;
+            }
+        } else
+        {
+            Trace.log(1, "Requirements not met to use native optimizations");
+            return false;
+        }
+    }
+
+    public void changePassword(String s, String s1)
+        throws AS400SecurityException, IOException, UnknownHostException, ExtendedIllegalStateException
+    {
+        if(systemName_.length() == 0)
+        {
+            Trace.log(2, "System name is not set");
+            throw new ExtendedIllegalStateException("systemName", 4);
+        }
+        if(userId_.length() == 0)
+        {
+            Trace.log(2, "User ID is not set");
+            throw new ExtendedIllegalStateException("userId", 4);
+        }
+        if(s == null)
+        {
+            Trace.log(2, "Old password is null");
+            throw new NullPointerException("oldPassword");
+        }
+        if(s1 == null)
+        {
+            Trace.log(2, "New password is null");
+            throw new NullPointerException("newPassword");
+        } else
+        {
+            SecurityManager400.changePassword(systemName_, userId_, s.toUpperCase(), s1.toUpperCase(), useSSLConnection);
+            return;
+        }
+    }
+
+    public static void clearPasswordCache()
+    {
+        SecurityManager400.clearPasswordCache();
+    }
+
+    public static void clearPasswordCache(String s)
+    {
+        if(s == null)
+        {
+            Trace.log(2, "System name is null");
+            throw new NullPointerException("system");
+        } else
+        {
+            SecurityManager400.clearPasswordCache(resolveSystem(s));
+            return;
+        }
+    }
+
+    AS400Server connect(String s)
+        throws ServerStartupException, AS400SecurityException, IOException, UnknownHostException
+    {
+        boolean flag = isConnected();
+        AS400Server as400server = null;
+        Vector vector = (Vector)existingServers_.get(s);
+        if(!vector.isEmpty())
+        {
+            as400server = (AS400Server)vector.firstElement();
+            Trace.log(1, "Reusing previous server object...");
+            return as400server;
+        }
+        if(security400_ == null)
+            signOn();
+        SocketContainer socketcontainer;
+        try
+        {
+            socketcontainer = startServer(s);
+        }
+        catch(AS400SecurityException _ex)
+        {
+            Trace.log(1, "Start server failed due to security...");
+            signOn();
+            socketcontainer = startServer(s);
+        }
+        Trace.log(1, "Server started");
+        as400server = new AS400Server(s, socketcontainer);
+        as400server.setSystem(this);
+        vector.addElement(as400server);
+        if(s.equals("as-ddm"))
+            try
+            {
+                exchangeDDMSecurityInfo(as400server);
+            }
+            catch(InterruptedException _ex) { }
+        fireConnectEvent(true, PortMapper.getServiceId(s));
+        if(!flag)
+            firePropertyChange("connected", new Boolean(flag), new Boolean(true));
+        return as400server;
+    }
+
+    public void connectService(int i)
+        throws ServerStartupException, AS400SecurityException, IOException, UnknownHostException
+    {
+        if((i == 3 || i == 5) && canUseNativeOptimizations())
+        {
+            if(Trace.isTraceOn())
+            {
+                Trace.log(1, "No service connection necessary for native service: " + getServerName(i));
+                return;
+            }
+        } else
+        {
+            String s = getServerName(i);
+            connect(s);
+            Trace.log(1, "Service connected");
+        }
+    }
+
+    void disconnect(String s)
+    {
+        AS400Server as400server;
+        for(Vector vector = (Vector)existingServers_.get(s); !vector.isEmpty(); disconnectServer(as400server))
+            as400server = (AS400Server)vector.elementAt(0);
+
+        if(Trace.isTraceOn())
+            Trace.log(1, "Service disconnected: " + s);
+    }
+
+    public void disconnectAllServices()
+    {
+        Trace.log(1, "Disconnecting all services...");
+        disconnect("as-file");
+        disconnect("as-netprt");
+        disconnect("as-dtaq");
+        disconnect("as-rmtcmd");
+        disconnect("as-database");
+        disconnect("as-ddm");
+        Trace.log(1, "All services disconnected.");
+    }
+
+    void disconnectServer(AS400Server as400server)
+    {
+        boolean flag = isConnected();
+        as400server.forceDisconnect();
+        String s = as400server.getServiceName();
+        Vector vector = (Vector)existingServers_.get(s);
+        if(!vector.isEmpty())
+        {
+            vector.removeElement(as400server);
+            if(vector.isEmpty())
+                fireConnectEvent(false, PortMapper.getServiceId(s));
+        }
+        Trace.log(1, "Server disconnected");
+        if(!isConnected() && flag)
+            firePropertyChange("connected", new Boolean(flag), new Boolean(false));
+    }
+
+    public void disconnectService(int i)
+    {
+        disconnect(getServerName(i));
+    }
+
+    void exchangeDDMSecurityInfo(AS400Server as400server)
+        throws ConnectionDroppedException, InterruptedException, IOException, AS400SecurityException
+    {
+        Trace.log(1, "Exchanging DDM security information with a V4R2 or newer system.");
+        DDMRequestDataStream ddmrequestdatastream = DDMRequestDataStream.getRequestEXCSAT("V4R2");
+        if(Trace.isTraceOn())
+            Trace.log(0, "DDM: V4R2 or newer system: EXCSAT request datastream:", ((DataStream) (ddmrequestdatastream)).data_);
+        as400server.sendExchangeAttrRequest(ddmrequestdatastream);
+        DDMDataStream ddmdatastream = (DDMDataStream)as400server.getExchangeAttrReply();
+        if(Trace.isTraceOn())
+            Trace.log(0, "DDM: V4R2 or newer system: EXCSAT reply datastream:", ((DataStream) (ddmdatastream)).data_);
+        if(ddmdatastream.getCodePoint() != 5187)
+        {
+            Trace.log(2, "DDM: V4R2 or newer system: EXCSAT failed:", ((DataStream) (ddmdatastream)).data_);
+            disconnectServer(as400server);
+            throw new InternalErrorException(2);
+        }
+        boolean flag = getVRM() >= generateVRM(4, 4, 0);
+        if(flag)
+        {
+            Trace.log(1, "DDM: Running to V4R4 or newer system.");
+            byte abyte0[] = new byte[8];
+            byte abyte1[] = new byte[8];
+            long l = System.currentTimeMillis();
+            abyte0[0] = (byte)(int)(l >>> 56);
+            abyte0[1] = (byte)(int)(l >>> 48);
+            abyte0[2] = (byte)(int)(l >>> 40);
+            abyte0[3] = (byte)(int)(l >>> 32);
+            abyte0[4] = (byte)(int)(l >>> 24);
+            abyte0[5] = (byte)(int)(l >>> 16);
+            abyte0[6] = (byte)(int)(l >>> 8);
+            abyte0[7] = (byte)(int)l;
+            if(Trace.isTraceOn())
+                Trace.log(1, "DDM: V4R4 or newer system: client seed:", abyte0);
+            DDMRequestDataStream ddmrequestdatastream1 = new DDMRequestDataStream(28);
+            ddmrequestdatastream1.set16bit(22, 6);
+            ddmrequestdatastream1.set16bit(4205, 8);
+            ddmrequestdatastream1.set16bit(6, 10);
+            ddmrequestdatastream1.set16bit(4514, 12);
+            ddmrequestdatastream1.set16bit(6, 14);
+            ddmrequestdatastream1.set16bit(12, 16);
+            ddmrequestdatastream1.set16bit(4572, 18);
+            System.arraycopy(abyte0, 0, ((DataStream) (ddmrequestdatastream1)).data_, 20, 8);
+            if(Trace.isTraceOn())
+                Trace.log(0, "DDM: V4R4 or newer system: ACCSEC request datastream:", ((DataStream) (ddmrequestdatastream1)).data_);
+            DDMDataStream ddmdatastream1 = (DDMDataStream)as400server.sendAndReceive(ddmrequestdatastream1);
+            if(Trace.isTraceOn())
+                Trace.log(0, "DDM: V4R4 or newer system: ACCSEC reply datastream:", ((DataStream) (ddmdatastream1)).data_);
+            if(ddmdatastream1.getCodePoint() != 5292)
+            {
+                Trace.log(2, "DDM: V4R4 or newer system: ACCSEC failed:", ((DataStream) (ddmdatastream1)).data_);
+                disconnectServer(as400server);
+                throw new InternalErrorException(2);
+            }
+            if(ddmdatastream1.get16bit(18) == 4516)
+            {
+                Trace.log(2, "DDM: V4R4 or newer system: ACCSEC, SECTKN failed:", ((DataStream) (ddmdatastream1)).data_);
+                disconnectServer(as400server);
+                throw new InternalErrorException(5);
+            }
+            if(ddmdatastream1.get16bit(18) != 4572)
+            {
+                Trace.log(2, "DDM: V4R4 or newer system: ACCSEC, SECTKN failed:", ((DataStream) (ddmdatastream1)).data_);
+                disconnectServer(as400server);
+                throw new InternalErrorException(9);
+            }
+            System.arraycopy(((DataStream) (ddmdatastream1)).data_, 20, abyte1, 0, 8);
+            if(Trace.isTraceOn())
+                Trace.log(1, "DDM: V4R4 or newer system: server seed:", abyte1);
+            byte abyte2[] = security400_.getPassword(abyte0, abyte1);
+            int j = userId_.length() + abyte2.length;
+            DDMRequestDataStream ddmrequestdatastream4 = new DDMRequestDataStream(24 + j);
+            ddmrequestdatastream4.set16bit(18 + j, 6);
+            ddmrequestdatastream4.set16bit(4206, 8);
+            ddmrequestdatastream4.set16bit(6, 10);
+            ddmrequestdatastream4.set16bit(4514, 12);
+            ddmrequestdatastream4.set16bit(6, 14);
+            ddmrequestdatastream4.set16bit(4 + userId_.length(), 16);
+            ddmrequestdatastream4.set16bit(4512, 18);
+            xlate.AsciiToEbcdic(userId_, ((DataStream) (ddmrequestdatastream4)).data_, 20);
+            ddmrequestdatastream4.set16bit(4 + abyte2.length, 20 + userId_.length());
+            ddmrequestdatastream4.set16bit(4513, 22 + userId_.length());
+            System.arraycopy(abyte2, 0, ((DataStream) (ddmrequestdatastream4)).data_, 24 + userId_.length(), 8);
+            if(Trace.isTraceOn())
+                Trace.log(0, "DDM: V4R4 or newer system: SECCHK request datastream:", ((DataStream) (ddmrequestdatastream4)).data_);
+            ddmdatastream1 = (DDMDataStream)as400server.sendAndReceive(ddmrequestdatastream4);
+            if(Trace.isTraceOn())
+                Trace.log(0, "DDM: V4R4 or newer system: SECCHK reply datastream:", ((DataStream) (ddmdatastream1)).data_);
+            if(ddmdatastream1.getCodePoint() != 4633)
+            {
+                Trace.log(2, "DDM: V4R4 or newer system: SECCHK failed:", ((DataStream) (ddmdatastream1)).data_);
+                disconnectServer(as400server);
+                throw new InternalErrorException(2);
+            }
+            if(ddmdatastream1.get16bit(18) == 4516)
+            {
+                if(((DataStream) (ddmdatastream1)).data_[((DataStream) (ddmdatastream1)).data_.length - 1] != 0)
+                {
+                    Trace.log(2, "DDM: V4R4 or newer system: SECCHK failed:", ((DataStream) (ddmdatastream1)).data_);
+                    disconnectServer(as400server);
+                    throw new InternalErrorException(9);
+                }
+                Trace.log(1, "DDM: V4R4 or newer system: SECCHK succeeded.");
+            } else
+            {
+                Trace.log(2, "DDM: V4R4 or newer system: SECCHK failed:", ((DataStream) (ddmdatastream1)).data_);
+                disconnectServer(as400server);
+                throw new InternalErrorException(6);
+            }
+        } else
+        {
+            Trace.log(1, "DDM: Running to pre-V4R4 system.");
+            DDMRequestDataStream ddmrequestdatastream2 = new DDMRequestDataStream(16);
+            ddmrequestdatastream2.set16bit(10, 6);
+            ddmrequestdatastream2.set16bit(4205, 8);
+            ddmrequestdatastream2.set16bit(6, 10);
+            ddmrequestdatastream2.set16bit(4514, 12);
+            ddmrequestdatastream2.set16bit(3, 14);
+            if(Trace.isTraceOn())
+                Trace.log(0, "DDM: Pre-V4R4 system: ACCSEC request datastream:", ((DataStream) (ddmrequestdatastream2)).data_);
+            DDMDataStream ddmdatastream2 = (DDMDataStream)as400server.sendAndReceive(ddmrequestdatastream2);
+            if(Trace.isTraceOn())
+                Trace.log(0, "DDM: Pre-V4R4 system: ACCSEC reply datastream:", ((DataStream) (ddmdatastream2)).data_);
+            if(ddmdatastream2.getCodePoint() != 5292)
+            {
+                Trace.log(2, "DDM: Pre-V4R4 system: ACCSEC failed:", ((DataStream) (ddmdatastream2)).data_);
+                disconnectServer(as400server);
+                throw new InternalErrorException(2);
+            }
+            int i = userId_.length() + password_.length();
+            DDMRequestDataStream ddmrequestdatastream3 = new DDMRequestDataStream(24 + i);
+            ddmrequestdatastream3.set16bit(18 + i, 6);
+            ddmrequestdatastream3.set16bit(4206, 8);
+            ddmrequestdatastream3.set16bit(6, 10);
+            ddmrequestdatastream3.set16bit(4514, 12);
+            ddmrequestdatastream3.set16bit(3, 14);
+            ddmrequestdatastream3.set16bit(4 + userId_.length(), 16);
+            ddmrequestdatastream3.set16bit(4512, 18);
+            xlate.AsciiToEbcdic(userId_, ((DataStream) (ddmrequestdatastream3)).data_, 20);
+            ddmrequestdatastream3.set16bit(4 + password_.length(), 20 + userId_.length());
+            ddmrequestdatastream3.set16bit(4513, 22 + userId_.length());
+            xlate.AsciiToEbcdic(password_, ((DataStream) (ddmrequestdatastream3)).data_, 24 + userId_.length());
+            if(Trace.isTraceOn())
+                Trace.log(0, "DDM: Pre-V4R4 system: SECCHK request datastream:", ((DataStream) (ddmrequestdatastream2)).data_);
+            ddmdatastream2 = (DDMDataStream)as400server.sendAndReceive(ddmrequestdatastream3);
+            if(Trace.isTraceOn())
+                Trace.log(0, "DDM: Pre-V4R4 system: SECCHK reply datastream:", ((DataStream) (ddmdatastream2)).data_);
+            if(ddmdatastream2.getCodePoint() != 4633)
+            {
+                Trace.log(2, "DDM: Pre-V4R4 system: SECCHK failed:", ((DataStream) (ddmdatastream2)).data_);
+                disconnectServer(as400server);
+                throw new InternalErrorException(2);
+            }
+        }
+        Trace.log(1, "DDM: Exchange of security attributes completed.");
+    }
+
+    private void exchangeRandomSeeds(InputStream inputstream, OutputStream outputstream)
+        throws IOException, AS400SecurityException
+    {
+        AS400XChgRandSeedDS as400xchgrandseedds = new AS400XChgRandSeedDS(0);
+        as400xchgrandseedds.write(outputstream);
+        outputstream.flush();
+        AS400XChgRandSeedReplyDS as400xchgrandseedreplyds = new AS400XChgRandSeedReplyDS();
+        as400xchgrandseedreplyds.read(inputstream);
+        if(as400xchgrandseedreplyds.primaryRC() != 0)
+        {
+            Trace.log(4, "Exchange attribute failed, primary return code =", as400xchgrandseedreplyds.primaryRC());
+            Trace.log(2, "Exchange attribute failed, secondary return code =", as400xchgrandseedreplyds.secondaryRC());
+            throw returnReqReplyException(as400xchgrandseedreplyds.primaryRC(), as400xchgrandseedreplyds.secondaryRC());
+        } else
+        {
+            System.arraycopy(as400xchgrandseedds.clientSeed(), 0, clientSeed_, 0, 8);
+            System.arraycopy(as400xchgrandseedreplyds.serverSeed(), 0, serverSeed_, 0, 8);
+            return;
+        }
+    }
+
+    protected void finalize()
+        throws Throwable
+    {
+        disconnectAllServices();
+        Trace.log(1, "Finalize method for AS400 invoked");
+    }
+
+    private void fireConnectEvent(boolean flag, int i)
+    {
+        Vector vector;
+        synchronized(this)
+        {
+            vector = (Vector)eventList.clone();
+        }
+        ConnectionEvent connectionevent = new ConnectionEvent(this, i);
+        for(int j = 0; j < vector.size(); j++)
+        {
+            ConnectionListener connectionlistener = (ConnectionListener)vector.elementAt(j);
+            if(flag)
+                connectionlistener.connected(connectionevent);
+            else
+                connectionlistener.disconnected(connectionevent);
+        }
+
+    }
+
+    void firePropertyChange(String s, Object obj, Object obj1)
+    {
+        propertyList.firePropertyChange(s, obj, obj1);
+    }
+
+    public static int generateVRM(int i, int j, int k)
+    {
+        return ((i & 0xffff) << 16) + ((j & 0xff) << 8) + (k & 0xff);
+    }
+
+    public int getCcsid()
+    {
+        if(ccsid_ == 0)
+            try
+            {
+                Trace.log(1, "Retrieving ccsid from server...");
+                ccsid_ = getCcsidFromServer();
+                Trace.log(1, "  CCSID retrieved = ", ccsid_);
+            }
+            catch(Exception _ex)
+            {
+                Trace.log(1, "  Taking best guess ccsid...");
+                ccsid_ = ExecutionEnvironment.getBestGuessAS400Ccsid();
+                Trace.log(1, "  CCSID retrieved = ", ccsid_);
+            }
+        return ccsid_;
+    }
+
+    private int getCcsidFromServer()
+        throws UnknownHostException, IOException, AS400SecurityException, ServerStartupException, InterruptedException
+    {
+        NLSImpl nlsimpl = (NLSImpl)loadImpl("com.ibm.as400.access.NLSImplNative", "com.ibm.as400.access.NLSImplRemote");
+        nlsimpl.setSystem(this);
+        nlsimpl.connect();
+        nlsimpl.disconnect();
+        return nlsimpl.getCcsid();
+    }
+
+    public static String getDefaultUser(String s)
+        throws UnknownHostException
+    {
+        Trace.log(1, "Enter getDefaultUser()");
+        if(s == null)
+        {
+            Trace.log(2, "System name is null");
+            throw new NullPointerException("systemName");
+        } else
+        {
+            Trace.log(1, "Exit getDefaultUser()");
+            return SecurityManager400.getDefaultUser(resolveSystem(s));
+        }
+    }
+
+    public String getJobCCSIDEncoding()
+        throws UnknownHostException, IOException, AS400SecurityException, ServerStartupException, InterruptedException
+    {
+        return ConvTable.ccsidToEncoding(getCcsidFromServer());
+    }
+
+    public int getModification()
+        throws UnknownHostException, IOException, AS400SecurityException
+    {
+        Trace.log(1, "Enter getModification()");
+        if(security400_ == null)
+            getSecurity400();
+        Trace.log(1, "Exit getModification()");
+        return security400_.getSignonInfo().getVersion().getModificationLevel();
+    }
+
+    AS400Server getNewConnection(String s)
+        throws ServerStartupException, AS400SecurityException, IOException, UnknownHostException
+    {
+        boolean flag = isConnected();
+        Vector vector = (Vector)existingServers_.get(s);
+        if(security400_ == null)
+            signOn();
+        SocketContainer socketcontainer;
+        try
+        {
+            socketcontainer = startServer(s);
+        }
+        catch(AS400SecurityException _ex)
+        {
+            Trace.log(1, "Start server failed due to security...");
+            signOn();
+            socketcontainer = startServer(s);
+        }
+        Trace.log(1, "Server started");
+        AS400Server as400server = new AS400Server(s, socketcontainer);
+        as400server.setSystem(this);
+        vector.addElement(as400server);
+        if(s.equals("as-ddm"))
+            try
+            {
+                exchangeDDMSecurityInfo(as400server);
+            }
+            catch(InterruptedException _ex) { }
+        fireConnectEvent(true, PortMapper.getServiceId(s));
+        if(!flag)
+            firePropertyChange("connected", new Boolean(flag), new Boolean(true));
+        return as400server;
+    }
+
+    Security400 getSecurityObject()
+    {
+        return security400_;
+    }
+
+    public GregorianCalendar getPasswordExpirationDate()
+        throws UnknownHostException, IOException, AS400SecurityException
+    {
+        Trace.log(1, "Enter getPasswordExpirationDate()");
+        if(security400_ == null)
+            getSecurity400();
+        Trace.log(1, "Exit getPasswordExpirationDate()");
+        return security400_.getSignonInfo().getExpirationDate();
+    }
+
+    public static int getPasswordExpirationWarningDays()
+    {
+        Trace.log(1, "Enter/exit getPasswordExpirationWarningDays()");
+        return SecurityManager400.getWarningDays();
+    }
+
+    public GregorianCalendar getPreviousSignonDate()
+        throws UnknownHostException, IOException, AS400SecurityException
+    {
+        Trace.log(1, "Enter getPreviousSignonDate()");
+        if(security400_ == null)
+            getSecurity400();
+        Trace.log(1, "Exit getPreviousSignonDate()");
+        return security400_.getSignonInfo().getLastSignon();
+    }
+
+    public int getRelease()
+        throws UnknownHostException, IOException, AS400SecurityException
+    {
+        Trace.log(1, "Enter getRelease()");
+        if(security400_ == null)
+            getSecurity400();
+        Trace.log(1, "Exit getRelease()");
+        return security400_.getSignonInfo().getVersion().getRelease();
+    }
+
+    public int getServicePort(int i)
+    {
+        if(systemName_.length() == 0)
+        {
+            Trace.log(2, "System name is not set");
+            throw new ExtendedIllegalStateException("systemName", 4);
+        }
+        if(i < 0 || i > 7)
+            throw new ExtendedIllegalArgumentException("service (" + Integer.toString(i) + ")", 2);
+        else
+            return PortMapper.getServicePort(systemName_, i, useSSLConnection);
+    }
+
+    private void getSecurity400()
+        throws IOException, UnknownHostException, AS400SecurityException
+    {
+        Security400 security400;
+        if(systemName_.length() == 0)
+            security400 = SecurityManager400.signon(prompt_, useSSLConnection, showCheckboxes);
+        else
+        if(userId_.length() == 0)
+            security400 = SecurityManager400.signon(systemName_, prompt_, true, true, useSSLConnection, showCheckboxes);
+        else
+        if(password_.length() == 0)
+            security400 = SecurityManager400.signon(systemName_, userId_, prompt_, true, useSSLConnection, showCheckboxes);
+        else
+            security400 = SecurityManager400.signon(systemName_, userId_, password_, prompt_, useSSLConnection, showCheckboxes);
+        if(security400 == null)
+        {
+            Trace.log(2, "User cancelled signon");
+            throw new AS400SecurityException(25);
+        }
+        security400_ = security400;
+        systemName_ = security400.getSystem();
+        userId_ = security400.getUser();
+        password_ = security400.getPromptInfo();
+        if(DataStream.getDefaultConverter() == null)
+        {
+            int i = security400_.getSignonInfo().getServerCCSID();
+            if(i != 0)
+            {
+                DataStream.setDefaultConverter(Converter.getConverter(i, this));
+                return;
+            }
+            DataStream.setDefaultConverter(Converter.getConverter(ExecutionEnvironment.getBestGuessAS400Ccsid(), this));
+        }
+    }
+
+    private static String getServerName(int i)
+    {
+        switch(i)
+        {
+        case 0: // '\0'
+            return "as-file";
+
+        case 1: // '\001'
+            return "as-netprt";
+
+        case 2: // '\002'
+            return "as-rmtcmd";
+
+        case 3: // '\003'
+            return "as-dtaq";
+
+        case 5: // '\005'
+            return "as-ddm";
+
+        case 4: // '\004'
+            return "as-database";
+
+        case 6: // '\006'
+            return "as-central";
+
+        case 7: // '\007'
+            return "as-signon";
+        }
+        Trace.log(2, "Invalid service - " + String.valueOf(i));
+        throw new IllegalArgumentException("service");
+    }
+
+    public GregorianCalendar getSignonDate()
+        throws UnknownHostException, IOException, AS400SecurityException
+    {
+        Trace.log(1, "Enter getSignonDate()");
+        if(security400_ == null)
+            getSecurity400();
+        Trace.log(1, "Exit getSignonDate()");
+        return security400_.getSignonInfo().getCurrentSignon();
+    }
+
+    public String getSystemName()
+    {
+        Trace.log(1, "Enter/exit getSystemName()");
+        return systemName_;
+    }
+
+    public String getUserId()
+    {
+        Trace.log(1, "Enter/exit getUserId()");
+        return userId_;
+    }
+
+    public int getVersion()
+        throws UnknownHostException, IOException, AS400SecurityException
+    {
+        Trace.log(1, "Enter getVersion()");
+        if(security400_ == null)
+            getSecurity400();
+        Trace.log(1, "Exit getVersion()");
+        return security400_.getSignonInfo().getVersion().getVersion();
+    }
+
+    public int getVRM()
+        throws UnknownHostException, IOException, AS400SecurityException
+    {
+        Trace.log(1, "Enter getVRM()");
+        if(security400_ == null)
+            getSecurity400();
+        Trace.log(1, "Exit getVRM()");
+        return security400_.getSignonInfo().getVersion().getVersionReleaseModification();
+    }
+
+    public void initializeConverter(int i)
+        throws UnsupportedEncodingException
+    {
+        Converter.getConverter(i, this);
+    }
+
+    static boolean isAS400()
+    {
+        try
+        {
+            String s = System.getProperty("os.name");
+            if(Trace.isTraceOn())
+                Trace.log(1, "Detected os.name : " + s);
+            if(s != null)
+                return s.equalsIgnoreCase("OS/400");
+            else
+                return false;
+        }
+        catch(SecurityException securityexception)
+        {
+            Trace.log(2, "Error retrieving os.name", securityexception);
+        }
+        return false;
+    }
+
+    public boolean isConnected()
+    {
+        if(isConnected(0))
+            return true;
+        if(isConnected(2))
+            return true;
+        if(isConnected(3))
+            return true;
+        if(isConnected(1))
+            return true;
+        return isConnected(5);
+    }
+
+    public boolean isConnected(int i)
+    {
+        String s = getServerName(i);
+        return isSeviceConnected(s);
+    }
+
+    private boolean isSeviceConnected(String s)
+    {
+        Vector vector = (Vector)existingServers_.get(s);
+        return !vector.isEmpty();
+    }
+
+    public boolean isGuiAvailable()
+    {
+        Trace.log(1, "Enter/exit isGuiAvailable()");
+        return prompt_;
+    }
+
+    public boolean isLocal()
+    {
+        return isSysLocal(systemName_);
+    }
+
+    static boolean isSysLocal(String s)
+    {
+        if(onAS400)
+        {
+            if(s.equalsIgnoreCase("localhost"))
+            {
+                Trace.log(1, "System name is localhost");
+                return true;
+            }
+            try
+            {
+                InetAddress inetaddress = InetAddress.getLocalHost();
+                InetAddress ainetaddress[] = InetAddress.getAllByName(s);
+                for(int i = 0; i < ainetaddress.length; i++)
+                {
+                    if(Trace.isTraceOn())
+                        Trace.log(1, "Comparing local address " + inetaddress + " to " + ainetaddress[i]);
+                    if(inetaddress.equals(ainetaddress[i]))
+                        return true;
+                }
+
+            }
+            catch(UnknownHostException unknownhostexception)
+            {
+                Trace.log(2, "Error retrieving host address information", unknownhostexception);
+            }
+        }
+        Trace.log(1, "System name is not local.");
+        return false;
+    }
+
+    public boolean isMustUseSockets()
+    {
+        return !canUseNativeOptimization;
+    }
+
+    public boolean isShowCheckboxes()
+    {
+        Trace.log(1, "Enter/exit isShowCheckboxes()");
+        return showCheckboxes;
+    }
+
+    public boolean isUseDefaultUser()
+    {
+        Trace.log(1, "Enter/exit isUseDefaultUser()");
+        return useDefUser_;
+    }
+
+    public boolean isUsePasswordCache()
+    {
+        Trace.log(1, "Enter/exit isUsePasswordCache()");
+        return useCache_;
+    }
+
+    Object loadImpl(String s, String s1)
+    {
+        if(canUseNativeOptimizations())
+        {
+            try
+            {
+                return Class.forName(s).newInstance();
+            }
+            catch(ClassNotFoundException classnotfoundexception)
+            {
+                Trace.log(2, "Unexpected ClassNotFoundException", classnotfoundexception);
+            }
+            catch(IllegalAccessException illegalaccessexception)
+            {
+                Trace.log(2, "Unexpected IllegalAccessException", illegalaccessexception);
+            }
+            catch(InstantiationException instantiationexception)
+            {
+                Trace.log(2, "Unexpected InstantiationException", instantiationexception);
+            }
+            if(Trace.isTraceOn())
+                Trace.log(1, "Load of native impl: " + s + " failed, attempting to load remote impl");
+        }
+        try
+        {
+            return Class.forName(s1).newInstance();
+        }
+        catch(ClassNotFoundException classnotfoundexception1)
+        {
+            Trace.log(2, "Unexpected ClassNotFoundException", classnotfoundexception1);
+        }
+        catch(IllegalAccessException illegalaccessexception1)
+        {
+            Trace.log(2, "Unexpected IllegalAccessException", illegalaccessexception1);
+        }
+        catch(InstantiationException instantiationexception1)
+        {
+            Trace.log(2, "Unexpected InstantiationException", instantiationexception1);
+        }
+        Trace.log(1, "Load of remote impl: " + s1 + " failed");
+        throw new InternalErrorException(6);
+    }
+
+    static SocketContainer loadSocketContainer(String s)
+        throws IOException
+    {
+        try
+        {
+            return (SocketContainer)Class.forName(s).newInstance();
+        }
+        catch(ClassNotFoundException classnotfoundexception)
+        {
+            Trace.log(2, "Unexpected ClassNotFoundException", classnotfoundexception);
+        }
+        catch(IllegalAccessException illegalaccessexception)
+        {
+            Trace.log(2, "Unexpected IllegalAccessException", illegalaccessexception);
+        }
+        catch(InstantiationException instantiationexception)
+        {
+            Trace.log(2, "Unexpected InstantiationException", instantiationexception);
+        }
+        Trace.log(1, "Load of socket container: " + s + " failed");
+        throw new IOException();
+    }
+
+    public synchronized void removeConnectionListener(ConnectionListener connectionlistener)
+    {
+        eventList.removeElement(connectionlistener);
+    }
+
+    public static void removeDefaultUser(String s)
+    {
+        if(s == null)
+        {
+            Trace.log(2, "System name is null");
+            throw new NullPointerException("systemName");
+        } else
+        {
+            SecurityManager400.removeDefaultUser(resolveSystem(s));
+            return;
+        }
+    }
+
+    public synchronized void removePropertyChangeListener(PropertyChangeListener propertychangelistener)
+    {
+        propertyList.removePropertyChangeListener(propertychangelistener);
+    }
+
+    public void removeVetoableChangeListener(VetoableChangeListener vetoablechangelistener)
+    {
+        vetos_.removeVetoableChangeListener(vetoablechangelistener);
+    }
+
+    public static void removePasswordCacheEntry(String s, String s1)
+    {
+        if(s == null)
+        {
+            Trace.log(2, "System name is null");
+            throw new NullPointerException("system");
+        }
+        if(s1 == null)
+        {
+            Trace.log(2, "User ID is null");
+            throw new NullPointerException("user");
+        } else
+        {
+            SecurityManager400.removeCacheEntry(resolveSystem(s), resolveUserId(s1.toUpperCase()));
+            return;
+        }
+    }
+
+    static String resolveSystem(String s)
+    {
+        if(onAS400)
+        {
+            if(s.length() == 0)
+            {
+                Trace.log(1, "Resolving initial system name to localhost");
+                return "localhost";
+            }
+            if(isSysLocal(s))
+            {
+                Trace.log(1, "Resolving system name to localhost");
+                return "localhost";
+            }
+        }
+        if(Trace.isTraceOn())
+            Trace.log(1, "System name is '" + s + "'");
+        return s;
+    }
+
+    static String resolveUserId(String s)
+    {
+        if(onAS400)
+        {
+            String s1 = CurrentUser.getUserID();
+            if(s1 == null)
+            {
+                if(Trace.isTraceOn())
+                    Trace.log(1, "Current userID information not available userID is: '" + s + "'");
+                return s;
+            }
+            if(s.length() == 0)
+            {
+                if(Trace.isTraceOn())
+                    Trace.log(1, "Resolving initial userid to:" + s1);
+                return s1;
+            }
+            if(s.equals("*CURRENT"))
+            {
+                if(Trace.isTraceOn())
+                    Trace.log(1, "Replacing *current as user ID with:" + s1);
+                return s1;
+            }
+        }
+        if(Trace.isTraceOn())
+            Trace.log(1, "User ID is: '" + s + "'");
+        return s;
+    }
+
+    private static boolean userIdMatchesLocal(String s)
+    {
+        if(onAS400)
+        {
+            String s1 = CurrentUser.getUserID();
+            if(s1 == null)
+            {
+                if(Trace.isTraceOn())
+                    Trace.log(1, "Current userID information not available");
+                return false;
+            } else
+            {
+                return s.equals(s1);
+            }
+        } else
+        {
+            return false;
+        }
+    }
+
+    static String resolvePassword(String s, String s1)
+    {
+        if(onAS400)
+        {
+            if(userIdMatchesLocal(s) && s1.length() == 0)
+            {
+                Trace.log(1, "Resolved supporting information from current userid");
+                return "*CURRENT";
+            }
+            if(!userIdMatchesLocal(s) && s1.equals("*CURRENT"))
+            {
+                Trace.log(1, "User ID no longer equals current, password unset from *CURRENT");
+                return "";
+            }
+        }
+        return s1;
+    }
+
+    public void setCcsid(int i)
+        throws PropertyVetoException
+    {
+        int j = ccsid_;
+        vetos_.fireVetoableChange("ccsid", new Integer(ccsid_), new Integer(i));
+        ccsid_ = i;
+        firePropertyChange("ccsid", new Integer(j), new Integer(i));
+    }
+
+    public static boolean setDefaultUser(String s, String s1)
+    {
+        if(s == null)
+        {
+            Trace.log(2, "System name is null");
+            throw new NullPointerException("systemName");
+        }
+        if(s1 == null)
+        {
+            Trace.log(2, "User ID is null");
+            throw new NullPointerException("user");
+        } else
+        {
+            return SecurityManager400.setDefaultUser(resolveSystem(s), resolveUserId(s1.toUpperCase()));
+        }
+    }
+
+    public void setGuiAvailable(boolean flag)
+        throws PropertyVetoException
+    {
+        boolean flag1 = prompt_;
+        vetos_.fireVetoableChange("guiAvailable", new Boolean(prompt_), new Boolean(flag));
+        prompt_ = flag;
+        firePropertyChange("guiAvailable", new Boolean(flag1), new Boolean(prompt_));
+    }
+
+    public void setMustUseSockets(boolean flag)
+    {
+        canUseNativeOptimization = !flag;
+    }
+
+    public void setPassword(String s)
+    {
+        if(security400_ != null)
+        {
+            throw new ExtendedIllegalStateException("password", 5);
+        } else
+        {
+            password_ = s.toUpperCase();
+            return;
+        }
+    }
+
+    public static void setPasswordExpirationWarningDays(int i)
+    {
+        SecurityManager400.setWarningDays(i);
+    }
+
+    public void setServicePort(int i, int j)
+    {
+        if(systemName_.length() == 0)
+        {
+            Trace.log(2, "System name is not set");
+            throw new ExtendedIllegalStateException("systemName", 4);
+        }
+        if(i < 0 || i > 7)
+            throw new ExtendedIllegalArgumentException("service (" + Integer.toString(i) + ")", 2);
+        if(j < -1)
+        {
+            throw new ExtendedIllegalArgumentException("port (" + Integer.toString(j) + ")", 2);
+        } else
+        {
+            PortMapper.setServicePort(systemName_, i, j, useSSLConnection);
+            return;
+        }
+    }
+
+    public void setServicePortsToDefault()
+    {
+        if(systemName_.length() == 0)
+        {
+            Trace.log(2, "System name is not set");
+            throw new ExtendedIllegalStateException("systemName", 4);
+        } else
+        {
+            PortMapper.setServicePortsToDefault(systemName_);
+            return;
+        }
+    }
+
+    public void setShowCheckboxes(boolean flag)
+    {
+        Trace.log(1, "Enter/exit setShowCheckboxes()");
+        showCheckboxes = flag;
+    }
+
+    public void setSystemName(String s)
+        throws PropertyVetoException
+    {
+        if(security400_ != null)
+        {
+            throw new ExtendedIllegalStateException("systemName", 5);
+        } else
+        {
+            String s1 = systemName_;
+            String s2 = resolveSystem(s);
+            vetos_.fireVetoableChange("systemName", systemName_, s2);
+            systemName_ = s2;
+            firePropertyChange("systemName", s1, systemName_);
+            return;
+        }
+    }
+
+    boolean setTbCcsid(int i)
+    {
+        if(ccsid_ == 0)
+        {
+            ccsid_ = i;
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
+
+    public void setUseDefaultUser(boolean flag)
+        throws PropertyVetoException
+    {
+        boolean flag1 = useDefUser_;
+        vetos_.fireVetoableChange("useDefaultUser", new Boolean(useDefUser_), new Boolean(flag));
+        useDefUser_ = flag;
+        firePropertyChange("useDefaultUser", new Boolean(flag1), new Boolean(flag));
+    }
+
+    public void setUsePasswordCache(boolean flag)
+        throws PropertyVetoException
+    {
+        boolean flag1 = useCache_;
+        vetos_.fireVetoableChange("usePasswordCache", new Boolean(useCache_), new Boolean(flag));
+        useCache_ = flag;
+        firePropertyChange("usePasswordCache", new Boolean(flag1), new Boolean(flag));
+    }
+
+    public void setUserId(String s)
+        throws PropertyVetoException
+    {
+        if(security400_ != null)
+        {
+            throw new ExtendedIllegalStateException("user", 5);
+        } else
+        {
+            String s1 = userId_;
+            String s2 = resolveUserId(s.toUpperCase());
+            vetos_.fireVetoableChange("userId", userId_, s2);
+            userId_ = s2;
+            password_ = resolvePassword(userId_, password_);
+            firePropertyChange("userId", s1, userId_);
+            return;
+        }
+    }
+
+    void signOn()
+        throws IOException, UnknownHostException, AS400SecurityException
+    {
+        Trace.log(1, "Begin Signon...");
+        if(security400_ == null)
+        {
+            security400_ = SecurityManager400.getSecurityObject(systemName_, userId_);
+            if(security400_ == null)
+            {
+                Trace.log(1, "Signon and get new security object...");
+                getSecurity400();
+            }
+        } else
+        {
+            Trace.log(1, "Re-using security object to signon...");
+            security400_ = SecurityManager400.signon(security400_, prompt_, useSSLConnection, showCheckboxes);
+        }
+        if(security400_ == null)
+        {
+            Trace.log(4, "Failed to get a security object");
+            Trace.log(2, "User cancelled signon");
+            throw new AS400SecurityException(25);
+        }
+        Trace.log(3, "Signon successfully...");
+        systemName_ = security400_.getSystem();
+        userId_ = security400_.getUser();
+        password_ = security400_.getPromptInfo();
+        if(DataStream.getDefaultConverter() == null)
+        {
+            int i = security400_.getSignonInfo().getServerCCSID();
+            if(i != 0)
+            {
+                DataStream.setDefaultConverter(Converter.getConverter(i, this));
+                return;
+            }
+            DataStream.setDefaultConverter(Converter.getConverter(ExecutionEnvironment.getBestGuessAS400Ccsid(), this));
+        }
+    }
+
+    SocketContainer startServer(String s)
+        throws ServerStartupException, AS400SecurityException, IOException, UnknownHostException
+    {
+        SocketContainer socketcontainer = PortMapper.getServerSocket(security400_.getSystem(), s, useSSLConnection);
+        if(!s.equals("as-ddm"))
+        {
+            InputStream inputstream;
+            OutputStream outputstream;
+            try
+            {
+                inputstream = socketcontainer.getInputStream();
+                outputstream = socketcontainer.getOutputStream();
+                Trace.log(1, "Exchanging random seeds...");
+                exchangeRandomSeeds(inputstream, outputstream);
+            }
+            catch(IOException _ex)
+            {
+                Trace.log(2, "Failed to start the server...");
+                throw new ServerStartupException(3);
+            }
+            byte abyte0[] = security400_.getPassword(clientSeed_, serverSeed_);
+            Trace.log(1, "Sending start server request...");
+            AS400StrSvrDS as400strsvrds = new AS400StrSvrDS(AS400Server.getServerId(s), userId_, abyte0, true);
+            as400strsvrds.write(outputstream);
+            outputstream.flush();
+            AS400StrSvrReplyDS as400strsvrreplyds = new AS400StrSvrReplyDS();
+            as400strsvrreplyds.read(inputstream);
+            if(as400strsvrreplyds.primaryRC() != 0)
+            {
+                Trace.log(4, "Start server failed, primary return code =", as400strsvrreplyds.primaryRC());
+                Trace.log(2, "Start server failed, secondary return code =", as400strsvrreplyds.secondaryRC());
+                throw returnReqReplyException(as400strsvrreplyds.primaryRC(), as400strsvrreplyds.secondaryRC());
+            }
+        }
+        Trace.log(3, "Server started successfully");
+        return socketcontainer;
+    }
+
+    public String toString()
+    {
+        if(systemName_.length() == 0)
+            return super.toString();
+        if(userId_.length() == 0)
+            return super.toString() + systemName_;
+        else
+            return super.toString() + systemName_ + "  " + userId_;
+    }
+
+    private IOException returnReqReplyException(int i, int j)
+        throws AS400SecurityException
+    {
+        switch(i)
+        {
+        case 1: // '\001'
+            switch(j)
+            {
+            case 1: // '\001'
+                return new IOException(ResourceBundleLoader.getText("EXC_RANDOM_SEED_EXCHANGE_INVALID"));
+
+            case 3: // '\003'
+                return new IOException(ResourceBundleLoader.getText("EXC_REQUEST_ID_NOT_VALID"));
+
+            case 4: // '\004'
+                return new IOException(ResourceBundleLoader.getText("EXC_RANDOM_SEED_INVALID"));
+
+            case 5: // '\005'
+                return new IOException(ResourceBundleLoader.getText("EXC_RANDOM_SEED_REQUIRED"));
+
+            case 6: // '\006'
+                return new IOException(ResourceBundleLoader.getText("EXC_PASSWORD_ENCRYPT_INVALID"));
+
+            case 7: // '\007'
+                return new IOException(ResourceBundleLoader.getText("EXC_USERID_LENGTH_NOT_VALID"));
+
+            case 8: // '\b'
+                return new IOException(ResourceBundleLoader.getText("EXC_PASSWORD_LENGTH_NOT_VALID"));
+
+            case 9: // '\t'
+                return new IOException(ResourceBundleLoader.getText("EXC_SEND_REPLY_INVALID"));
+
+            case 10: // '\n'
+                return new IOException(ResourceBundleLoader.getText("EXC_START_SERVER_REQUEST_NOT_VALID"));
+
+            case 2: // '\002'
+            default:
+                return new IOException(ResourceBundleLoader.getText("EXC_REQUEST_DATA_ERROR"));
+            }
+
+        case 2: // '\002'
+            switch(j)
+            {
+            case 1: // '\001'
+                throw new AS400SecurityException(32);
+
+            case 2: // '\002'
+                throw new AS400SecurityException(31);
+            }
+            throw new AS400SecurityException(28);
+
+        case 3: // '\003'
+            switch(j)
+            {
+            case 11: // '\013'
+                throw new AS400SecurityException(8);
+
+            case 12: // '\f'
+                throw new AS400SecurityException(9);
+
+            case 13: // '\r'
+                throw new AS400SecurityException(7);
+
+            case 14: // '\016'
+                throw new AS400SecurityException(6);
+            }
+            throw new AS400SecurityException(6);
+
+        case 4: // '\004'
+            throw new AS400SecurityException(27);
+        }
+        return new IOException(ResourceBundleLoader.getText("EXC_START_SERVER_UNKNOWN_ERROR"));
+    }
+
+    public boolean validateSignon()
+        throws UnknownHostException, IOException, AS400SecurityException, ExtendedIllegalStateException
+    {
+        if(security400_ != null)
+            return security400_.signon(false, useSSLConnection, showCheckboxes) == 0;
+        if(userId_.length() == 0)
+        {
+            Trace.log(2, "User ID is not set");
+            throw new ExtendedIllegalStateException("userId", 4);
+        }
+        if(password_.length() == 0)
+        {
+            Trace.log(2, "Password is not set");
+            throw new ExtendedIllegalStateException("password", 4);
+        } else
+        {
+            return validateSignon(userId_, password_);
+        }
+    }
+
+    public boolean validateSignon(String s)
+        throws UnknownHostException, IOException, AS400SecurityException, ExtendedIllegalStateException
+    {
+        if(userId_.length() == 0)
+        {
+            Trace.log(2, "User ID is null");
+            throw new ExtendedIllegalStateException("userId", 4);
+        } else
+        {
+            return validateSignon(userId_, s);
+        }
+    }
+
+    public boolean validateSignon(String s, String s1)
+        throws UnknownHostException, IOException, AS400SecurityException, ExtendedIllegalStateException
+    {
+        if(systemName_.length() == 0)
+        {
+            Trace.log(2, "System name is not set");
+            throw new ExtendedIllegalStateException("systemName", 4);
+        }
+        if(s == null)
+        {
+            Trace.log(2, "User ID is null");
+            throw new NullPointerException("userId");
+        }
+        if(s1 == null)
+        {
+            Trace.log(2, "Password is null");
+            throw new NullPointerException("password");
+        }
+        Security400 security400 = SecurityManager400.validateSignon(systemName_, resolveUserId(s.toUpperCase()), s1.toUpperCase(), useSSLConnection);
+        return security400 != null;
+    }
+
+    static final long serialVersionUID = 0x4b255abfff8d23c3L;
+    public static final int FILE = 0;
+    public static final int PRINT = 1;
+    public static final int COMMAND = 2;
+    public static final int DATAQUEUE = 3;
+    public static final int DATABASE = 4;
+    public static final int RECORDACCESS = 5;
+    public static final int CENTRAL = 6;
+    public static final int SIGNON = 7;
+    public static final int USE_PORT_MAPPER = -1;
+    private static boolean onAS400;
+    private static final int NUMBEROFSERVERS = 7;
+    private transient Hashtable existingServers_;
+    private String systemName_;
+    private String userId_;
+    private transient String password_;
+    private transient Security400 security400_;
+    private transient byte clientSeed_[];
+    private transient byte serverSeed_[];
+    private boolean prompt_;
+    private boolean useCache_;
+    private boolean useDefUser_;
+    private boolean showCheckboxes;
+    private int ccsid_;
+    private transient Vector eventList;
+    private transient PropertyChangeSupport propertyList;
+    private transient VetoableChangeSupport vetos_;
+    boolean useSSLConnection;
+    private boolean canUseNativeOptimization;
+
+    static 
+    {
+        if(isAS400())
+            onAS400 = true;
+    }
+}

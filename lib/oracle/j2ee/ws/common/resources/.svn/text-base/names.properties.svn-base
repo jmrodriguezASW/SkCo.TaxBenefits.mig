@@ -1,0 +1,10 @@
+#
+# $Id: names.properties 14-jul-2005.16:53:42 quwang Exp $
+#
+
+# general
+names.warning.classexists.classpath=a class by name : \"{0}\" is already available in the classpath  
+
+names.warning.failedonunique.serializer= failed to make an unique serializer class : \"{0}\" , the error :\"{1}\"
+
+names.warning.verify.java.member.acessor.methods= failed to find accessor \"{0}\" in \"{1}\"

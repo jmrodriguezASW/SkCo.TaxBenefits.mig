@@ -1,0 +1,218 @@
+<?xml version = '1.0' encoding = 'windows-1252'?>
+<web-app-deployment nselem="web-app-deployment" class="oracle.jdeveloper.deploy.war.WarProfile" xmlns="http://xmlns.oracle.com/jdeveloper/904/deploy/j2ee-war">
+   <appletArchiveName class="java.lang.String"/>
+   <appletArchives>
+      <archives class="[Ljava.net.URL;"/>
+      <selectionMode>0</selectionMode>
+   </appletArchives>
+   <appletDeployedAsArchive>false</appletDeployedAsArchive>
+   <appletDeployment>false</appletDeployment>
+   <appletFiles>
+      <autoInclude>true</autoInclude>
+      <deploySourceAs>0</deploySourceAs>
+      <files>
+         <Item path="META-INF/Copy of web.xml" id="0"/>
+         <Item path="META-INF/log4j.properties"/>
+         <Item path="META-INF/vssver2.scc" id="1"/>
+         <Item path="META-INF/web.xml"/>
+         <Item path="TBPKT_AJUSTES/TBPKT_DECISION_CLIENTE/vssver2.scc" id="2"/>
+         <Item path="TBPKT_AJUSTES/vssver2.scc" id="3"/>
+         <Item path="TBPKT_CARGUE_APLICACION/vssver2.scc" id="4"/>
+         <Item path="TBPKT_EXCEPCIONES/vssver2.scc" id="5"/>
+         <Item path="TBPKT_IAS/ClassTestAparece.java" id="6"/>
+         <Item path="TBPKT_IAS/vssver2.scc" id="7"/>
+         <Item path="TBPKT_INFORMATIVO/TBPKT_CONSULTAPORTE/vssver2.scc" id="8"/>
+         <Item path="TBPKT_INFORMATIVO/TBPKT_CONSULTARETIROS/vssver2.scc" id="9"/>
+         <Item path="TBPKT_INFORMATIVO/TBPKT_EXTRACTOS/vssver2.scc" id="10"/>
+         <Item path="TBPKT_INFORMATIVO/TBPKT_IMPUESTOS/vssver2.scc" id="11"/>
+         <Item path="TBPKT_INFORMATIVO/TBPKT_INFORMACION_TRASLADOS/vssver2.scc" id="12"/>
+         <Item path="TBPKT_INFORMATIVO/TBPKT_INTERFACE_CONTABLE/vssver2.scc" id="13"/>
+         <Item path="TBPKT_INFORMATIVO/TBPKT_MEDIOS_MAGNETICOS/vssver2.scc" id="14"/>
+         <Item path="TBPKT_INFORMATIVO/TBPKT_REPORTESCONTROL/vssver2.scc" id="15"/>
+         <Item path="TBPKT_INFORMATIVO/TBPKT_RETENCION_FUENTE/vssver2.scc" id="16"/>
+         <Item path="TBPKT_MODULO_APORTES/vssver2.scc" id="17"/>
+         <Item path="TBPKT_MODULO_RETIROS/TBPKT_ELIMINAR_MULTIFUND/vssver2.scc" id="18"/>
+         <Item path="TBPKT_MODULO_RETIROS/TBPKT_INTERFACE_RETIROS/vssver2.scc" id="19"/>
+         <Item path="TBPKT_MODULO_RETIROS/TBPKT_MODIFICAR_SOLICITUD/vssver2.scc" id="20"/>
+         <Item path="TBPKT_MODULO_RETIROS/TBPKT_SOLICITUD_RETIROS/vssver2.scc" id="21"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_ACTUALIZAR_CONTRATOS/vssver2.scc" id="22"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_CIERREUNIDAD/vssver2.scc" id="23"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_CONCEPTOTIPOCARGO/vssver2.scc" id="24"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_CONCEPTOTRANSACCION/vssver2.scc" id="25"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_CONDICIONPENALIZACION/vssver2.scc" id="26"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_CONTABILIDAD/vssver2.scc" id="27"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_CONTRATOCONDICION/vssver2.scc" id="28"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_EMPRESA/vssver2.scc" id="29"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_EMPRESAS_CONTRATOS/vssver2.scc" id="30"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_FESTIVOS/vssver2.scc" id="31"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_FONDOPENSION/vssver2.scc" id="32"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_FORMATOCERTIFICADO/vssver2.scc" id="33"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_ITEMCERTIFICADO/vssver2.scc" id="34"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_MINIMOFONDO/vssver2.scc" id="35"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_PARAMETRIZACION_CONTRATOS/vssver2.scc" id="36"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_PENALIZACION_TRASLADO/vssver2.scc" id="37"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_PRODUCTO/vssver2.scc" id="38"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_PRODUCTOCONCEPTO/vssver2.scc" id="39"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_PRODUCTOCONDICION/vssver2.scc" id="40"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_PROGRAMA/vssver2.scc" id="41"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_REFERENCIASISTEMA/vssver2.scc" id="42"/>
+         <Item path="TBPKT_PARAMETROS/TBPKT_REFERENCIASUSUARIO/vssver2.scc" id="43"/>
+         <Item path="TBPKT_UTILIDADES/TBPKT_AS400_APORTES/vssver2.scc" id="44"/>
+         <Item path="TBPKT_UTILIDADES/TBPKT_CONEXIONBASEDATOS/vssver2.scc" id="45"/>
+         <Item path="TBPKT_UTILIDADES/TBPKT_CONEXIONBASEDATOSSQLJ/vssver2.scc" id="46"/>
+         <Item path="TBPKT_UTILIDADES/TBPKT_CONSULTA/vssver2.scc" id="47"/>
+         <Item path="TBPKT_UTILIDADES/TBPKT_FECHAS/vssver2.scc" id="48"/>
+         <Item path="TBPKT_UTILIDADES/TBPKT_FUNCIONES_AS400/vssver2.scc" id="49"/>
+         <Item path="TBPKT_UTILIDADES/TBPKT_PLANTILLA/vssver2.scc" id="50"/>
+         <Item path="TBPKT_UTILIDADES/TBPKT_RETENCION_FUENTE/vssver2.scc" id="51"/>
+         <Item path="TBPKT_UTILIDADES/TBPKT_RTF/vssver2.scc" id="52"/>
+         <Item path="TBPKT_UTILIDADES/TBPKT_SEGURIDAD/vssver2.scc" id="53"/>
+         <Item path="TBPKT_UTILIDADES/TBPKT_VALOR_UNIDAD/vssver2.scc" id="54"/>
+         <Item path="vssver2.scc" id="55"/>
+         <Item path="../test/TBPKT_UTILIDADES/TBPKT_FUNCIONES_AS400/vssver2.scc" id="56"/>
+         <Item path="../test/TBPKT_UTILIDADES/TBPKT_VALOR_UNIDAD/vssver2.scc" id="57"/>
+      </files>
+      <selectionFilters>
+         <Item id="58">oracle.jdevimpl.deploy.common.JavaSelectionFilter</Item>
+      </selectionFilters>
+   </appletFiles>
+   <appletLocation class="java.lang.String"/>
+   <archiveOptions>
+      <additionalManifests/>
+      <compressed>false</compressed>
+      <hasManifest>false</hasManifest>
+      <mainClass/>
+   </archiveOptions>
+   <cdaSettings>
+      <additionalArchives/>
+      <afterFilters/>
+      <beforeFilters/>
+      <duringFilters/>
+      <selectedArchives>
+         <archives>
+            <Item path="../../../../../programas/jdev904/sqlj/lib/runtime12ee.jar" jar-entry=""/>
+         </archives>
+         <selectionMode>0</selectionMode>
+      </selectedArchives>
+   </cdaSettings>
+   <contextRoot>Servlets</contextRoot>
+   <defaultConnection class="java.lang.String"/>
+   <deployClientMaxHeapSize/>
+   <earURL path="../deploy/webapp1.ear"/>
+   <enterpriseAppName>webapp1</enterpriseAppName>
+   <javaFiles>
+      <autoInclude>true</autoInclude>
+      <deploySourceAs>0</deploySourceAs>
+      <files>
+         <Item idref="0"/>
+         <Item path="META-INF/application-client.xml"/>
+         <Item idref="1"/>
+         <Item idref="2"/>
+         <Item idref="3"/>
+         <Item idref="4"/>
+         <Item idref="5"/>
+         <Item idref="6"/>
+         <Item idref="7"/>
+         <Item idref="8"/>
+         <Item idref="9"/>
+         <Item idref="10"/>
+         <Item idref="11"/>
+         <Item idref="12"/>
+         <Item idref="13"/>
+         <Item idref="14"/>
+         <Item idref="15"/>
+         <Item idref="16"/>
+         <Item idref="17"/>
+         <Item idref="18"/>
+         <Item idref="19"/>
+         <Item idref="20"/>
+         <Item idref="21"/>
+         <Item idref="22"/>
+         <Item idref="23"/>
+         <Item idref="24"/>
+         <Item idref="25"/>
+         <Item idref="26"/>
+         <Item idref="27"/>
+         <Item idref="28"/>
+         <Item idref="29"/>
+         <Item idref="30"/>
+         <Item idref="31"/>
+         <Item idref="32"/>
+         <Item idref="33"/>
+         <Item idref="34"/>
+         <Item idref="35"/>
+         <Item idref="36"/>
+         <Item idref="37"/>
+         <Item idref="38"/>
+         <Item idref="39"/>
+         <Item idref="40"/>
+         <Item idref="41"/>
+         <Item idref="42"/>
+         <Item idref="43"/>
+         <Item idref="44"/>
+         <Item idref="45"/>
+         <Item idref="46"/>
+         <Item idref="47"/>
+         <Item idref="48"/>
+         <Item idref="49"/>
+         <Item idref="50"/>
+         <Item idref="51"/>
+         <Item idref="52"/>
+         <Item idref="53"/>
+         <Item idref="54"/>
+         <Item idref="55"/>
+         <Item idref="56"/>
+         <Item idref="57"/>
+      </files>
+      <selectionFilters>
+         <Item idref="58"/>
+      </selectionFilters>
+   </javaFiles>
+   <profileDeps/>
+   <properties/>
+   <warURL path="../deploy/webapp1.war"/>
+   <webSelectionRules>
+      <rules>
+         <Item>
+            <pattern>filesjs/vssver2.scc</pattern>
+            <type>1</type>
+         </Item>
+         <Item>
+            <pattern>imagenes/vssver2.scc</pattern>
+            <type>1</type>
+         </Item>
+         <Item>
+            <pattern>vssver2.scc</pattern>
+            <type>1</type>
+         </Item>
+         <Item>
+            <pattern>WEB-INF/vssver2.scc</pattern>
+            <type>1</type>
+         </Item>
+         <Item>
+            <pattern>WEB-INF/temp/</pattern>
+            <type>1</type>
+         </Item>
+         <Item>
+            <pattern>**/CVS/</pattern>
+            <type>1</type>
+         </Item>
+         <Item>
+            <pattern>**.contrib</pattern>
+            <type>1</type>
+         </Item>
+         <Item>
+            <pattern>**.keep</pattern>
+            <type>1</type>
+         </Item>
+         <Item>
+            <pattern>**.rvi</pattern>
+            <type>1</type>
+         </Item>
+         <Item>
+            <pattern>**</pattern>
+            <type>0</type>
+         </Item>
+      </rules>
+   </webSelectionRules>
+</web-app-deployment>
