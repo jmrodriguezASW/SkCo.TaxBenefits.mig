@@ -6,7 +6,6 @@ import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.TBCL_Seguridad;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-import javax.servlet.SingleThreadModel;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +13,7 @@ import javax.servlet.http.HttpSession;
 
 
 
-public class TBS_FinalizarEliminar_Oblig extends HttpServlet implements SingleThreadModel
+public class TBS_FinalizarEliminar_Oblig extends HttpServlet
 {
   private String[] v_valusu;
   private String[] resul = null;
@@ -47,11 +46,11 @@ public class TBS_FinalizarEliminar_Oblig extends HttpServlet implements SingleTh
       String v_pintar = "";
       String v_pie = "";
       
-      if (((String)session.getValue("s_contrato") != null) || ((String)session.getValue("s_producto") != null)) {
-        String v_pro = (String)session.getValue("s_producto");
-        String v_contra = (String)session.getValue("s_contrato");
+      if (((String)session.getAttribute("s_contrato") != null) || ((String)session.getAttribute("s_producto") != null)) {
+        String v_pro = (String)session.getAttribute("s_producto");
+        String v_contra = (String)session.getAttribute("s_contrato");
         String s_conret = request.getParameter("v_conret");
-        v_ruta_serv = ((String)session.getValue("s_ruta_serv"));
+        v_ruta_serv = ((String)session.getAttribute("s_ruta_serv"));
         
         SQL_PTB_RETIROS_OBLIG objSQL_PTB_RETIROS_OBLIG = new SQL_PTB_RETIROS_OBLIG();
         resul = objSQL_PTB_RETIROS_OBLIG.ELIMINAR_RETIRO_OBLIG(v_pro, v_contra, s_conret, v_usuario);

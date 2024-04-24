@@ -148,33 +148,33 @@ implements sqlj.runtime.NamedIterator
    double v_sumatporcentaje= 0;/**Sumatoria de porcentajes retirados*/
    double vsumvalor        = 0;/**sumatoria de valores retirados de fondos de otras  solicitudes de retiro*/
    /**Verificar que las variables de session no expiren*/
-   if((java.lang.String)session.getValue("s_contrato") != null ||(java.lang.String)session.getValue("s_producto") != null)
+   if((java.lang.String)session.getAttribute("s_contrato") != null ||(java.lang.String)session.getAttribute("s_producto") != null)
    {
     /**Capturar variables de session*/
-    v_contra         = (java.lang.String)session.getValue("s_contrato");/**Tomar contrato*/
-    v_pro            = (java.lang.String)session.getValue("s_producto");/**Tomar  producto*/
-    v_nom            = (java.lang.String)session.getValue("s_nombres");/**Tomar  nombres*/
-    v_ape            = (java.lang.String)session.getValue("s_apellidos");/**Tomar apellidos*/
-    v_fecefe         = (java.lang.String)session.getValue("s_fecefe");/**Tomar fehca efectiva*/
-    //v_consecutivo    = (java.lang.String)session.getValue("s_conret");/**Tomar consecutivo del retiro a modificar fondos*/
-    v_conret         = new Integer ((java.lang.String)session.getValue("s_conret")).intValue();/**Consecutivo retiro numerico*/
-    //v_valre          = (java.lang.String)session.getValue("s_valoret");/**Tomar Valor retiro */
-    v_valre2         = new Double((java.lang.String)session.getValue("s_valoret")).doubleValue();/**Valor retiro numerico*/
+    v_contra         = (java.lang.String)session.getAttribute("s_contrato");/**Tomar contrato*/
+    v_pro            = (java.lang.String)session.getAttribute("s_producto");/**Tomar  producto*/
+    v_nom            = (java.lang.String)session.getAttribute("s_nombres");/**Tomar  nombres*/
+    v_ape            = (java.lang.String)session.getAttribute("s_apellidos");/**Tomar apellidos*/
+    v_fecefe         = (java.lang.String)session.getAttribute("s_fecefe");/**Tomar fehca efectiva*/
+    //v_consecutivo    = (java.lang.String)session.getAttribute("s_conret");/**Tomar consecutivo del retiro a modificar fondos*/
+    v_conret         = new Integer ((java.lang.String)session.getAttribute("s_conret")).intValue();/**Consecutivo retiro numerico*/
+    //v_valre          = (java.lang.String)session.getAttribute("s_valoret");/**Tomar Valor retiro */
+    v_valre2         = new Double((java.lang.String)session.getAttribute("s_valoret")).doubleValue();/**Valor retiro numerico*/
     v_maximo         = "";/**Maximo fondo*/
     /**Capturar maximos fondos*/
     try { v_maximo = request.getParameter("v_maximo"); } catch (Exception e) { e.printStackTrace(); }
-    session.removeValue("s_maximo");
-    session.putValue("s_maximo",v_maximo);
+    session.removeAttribute("s_maximo");
+    session.setAttribute("s_maximo",v_maximo);
 
     /**Tomar la descripcion de los fondos y mostrar el valor de los fondos disponibles reales*/
     for ( int i=1;i< new Integer(v_maximo).intValue();i++)
     {
      v_encontrofondo2 = true;
-     v_codigofondo    =(java.lang.String)session.getValue("s_codfon"+i+"");
+     v_codigofondo    =(java.lang.String)session.getAttribute("s_codfon"+i+"");
 
      v_fon.addElement(v_codigofondo);
-     //v_valorfondo     = (java.lang.String)session.getValue("s_valfon"+i+"");
-     v_valort         = new Double((java.lang.String)session.getValue("s_valfon"+i+"")).doubleValue();
+     //v_valorfondo     = (java.lang.String)session.getAttribute("s_valfon"+i+"");
+     v_valort         = new Double((java.lang.String)session.getAttribute("s_valfon"+i+"")).doubleValue();
 
      /**Consulta valor de fondos retirados para esa fecha*/
      /*@lineinfo:generated-code*//*@lineinfo:112^6*/
@@ -292,28 +292,28 @@ implements sqlj.runtime.NamedIterator
       v_valret.addElement(new Double(c));
       v_porret.addElement(new Double(c));
      }
-     v_descripcionfondo    = (java.lang.String)session.getValue("s_desfon"+i+"");
+     v_descripcionfondo    = (java.lang.String)session.getAttribute("s_desfon"+i+"");
 
      v_desc.addElement(v_descripcionfondo);
-     v_minimofon =  (java.lang.String)session.getValue("s_minfon"+i+"");
+     v_minimofon =  (java.lang.String)session.getAttribute("s_minfon"+i+"");
      v_minfon.addElement(v_minimofon);
     }
     /**Capturar tipo de distribución de fondos*/
     try { v_fondo = request.getParameter("v_fondo"); } catch (Exception e) { e.printStackTrace(); }
-    session.removeValue("s_fondo");
-    session.removeValue("s_codfonvalor");
-    session.putValue("s_fondo",v_fondo);
-    session.putValue("s_codfonvalor",v_codfonvalor);
+    session.removeAttribute("s_fondo");
+    session.removeAttribute("s_codfonvalor");
+    session.setAttribute("s_fondo",v_fondo);
+    session.setAttribute("s_codfonvalor",v_codfonvalor);
     /**Distribución prorrata*/
     if(v_fondo.equals("0"))
     {
-     session.removeValue("s_prorrata");
-     session.putValue("s_prorrata","S");
+     session.removeAttribute("s_prorrata");
+     session.setAttribute("s_prorrata","S");
     }
     else
     {/**Distribución valor o porcentaje*/
-     session.removeValue("s_prorrata");
-     session.putValue("s_prorrata","N");
+     session.removeAttribute("s_prorrata");
+     session.setAttribute("s_prorrata","N");
     }
     v_fon.trimToSize();
     v_desc.trimToSize();

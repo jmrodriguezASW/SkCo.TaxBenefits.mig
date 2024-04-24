@@ -10,7 +10,7 @@ import TBPKT_UTILIDADES.TBPKT_VALOR_UNIDAD.SQL_VALOR_UNIDAD_CC;
 import TBPKT_UTILIDADES.TBPKT_PLANTILLA.STBCL_GenerarBaseHTML;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
-public class TBCS_Consulta_Impuestos extends HttpServlet implements SingleThreadModel{
+public class TBCS_Consulta_Impuestos extends HttpServlet{
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
 private double rendimientos = 0;

@@ -13,12 +13,11 @@ import java.util.Vector;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.SingleThreadModel;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class TBCS_Retiros_Oblig extends HttpServlet implements SingleThreadModel{
+public class TBCS_Retiros_Oblig extends HttpServlet{
     
     private PrintWriter out;
     private TBCL_Consulta v_Consulta;

@@ -365,34 +365,34 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
 
 
    /**Verificar que las variables de session no expiren*/
-   if((java.lang.String)session.getValue("s_contrato") !=null || (java.lang.String)session.getValue("s_producto") != null)
+   if((java.lang.String)session.getAttribute("s_contrato") !=null || (java.lang.String)session.getAttribute("s_producto") != null)
    {/**Capturar variables de session  4*/
-    v_contrato     = (java.lang.String)session.getValue("s_contrato");//toma contrato
-    v_producto     = (java.lang.String)session.getValue("s_producto");//toma producto
-    v_canje        = (java.lang.String)session.getValue("s_diascanje");//toma numero de dias canje
-    v_nom          = (java.lang.String)session.getValue("s_nombres");//tomo nombres del afiliado
-    v_ape          = (java.lang.String)session.getValue("s_apellidos");//tomo apellidos del afiliado
-    v_fecha        = (java.lang.String)session.getValue("s_fecefectiva");//tomo fecha efectiva del retirpo
-    v_fechapro     = (java.lang.String)session.getValue("s_fecpro");//tomo fecha efectiva del retirpo
-    v_sistema      = (java.lang.String)session.getValue("s_sistema");
-    v_usumfund     = (java.lang.String)session.getValue("s_usumfund");
-    v_passmfund    = (java.lang.String)session.getValue("s_passmfund");
-    v_libreria     = (java.lang.String)session.getValue("s_libreria");
-    v_tipopenaliza = (java.lang.String)session.getValue("s_penaliza");
-    v_cargo1       = (java.lang.String)session.getValue("s_cargo1");
-    v_cargo2       = (java.lang.String)session.getValue("s_cargo2");
-    v_cargo3       = (java.lang.String)session.getValue("s_cargo3");
-    v_cargo4       = (java.lang.String)session.getValue("s_cargo4");
-    //v_salrenneto   = (java.lang.String)session.getValue("s_salrenneto");
-    //v_salrenbruto  = (java.lang.String)session.getValue("s_salrenbruto");
-    double v_salrenneto2    = new Double((java.lang.String)session.getValue("s_salrenneto")).doubleValue();
-    double v_salrenbruto2   = new Double((java.lang.String)session.getValue("s_salrenbruto")).doubleValue();
-    //v_saldoneto    =(java.lang.String)session.getValue("s_saldisponeto");
-    //v_saldobruto   =(java.lang.String)session.getValue("s_saldispo");
-    //v_saldomfund   =(java.lang.String)session.getValue("s_saldomfund");
-    double v_saldoneto2     = new Double((java.lang.String)session.getValue("s_saldisponeto")).doubleValue();
-    double v_saldobruto2    = new Double((java.lang.String)session.getValue("s_saldispo")).doubleValue();
-    double v_saldomfund2    = new Double((java.lang.String)session.getValue("s_saldomfund")).doubleValue();
+    v_contrato     = (java.lang.String)session.getAttribute("s_contrato");//toma contrato
+    v_producto     = (java.lang.String)session.getAttribute("s_producto");//toma producto
+    v_canje        = (java.lang.String)session.getAttribute("s_diascanje");//toma numero de dias canje
+    v_nom          = (java.lang.String)session.getAttribute("s_nombres");//tomo nombres del afiliado
+    v_ape          = (java.lang.String)session.getAttribute("s_apellidos");//tomo apellidos del afiliado
+    v_fecha        = (java.lang.String)session.getAttribute("s_fecefectiva");//tomo fecha efectiva del retirpo
+    v_fechapro     = (java.lang.String)session.getAttribute("s_fecpro");//tomo fecha efectiva del retirpo
+    v_sistema      = (java.lang.String)session.getAttribute("s_sistema");
+    v_usumfund     = (java.lang.String)session.getAttribute("s_usumfund");
+    v_passmfund    = (java.lang.String)session.getAttribute("s_passmfund");
+    v_libreria     = (java.lang.String)session.getAttribute("s_libreria");
+    v_tipopenaliza = (java.lang.String)session.getAttribute("s_penaliza");
+    v_cargo1       = (java.lang.String)session.getAttribute("s_cargo1");
+    v_cargo2       = (java.lang.String)session.getAttribute("s_cargo2");
+    v_cargo3       = (java.lang.String)session.getAttribute("s_cargo3");
+    v_cargo4       = (java.lang.String)session.getAttribute("s_cargo4");
+    //v_salrenneto   = (java.lang.String)session.getAttribute("s_salrenneto");
+    //v_salrenbruto  = (java.lang.String)session.getAttribute("s_salrenbruto");
+    double v_salrenneto2    = new Double((java.lang.String)session.getAttribute("s_salrenneto")).doubleValue();
+    double v_salrenbruto2   = new Double((java.lang.String)session.getAttribute("s_salrenbruto")).doubleValue();
+    //v_saldoneto    =(java.lang.String)session.getAttribute("s_saldisponeto");
+    //v_saldobruto   =(java.lang.String)session.getAttribute("s_saldispo");
+    //v_saldomfund   =(java.lang.String)session.getAttribute("s_saldomfund");
+    double v_saldoneto2     = new Double((java.lang.String)session.getAttribute("s_saldisponeto")).doubleValue();
+    double v_saldobruto2    = new Double((java.lang.String)session.getAttribute("s_saldispo")).doubleValue();
+    double v_saldomfund2    = new Double((java.lang.String)session.getAttribute("s_saldomfund")).doubleValue();
     /* Agregado por Marcela Ortiz Sandoval 
      * 2009/10/27
      * Inclusión del id del evento de Saro
@@ -400,8 +400,8 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
     /**Capturar el id del evento de Saro */
     try { 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         v_idsaro = request.getParameter("v_idsaro"); 
-    session.removeValue("v_idsaro");
-    session.putValue("v_idsaro",v_idsaro);
+    session.removeAttribute("v_idsaro");
+    session.setAttribute("v_idsaro",v_idsaro);
     
     /**Validar el id del evento de Saro */
     if (!v_idsaro.trim().equals("")){
@@ -424,8 +424,8 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
     } 
     catch (Exception e) { e.printStackTrace(); }
     
-    session.removeValue("s_contador");
-    session.putValue("s_contador",(java.lang.Object)new Integer(v_con).toString());
+    session.removeAttribute("s_contador");
+    session.setAttribute("s_contador",(java.lang.Object)new Integer(v_con).toString());
    /**Tomar naturaleza de retiro y declarar como variable de session*/
     try { v_naturaleza2 = request.getParameter("naturaleza"); } catch (Exception e) { e.printStackTrace(); }
     if(v_naturaleza2.equals("sin"))
@@ -434,8 +434,8 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
     }//5
     else
     {//5
-     session.removeValue("s_naturaleza");
-     session.putValue("s_naturaleza",(java.lang.Object)v_naturaleza2);
+     session.removeAttribute("s_naturaleza");
+     session.setAttribute("s_naturaleza",(java.lang.Object)v_naturaleza2);
     }//5
     /**Tomar respetar naturaleza y declarar como variable de session*/
     try { v_respetar = request.getParameter("respetar"); } catch (Exception e) { e.printStackTrace(); }
@@ -445,8 +445,8 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
     }//6
     else
     {//6
-     session.removeValue("s_respetar");
-     session.putValue("s_respetar",(java.lang.Object)v_respetar);
+     session.removeAttribute("s_respetar");
+     session.setAttribute("s_respetar",(java.lang.Object)v_respetar);
      }//6
      /**Tomar rmétodo orden y declarar como variable de session*/
      try { v_orden2 = request.getParameter("orden"); } catch (Exception e) { e.printStackTrace(); }
@@ -456,14 +456,14 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
      }//7
      else
      {//7
-      session.removeValue("s_orden");
-      session.putValue("s_orden",(java.lang.Object)v_orden2);
+      session.removeAttribute("s_orden");
+      session.setAttribute("s_orden",(java.lang.Object)v_orden2);
      }//7
      /**Indicador de actualizar esquema default*/
      try { v_actualizar = request.getParameter("v_actualizar"); } catch (Exception e) { e.printStackTrace(); }
      /**Declarar como variable de session*/
-     session.removeValue("s_actualizar");
-     session.putValue("s_actualizar",(java.lang.Object)v_actualizar);
+     session.removeAttribute("s_actualizar");
+     session.setAttribute("s_actualizar",(java.lang.Object)v_actualizar);
      /**Toma método beneficio y se declarar como variable de session*/
      try { v_beneficio = request.getParameter("beneficio"); } catch (Exception e) { e.printStackTrace(); }
      if(!v_beneficio.equals("sin"))
@@ -471,8 +471,8 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
       v_metben = v_beneficio.substring(1,7);
       v_ben    = v_beneficio.substring(0,1);
      }//8
-     session.removeValue("s_beneficio");
-     session.putValue("s_beneficio",(java.lang.Object)v_metben);
+     session.removeAttribute("s_beneficio");
+     session.setAttribute("s_beneficio",(java.lang.Object)v_metben);
      /**Toma método penalización y declarar como variable de session*/
      try { v_penalizacion = request.getParameter("penalizacion"); } catch (Exception e) { e.printStackTrace(); }
      if(!v_penalizacion.equals("sin"))
@@ -480,8 +480,8 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
       v_pen  =  v_penalizacion.substring(0,1);
       v_metpen =v_penalizacion.substring(1,7);
      }//9
-     session.removeValue("s_metpen");
-     session.putValue("s_metpen",(java.lang.Object)v_metpen);
+     session.removeAttribute("s_metpen");
+     session.setAttribute("s_metpen",(java.lang.Object)v_metpen);
      /**Tomar método cuenta y se declara como variable de session*/
      try { v_cuenta = request.getParameter("cuenta"); } catch (Exception e) { e.printStackTrace(); }
      if(!v_cuenta.equals("sin"))
@@ -489,8 +489,8 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
       v_metcue =v_cuenta.substring(1,7);
       v_cue  =  v_cuenta.substring(0,1);
      }
-     session.removeValue("s_cuencon");
-     session.putValue("s_cuencon",(java.lang.Object)v_metcue);
+     session.removeAttribute("s_cuencon");
+     session.setAttribute("s_cuencon",(java.lang.Object)v_metcue);
      /**Verificar seleccion esquema retiro*/
      if(v_beneficio.equals("sin"))
      {
@@ -596,11 +596,11 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
 /*@lineinfo:user-code*//*@lineinfo:377^146*/
       if(v_indvalesq == 0)
       {//11
-       //v_valor  =( java.lang.String)session.getValue("s_valor");
-       String v_valorret = ( java.lang.String)session.getValue("s_valor");
+       //v_valor  =( java.lang.String)session.getAttribute("s_valor");
+       String v_valorret = ( java.lang.String)session.getAttribute("s_valor");
        v_valor2 = new Double (v_valorret).doubleValue();
-       v_valuni = (java.lang.String)session.getValue("s_valuni");
-       v_tipov  =(java.lang.String)session.getValue("s_tipov");
+       v_valuni = (java.lang.String)session.getAttribute("s_valuni");
+       v_tipov  =(java.lang.String)session.getAttribute("s_tipov");
        
        v_valunidad = new Double(v_valuni).doubleValue();
         
@@ -645,7 +645,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
 //  ************************************************************
 
 /*@lineinfo:user-code*//*@lineinfo:397^88*/
-       session.putValue("s_contra_unif",v_contrato_unif);
+       session.setAttribute("s_contra_unif",v_contrato_unif);
        out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_producto+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
        out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nom+"  <b> Apellidos </b>"+v_ape+" </CENTER></font>");
        out.println("<br>");
@@ -1495,8 +1495,8 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
          /**Verificar que de los aportes sin informaciópn se toque o no los saldos*/
          if(v_nota)
          {
-          session.removeValue("s_nota");
-          session.putValue("s_nota","S");
+          session.removeAttribute("s_nota");
+          session.setAttribute("s_nota","S");
           out.println("<br>");
           out.println("<PRE>");
           out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
@@ -1508,8 +1508,8 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
          }
          else
          {
-          session.removeValue("s_nota");
-          session.putValue("s_nota","N");
+          session.removeAttribute("s_nota");
+          session.setAttribute("s_nota","N");
           out.println("<br>");
           out.println("<PRE>");
           out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");

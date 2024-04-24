@@ -13,7 +13,7 @@ import java.sql.Driver;
 import java.sql.Connection;
 import TBPKT_UTILIDADES.TBPKT_PLANTILLA.*;
 
-public class TBS_TIPO_CIERRE extends HttpServlet implements SingleThreadModel{
+public class TBS_TIPO_CIERRE extends HttpServlet{
   /**
    * Initialize global variables
    */

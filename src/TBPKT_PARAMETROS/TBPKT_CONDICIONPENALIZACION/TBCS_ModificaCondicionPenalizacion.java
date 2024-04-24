@@ -12,7 +12,7 @@ import org.owasp.validator.html.*; // INT20131108
 //Nombre de la clase que modificará la condición penalización
 import TBPKT_UTILIDADES.TBPKT_REFERENCIAS.TBCL_REFERENCIAS;// INT20131108
 
-public class TBCS_ModificaCondicionPenalizacion extends HttpServlet implements SingleThreadModel{
+public class TBCS_ModificaCondicionPenalizacion extends HttpServlet{
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
 private String v_nuevaCadena ="";

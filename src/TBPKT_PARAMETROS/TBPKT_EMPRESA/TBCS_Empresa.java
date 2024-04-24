@@ -13,7 +13,7 @@ import TBPKT_UTILIDADES.TBPKT_REFERENCIAS.TBCL_REFERENCIAS;// INT20131108
 
 
 //Nombre de la clase principal de administración de empresas
-public class TBCS_Empresa extends HttpServlet implements SingleThreadModel{
+public class TBCS_Empresa extends HttpServlet{
 private PrintWriter out;//Clase que se encarga de imprimir el código HTML
 private TBCL_Consulta v_Consulta;//Clase que se encarga de ejecutar las sentencias SQL
 private String v_nuevaCadena ="";

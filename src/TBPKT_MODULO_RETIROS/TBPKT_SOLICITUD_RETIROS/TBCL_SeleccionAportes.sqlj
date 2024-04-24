@@ -70,18 +70,18 @@ public class TBCL_SeleccionAportes extends HttpServlet {
            DefaultContext.setDefaultContext(ctx11);
            
        /**Verificar que las variables de session no expiren*/
-       if((java.lang.String)session.getValue("s_contrato") != null ||(java.lang.String)session.getValue("s_producto") != null)
+       if((java.lang.String)session.getAttribute("s_contrato") != null ||(java.lang.String)session.getAttribute("s_producto") != null)
        {                              
             /**Capturar variables de session*/
-            v_contra            = (java.lang.String)session.getValue("s_contrato");/**Tomar contrato*/
-            v_pro               = (java.lang.String)session.getValue("s_producto");/**Tomar producto*/  
-            v_nombre            = (java.lang.String)session.getValue("s_nombres");
-            v_apellidos         = (java.lang.String)session.getValue("s_apellidos");                
-            String v_fecefe     = (java.lang.String)session.getValue("s_fecefectiva");
-            String v_fecpro     = (java.lang.String)session.getValue("s_fecpro");
+            v_contra            = (java.lang.String)session.getAttribute("s_contrato");/**Tomar contrato*/
+            v_pro               = (java.lang.String)session.getAttribute("s_producto");/**Tomar producto*/  
+            v_nombre            = (java.lang.String)session.getAttribute("s_nombres");
+            v_apellidos         = (java.lang.String)session.getAttribute("s_apellidos");                
+            String v_fecefe     = (java.lang.String)session.getAttribute("s_fecefectiva");
+            String v_fecpro     = (java.lang.String)session.getAttribute("s_fecpro");
             monto_retiro = request.getParameter("obligatoriov_valor");   
-            v_prov_comi_total_AVA = Double.parseDouble(session.getValue("v_prov_comi_rend_AVA").toString()) + Double.parseDouble(session.getValue("v_prov_comi_capital_AVA").toString());    
-            v_prov_comi_total_AVE = Double.parseDouble(session.getValue("s_prov_comi_total_AVE").toString());   
+            v_prov_comi_total_AVA = Double.parseDouble(session.getAttribute("v_prov_comi_rend_AVA").toString()) + Double.parseDouble(session.getAttribute("v_prov_comi_capital_AVA").toString());    
+            v_prov_comi_total_AVE = Double.parseDouble(session.getAttribute("s_prov_comi_total_AVE").toString());   
             
             v_contra = String.valueOf(Integer.parseInt(v_contra));
             
@@ -109,9 +109,9 @@ public class TBCL_SeleccionAportes extends HttpServlet {
    //sJT_stTem.setString(7,Fecha400.format(FechaPantalla.parse(v_fecpro)).toString());
    //ACA DEBEMOS ENVIAR EL DE AVA O AVE
    if (v_concepto.equals("N"))                 
-       sJT_stTem.setDouble(7,calculodecimal(Double.parseDouble(session.getValue("v_valorunidad_AVA").toString()),6));
+       sJT_stTem.setDouble(7,calculodecimal(Double.parseDouble(session.getAttribute("v_valorunidad_AVA").toString()),6));
    else
-       sJT_stTem.setDouble(7,calculodecimal(Double.parseDouble(session.getValue("v_valorunidad_AVE").toString()),6));       
+       sJT_stTem.setDouble(7,calculodecimal(Double.parseDouble(session.getAttribute("v_valorunidad_AVE").toString()),6));       
    sJT_stTem.setDouble(8,1);
    sJT_ecTe.oracleExecuteUpdate();
    // retrieve OUT parameters
@@ -177,20 +177,20 @@ public class TBCL_SeleccionAportes extends HttpServlet {
           v_prov_comi_total_AVE = 0;   
           rend_prorrata = 1;              
           cap_prorrata = 0;
-          session.removeValue("v_prov_comi_rend");
-          session.putValue("v_prov_comi_rend",v_prov_comi_total_AVA);
-          session.removeValue("v_prov_comi_cap");
-          session.putValue("v_prov_comi_cap",0.0);
+          session.removeAttribute("v_prov_comi_rend");
+          session.setAttribute("v_prov_comi_rend",v_prov_comi_total_AVA);
+          session.removeAttribute("v_prov_comi_cap");
+          session.setAttribute("v_prov_comi_cap",0.0);
           v_prov_comi_cap = 0;
           v_prov_comi_rend = v_prov_comi_total_AVA;
           if (v_prov_comi_total_AVA>v_rendimientos_tot) {
                v_prov_comi_total_AVA = v_prov_comi_total_AVA-v_rendimientos_tot;               
                rend_prorrata = 0;               
                cap_prorrata = 1;               
-               session.removeValue("v_prov_comi_rend");
-               session.putValue("v_prov_comi_rend",0.0);
-               session.removeValue("v_prov_comi_cap");
-               session.putValue("v_prov_comi_cap",v_prov_comi_total_AVA);
+               session.removeAttribute("v_prov_comi_rend");
+               session.setAttribute("v_prov_comi_rend",0.0);
+               session.removeAttribute("v_prov_comi_cap");
+               session.setAttribute("v_prov_comi_cap",v_prov_comi_total_AVA);
                v_prov_comi_cap = v_prov_comi_total_AVA;
                v_prov_comi_rend = 0;
             }                      
@@ -200,20 +200,20 @@ public class TBCL_SeleccionAportes extends HttpServlet {
           v_prov_comi_total_AVA=0;
           rend_prorrata = 1;              
           cap_prorrata = 0;
-          session.removeValue("v_prov_comi_rend");
-          session.putValue("v_prov_comi_rend",v_prov_comi_total_AVE);
-          session.removeValue("v_prov_comi_cap");
-          session.putValue("v_prov_comi_cap",0.0);
+          session.removeAttribute("v_prov_comi_rend");
+          session.setAttribute("v_prov_comi_rend",v_prov_comi_total_AVE);
+          session.removeAttribute("v_prov_comi_cap");
+          session.setAttribute("v_prov_comi_cap",0.0);
           v_prov_comi_cap = 0;
           v_prov_comi_rend = v_prov_comi_total_AVE;
           if (v_prov_comi_total_AVE>v_rendimientos_tot) {
               v_prov_comi_total_AVE = v_prov_comi_total_AVE-v_rendimientos_tot;
               rend_prorrata = 0;              
               cap_prorrata = 1;
-              session.removeValue("v_prov_comi_rend");
-              session.putValue("v_prov_comi_rend",0.0);
-              session.removeValue("v_prov_comi_cap");
-              session.putValue("v_prov_comi_cap",v_prov_comi_total_AVE);
+              session.removeAttribute("v_prov_comi_rend");
+              session.setAttribute("v_prov_comi_rend",0.0);
+              session.removeAttribute("v_prov_comi_cap");
+              session.setAttribute("v_prov_comi_cap",v_prov_comi_total_AVE);
               v_prov_comi_cap = v_prov_comi_total_AVE;
               v_prov_comi_rend = 0;
             }          

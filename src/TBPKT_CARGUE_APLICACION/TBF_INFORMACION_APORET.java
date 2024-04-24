@@ -81,7 +81,7 @@ public class TBF_INFORMACION_APORET extends JFrame
  {
   this.invocar = invocar;
   this.invocar.setEnabled(false);
-  this.show();
+  this.setVisible(true);
  }
  //Mensajes de la ventana
  public void TBP_APORET (String v_aporte

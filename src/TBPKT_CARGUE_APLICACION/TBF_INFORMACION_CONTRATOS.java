@@ -81,7 +81,7 @@ public class TBF_INFORMACION_CONTRATOS extends JFrame
  {
   this.invocar = invocar;
   this.invocar.setEnabled(false);
-  this.show();
+  this.setVisible(true);
  }
  /*Mansajes de la ventana*/
  public void TBP_contrato (String v_contrato

@@ -4,7 +4,6 @@ import TBPKT_UTILIDADES.TBPKT_CONSULTA.TBCL_Consulta;
 
 import java.io.PrintWriter;
 
-import javax.servlet.SingleThreadModel;
 import javax.servlet.http.HttpServlet;
 import TBPKT_UTILIDADES.TBPKT_PLANTILLA.STBCL_GenerarBaseHTML;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
@@ -19,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-public class TBCS_ConsultaRetiro_Oblig extends HttpServlet implements SingleThreadModel{
+public class TBCS_ConsultaRetiro_Oblig extends HttpServlet{
     
     private PrintWriter out;
     private TBCL_Consulta v_Consulta;

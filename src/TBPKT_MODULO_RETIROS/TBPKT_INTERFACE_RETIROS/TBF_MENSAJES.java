@@ -37,7 +37,7 @@ public class TBF_MENSAJES extends JFrame {
   public void TBP_setModal(Frame invocar){
     this.invocar = invocar;
     this.invocar.setEnabled(false);
-    this.show();
+    this.setVisible(true);
   }
   //Inicializa los textos del frmae con las variables enviadas
   public void mensaje (String v_mensaje){

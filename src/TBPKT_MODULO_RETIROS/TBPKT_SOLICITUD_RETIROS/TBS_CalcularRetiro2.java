@@ -22,7 +22,7 @@ import co.oldmutual.taxbenefit.util.DataSourceWrapper;
 //import PKT_ACTUALIZA_APORTES.*;
 
 
-public class TBS_CalcularRetiro2 extends HttpServlet implements SingleThreadModel
+public class TBS_CalcularRetiro2 extends HttpServlet
 {
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
  {
@@ -70,53 +70,53 @@ procedimiento de la base de datos
    //se hace conexion a taxbenefit
    t_tax    =   DataSourceWrapper.getInstance().getConnection();
    
-   if((java.lang.String)session.getValue("s_valuni") != null)
+   if((java.lang.String)session.getAttribute("s_valuni") != null)
    {
-    if((java.lang.String)session.getValue("s_contrato") != null || (java.lang.String)session.getValue("s_producto") != null)
+    if((java.lang.String)session.getAttribute("s_contrato") != null || (java.lang.String)session.getAttribute("s_producto") != null)
     {
-     String v_pro = (java.lang.String)session.getValue("s_producto");
-     String v_contra = (java.lang.String)session.getValue("s_contrato");
+     String v_pro = (java.lang.String)session.getAttribute("s_producto");
+     String v_contra = (java.lang.String)session.getAttribute("s_contrato");
      
      /**Modificado 2009/10/27 Variable Id Saro*/
      try{
-       if((java.lang.String)session.getValue("v_idsaro")!= null){
-         v_idsaro = (java.lang.String)session.getValue("v_idsaro");
-         session.removeValue("v_idsaro");
-         session.putValue("v_idsaro",v_idsaro);
+       if((java.lang.String)session.getAttribute("v_idsaro")!= null){
+         v_idsaro = (java.lang.String)session.getAttribute("v_idsaro");
+         session.removeAttribute("v_idsaro");
+         session.setAttribute("v_idsaro",v_idsaro);
        }
      }catch (Exception e)  { e.printStackTrace(); }
      
      double v_conret = 0;
-     String v_fecpro =(java.lang.String)session.getValue("s_fecpro");
+     String v_fecpro =(java.lang.String)session.getAttribute("s_fecpro");
      //Date v_fecpro2 = v_fecpro2.valueOf(v_fecpro);
      java.sql.Date v_fecpro2 = new java.sql.Date(4);
      v_fecpro2 = java.sql.Date.valueOf(v_fecpro);
-     String v_fecefe = (java.lang.String)session.getValue("s_fecefectiva");
+     String v_fecefe = (java.lang.String)session.getAttribute("s_fecefectiva");
      //Date v_fecefe2 = v_fecefe2.valueOf(v_fecefe);
      java.sql.Date v_fecefe2 = new java.sql.Date(4);
      v_fecefe2 = java.sql.Date.valueOf(v_fecefe);
      String v_tranmulti = null;
-     String v_tipo = (java.lang.String)session.getValue("s_tipotran");
-     String v_clase =  (java.lang.String)session.getValue("s_clasetran");
+     String v_tipo = (java.lang.String)session.getAttribute("s_tipotran");
+     String v_clase =  (java.lang.String)session.getAttribute("s_clasetran");
      double v_valor2 = 0;
      String v_tipov ="STV002";
-     String v_valoruni2 =(java.lang.String)session.getValue("s_valuni");
+     String v_valoruni2 =(java.lang.String)session.getAttribute("s_valuni");
      double  v_valoruni = new Double(v_valoruni2).doubleValue();
-     String v_penalizar =(java.lang.String)session.getValue("s_penaliza");
-     String v_prorrata = (java.lang.String)session.getValue("s_fondo");
-     String v_usuariopipe =(java.lang.String)session.getValue("s_usuariopipe");
-     String v_tuni =(java.lang.String)session.getValue("s_unidadtax");
-     String  v_banco =(java.lang.String)session.getValue("s_banco");
+     String v_penalizar =(java.lang.String)session.getAttribute("s_penaliza");
+     String v_prorrata = (java.lang.String)session.getAttribute("s_fondo");
+     String v_usuariopipe =(java.lang.String)session.getAttribute("s_usuariopipe");
+     String v_tuni =(java.lang.String)session.getAttribute("s_unidadtax");
+     String  v_banco =(java.lang.String)session.getAttribute("s_banco");
 
-     String  v_numcuen =(java.lang.String)session.getValue("s_cuenta");
+     String  v_numcuen =(java.lang.String)session.getAttribute("s_cuenta");
 
-     String v_afp =(java.lang.String)session.getValue("s_afp");
-     String v_proti =(java.lang.String)session.getValue("s_proti");
-     String v_conti =(java.lang.String)session.getValue("s_conti");
-     String v_sistema = (java.lang.String)session.getValue("s_sistema");
-     String v_usumfund= (java.lang.String)session.getValue("s_usumfund");
-     String v_passmfund= (java.lang.String)session.getValue("s_passmfund");
-     String v_libreria = (java.lang.String)session.getValue("s_libreria");
+     String v_afp =(java.lang.String)session.getAttribute("s_afp");
+     String v_proti =(java.lang.String)session.getAttribute("s_proti");
+     String v_conti =(java.lang.String)session.getAttribute("s_conti");
+     String v_sistema = (java.lang.String)session.getAttribute("s_sistema");
+     String v_usumfund= (java.lang.String)session.getAttribute("s_usumfund");
+     String v_passmfund= (java.lang.String)session.getAttribute("s_passmfund");
+     String v_libreria = (java.lang.String)session.getAttribute("s_libreria");
      String v_bloqueo = "";
      //out.println("s_afp = "+ v_afp + "s_proti=" + v_proti + ",s_conti=" + v_conti + ",s_sistema=" + v_sistema + ",s_usumfund=" +v_usumfund+"s_passmfund="+v_passmfund+"s_libreria="+v_libreria);
 
@@ -311,14 +311,14 @@ AS 400
        String v_mensajeret =  l_stmt1.getString(36);
        l_stmt1.close();
         try {  
-              String v_esTercero =(java.lang.String)session.getValue("esTercero"); 
+              String v_esTercero =(java.lang.String)session.getAttribute("esTercero"); 
               String v_doc_ter="", v_tipodoc_ter="", v_nomb_terc="", v_apell_terc ="";
               if (v_esTercero.equals("S"))
               {
-                  try { v_doc_ter = (java.lang.String)session.getValue("v_doc_ter"); } catch (Exception e) { e.printStackTrace(); }
-                  try { v_tipodoc_ter = (java.lang.String)session.getValue("v_tipodoc_ter"); } catch (Exception e) { e.printStackTrace(); }
-                  try { v_nomb_terc = (java.lang.String)session.getValue("v_nomb_terc"); } catch (Exception e) { e.printStackTrace(); }
-                  try { v_apell_terc = (java.lang.String)session.getValue("v_apell_terc"); } catch (Exception e) { e.printStackTrace(); }
+                  try { v_doc_ter = (java.lang.String)session.getAttribute("v_doc_ter"); } catch (Exception e) { e.printStackTrace(); }
+                  try { v_tipodoc_ter = (java.lang.String)session.getAttribute("v_tipodoc_ter"); } catch (Exception e) { e.printStackTrace(); }
+                  try { v_nomb_terc = (java.lang.String)session.getAttribute("v_nomb_terc"); } catch (Exception e) { e.printStackTrace(); }
+                  try { v_apell_terc = (java.lang.String)session.getAttribute("v_apell_terc"); } catch (Exception e) { e.printStackTrace(); }
                   if ((!v_doc_ter.trim().equals("")&&
                        !v_tipodoc_ter.trim().equals("")&&
                        !v_apell_terc.trim().equals("")) &&
@@ -361,7 +361,7 @@ AS 400
            
        if(v_indiretiro == 0)
        {
-        session.removeValue("s_valuni");
+        session.removeAttribute("s_valuni");
         t_tax.commit();
         String v_pintar=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Solicitud de Retiro","","<center>Solicitud de Retiro "+v_conret+" realizada con exito.</center>",false);
         out.println(""+v_pintar+"");

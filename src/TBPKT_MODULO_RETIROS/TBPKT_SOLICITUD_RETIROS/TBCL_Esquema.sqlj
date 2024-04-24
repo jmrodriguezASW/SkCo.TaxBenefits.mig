@@ -101,60 +101,60 @@ public class TBCL_Esquema extends HttpServlet
    
    
    /**Verificar que las variables de session no expiren*/
-   if((java.lang.String)session.getValue("s_contrato") != null ||(java.lang.String)session.getValue("s_producto") != null)
+   if((java.lang.String)session.getAttribute("s_contrato") != null ||(java.lang.String)session.getAttribute("s_producto") != null)
    {
     /**Capturar variables de session*/
-    v_contra  = (java.lang.String)session.getValue("s_contrato");/**Tomar contrato*/
-    v_pro     = (java.lang.String)session.getValue("s_producto");/**Tomar producto*/
-    v_nom     = (java.lang.String)session.getValue("s_nombres");/**Tomar nombre del afiliado*/
-    v_ape     = (java.lang.String)session.getValue("s_apellidos");/**Tomar apellido del afiliado*/
-    v_reftipo = (java.lang.String)session.getValue("s_tipotran");//**Tomar tipo de transacción*/
-    v_refclase= (java.lang.String)session.getValue("s_clasetran");//**Tomar clase de transacción*/
-    v_fondo   =(java.lang.String)session.getValue("s_fondo");
+    v_contra  = (java.lang.String)session.getAttribute("s_contrato");/**Tomar contrato*/
+    v_pro     = (java.lang.String)session.getAttribute("s_producto");/**Tomar producto*/
+    v_nom     = (java.lang.String)session.getAttribute("s_nombres");/**Tomar nombre del afiliado*/
+    v_ape     = (java.lang.String)session.getAttribute("s_apellidos");/**Tomar apellido del afiliado*/
+    v_reftipo = (java.lang.String)session.getAttribute("s_tipotran");//**Tomar tipo de transacción*/
+    v_refclase= (java.lang.String)session.getAttribute("s_clasetran");//**Tomar clase de transacción*/
+    v_fondo   =(java.lang.String)session.getAttribute("s_fondo");
     
     /**Modificado 2009/10/27 Variable Id Saro*/
     try{
-      if((java.lang.String)session.getValue("v_idsaro")!= null){
-          v_idsaro = (java.lang.String)session.getValue("v_idsaro");
-          session.removeValue("v_idsaro");
-          session.putValue("v_idsaro",v_idsaro);
+      if((java.lang.String)session.getAttribute("v_idsaro")!= null){
+          v_idsaro = (java.lang.String)session.getAttribute("v_idsaro");
+          session.removeAttribute("v_idsaro");
+          session.setAttribute("v_idsaro",v_idsaro);
       }
     }catch (Exception e)  { e.printStackTrace(); }
     
     /**Capturar variables para giros a terceros */
     try {  
-          v_esTercero =(java.lang.String)session.getValue("esTercero"); 
-          session.putValue("esTercero",v_esTercero); 
+          v_esTercero =(java.lang.String)session.getAttribute("esTercero"); 
+          session.setAttribute("esTercero",v_esTercero); 
           if (v_esTercero.equals("S")){
-              try { v_doc_ter = (java.lang.String)session.getValue("v_doc_ter"); } catch (Exception e) { e.printStackTrace(); }
-              try { v_tipodoc_ter = (java.lang.String)session.getValue("v_tipodoc_ter"); } catch (Exception e) { e.printStackTrace(); }
-              try { v_nomb_terc = (java.lang.String)session.getValue("v_nomb_terc"); } catch (Exception e) { e.printStackTrace(); }
-              try { v_apell_terc = (java.lang.String)session.getValue("v_apell_terc"); } catch (Exception e) { e.printStackTrace(); }
+              try { v_doc_ter = (java.lang.String)session.getAttribute("v_doc_ter"); } catch (Exception e) { e.printStackTrace(); }
+              try { v_tipodoc_ter = (java.lang.String)session.getAttribute("v_tipodoc_ter"); } catch (Exception e) { e.printStackTrace(); }
+              try { v_nomb_terc = (java.lang.String)session.getAttribute("v_nomb_terc"); } catch (Exception e) { e.printStackTrace(); }
+              try { v_apell_terc = (java.lang.String)session.getAttribute("v_apell_terc"); } catch (Exception e) { e.printStackTrace(); }
               
                if ((!v_doc_ter.trim().equals("")&&!v_tipodoc_ter.trim().equals("")&&
                     !v_apell_terc.trim().equals(""))){
-                 session.removeValue("v_doc_ter");
-                 session.putValue("v_doc_ter",v_doc_ter);
-                 session.removeValue("v_tipodoc_ter");
-                 session.putValue("v_tipodoc_ter",v_tipodoc_ter);
-                 session.removeValue("v_nomb_terc");
-                 session.putValue("v_nomb_terc",v_nomb_terc);
-                 session.removeValue("v_apell_terc");
-                 session.putValue("v_apell_terc",v_apell_terc);
+                 session.removeAttribute("v_doc_ter");
+                 session.setAttribute("v_doc_ter",v_doc_ter);
+                 session.removeAttribute("v_tipodoc_ter");
+                 session.setAttribute("v_tipodoc_ter",v_tipodoc_ter);
+                 session.removeAttribute("v_nomb_terc");
+                 session.setAttribute("v_nomb_terc",v_nomb_terc);
+                 session.removeAttribute("v_apell_terc");
+                 session.setAttribute("v_apell_terc",v_apell_terc);
                }
           } 
      }catch (Exception e)  { e.printStackTrace(); }
     /**/
      
     /**Capturar esquema de retiro escogido*/
-     String v_valorret = ( java.lang.String)session.getValue("s_valor");
+     String v_valorret = ( java.lang.String)session.getAttribute("s_valor");
 
     try { v_esquema = request.getParameter("v_esquema"); } catch (Exception e) { e.printStackTrace(); }
     /**Capturar maximo fondos*/
     try { v_maximo2 = request.getParameter("v_maximo2"); } catch (Exception e) { e.printStackTrace(); }
     /**Variable de session maximo fondos*/
-    session.removeValue("s_maximo2");
-    session.putValue("s_maximo2",v_maximo2);
+    session.removeAttribute("s_maximo2");
+    session.setAttribute("s_maximo2",v_maximo2);
 
     /**Capturar valor retirado de cada fondo(distribución prorrata y valor)*/
     if(v_fondo.equals("1")||v_fondo.equals("0"))
@@ -170,18 +170,18 @@ public class TBCL_Esquema extends HttpServlet
                   WHERE REF_CODIGO = 'STC006'
           };
         if (v_cargomil>0) {
-        session.removeValue("s_valorcli"+i+"");
-        session.putValue("s_valorcli"+i+"",String.valueOf(Double.parseDouble(v_valorcli)/v_cargomil));
+        session.removeAttribute("s_valorcli"+i+"");
+        session.setAttribute("s_valorcli"+i+"",String.valueOf(Double.parseDouble(v_valorcli)/v_cargomil));
         }
         else {
-          session.removeValue("s_valorcli"+i+"");
-          session.putValue("s_valorcli"+i+"",v_valorcli);  
+          session.removeAttribute("s_valorcli"+i+"");
+          session.setAttribute("s_valorcli"+i+"",v_valorcli);  
         }
       }
       else
       {
-        session.removeValue("s_valorcli"+i+"");
-        session.putValue("s_valorcli"+i+"",v_valorcli);  
+        session.removeAttribute("s_valorcli"+i+"");
+        session.setAttribute("s_valorcli"+i+"",v_valorcli);  
       }
       
      }
@@ -194,8 +194,8 @@ public class TBCL_Esquema extends HttpServlet
       {
        try { v_porcencli = request.getParameter("porcen"+i); } catch (Exception e) { e.printStackTrace(); }
        /**Variable de session porcentaje retirado de cada fondo*/
-       session.removeValue("s_porcencli"+i+"");
-       session.putValue("s_porcencli"+i+"",v_porcencli);
+       session.removeAttribute("s_porcencli"+i+"");
+       session.setAttribute("s_porcencli"+i+"",v_porcencli);
       }
      }
     }

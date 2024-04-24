@@ -144,13 +144,13 @@ implements sqlj.runtime.NamedIterator
    /**Verificar que las variables de session no expiren*/
 
 
-   if((java.lang.String)session.getValue("s_contrato") != null ||(java.lang.String)session.getValue("s_producto")!= null)
+   if((java.lang.String)session.getAttribute("s_contrato") != null ||(java.lang.String)session.getAttribute("s_producto")!= null)
    {
     /**Capturar variables de session*/
-    v_contra     = (java.lang.String)session.getValue("s_contrato");/**Tomar contrato*/
-    v_pro        = (java.lang.String)session.getValue("s_producto");/**Tomar producto*/
-    v_tusu       =(java.lang.String)session.getValue("s_tipousu");/**Tomar Tipo de usuario*/
-    v_tuni       =(java.lang.String)session.getValue("s_unidad");/**Tomar unidad de proceso*/
+    v_contra     = (java.lang.String)session.getAttribute("s_contrato");/**Tomar contrato*/
+    v_pro        = (java.lang.String)session.getAttribute("s_producto");/**Tomar producto*/
+    v_tusu       =(java.lang.String)session.getAttribute("s_tipousu");/**Tomar Tipo de usuario*/
+    v_tuni       =(java.lang.String)session.getAttribute("s_unidad");/**Tomar unidad de proceso*/
 
     /*@lineinfo:generated-code*//*@lineinfo:74^5*/
 
@@ -214,8 +214,8 @@ implements sqlj.runtime.NamedIterator
 //  ************************************************************
 
 /*@lineinfo:user-code*//*@lineinfo:75^61*/
-    session.removeValue("s_unidad_proceso");
-    session.putValue("s_unidad_proceso",(java.lang.Object)v_coduni);
+    session.removeAttribute("s_unidad_proceso");
+    session.setAttribute("s_unidad_proceso",(java.lang.Object)v_coduni);
 
     if(!v_codusu.equals("XXXXXX"))
     {//if usuario
@@ -465,7 +465,7 @@ implements sqlj.runtime.NamedIterator
    }
 
     String v_fecha_eliminacion = v_fecha.toString();
-    session.putValue("s_fechaeliminacion", (java.lang.Object)v_fecha_eliminacion);
+    session.setAttribute("s_fechaeliminacion", (java.lang.Object)v_fecha_eliminacion);
 
     /**Seleccionar información de retiros no procesadas por multifund*/
     /*@lineinfo:generated-code*//*@lineinfo:152^5*/
@@ -525,11 +525,11 @@ implements sqlj.runtime.NamedIterator
      {
       v_nombre= v_retiro.CON_NOMBRES().trim();
 
-      session.removeValue("s_nombres");
-      session.putValue("s_nombres",(java.lang.Object)v_nombre);
+      session.removeAttribute("s_nombres");
+      session.setAttribute("s_nombres",(java.lang.Object)v_nombre);
       v_apellidos = v_retiro.CON_APELLIDOS().trim();
-      session.removeValue("s_apellidos");
-      session.putValue("s_apellidos",(java.lang.Object)v_apellidos);
+      session.removeAttribute("s_apellidos");
+      session.setAttribute("s_apellidos",(java.lang.Object)v_apellidos);
       /*Cambio para manejo de referencia unica 2009/03/30 MOS */
       String v_contrato_unif = "";
       /*@lineinfo:generated-code*//*@lineinfo:191^7*/

@@ -147,7 +147,7 @@ catch (Exception E)
     t_st.close();
     m.setModal2(this);
     m.mensaje("No se encuentra disponible la información para el cargue.");
-    m.show();
+    m.setVisible(true);
    }
    else if(v_contador > 1)
         {//si hay mas de un registro en la tabla de control, no se procede al cargue
@@ -155,7 +155,7 @@ catch (Exception E)
          t_st.close();
          m.setModal2(this);
          m.mensaje("Se encuentr más de un registro de control para el cargue.");
-         m.show();
+         m.setVisible(true);
         }
    //si esta cargada la información se procede a insertar
    if(v_control2.equals("Y"))
@@ -245,7 +245,7 @@ catch (Exception E)
      "Total de registros de retiros procesados "+v_retcon+" y total de registros no procesados "+v_retfal+"",
      "Total de registros de aportes-retiros procesados "+v_axpcon+" y total de registros no procesados "+v_axpfal+"",
      "Total de registros de penalización-retiro procesados "+v_pencon+" y total de registros no procesados "+v_penfal+"",v_menlog,"Borrado de información de la librería intermedia no realizado.");
-     f.show();
+     f.setVisible(true);
     }
     else
     {//si no pasa nada se procede a borrar la información
@@ -292,7 +292,7 @@ catch (Exception E)
       "Total de registros de retiros procesados "+v_retcon+" y total de registros no procesados "+v_retfal+"",
       "Total de registros de aportes-retiros procesados "+v_axpcon+" y total de registros no procesados "+v_axpfal+"",
       "Total de registros de penalización-retiro procesados "+v_pencon+" y total de registros no procesados "+v_penfal+"",v_menlog,"Borrado de información de la libreria intermedia realizado.");
-      f.show();
+      f.setVisible(true);
      }
     //}
    }
@@ -303,7 +303,7 @@ catch (Exception E)
     System.out.println("No se encuentra disponible la información para el cargue");
     m.setModal2(this);
     m.mensaje("No se encuentra disponible la información para el cargue.");
-    m.show();
+    m.setVisible(true);
    }
   }
   catch(Exception ex)
@@ -315,7 +315,7 @@ catch (Exception E)
     System.out.println("Error en el proceso "+ex);
     i_men.setModal2(this);
     i_men.mensaje("Mensaje de error "+ex);
-    i_men.show();
+    i_men.setVisible(true);
    }
    catch(Exception e) {}
 

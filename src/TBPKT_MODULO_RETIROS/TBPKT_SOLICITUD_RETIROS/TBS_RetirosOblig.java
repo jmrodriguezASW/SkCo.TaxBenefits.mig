@@ -8,13 +8,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
-import javax.servlet.SingleThreadModel;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class TBS_RetirosOblig extends HttpServlet implements SingleThreadModel {
+public class TBS_RetirosOblig extends HttpServlet {
      
      public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
   
@@ -47,30 +46,30 @@ public class TBS_RetirosOblig extends HttpServlet implements SingleThreadModel {
        v_tipousu = parametros[4];
        v_idworker = parametros[5];
     
-       session.removeValue("s_producto");
+       session.removeAttribute("s_producto");
        try
        {
-        session.putValue("s_producto",(java.lang.Object)v_producto);//parametros[1]);
+        session.setAttribute("s_producto",(java.lang.Object)v_producto);//parametros[1]);
        }
        catch (Exception e)
        {
         e.printStackTrace();
        }
-       session.removeValue("s_contrato");
+       session.removeAttribute("s_contrato");
       
        try
        {
-        session.putValue("s_contrato",(java.lang.Object)v_contrato);//parametros[0]);
+        session.setAttribute("s_contrato",(java.lang.Object)v_contrato);//parametros[0]);
        }
        catch (Exception e)
        {
         e.printStackTrace();
        }
-       session.removeValue("s_usuario");
+       session.removeAttribute("s_usuario");
       
        try
        {
-        session.putValue("s_usuariopipe",(java.lang.Object)v_usuario);//parametros[4]);
+        session.setAttribute("s_usuariopipe",(java.lang.Object)v_usuario);//parametros[4]);
        }
        catch (Exception e)
        {
@@ -79,7 +78,7 @@ public class TBS_RetirosOblig extends HttpServlet implements SingleThreadModel {
     
        try
        {
-        session.putValue("permiteCerrados",(java.lang.Object)permiteCerrados);
+        session.setAttribute("permiteCerrados",(java.lang.Object)permiteCerrados);
        }
        catch (Exception e)
        {

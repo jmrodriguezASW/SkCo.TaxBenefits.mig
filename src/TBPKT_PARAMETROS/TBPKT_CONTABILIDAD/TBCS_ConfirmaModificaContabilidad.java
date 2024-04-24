@@ -9,7 +9,7 @@ import TBPKT_UTILIDADES.TBPKT_PLANTILLA.GTBCL_GenerarBaseHTML;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 //Nombre de la clase que v_confirma la modificación de administración contable
-public class TBCS_ConfirmaModificaContabilidad extends HttpServlet implements SingleThreadModel{
+public class TBCS_ConfirmaModificaContabilidad extends HttpServlet{
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
 private String v_nuevaCadena ="";

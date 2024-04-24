@@ -14,7 +14,7 @@ import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
  * -cambiar distribución de fondos
  * -eliminar solicitud de retiro pendisnte de enviar a multifund
 */
-public class TBS_ModificarSolicitud extends HttpServlet implements SingleThreadModel
+public class TBS_ModificarSolicitud extends HttpServlet
 {
 
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -48,48 +48,48 @@ public class TBS_ModificarSolicitud extends HttpServlet implements SingleThreadM
    v_tipousu = parametros[4];
    v_idworker = parametros[5];
 
-   session.removeValue("s_producto");
+   session.removeAttribute("s_producto");
    try
    {
-    session.putValue("s_producto",v_producto);//request.getParameter("nom_producto"));
+    session.setAttribute("s_producto",v_producto);//request.getParameter("nom_producto"));
    }
    catch (Exception e)
    {
     e.printStackTrace();
    }
-   session.removeValue("s_contrato");
+   session.removeAttribute("s_contrato");
    try
    {
 
-    session.putValue("s_contrato",v_contrato);//request.getParameter("nom_contrato") );
+    session.setAttribute("s_contrato",v_contrato);//request.getParameter("nom_contrato") );
    }
    catch (Exception e)
    {
     e.printStackTrace();
    }
-   session.removeValue("s_usuario");
+   session.removeAttribute("s_usuario");
    try
    {
-    session.putValue("s_usuario",v_tipousu);//request.getParameter("nom_tipousuario") );
+    session.setAttribute("s_usuario",v_tipousu);//request.getParameter("nom_tipousuario") );
    }
    catch (Exception e)
    {
     e.printStackTrace();
    }
-   session.removeValue("s_unidad");
+   session.removeAttribute("s_unidad");
    try
    {
 
-    session.putValue("s_unidad",v_unidad);//request.getParameter("nom_unidad") );
+    session.setAttribute("s_unidad",v_unidad);//request.getParameter("nom_unidad") );
    }
    catch (Exception e)
    {
     e.printStackTrace();
    }
-   session.removeValue("s_usuariopipe");
+   session.removeAttribute("s_usuariopipe");
    try
    {
-    session.putValue("s_usuariopipe",v_usuario);//request.getParameter("nom_usuario") );
+    session.setAttribute("s_usuariopipe",v_usuario);//request.getParameter("nom_usuario") );
    }
    catch (Exception e)
    {

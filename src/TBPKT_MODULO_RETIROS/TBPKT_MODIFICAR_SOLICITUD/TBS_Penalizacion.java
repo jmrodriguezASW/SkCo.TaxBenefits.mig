@@ -7,7 +7,7 @@ import java.sql.*;
 import TBPKT_UTILIDADES.TBPKT_PLANTILLA.*;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 /*clase que maneja la opcion escogida por el usuario, para modificar solicitud de retiro*/
-public class TBS_Penalizacion extends HttpServlet implements SingleThreadModel
+public class TBS_Penalizacion extends HttpServlet
 {
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
  {
@@ -47,8 +47,8 @@ public class TBS_Penalizacion extends HttpServlet implements SingleThreadModel
    try { v_conret= request.getParameter("v_conret");}
    catch (Exception e){e.printStackTrace(); }
    //se coloca consecutivo de la solicitud de retiro como variable de session
-   session.removeValue("s_conret");
-   session.putValue("s_conret",(java.lang.Object)v_conret);
+   session.removeAttribute("s_conret");
+   session.setAttribute("s_conret",(java.lang.Object)v_conret);
    //se toma opcion escogida por el cliente
    try {v_modificar= request.getParameter("v_modificar");}
    catch (Exception e){ e.printStackTrace();}

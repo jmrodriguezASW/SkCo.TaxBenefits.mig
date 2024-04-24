@@ -9,7 +9,7 @@ import TBPKT_UTILIDADES.TBPKT_PLANTILLA.STBCL_GenerarBaseHTML;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 //Este servlet carga los datos del producto con sus datos de condiciones de penalizacion
-public class TBCS_CargaProductoCondicion extends HttpServlet implements SingleThreadModel
+public class TBCS_CargaProductoCondicion extends HttpServlet
 {
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;

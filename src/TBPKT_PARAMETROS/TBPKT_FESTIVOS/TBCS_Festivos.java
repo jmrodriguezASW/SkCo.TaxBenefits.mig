@@ -11,7 +11,7 @@ import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 
 //Nombre de la clase principal de festivos
-public class TBCS_Festivos extends HttpServlet implements SingleThreadModel{
+public class TBCS_Festivos extends HttpServlet{
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
 private String v_nuevaCadena;

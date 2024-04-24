@@ -9,7 +9,7 @@ import TBPKT_UTILIDADES.TBPKT_PLANTILLA.GTBCL_GenerarBaseHTML;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 //Nombre de la clase que se encarga de eliminar la contabilidad
-public class TBCS_EliminaContabilidad extends HttpServlet implements SingleThreadModel{
+public class TBCS_EliminaContabilidad extends HttpServlet{
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
 private String v_nuevaCadena ="";

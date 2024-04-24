@@ -10,7 +10,7 @@ import TBPKT_UTILIDADES.TBPKT_CONSULTA.TBCL_Consulta;
 import TBPKT_UTILIDADES.TBPKT_PLANTILLA.STBCL_GenerarBaseHTML;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
-public class TBCS_ConfirmaModificaUnidadCierre extends HttpServlet implements SingleThreadModel{
+public class TBCS_ConfirmaModificaUnidadCierre extends HttpServlet{
 private PrintWriter out;//Clase que se encarga de imprimir el código HTML
 private TBCL_Consulta v_Consulta;//Clase que se encarga de manejar las declaraciones
 private String v_nuevaCadena ="";

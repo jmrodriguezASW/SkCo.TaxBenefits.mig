@@ -10,7 +10,7 @@ import TBPKT_UTILIDADES.TBPKT_PLANTILLA.STBCL_GenerarBaseHTML;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 //Nombre de la clase
-public class TBCS_ACEMUnidadCierre extends HttpServlet implements SingleThreadModel{
+public class TBCS_ACEMUnidadCierre extends HttpServlet{
 private PrintWriter out;//Me permite mostrar el código HTML
 private TBCL_Consulta v_Consulta;// Clase que se encargará de las Consultas, cerrar y abrir la conexión con la Base de datos
 private String v_nuevaCadena ="";

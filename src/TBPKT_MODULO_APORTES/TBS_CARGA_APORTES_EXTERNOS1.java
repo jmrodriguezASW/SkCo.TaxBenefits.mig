@@ -17,7 +17,7 @@ import java.lang.Math;
 *definitiva de APORTES EN TAX
 */
 
-public class TBS_CARGA_APORTES_EXTERNOS1 extends HttpServlet implements SingleThreadModel
+public class TBS_CARGA_APORTES_EXTERNOS1 extends HttpServlet
 {
 //----------------------------------------------------------------------------------------------------
 public void init(ServletConfig config) throws ServletException

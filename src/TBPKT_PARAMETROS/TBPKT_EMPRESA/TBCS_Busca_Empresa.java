@@ -7,7 +7,7 @@ import java.util.*;
 import TBPKT_UTILIDADES.TBPKT_PLANTILLA.STBCL_GenerarBaseHTML;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
-public class TBCS_Busca_Empresa extends HttpServlet implements SingleThreadModel{
+public class TBCS_Busca_Empresa extends HttpServlet{
 private PrintWriter out;//Clase que se encarga de imprimir el código HTML
 private String v_nuevaCadena ="";
 

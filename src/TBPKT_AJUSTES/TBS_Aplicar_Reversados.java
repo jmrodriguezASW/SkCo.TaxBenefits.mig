@@ -39,7 +39,7 @@ import oracle.sql.*;
 * @return   ninguno
 */
 
-public class TBS_Aplicar_Reversados extends HttpServlet implements SingleThreadModel
+public class TBS_Aplicar_Reversados extends HttpServlet
 {
   //DEFINICIONES INICIALES
   TBCL_LoadPage i_LP;
@@ -107,7 +107,7 @@ public void init(ServletConfig config) throws ServletException
     TBPL_CleanSession();
     if(!cod_producto.equals("") && !num_contrato.equals(""))
     {
-         if(sess.getValue("NOMBAPEL")==null)
+         if(sess.getAttribute("NOMBAPEL")==null)
           {
             //SI loS NOMBRES SON NULOS tomarlos de la base de datos
             TBPBD_ContrNomApel();
@@ -115,13 +115,13 @@ public void init(ServletConfig config) throws ServletException
          else
           {
             //si estan validos solo tomarlos
-            v_nombApel = (String)sess.getValue("NOMBAPEL");
+            v_nombApel = (String)sess.getAttribute("NOMBAPEL");
           }
          if(request.getParameter("obligatorio_razon")==null)
           {
 
             //si la razon es nula dibujo la página de salida #1
-            sess.removeValue("VALRETREV");
+            sess.removeAttribute("VALRETREV");
 
             TBPL_BuildPage1();
           }
@@ -184,10 +184,10 @@ public void init(ServletConfig config) throws ServletException
 */
   private void TBPL_CleanSession()
   {
-    if(sess.getValue("NOMBAPEL")!=null)      sess.removeValue("NOMBAPEL");
-    if(sess.getValue("KEYS")!=null)          sess.removeValue("KEYS");
-    //if(sess.getValue("VALRETREV")!=null)     sess.removeValue("VALRETREV");
-    if(sess.getValue("MODIFICADOREV")!=null) sess.removeValue("MODIFICADOREV");
+    if(sess.getAttribute("NOMBAPEL")!=null)      sess.removeAttribute("NOMBAPEL");
+    if(sess.getAttribute("KEYS")!=null)          sess.removeAttribute("KEYS");
+    //if(sess.getAttribute("VALRETREV")!=null)     sess.removeAttribute("VALRETREV");
+    if(sess.getAttribute("MODIFICADOREV")!=null) sess.removeAttribute("MODIFICADOREV");
   
 
   }
@@ -219,8 +219,8 @@ private boolean TBPBD_findRev()
     }
    else
     {
-     sess.removeValue("VALRETREV");
-     sess.putValue("VALRETREV",valores);//colocar la información en una variable de sessión
+     sess.removeAttribute("VALRETREV");
+     sess.setAttribute ("VALRETREV",valores);//colocar la información en una variable de sessión
      TBPL_showRev(valores);
      return true;
     }
@@ -286,19 +286,19 @@ private boolean TBPBD_findRev()
     out.println("<tr bgColor=white borderColor=silver ><td align='center' class=\"td11\" style='border: thin solid'><font face='Verdana' size='1' color='FFFFFF'><strong>Trans. Tax.</strong></font></td><td align='center' class=\"td11\" style='border: thin solid'><font face='Verdana' size='1' color='FFFFFF'><strong>Trans.<br>MF</strong></font></td><td align='center' class=\"td11\"  style='border: thin solid'><font face='Verdana' size='1' color='FFFFFF'><strong><center>&nbsp;&nbsp;&nbsp;&nbsp;Fecha&nbsp;&nbsp;&nbsp;&nbsp;Efectiva&nbsp;&nbsp;&nbsp;&nbsp;</center></strong></font></td><td align='center' class=\"td11\"  style='border: thin solid'><font face='Verdana' size='1' color='FFFFFF'><strong><center>&nbsp;&nbsp;&nbsp;&nbsp;Fecha&nbsp;&nbsp;&nbsp;&nbsp;Proceso&nbsp;&nbsp;&nbsp;&nbsp;</center></strong></font></td>");
     out.println("<td align='center'  class=\"td11\" style='border: thin solid'><font face='Verdana' size='1' color='FFFFFF'><strong>Valor</strong></font></td><td align='center'  class=\"td11\" style='border: thin solid'><font face='Verdana' size='1' color='FFFFFF'><strong><center>&nbsp;&nbsp;&nbsp;&nbsp;Ajustar&nbsp;&nbsp;&nbsp;&nbsp;a&nbsp;&nbsp;&nbsp;&nbsp;Fecha&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</center></strong></font></td><td align='center'  class=\"td11\" style='border: thin solid'><font face='Verdana' size='1' color='FFFFFF'><strong>Aplicar</strong></font></td></tr>");
     //tomar la información de los retiros reversados de la variable de session si existe o va a la BD.
-    if(sess.getValue("VALRETREV")!=null && sess.getValue("MODIFICADOREV")==null)
+    if(sess.getAttribute("VALRETREV")!=null && sess.getAttribute("MODIFICADOREV")==null)
     {
 
-      TBPL_showRev((String)sess.getValue("VALRETREV"));//mostrar los retiros reversados
+      TBPL_showRev((String)sess.getAttribute("VALRETREV"));//mostrar los retiros reversados
       botonExe = true;
       no_entro = false;
     }
     else
     {
 
-     //if(sess.getValue("MODIFICADOREV")!=null)
-     sess.removeValue("MODIFICADOREV");
-     sess.removeValue("VALRETREV");
+     //if(sess.getAttribute("MODIFICADOREV")!=null)
+     sess.removeAttribute("MODIFICADOREV");
+     sess.removeAttribute("VALRETREV");
      if(TBPBD_findRev())//buscar en la BD.
       {
        no_entro = false;
@@ -411,9 +411,9 @@ try
     v_hoy                        = hoy_date.toString();
     java.sql.Date hoy = new java.sql.Date(4);/**Fecha de proceso del retiro*/
 
-    String v_codusu      = (java.lang.String)sess.getValue("s_codigotipousuario");
-    String v_coduni      = (java.lang.String)sess.getValue("s_codigounidad");
-    String v_usuariopipeline = (java.lang.String)sess.getValue("s_usuariopipeline");
+    String v_codusu      = (java.lang.String)sess.getAttribute("s_codigotipousuario");
+    String v_coduni      = (java.lang.String)sess.getAttribute("s_codigounidad");
+    String v_usuariopipeline = (java.lang.String)sess.getAttribute("s_usuariopipeline");
     String v_tipocierre  = "";
     String v_hora        ="";
     String v_horacierre  = "";
@@ -508,9 +508,9 @@ try
 
      //fin calculo fecha actual
     //captura de cadena de parametros
-    if((String)sess.getValue("VALRETREV")!=null)
+    if((String)sess.getAttribute("VALRETREV")!=null)
     {
-      v_parametros = (String)sess.getValue("VALRETREV");
+      v_parametros = (String)sess.getAttribute("VALRETREV");
       v_razon      = request.getParameter("obligatorio_razon");
       if(v_razon.length()>100) v_razon = v_razon.substring(0,100);
     }
@@ -906,8 +906,8 @@ try
       }//if(accion.equalsIgnoreCase("Y"))
 
     }//while true
-sess.removeValue("MODIFICADOREV");
-sess.putValue("MODIFICADOREV","YES");
+sess.removeAttribute("MODIFICADOREV");
+sess.setAttribute("MODIFICADOREV","YES");
 return true;
  }
  catch(Exception ex)
@@ -963,8 +963,8 @@ return true;
    {
     TBCL_HTML nombres = new TBCL_HTML();
     v_nombApel = nombres.TBPL_Nombres(cod_producto,num_contrato);
-    sess.removeValue("NOMBAPEL");
-    sess.putValue("NOMBAPEL",v_nombApel);
+    sess.removeAttribute("NOMBAPEL");
+    sess.setAttribute("NOMBAPEL",v_nombApel);
    }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
   public String getServletInfo()

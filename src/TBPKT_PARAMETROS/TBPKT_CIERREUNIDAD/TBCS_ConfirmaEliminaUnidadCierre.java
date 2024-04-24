@@ -11,7 +11,7 @@ import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 
 //Nombre  de la clase
-public class TBCS_ConfirmaEliminaUnidadCierre extends HttpServlet implements SingleThreadModel{
+public class TBCS_ConfirmaEliminaUnidadCierre extends HttpServlet{
 private PrintWriter out;//Clase que se encarga de imprimir el código HTML
 private TBCL_Consulta v_Consulta;//Clase que se encarga de las Consultas
 private String v_nuevaCadena ="";

@@ -82,12 +82,12 @@ public class TBS_DecisionRetiro extends HttpServlet {
     i_sqlj=new SQL_DAJUSTE();
 
     sess=request.getSession(true);
-    cod_producto = (String) sess.getValue("PRODUCTO");
-    num_contrato = (String) sess.getValue("CONTRATO");
+    cod_producto = (String) sess.getAttribute("PRODUCTO");
+    num_contrato = (String) sess.getAttribute("CONTRATO");
     if(!producto.equals(cod_producto) || !contrato.equals(num_contrato)){
       TBPL_CleanSession();
-      sess.putValue("PRODUCTO", producto);
-      sess.putValue("CONTRATO", contrato);
+      sess.setAttribute("PRODUCTO", producto);
+      sess.setAttribute("CONTRATO", contrato);
       cod_producto = producto;
       num_contrato = contrato;
     }
@@ -100,12 +100,12 @@ public class TBS_DecisionRetiro extends HttpServlet {
       if(i_sqlj.TBPBD_ConexionBD())
       {//conexión con la BD
 
-        if(sess.getValue("NOMBAPEL")==null)
+        if(sess.getAttribute("NOMBAPEL")==null)
         {//tomar nombres y apellidos
 
             TBPBD_ContrNomApel();
         }else
-          v_nombApel=(String)sess.getValue("NOMBAPEL");
+          v_nombApel=(String)sess.getAttribute("NOMBAPEL");
 
         //tomar parametros de las decisones del cliente por cada consecutivo del ajuste
         if(TBPL_takeParameter2() && request.getParameter("only")==null)
@@ -137,20 +137,20 @@ public class TBS_DecisionRetiro extends HttpServlet {
 
 ///////////////////////Limpia Variables de Session que hay en memoria///////////////////////////////////
   private void TBPL_CleanSession(){
-    if(sess.getValue("NOMBAPEL")!=null)
-      sess.removeValue("NOMBAPEL");
-    if(sess.getValue("KEYS")!=null)
-      sess.removeValue("KEYS");
-    if(sess.getValue("VALRETDEC")!=null)
-      sess.removeValue("VALRETDEC");
-    if(sess.getValue("MODIFICADODEC")!=null)
-      sess.removeValue("MODIFICADODEC");
-    if(sess.getValue("CONSECU")!=null)
-      sess.removeValue("CONSECU");
-    if(sess.getValue("PRODUCTO")!=null)
-      sess.removeValue("PRODUCTO");
-    if(sess.getValue("CONTRATO")!=null)
-      sess.removeValue("CONTRATO");
+    if(sess.getAttribute("NOMBAPEL")!=null)
+      sess.removeAttribute("NOMBAPEL");
+    if(sess.getAttribute("KEYS")!=null)
+      sess.removeAttribute("KEYS");
+    if(sess.getAttribute("VALRETDEC")!=null)
+      sess.removeAttribute("VALRETDEC");
+    if(sess.getAttribute("MODIFICADODEC")!=null)
+      sess.removeAttribute("MODIFICADODEC");
+    if(sess.getAttribute("CONSECU")!=null)
+      sess.removeAttribute("CONSECU");
+    if(sess.getAttribute("PRODUCTO")!=null)
+      sess.removeAttribute("PRODUCTO");
+    if(sess.getAttribute("CONTRATO")!=null)
+      sess.removeAttribute("CONTRATO");
   }
 
 ////////////construccion de la página de salida para la toma de decisiones de cada uno//////
@@ -174,13 +174,13 @@ public class TBS_DecisionRetiro extends HttpServlet {
     //tomar la información de los ajustes sin acción de la variable de session si existe o
     //va a la BD.
 
-    if(sess.getValue("VALRETDEC")!=null && sess.getValue("MODIFICADODEC")==null){
-      TBPL_showDec((String)sess.getValue("VALRETDEC"),(String)sess.getValue("CONSECU"));
+    if(sess.getAttribute("VALRETDEC")!=null && sess.getAttribute("MODIFICADODEC")==null){
+      TBPL_showDec((String)sess.getAttribute("VALRETDEC"),(String)sess.getAttribute("CONSECU"));
       botonExe=true;
     }
     else{
-     if(sess.getValue("MODIFICADODEC")!=null)
-       sess.removeValue("MODIFICADODEC");
+     if(sess.getAttribute("MODIFICADODEC")!=null)
+       sess.removeAttribute("MODIFICADODEC");
      if(TBPBD_findDec())
        botonExe=true;
     }
@@ -209,8 +209,8 @@ public class TBS_DecisionRetiro extends HttpServlet {
       i_LP.TBPL_scriptMsgErr(out,"No existen retiros a ajustar "+valores[0]);
       return false;
     }else{
-      sess.putValue("VALRETDEC",valores[0]);//información por cada consecutivo con sus lineas
-      sess.putValue("CONSECU",valores[1]);//valores de los consecutivos sin acción
+      sess.setAttribute("VALRETDEC",valores[0]);//información por cada consecutivo con sus lineas
+      sess.setAttribute("CONSECU",valores[1]);//valores de los consecutivos sin acción
 
       TBPL_showDec(valores[0],valores[1]);//mostrar la información
       return true;
@@ -239,10 +239,10 @@ public class TBS_DecisionRetiro extends HttpServlet {
     v_msg = "";
     v_Ajustados = "";
     v_ejecutar = false;
-    if(sess.getValue("VALRETDEC")==null && sess.getValue("CONSECU")==null)
+    if(sess.getAttribute("VALRETDEC")==null && sess.getAttribute("CONSECU")==null)
       return false;
-    String valores = (String) sess.getValue("VALRETDEC");
-    String consec = (String) sess.getValue("CONSECU");
+    String valores = (String) sess.getAttribute("VALRETDEC");
+    String consec = (String) sess.getAttribute("CONSECU");
     int ii = 1, linea;
     String consecAjus = "";
     String v_ii = "";
@@ -355,10 +355,10 @@ public class TBS_DecisionRetiro extends HttpServlet {
     if(save){
       if(i_sqlj.TBPBD_Commit())
       {//realizar cambios
-        //if(sess.getValue("VALRETDEC")!=null)
-        sess.removeValue("CONSECU");
-        sess.removeValue("VALRETDEC");
-        sess.putValue("MODIFICADODEC","YES");
+        //if(sess.getAttribute("VALRETDEC")!=null)
+        sess.removeAttribute("CONSECU");
+        sess.removeAttribute("VALRETDEC");
+        sess.setAttribute("MODIFICADODEC","YES");
         return true;
       }
       else
@@ -395,7 +395,7 @@ public class TBS_DecisionRetiro extends HttpServlet {
     String valCadena[]=new String[2];
     valCadena=i_sqlj.TBPBD_ContratoNomApel(cod_producto,num_contrato);
     v_nombApel=valCadena[0];
-    sess.putValue("NOMBAPEL",v_nombApel);
+    sess.setAttribute("NOMBAPEL",v_nombApel);
   }
 
   /**

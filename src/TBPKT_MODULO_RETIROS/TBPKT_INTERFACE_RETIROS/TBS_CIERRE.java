@@ -8,7 +8,7 @@ import TBPKT_UTILIDADES.TBPKT_PLANTILLA.*;
 import TBPKT_UTILIDADES.TBPKT_CONEXIONBASEDATOS.*;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
-public class TBS_CIERRE extends HttpServlet implements SingleThreadModel{
+public class TBS_CIERRE extends HttpServlet{
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
   }
@@ -43,7 +43,7 @@ public class TBS_CIERRE extends HttpServlet implements SingleThreadModel{
       HttpSession session = request.getSession(true);
       if( session == null)
         session = request.getSession(true);
-      session.putValue("s_cierre","2");
+      session.setAttribute("s_cierre","2");
       icierre.TBP_CIERRE_T(out, session);
       out.close();
     }

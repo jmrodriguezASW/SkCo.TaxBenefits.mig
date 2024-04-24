@@ -11,7 +11,7 @@ import TBPKT_UTILIDADES.TBPKT_CONSULTA.TBCL_Consulta;
 import TBPKT_UTILIDADES.TBPKT_PLANTILLA.STBCL_GenerarBaseHTMLII;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
-public class TBCS_Ingresos_Oblig extends HttpServlet implements SingleThreadModel{
+public class TBCS_Ingresos_Oblig extends HttpServlet{
     
     private PrintWriter out;
     private TBCL_Consulta v_Consulta;

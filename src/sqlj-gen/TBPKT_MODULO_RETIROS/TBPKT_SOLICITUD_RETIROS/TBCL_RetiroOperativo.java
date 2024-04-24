@@ -339,25 +339,25 @@ procedimiento de la base de datos
    /*Fin codigo agregado*/  
    
    /**Verificar que las variables de session no expiren*/
-   if((java.lang.String)session.getValue("s_contrato") != null || (java.lang.String)session.getValue("s_producto")!= null)
+   if((java.lang.String)session.getAttribute("s_contrato") != null || (java.lang.String)session.getAttribute("s_producto")!= null)
    {
     /**Capturar variables de session*/
-    v_nombre    = (java.lang.String)session.getValue("s_nombres");
-    v_apellidos = (java.lang.String)session.getValue("s_apellidos");
-    v_contra    = (java.lang.String)session.getValue("s_contrato");
-    v_pro       = (java.lang.String)session.getValue("s_producto");
-    v_fecefe    = (java.lang.String)session.getValue("s_fecefectiva");
-    v_fecpro    = (java.lang.String)session.getValue("s_fecpro");
-    v_valmin    = new Double((java.lang.String)session.getValue("s_valmin")).doubleValue();
-    v_sistema   = (java.lang.String)session.getValue("s_sistema");
-    v_usumfund  = (java.lang.String)session.getValue("s_usumfund");
-    v_passmfund = (java.lang.String)session.getValue("s_passmfund");
-    v_libreria  = (java.lang.String)session.getValue("s_libreria");
+    v_nombre    = (java.lang.String)session.getAttribute("s_nombres");
+    v_apellidos = (java.lang.String)session.getAttribute("s_apellidos");
+    v_contra    = (java.lang.String)session.getAttribute("s_contrato");
+    v_pro       = (java.lang.String)session.getAttribute("s_producto");
+    v_fecefe    = (java.lang.String)session.getAttribute("s_fecefectiva");
+    v_fecpro    = (java.lang.String)session.getAttribute("s_fecpro");
+    v_valmin    = new Double((java.lang.String)session.getAttribute("s_valmin")).doubleValue();
+    v_sistema   = (java.lang.String)session.getAttribute("s_sistema");
+    v_usumfund  = (java.lang.String)session.getAttribute("s_usumfund");
+    v_passmfund = (java.lang.String)session.getAttribute("s_passmfund");
+    v_libreria  = (java.lang.String)session.getAttribute("s_libreria");
     /* Agregado por Marcela Ortiz Sandoval 
      * 30/08/2007
      * Incluye parametros para manejo de contratos corporativos */
-    montoMinRetiro = (java.lang.String)session.getValue("montoMinRetiro");
-    saldoMinRetiro = (java.lang.String)session.getValue("saldoMinRetiro");
+    montoMinRetiro = (java.lang.String)session.getAttribute("montoMinRetiro");
+    saldoMinRetiro = (java.lang.String)session.getAttribute("saldoMinRetiro");
     double montoMinimo = 0;
     double saldoMinimo = 0;
     if(montoMinRetiro!=null && montoMinRetiro.length()>0){
@@ -457,15 +457,15 @@ procedimiento de la base de datos
 /*@lineinfo:user-code*//*@lineinfo:260^12*/
       
            v_fecpro = v_fecefe;
-           session.removeValue("s_fecpro");
-           session.putValue("s_fecpro", v_fecefe);
+           session.removeAttribute("s_fecpro");
+           session.setAttribute("s_fecpro", v_fecefe);
      }
      else if(v_calfec > 0)/**Fecha efectiva backdate*/
           {
            v_efe=i_fecha.TBFL_Fecha(v_fecefe);
            v_fecpro = v_fecha_actual;
-           session.removeValue("s_fecpro");
-           session.putValue("s_fecpro", v_fecpro);
+           session.removeAttribute("s_fecpro");
+           session.setAttribute("s_fecpro", v_fecpro);
           }
      /**Consultar tiempo del contrato*/
      /*@lineinfo:generated-code*//*@lineinfo:274^6*/
@@ -502,8 +502,8 @@ procedimiento de la base de datos
      while(v_contrato.next())
      {
       v_cum2 = new Double(v_contrato.v_fechacontrato()).toString();
-      session.removeValue("s_cumes");
-      session.putValue("s_cumes",(java.lang.Object)v_cum2);
+      session.removeAttribute("s_cumes");
+      session.setAttribute("s_cumes",(java.lang.Object)v_cum2);
      }
      v_contrato.close();
 
@@ -550,8 +550,8 @@ procedimiento de la base de datos
      if(v_penaliza.equals("N"))
      {
       /**Variable de session de penalización del retiro*/
-      session.removeValue("s_penaliza");
-      session.putValue("s_penaliza",v_penaliza);
+      session.removeAttribute("s_penaliza");
+      session.setAttribute("s_penaliza",v_penaliza);
       v_penalizarretiro = v_penaliza;
      }
      else
@@ -565,33 +565,33 @@ procedimiento de la base de datos
       if(v_enconpenaliza)
       {
        /**Variable de session de penalización del retiro*/
-       session.removeValue("s_penaliza");
-       session.putValue("s_penaliza","S");
+       session.removeAttribute("s_penaliza");
+       session.setAttribute("s_penaliza","S");
        v_penalizarretiro = "S";
       }
       else /**Si el contrato es NO penalizado*/
       {
        /**Variable de session de penalización del retiro*/
-       session.removeValue("s_penaliza");
-       session.putValue("s_penaliza","N");
+       session.removeAttribute("s_penaliza");
+       session.setAttribute("s_penaliza","N");
        v_penalizarretiro = "N";
       }
      }
      /**Variable de session concepto de transaccion*/
-     session.removeValue("s_tipotran");
-     session.removeValue("s_clasetran");
-     session.removeValue("s_diasmenor");
-     session.removeValue("s_diasmayor");
-     session.removeValue("s_conceptopenalizar");
-     session.removeValue("s_traslado");
-     session.removeValue("s_total");
-     session.putValue("s_tipotran",v_tipotran);
-     session.putValue("s_clasetran",v_clasetran);
-     session.putValue("s_diasmenor",v_diasmenor);
-     session.putValue("s_diasmayor",v_diasmayor);
-     session.putValue("s_conceptopenalizar",v_penaliza);
-     session.putValue("s_traslado",v_traslado);
-     session.putValue("s_total",v_total);
+     session.removeAttribute("s_tipotran");
+     session.removeAttribute("s_clasetran");
+     session.removeAttribute("s_diasmenor");
+     session.removeAttribute("s_diasmayor");
+     session.removeAttribute("s_conceptopenalizar");
+     session.removeAttribute("s_traslado");
+     session.removeAttribute("s_total");
+     session.setAttribute("s_tipotran",v_tipotran);
+     session.setAttribute("s_clasetran",v_clasetran);
+     session.setAttribute("s_diasmenor",v_diasmenor);
+     session.setAttribute("s_diasmayor",v_diasmayor);
+     session.setAttribute("s_conceptopenalizar",v_penaliza);
+     session.setAttribute("s_traslado",v_traslado);
+     session.setAttribute("s_total",v_total);
 
      /**Consultar código del banco y número de cuenta*/
 
@@ -680,8 +680,8 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 /*@lineinfo:user-code*//*@lineinfo:426^11*/
      v_dim = (v_dim - 1) * 2;
-     session.removeValue("s_dim");
-     session.putValue("s_dim",(java.lang.Object)new Integer(v_dim).toString());
+     session.removeAttribute("s_dim");
+     session.setAttribute("s_dim",(java.lang.Object)new Integer(v_dim).toString());
      if(v_banco.trim().equals(""))
      {
       v_infbanco = false;
@@ -741,12 +741,12 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
       {
        // v_saldo  = v_valuni2[1];
        /**Variable de session saldo multifund*/
-       session.removeValue("s_saldomfund");
-       session.putValue("s_saldomfund",(java.lang.Object)new Double(v_valuni2[1]).toString());
+       session.removeAttribute("s_saldomfund");
+       session.setAttribute("s_saldomfund",(java.lang.Object)new Double(v_valuni2[1]).toString());
        v_valor_unidad = v_valuni2[0];
        /**Variable de session valor de unidad*/
-       session.removeValue("s_valuni");
-       session.putValue("s_valuni",(java.lang.Object)new Double(v_valuni2[0]).toString());
+       session.removeAttribute("s_valuni");
+       session.setAttribute("s_valuni",(java.lang.Object)new Double(v_valuni2[0]).toString());
 
        /**Consultar cargos para el tipo de retiro*/
        /*@lineinfo:generated-code*//*@lineinfo:486^8*/
@@ -802,17 +802,17 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 /*@lineinfo:user-code*//*@lineinfo:494^55*/
         /**Variables de session cargos*/
-       session.removeValue("s_cargo1");
-       session.putValue("s_cargo1",(java.lang.Object)v_cargo1);
+       session.removeAttribute("s_cargo1");
+       session.setAttribute("s_cargo1",(java.lang.Object)v_cargo1);
 
-       session.removeValue("s_cargo2");
-       session.putValue("s_cargo2",(java.lang.Object)v_cargo2);
+       session.removeAttribute("s_cargo2");
+       session.setAttribute("s_cargo2",(java.lang.Object)v_cargo2);
 
-       session.removeValue("s_cargo3");
-       session.putValue("s_cargo3",(java.lang.Object)v_cargo3);
+       session.removeAttribute("s_cargo3");
+       session.setAttribute("s_cargo3",(java.lang.Object)v_cargo3);
 
-       session.removeValue("s_cargo4");
-       session.putValue("s_cargo4",(java.lang.Object)v_cargo4);
+       session.removeAttribute("s_cargo4");
+       session.setAttribute("s_cargo4",(java.lang.Object)v_cargo4);
 
 
        /**Consultar saldo disponible neto y bruto del contrato*/
@@ -974,14 +974,14 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
         v_saldispo = v_salTotCap1 + v_salTotRend1;
 
         /**Variables de session Saldo bruto del contrato */
-        session.removeValue("s_saldispo");
-        session.putValue("s_saldispo",(java.lang.Object)new Double(v_saldispo).toString());
+        session.removeAttribute("s_saldispo");
+        session.setAttribute("s_saldispo",(java.lang.Object)new Double(v_saldispo).toString());
 
         /**Saldo de rendimientos brutos del contrato*/
         v_salrenbruto = v_salTotRend1;
         /**Variables de session Saldo de rendimientos brutos del contrato*/
-        session.removeValue("s_salrenbruto");
-        session.putValue("s_salrenbruto",(java.lang.Object)new Double(v_salrenbruto).toString());
+        session.removeAttribute("s_salrenbruto");
+        session.setAttribute("s_salrenbruto",(java.lang.Object)new Double(v_salrenbruto).toString());
 
         /**Saldo neto del contrato */
         v_saldisponeto = v_salTotCap2 + v_salTotRend2;//neto
@@ -1004,13 +1004,13 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
         
         
         /**Variables de session Saldo neto del contrato */
-        session.removeValue("s_saldisponeto");
-        session.putValue("s_saldisponeto",(java.lang.Object)new Double(v_saldisponeto).toString());
+        session.removeAttribute("s_saldisponeto");
+        session.setAttribute("s_saldisponeto",(java.lang.Object)new Double(v_saldisponeto).toString());
         /**Saldo de rendimientos netos del contrato*/
         v_salrenneto = v_salTotRend2;
         /**Variables de session Saldo de rendimientos netos del contrato*/
-        session.removeValue("s_salrenneto");
-        session.putValue("s_salrenneto",(java.lang.Object)new Double(v_salrenneto).toString());
+        session.removeAttribute("s_salrenneto");
+        session.setAttribute("s_salrenneto",(java.lang.Object)new Double(v_salrenneto).toString());
         /**Si saldo disponible mayor a cero*/
         if( v_saldispo > 0 && v_saldisponeto>0)
         {//2
@@ -1272,12 +1272,12 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
                             {
                                    v_fecefe = v_fecha_retiroTotalExpress;
                                    v_fecpro = v_fecha_retiroTotalExpress;
-                                   session.removeValue("s_fecpro");
-                                   session.putValue("s_fecpro", v_fecpro);
-                                   session.removeValue("s_fecefe");
-                                   session.putValue("s_fecefe", v_fecefe);
-                                   session.removeValue("s_fecefectiva");
-                                   session.putValue("s_fecefectiva", v_fecefe);
+                                   session.removeAttribute("s_fecpro");
+                                   session.setAttribute("s_fecpro", v_fecpro);
+                                   session.removeAttribute("s_fecefe");
+                                   session.setAttribute("s_fecefe", v_fecefe);
+                                   session.removeAttribute("s_fecefectiva");
+                                   session.setAttribute("s_fecefectiva", v_fecefe);
                                    v_aplicaRetTotExpr = 1;
                                 
                             }
@@ -1320,8 +1320,8 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
          /*Agregado por Marcela Ortiz Sandoval 
           * 14/09/2009 */
          out.println("<INPUT ID=esTercero NAME=esTercer TYPE=hidden VALUE='"+esTercero+"'>");
-         session.removeValue("esTercero");
-         session.putValue("esTercero",esTercero);
+         session.removeAttribute("esTercero");
+         session.setAttribute("esTercero",esTercero);
          /*Fin codigo agregado*/
          
          out.println("<pre>");

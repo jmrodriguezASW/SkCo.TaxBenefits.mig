@@ -46,13 +46,13 @@ public class TBCL_RetiroOperativo_Oblig extends HttpServlet{
         
         try
         { 
-        if((java.lang.String)session.getValue("s_contrato") != null || (java.lang.String)session.getValue("s_producto")!= null)
+        if((java.lang.String)session.getAttribute("s_contrato") != null || (java.lang.String)session.getAttribute("s_producto")!= null)
         {        
-           v_contra    = (java.lang.String)session.getValue("s_contrato");
-           v_pro       = (java.lang.String)session.getValue("s_producto");
-           v_nombre    = (java.lang.String)session.getValue("s_nombres");
-           v_apellidos = (java.lang.String)session.getValue("s_apellidos");
-           v_ruta_serv = (java.lang.String)session.getValue("s_ruta_serv");
+           v_contra    = (java.lang.String)session.getAttribute("s_contrato");
+           v_pro       = (java.lang.String)session.getAttribute("s_producto");
+           v_nombre    = (java.lang.String)session.getAttribute("s_nombres");
+           v_apellidos = (java.lang.String)session.getAttribute("s_apellidos");
+           v_ruta_serv = (java.lang.String)session.getAttribute("s_ruta_serv");
            String s_contra = String.valueOf(Integer.parseInt(v_contra)); 
                   
            double v_saldoAVA      = 0;/**Saldo de Aporte Voluntario del Afiliado para productos de FPOB y FPAL*/
@@ -73,20 +73,20 @@ public class TBCL_RetiroOperativo_Oblig extends HttpServlet{
                    INTO  :v_fecpro                                                                                     
                    FROM DUAL};
                    
-           session.removeValue("v_tipotran");
-           session.putValue("v_tipotran", v_tipotran);                    
+           session.removeAttribute("v_tipotran");
+           session.setAttribute("v_tipotran", v_tipotran);                    
                 
-           session.removeValue("s_fecpro");
-           session.putValue("s_fecpro", v_fecpro);
+           session.removeAttribute("s_fecpro");
+           session.setAttribute("s_fecpro", v_fecpro);
             
-           session.removeValue("s_fecefectiva");
-           session.putValue("s_fecefectiva", v_fecefe); 
+           session.removeAttribute("s_fecefectiva");
+           session.setAttribute("s_fecefectiva", v_fecefe); 
            
-           session.removeValue("s_total");
-           session.putValue("s_total", v_total); 
+           session.removeAttribute("s_total");
+           session.setAttribute("s_total", v_total); 
            
-           session.removeValue("s_tiporetiro");
-            session.putValue("s_tiporetiro", v_tiporetiro);            
+           session.removeAttribute("s_tiporetiro");
+            session.setAttribute("s_tiporetiro", v_tiporetiro);            
         
             if (v_clasetran.trim().toUpperCase().equals("UCT007")|| 
                 v_tipotran.trim().toUpperCase().equals("UTT012") ||
@@ -99,11 +99,11 @@ public class TBCL_RetiroOperativo_Oblig extends HttpServlet{
             {
                v_clasetran = "UCT001";      
             }
-            session.removeValue("esTercero");
-            session.putValue("esTercero",esTercero);   
+            session.removeAttribute("esTercero");
+            session.setAttribute("esTercero",esTercero);   
             
-            session.removeValue("v_clasetran");
-            session.putValue("v_clasetran", v_clasetran);
+            session.removeAttribute("v_clasetran");
+            session.setAttribute("v_clasetran", v_clasetran);
         
             double v_aportes_sin_cert_AVA = 0;    
             double v_aportes_sin_cert_AVE = 0;   
@@ -159,12 +159,12 @@ public class TBCL_RetiroOperativo_Oblig extends HttpServlet{
              v_saldoAVE = Double.parseDouble(saldos[1]);
              v_saldoTOblig = v_saldoAVA+v_saldoAVE;
              
-             session.removeValue("v_saldoTOblig");
-             session.putValue("v_saldoTOblig", String.valueOf(v_saldoTOblig));
-             session.removeValue("v_saldoAVA");
-             session.putValue("v_saldoAVA", v_saldoAVA);
-             session.removeValue("v_saldoAVE");
-             session.putValue("v_saldoAVE", v_saldoAVE);
+             session.removeAttribute("v_saldoTOblig");
+             session.setAttribute("v_saldoTOblig", String.valueOf(v_saldoTOblig));
+             session.removeAttribute("v_saldoAVA");
+             session.setAttribute("v_saldoAVA", v_saldoAVA);
+             session.removeAttribute("v_saldoAVE");
+             session.setAttribute("v_saldoAVE", v_saldoAVE);
              
              //Obtenemos de AS400 si hay credito pendiente del afiliado
              String resultCredito = Saldo_Contrato.TBFL_Saldo_Credito( v_pro, vtipoid, vnumid, v_libreria_oblig, v_sistema_oblig, v_usuario_oblig, v_password_oblig);
@@ -201,44 +201,44 @@ public class TBCL_RetiroOperativo_Oblig extends HttpServlet{
              }
              v_disponibleTOblig =  Double.parseDouble(SaldosFinales[12].toString().replace(",","").replace("$","")) +  Double.parseDouble(SaldosFinales[13].toString().replace(",","").replace("$",""));
              
-             session.removeValue("s_saldoava");
-             session.putValue("s_saldoava", SaldosFinales[0].toString().replace(",","").replace("$",""));               
-             session.removeValue("s_saldoave");
-             session.putValue("s_saldoave", SaldosFinales[1].toString().replace(",","").replace("$",""));
-             session.removeValue("s_comisionava");
-             session.putValue("s_comisionava", comisiones[0]);
-             session.removeValue("s_comisionave");
-             session.putValue("s_comisionave", comisiones[1]);             
-             session.removeValue("s_prov_comi_total_AVE");
-             session.putValue("s_prov_comi_total_AVE", String.valueOf(SaldosFinales[19].toString().replace(",","").replace("$","")));
-             session.removeValue("s_prov_comi_total_AVA");
-             session.putValue("s_prov_comi_total_AVA", String.valueOf(SaldosFinales[18].toString().replace(",","").replace("$","")));
+             session.removeAttribute("s_saldoava");
+             session.setAttribute("s_saldoava", SaldosFinales[0].toString().replace(",","").replace("$",""));               
+             session.removeAttribute("s_saldoave");
+             session.setAttribute("s_saldoave", SaldosFinales[1].toString().replace(",","").replace("$",""));
+             session.removeAttribute("s_comisionava");
+             session.setAttribute("s_comisionava", comisiones[0]);
+             session.removeAttribute("s_comisionave");
+             session.setAttribute("s_comisionave", comisiones[1]);             
+             session.removeAttribute("s_prov_comi_total_AVE");
+             session.setAttribute("s_prov_comi_total_AVE", String.valueOf(SaldosFinales[19].toString().replace(",","").replace("$","")));
+             session.removeAttribute("s_prov_comi_total_AVA");
+             session.setAttribute("s_prov_comi_total_AVA", String.valueOf(SaldosFinales[18].toString().replace(",","").replace("$","")));
              
-             session.removeValue("v_prov_comi_rend_AVA");
-             session.putValue("v_prov_comi_rend_AVA", SaldosFinales[14].toString().replace(",","").replace("$",""));
-             session.removeValue("v_prov_comi_capital_AVA");
-             session.putValue("v_prov_comi_capital_AVA", SaldosFinales[15].toString().replace(",","").replace("$",""));
+             session.removeAttribute("v_prov_comi_rend_AVA");
+             session.setAttribute("v_prov_comi_rend_AVA", SaldosFinales[14].toString().replace(",","").replace("$",""));
+             session.removeAttribute("v_prov_comi_capital_AVA");
+             session.setAttribute("v_prov_comi_capital_AVA", SaldosFinales[15].toString().replace(",","").replace("$",""));
              
-             session.removeValue("v_prov_comi_rend_AVE");
-             session.putValue("v_prov_comi_rend_AVE", SaldosFinales[16].toString().replace(",","").replace("$",""));
-             session.removeValue("v_prov_comi_capital_AVE");
-             session.putValue("v_prov_comi_capital_AVE", SaldosFinales[17].toString().replace(",","").replace("$",""));
+             session.removeAttribute("v_prov_comi_rend_AVE");
+             session.setAttribute("v_prov_comi_rend_AVE", SaldosFinales[16].toString().replace(",","").replace("$",""));
+             session.removeAttribute("v_prov_comi_capital_AVE");
+             session.setAttribute("v_prov_comi_capital_AVE", SaldosFinales[17].toString().replace(",","").replace("$",""));
              
-             session.removeValue("v_retencion_cont_AVA");
-             session.putValue("v_retencion_cont_AVA", SaldosFinales[8].toString().replace(",","").replace("$",""));
-             session.removeValue("v_retencion_rend_AVA");
-             session.putValue("v_retencion_rend_AVA", SaldosFinales[10].toString().replace(",","").replace("$",""));
+             session.removeAttribute("v_retencion_cont_AVA");
+             session.setAttribute("v_retencion_cont_AVA", SaldosFinales[8].toString().replace(",","").replace("$",""));
+             session.removeAttribute("v_retencion_rend_AVA");
+             session.setAttribute("v_retencion_rend_AVA", SaldosFinales[10].toString().replace(",","").replace("$",""));
              
-             session.removeValue("v_retencion_cont_AVE");
-             session.putValue("v_retencion_cont_AVE", SaldosFinales[9].toString().replace(",","").replace("$",""));
-             session.removeValue("v_retencion_rend_AVE");
-             session.putValue("v_retencion_rend_AVE", SaldosFinales[11].toString().replace(",","").replace("$",""));
+             session.removeAttribute("v_retencion_cont_AVE");
+             session.setAttribute("v_retencion_cont_AVE", SaldosFinales[9].toString().replace(",","").replace("$",""));
+             session.removeAttribute("v_retencion_rend_AVE");
+             session.setAttribute("v_retencion_rend_AVE", SaldosFinales[11].toString().replace(",","").replace("$",""));
              
-             session.removeValue("v_valorunidad_AVA");
-             session.putValue("v_valorunidad_AVA", SaldosFinales[21].toString().replace(",","").replace("$",""));
+             session.removeAttribute("v_valorunidad_AVA");
+             session.setAttribute("v_valorunidad_AVA", SaldosFinales[21].toString().replace(",","").replace("$",""));
              
-             session.removeValue("v_valorunidad_AVE");
-             session.putValue("v_valorunidad_AVE", SaldosFinales[22].toString().replace(",","").replace("$",""));
+             session.removeAttribute("v_valorunidad_AVE");
+             session.setAttribute("v_valorunidad_AVE", SaldosFinales[22].toString().replace(",","").replace("$",""));
          }
          else
          {
@@ -270,8 +270,8 @@ public class TBCL_RetiroOperativo_Oblig extends HttpServlet{
 
          String v_contrato_unif = "";
          #sql v_contrato_unif = {values(TBFBD_obtener_ref_unica(:v_pro,:v_contra))};
-         session.removeValue("s_contrato_unif");
-         session.putValue("s_contrato_unif",(java.lang.Object)v_contrato_unif);
+         session.removeAttribute("s_contrato_unif");
+         session.setAttribute("s_contrato_unif",(java.lang.Object)v_contrato_unif);
          out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
          out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nombre+"  <b> Apellidos </b>"+v_apellidos+" </CENTER></font>");
          

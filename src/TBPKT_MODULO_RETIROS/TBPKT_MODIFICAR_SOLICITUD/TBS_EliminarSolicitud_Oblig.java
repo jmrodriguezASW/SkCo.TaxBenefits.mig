@@ -5,13 +5,12 @@ import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.TBCL_Seguridad;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-import javax.servlet.SingleThreadModel;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class TBS_EliminarSolicitud_Oblig extends HttpServlet implements SingleThreadModel
+public class TBS_EliminarSolicitud_Oblig extends HttpServlet
 {  
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
   {
@@ -41,48 +40,48 @@ public class TBS_EliminarSolicitud_Oblig extends HttpServlet implements SingleTh
       v_tipousu = parametros[4];
       v_idworker = parametros[5];
       
-      session.removeValue("s_producto");
+      session.removeAttribute("s_producto");
       try
       {
-        session.putValue("s_producto", v_producto);
+        session.setAttribute("s_producto", v_producto);
       }
       catch (Exception e)
       {
         e.printStackTrace();
       }
-      session.removeValue("s_contrato");
+      session.removeAttribute("s_contrato");
       
       try
       {
-        session.putValue("s_contrato", "" + Integer.parseInt(v_contrato));
+        session.setAttribute("s_contrato", "" + Integer.parseInt(v_contrato));
       }
       catch (Exception e)
       {
         e.printStackTrace();
       }
-      session.removeValue("s_usuario");
+      session.removeAttribute("s_usuario");
       try
       {
-        session.putValue("s_usuario", v_tipousu);
+        session.setAttribute("s_usuario", v_tipousu);
       }
       catch (Exception e)
       {
         e.printStackTrace();
       }
-      session.removeValue("s_unidad");
+      session.removeAttribute("s_unidad");
       
       try
       {
-        session.putValue("s_unidad", v_unidad);
+        session.setAttribute("s_unidad", v_unidad);
       }
       catch (Exception e)
       {
         e.printStackTrace();
       }
-      session.removeValue("s_usuariopipe");
+      session.removeAttribute("s_usuariopipe");
       try
       {
-        session.putValue("s_usuariopipe", v_usuario);
+        session.setAttribute("s_usuariopipe", v_usuario);
       }
       catch (Exception e)
       {

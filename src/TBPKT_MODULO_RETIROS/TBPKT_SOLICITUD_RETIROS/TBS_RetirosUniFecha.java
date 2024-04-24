@@ -8,7 +8,7 @@ import java.sql.*;
 import TBPKT_UTILIDADES.TBPKT_PLANTILLA.*;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
-public class TBS_RetirosUniFecha extends HttpServlet implements SingleThreadModel
+public class TBS_RetirosUniFecha extends HttpServlet
 {
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
  {
@@ -55,46 +55,46 @@ public class TBS_RetirosUniFecha extends HttpServlet implements SingleThreadMode
    v_tipousu = parametros[4];
    v_idworker = parametros[5];
 
-   session.removeValue("s_producto");
+   session.removeAttribute("s_producto");
    try
    {
-    session.putValue("s_producto",(java.lang.Object)v_producto);//parametros[1]);
+    session.setAttribute("s_producto",(java.lang.Object)v_producto);//parametros[1]);
    }
    catch (Exception e)
    {
     e.printStackTrace();
    }
-   session.removeValue("s_contrato");
+   session.removeAttribute("s_contrato");
    try
    {
-    session.putValue("s_contrato",(java.lang.Object)v_contrato);//parametros[0]);
+    session.setAttribute("s_contrato",(java.lang.Object)v_contrato);//parametros[0]);
    }
    catch (Exception e)
    {
     e.printStackTrace();
    }
-   session.removeValue("s_usuario");
+   session.removeAttribute("s_usuario");
    try
    {
-    session.putValue("s_usuario",(java.lang.Object)v_tipousu);//parametros[4]);
+    session.setAttribute("s_usuario",(java.lang.Object)v_tipousu);//parametros[4]);
    }
    catch (Exception e)
    {
     e.printStackTrace();
    }
-   session.removeValue("s_unidad");
+   session.removeAttribute("s_unidad");
    try
    {
-    session.putValue("s_unidad",(java.lang.Object)v_unidad);//parametros[3]);
+    session.setAttribute("s_unidad",(java.lang.Object)v_unidad);//parametros[3]);
    }
    catch (Exception e)
    {
     e.printStackTrace();
    }
-   session.removeValue("s_usuariopipe");
+   session.removeAttribute("s_usuariopipe");
    try
    {
-    session.putValue("s_usuariopipe",(java.lang.Object)v_usuario);//parametros[2]);
+    session.setAttribute("s_usuariopipe",(java.lang.Object)v_usuario);//parametros[2]);
    }
    catch (Exception e)
    {
@@ -105,7 +105,7 @@ public class TBS_RetirosUniFecha extends HttpServlet implements SingleThreadMode
     * Incluye parametros para manejo de contratos corporativos */
    try
    {
-    session.putValue("permiteRetiros",(java.lang.Object)permiteRetiros);
+    session.setAttribute("permiteRetiros",(java.lang.Object)permiteRetiros);
    }
    catch (Exception e)
    {
@@ -113,7 +113,7 @@ public class TBS_RetirosUniFecha extends HttpServlet implements SingleThreadMode
    }
    try
    {
-    session.putValue("montoMinRetiro",(java.lang.Object)montoMinRetiro);
+    session.setAttribute("montoMinRetiro",(java.lang.Object)montoMinRetiro);
    }
    catch (Exception e)
    {
@@ -121,7 +121,7 @@ public class TBS_RetirosUniFecha extends HttpServlet implements SingleThreadMode
    }
    try
    {
-    session.putValue("saldoMinRetiro",(java.lang.Object)saldoMinRetiro);
+    session.setAttribute("saldoMinRetiro",(java.lang.Object)saldoMinRetiro);
    }
    catch (Exception e)
    {
@@ -130,7 +130,7 @@ public class TBS_RetirosUniFecha extends HttpServlet implements SingleThreadMode
 
    try
    {
-    session.putValue("permiteCerrados",(java.lang.Object)permiteCerrados);
+    session.setAttribute("permiteCerrados",(java.lang.Object)permiteCerrados);
    }
    catch (Exception e)
    {
@@ -142,7 +142,7 @@ public class TBS_RetirosUniFecha extends HttpServlet implements SingleThreadMode
     * Incluye parametro para manejo de retiro express  */
    try
    {
-    session.putValue("permiteExpress",(java.lang.Object)permiteExpress);
+    session.setAttribute("permiteExpress",(java.lang.Object)permiteExpress);
    }
    catch (Exception e)
    {

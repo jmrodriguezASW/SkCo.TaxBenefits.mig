@@ -8,7 +8,7 @@ import java.text.DecimalFormat;
 import TBPKT_UTILIDADES.TBPKT_PLANTILLA.*;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
-public class TBS_EliminarMulti extends HttpServlet implements SingleThreadModel {
+public class TBS_EliminarMulti extends HttpServlet {
 
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
  {
@@ -40,46 +40,46 @@ public class TBS_EliminarMulti extends HttpServlet implements SingleThreadModel 
    v_tipousu = parametros[4];
    v_idworker = parametros[5];
 
-   session.removeValue("s_producto");
+   session.removeAttribute("s_producto");
    try
    {
-    session.putValue("s_producto",parametros[1]);//request.getParameter("nom_producto"));
+    session.setAttribute("s_producto",parametros[1]);//request.getParameter("nom_producto"));
    }
    catch (Exception e)
    {
     e.printStackTrace();
    }
-   session.removeValue("s_contrato");
+   session.removeAttribute("s_contrato");
    try
    {
-    session.putValue("s_contrato",parametros[0]);//request.getParameter("nom_contrato"));
+    session.setAttribute("s_contrato",parametros[0]);//request.getParameter("nom_contrato"));
    }
    catch (Exception e)
    {
     e.printStackTrace();
    }
-   session.removeValue("s_usuariopipe");
+   session.removeAttribute("s_usuariopipe");
    try
    {
-    session.putValue("s_usuariopipe",parametros[2]);//request.getParameter("nom_usuario"));
+    session.setAttribute("s_usuariopipe",parametros[2]);//request.getParameter("nom_usuario"));
    }
    catch (Exception e)
    {
     e.printStackTrace();
    }
-   session.removeValue("s_tipousu");
+   session.removeAttribute("s_tipousu");
    try
    {
-    session.putValue("s_tipousu",(java.lang.Object)v_tipousu);//parametros[4]);
+    session.setAttribute("s_tipousu",(java.lang.Object)v_tipousu);//parametros[4]);
    }
    catch (Exception e)
    {
     e.printStackTrace();
    }
-   session.removeValue("s_unidad");
+   session.removeAttribute("s_unidad");
    try
    {
-    session.putValue("s_unidad",(java.lang.Object)v_unidad);//parametros[3]);
+    session.setAttribute("s_unidad",(java.lang.Object)v_unidad);//parametros[3]);
    }
    catch (Exception e)
    {

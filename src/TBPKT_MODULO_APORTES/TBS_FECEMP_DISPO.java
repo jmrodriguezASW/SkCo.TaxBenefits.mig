@@ -17,7 +17,7 @@ import co.oldmutual.taxbenefit.util.DataSourceWrapper; // INT20131108
 *Este servlet servirá para actualizar la disponibilidad de contratos asociados a una empresa
 */
 
-public class TBS_FECEMP_DISPO extends HttpServlet implements SingleThreadModel
+public class TBS_FECEMP_DISPO extends HttpServlet
 {
    int v_historia = -1;
    //---------------------------------------------------------------------------------------------------------------

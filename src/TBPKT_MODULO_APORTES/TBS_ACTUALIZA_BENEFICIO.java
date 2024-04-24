@@ -18,7 +18,7 @@ import co.oldmutual.taxbenefit.util.DataSourceWrapper; // INT20131108
 *razón valida
 */
 
-public class TBS_ACTUALIZA_BENEFICIO extends HttpServlet implements SingleThreadModel
+public class TBS_ACTUALIZA_BENEFICIO extends HttpServlet
 {
   int v_historia = -1;
   //---------------------------------------------------------------------------------------------------------------

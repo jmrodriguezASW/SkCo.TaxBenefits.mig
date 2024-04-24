@@ -24,7 +24,7 @@ import co.oldmutual.taxbenefit.util.DataSourceWrapper; // INT20131108
  */
 
 
-public class TBS_ACTUALIZA_CCONTINGENTE extends HttpServlet implements SingleThreadModel{
+public class TBS_ACTUALIZA_CCONTINGENTE extends HttpServlet{
 int v_historia  = -1;
   public void init(ServletConfig config) throws ServletException
     {super.init(config);}

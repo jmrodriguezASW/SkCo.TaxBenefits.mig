@@ -12,7 +12,7 @@ import co.oldmutual.taxbenefit.util.DataSourceWrapper;
 
 
 /*clase que actualiza la informacion de la distribución de los fondos*/
-public class TBS_ActualizarDistrifon extends HttpServlet implements SingleThreadModel
+public class TBS_ActualizarDistrifon extends HttpServlet
 {
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
  {
@@ -49,18 +49,18 @@ public class TBS_ActualizarDistrifon extends HttpServlet implements SingleThread
 
   //se hace conexion a taxbenefit
   t_tax =   DataSourceWrapper.getInstance().getConnection();
-  if((java.lang.String)session.getValue("s_producto") != null ||(java.lang.String)session.getValue("s_contrato") != null)
+  if((java.lang.String)session.getAttribute("s_producto") != null ||(java.lang.String)session.getAttribute("s_contrato") != null)
   {
-   String v_pro         = (java.lang.String)session.getValue("s_producto");//"MFUND";
-   String v_contra      = (java.lang.String)session.getValue("s_contrato");//"000011425";
-   String v_consecutivo = (java.lang.String)session.getValue("s_conret");
+   String v_pro         = (java.lang.String)session.getAttribute("s_producto");//"MFUND";
+   String v_contra      = (java.lang.String)session.getAttribute("s_contrato");//"000011425";
+   String v_consecutivo = (java.lang.String)session.getAttribute("s_conret");
    int v_conret         = new Integer (v_consecutivo).intValue();
-   String v_confonvalor = (java.lang.String)session.getValue("s_codfonvalor");
-   String v_prorrata    = (java.lang.String)session.getValue("s_prorrata");
-   String v_usuario     = (java.lang.String)session.getValue("s_usuariopipe");
-   String v_maximo      = (java.lang.String)session.getValue("s_maximo");
-   String v_fondo       = (java.lang.String)session.getValue("s_fondo");
-   String v_valre       = (java.lang.String)session.getValue("s_valoret");
+   String v_confonvalor = (java.lang.String)session.getAttribute("s_codfonvalor");
+   String v_prorrata    = (java.lang.String)session.getAttribute("s_prorrata");
+   String v_usuario     = (java.lang.String)session.getAttribute("s_usuariopipe");
+   String v_maximo      = (java.lang.String)session.getAttribute("s_maximo");
+   String v_fondo       = (java.lang.String)session.getAttribute("s_fondo");
+   String v_valre       = (java.lang.String)session.getAttribute("s_valoret");
    double    v_valre2   = new Double(v_valre).doubleValue();
    String v_maximo2     = "";
    try { v_maximo2 = request.getParameter("v_maximo2"); } catch (Exception e) { e.printStackTrace(); }
@@ -70,8 +70,8 @@ public class TBS_ActualizarDistrifon extends HttpServlet implements SingleThread
     {
      String v_valorcli = "";
      try { v_valorcli = request.getParameter("valor"+i); } catch (Exception e) { e.printStackTrace(); }
-     session.removeValue("s_valorcli"+i+"");
-     session.putValue("s_valorcli"+i+"",v_valorcli);
+     session.removeAttribute("s_valorcli"+i+"");
+     session.setAttribute("s_valorcli"+i+"",v_valorcli);
     }
    }
    else
@@ -82,8 +82,8 @@ public class TBS_ActualizarDistrifon extends HttpServlet implements SingleThread
      {
       String v_porcencli = "";
       try { v_porcencli = request.getParameter("porcen"+i); } catch (Exception e) { e.printStackTrace(); }
-     session.removeValue("s_porcencli"+i+"");
-      session.putValue("s_porcencli"+i+"",v_porcencli);
+     session.removeAttribute("s_porcencli"+i+"");
+      session.setAttribute("s_porcencli"+i+"",v_porcencli);
      }
     }
    }
@@ -115,8 +115,8 @@ public class TBS_ActualizarDistrifon extends HttpServlet implements SingleThread
      double v_sumporcentaje = 0;
      for ( int i=1;i<= new Integer(v_maximo2).intValue();i++)
      {
-      v_codfon   = (java.lang.String)session.getValue("s_codfon"+i+"");
-      v_valorfon = (java.lang.String)session.getValue("s_valorcli"+i+"");
+      v_codfon   = (java.lang.String)session.getAttribute("s_codfon"+i+"");
+      v_valorfon = (java.lang.String)session.getAttribute("s_valorcli"+i+"");
       if(!v_valorfon.trim().equals(""))
       {
        double v_valorfon2 = new Double(v_valorfon).doubleValue();
@@ -177,8 +177,8 @@ public class TBS_ActualizarDistrifon extends HttpServlet implements SingleThread
      {
       for ( int i=1;i<= new Integer(v_maximo2).intValue();i++)
       {
-       v_codfon = (java.lang.String)session.getValue("s_codfon"+i+"");
-       String v_porcenfon = (java.lang.String)session.getValue("s_porcencli"+i+"");
+       v_codfon = (java.lang.String)session.getAttribute("s_codfon"+i+"");
+       String v_porcenfon = (java.lang.String)session.getAttribute("s_porcencli"+i+"");
        if(!v_porcenfon.trim().equals(""))
        {
         double v_porcenfon2     = new Double(v_porcenfon).doubleValue();

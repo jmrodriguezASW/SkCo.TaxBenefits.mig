@@ -32,7 +32,7 @@ public class TBF_MENSAJE extends JFrame {
  {
   this.invocar = invocar;
   this.invocar.setEnabled(false);
-  this.show();
+  this.setVisible(true);
  }
  //Mensaje 
  public void mensaje (String v_mensaje)

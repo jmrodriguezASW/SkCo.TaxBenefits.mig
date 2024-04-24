@@ -9,7 +9,7 @@ import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 import org.owasp.validator.html.*; // INT20131108
 import TBPKT_UTILIDADES.TBPKT_REFERENCIAS.TBCL_REFERENCIAS;// INT20131108
 
-public class TBS_Retiros extends HttpServlet implements SingleThreadModel
+public class TBS_Retiros extends HttpServlet
 {
 
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -65,7 +65,7 @@ public class TBS_Retiros extends HttpServlet implements SingleThreadModel
         {
             CleanResults cr = as.scan(request.getParameter("obligatoriov_fecefectiva"), new File(POLICY_FILE_LOCATION));
             v_fecefe = cr.getCleanHTML();
-            if (!session.getValue("s_producto").toString().equals("FPOB") && !session.getValue("s_producto").toString().equals("FPAL"))
+            if (!session.getAttribute("s_producto").toString().equals("FPOB") && !session.getAttribute("s_producto").toString().equals("FPAL"))
             {
                 CleanResults crfp = as.scan(request.getParameter("obligatoriov_fecproceso"), new File(POLICY_FILE_LOCATION));
                 v_fecpro = crfp.getCleanHTML();
@@ -76,15 +76,15 @@ public class TBS_Retiros extends HttpServlet implements SingleThreadModel
           e.printStackTrace();
         } //INT20131108
       
-      session.removeValue("s_fecefectiva");
-      session.putValue("s_fecefectiva",(java.lang.Object)v_fecefe );        
+      session.removeAttribute("s_fecefectiva");
+      session.setAttribute("s_fecefectiva",(java.lang.Object)v_fecefe );        
  
-      if (session.getValue("s_producto").toString().equals("FPOB") || session.getValue("s_producto").toString().equals("FPAL")) {
+      if (session.getAttribute("s_producto").toString().equals("FPOB") || session.getAttribute("s_producto").toString().equals("FPAL")) {
               TBCL_RetiroOperativo_Oblig i_solicitud = new TBCL_RetiroOperativo_Oblig ();
               i_solicitud.TBPL_SolicitudOperativo_Oblig(out,session,request,nuevaCadena);
           }else
           {
-            session.putValue("s_fecpro",(java.lang.Object)v_fecpro );
+            session.setAttribute("s_fecpro",(java.lang.Object)v_fecpro );
             TBCL_RetiroOperativo i_solicitud = new TBCL_RetiroOperativo ();
             i_solicitud.TBPL_SolicitudOperativo(out,session,request,nuevaCadena);
           }

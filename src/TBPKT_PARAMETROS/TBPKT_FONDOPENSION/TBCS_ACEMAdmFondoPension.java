@@ -13,7 +13,7 @@ import org.owasp.validator.html.*; // INT20131108
 //Nobre de la clase que se encarga de mostrar las paginas de modificar, Consultar, eliminar y adicionar AFP
 import TBPKT_UTILIDADES.TBPKT_REFERENCIAS.TBCL_REFERENCIAS;// INT20131108
 
-public class TBCS_ACEMAdmFondoPension extends HttpServlet implements SingleThreadModel{
+public class TBCS_ACEMAdmFondoPension extends HttpServlet{
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
 private String v_nuevaCadena ="";

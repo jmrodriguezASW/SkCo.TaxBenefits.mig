@@ -119,14 +119,14 @@ implements sqlj.runtime.NamedIterator
    int v_consecutivo2        = 0;/**Variable consecutivo  númerico*/
 
    /**Verificar que las variables de session no expiren*/
-   if((java.lang.String)session.getValue("s_contrato")!= null ||(java.lang.String)session.getValue("s_producto") != null)
+   if((java.lang.String)session.getAttribute("s_contrato")!= null ||(java.lang.String)session.getAttribute("s_producto") != null)
    {
     /**Capturar variables de session*/
-    v_contra          = (java.lang.String)session.getValue("s_contrato"); //se toma contrato
-    v_pro             = (java.lang.String)session.getValue("s_producto");//se toma producto
-    v_nombre          =(java.lang.String)session.getValue("s_nombres");//se toma nombre del afiliado
-    v_apellidos       =(java.lang.String)session.getValue("s_apellidos");//apellidos del afiliado
-    v_consecutivo     = (java.lang.String)session.getValue("s_conret");//consecutivo del retiro
+    v_contra          = (java.lang.String)session.getAttribute("s_contrato"); //se toma contrato
+    v_pro             = (java.lang.String)session.getAttribute("s_producto");//se toma producto
+    v_nombre          =(java.lang.String)session.getAttribute("s_nombres");//se toma nombre del afiliado
+    v_apellidos       =(java.lang.String)session.getAttribute("s_apellidos");//apellidos del afiliado
+    v_consecutivo     = (java.lang.String)session.getAttribute("s_conret");//consecutivo del retiro
     v_consecutivo2    = new Integer(v_consecutivo).intValue();//se pasa consecutivo a númerico
 
     /**Capturar variables de session*/
@@ -197,10 +197,10 @@ implements sqlj.runtime.NamedIterator
      v_cuenta = "        ";
     }
     /**Variables de session cuenta y banco anteriores.*/
-    session.removeValue("s_bancoviejo");
-    session.putValue("s_bancoviejo",(java.lang.Object)v_banco);
-    session.removeValue("s_cuentaviejo");
-    session.putValue("s_cuentaviejo",(java.lang.Object)v_cuenta);
+    session.removeAttribute("s_bancoviejo");
+    session.setAttribute("s_bancoviejo",(java.lang.Object)v_banco);
+    session.removeAttribute("s_cuentaviejo");
+    session.setAttribute("s_cuentaviejo",(java.lang.Object)v_cuenta);
     /**Si se encuentran datos*/
     if (v_encontro)
     {

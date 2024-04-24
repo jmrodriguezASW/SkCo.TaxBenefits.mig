@@ -18,7 +18,7 @@ import java.io.*;
 */
  
 
-public class TBS_SelectRetiro extends HttpServlet implements SingleThreadModel{
+public class TBS_SelectRetiro extends HttpServlet{
 
   boolean botonAcep  = false;
   STBCL_GenerarBaseHTMLII codHtm;
@@ -65,18 +65,18 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
       if(i_sqlj.TBPBD_ConexionBD())
        {
          //conexión con la BD
-         if(sess.getValue("NOMBAPEL")==null)
+         if(sess.getAttribute("NOMBAPEL")==null)
           {
             //tomar nombres y apellidos
             TBPBD_ContrNomApel();
           }
          else
-           v_nombApel = (String)sess.getValue("NOMBAPEL");
+           v_nombApel = (String)sess.getAttribute("NOMBAPEL");
          if(!contCancel)
           {
             if(!contNoExis)
             {
-             if(sess.getValue("ESQUEMA")==null)
+             if(sess.getAttribute("ESQUEMA")==null)
              {
 
               TBPL_FindRef();
@@ -84,7 +84,7 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
              }
              else{
 
-              esquema = (String)sess.getValue("ESQUEMA");
+              esquema = (String)sess.getAttribute("ESQUEMA");
              }
 
              TBPL_BuildPage();//Construccion pagina final*/
@@ -107,12 +107,12 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
 }
 ///////////////////////Limpia Variables de Session que hay en memoria///////////////////////////////////
   private void TBPL_CleanSession(){
-    if(sess.getValue("NOMBAPEL")!=null)      sess.removeValue("NOMBAPEL");
-    if(sess.getValue("VALRETANU")!=null)     sess.removeValue("VALRETANU");
-    if(sess.getValue("MODIFICADOANU")!=null) sess.removeValue("MODIFICADOANU");
-    if(sess.getValue("FECHA")!=null)         sess.removeValue("FECHA");
-    if(sess.getValue("KEYS")!=null)          sess.removeValue("KEYS");
-    if(sess.getValue("VALRETSEL")!=null)     sess.removeValue("VALRETSEL");
+    if(sess.getAttribute("NOMBAPEL")!=null)      sess.removeAttribute("NOMBAPEL");
+    if(sess.getAttribute("VALRETANU")!=null)     sess.removeAttribute("VALRETANU");
+    if(sess.getAttribute("MODIFICADOANU")!=null) sess.removeAttribute("MODIFICADOANU");
+    if(sess.getAttribute("FECHA")!=null)         sess.removeAttribute("FECHA");
+    if(sess.getAttribute("KEYS")!=null)          sess.removeAttribute("KEYS");
+    if(sess.getAttribute("VALRETSEL")!=null)     sess.removeAttribute("VALRETSEL");
   }
 ///////////////Construcción de la página de salida con  los retiros vigentes/////////////////
 private void TBPL_BuildPage()
@@ -124,12 +124,12 @@ private void TBPL_BuildPage()
     out.println("<input type='hidden' id='cadena' name='cadena' value='"+cadena+"'>");
     //Armar selección de fechas desde - hasta
     String v_fecha = "";
-    /*if(sess.getValue("YEARMINMAX")==null)
+    /*if(sess.getAttribute("YEARMINMAX")==null)
       TBPBD_yearRetMinMax();
     else
      {
-      v_yearMin=i_fnd.TBPL_getCmp((String)sess.getValue("YEARMINMAX"),"yearmin");
-      v_yearMax=i_fnd.TBPL_getCmp((String)sess.getValue("YEARMINMAX"),"yearmax");
+      v_yearMin=i_fnd.TBPL_getCmp((String)sess.getAttribute("YEARMINMAX"),"yearmin");
+      v_yearMax=i_fnd.TBPL_getCmp((String)sess.getAttribute("YEARMINMAX"),"yearmax");
      }*/
 
    try
@@ -166,13 +166,13 @@ private void TBPL_BuildPage()
                  "diah='"+TBPL_DayMonth(request.getParameter("mesH"))+"' mesh='"+request.getParameter("mesH")+"' "+
                  "anoH='"+request.getParameter("anoH")+"'> ";
          findBD=true;
-         sess.removeValue("FECHA");
-         sess.putValue("FECHA", v_fecha );
+         sess.removeAttribute("FECHA");
+         sess.setAttribute("FECHA", v_fecha );
       }
     else
 
-      if(sess.getValue("FECHA")!=null)
-        v_fecha=(String)sess.getValue("FECHA");
+      if(sess.getAttribute("FECHA")!=null)
+        v_fecha=(String)sess.getAttribute("FECHA");
       else
        {
           if(!v_yearMin.trim().equals("") && !v_yearMax.trim().equals(""))
@@ -209,13 +209,13 @@ private void TBPL_BuildPage()
      TBPBD_FindAnu();//traer los retiros vigentes de la Base de datos
     }
    else
-     if(sess.getValue("VALRETANU")!=null && sess.getValue("MODIFICADOANU")==null)
-        TBPL_showAnu((String)sess.getValue("VALRETANU"));//mostrar inf. de retiros vigentes
+     if(sess.getAttribute("VALRETANU")!=null && sess.getAttribute("MODIFICADOANU")==null)
+        TBPL_showAnu((String)sess.getAttribute("VALRETANU"));//mostrar inf. de retiros vigentes
      else
      {
-      if(sess.getValue("MODIFICADOANU")!=null)
+      if(sess.getAttribute("MODIFICADOANU")!=null)
       {
-          sess.removeValue("MODIFICADOANU");
+          sess.removeAttribute("MODIFICADOANU");
           TBPBD_FindAnu();
       }
     }
@@ -258,8 +258,8 @@ private void TBPBD_ContrNomApel()
          contNoExis = true;
        else
        {
-        sess.removeValue("NOMBAPEL");
-        sess.putValue("NOMBAPEL",v_nombApel);
+        sess.removeAttribute("NOMBAPEL");
+        sess.setAttribute("NOMBAPEL",v_nombApel);
         contCancel = false;
         contNoExis  = false;
        }
@@ -298,13 +298,13 @@ private void TBPBD_yearRetMinMax()
     }
   v_yearMin = i_fnd.TBPL_getCmp(v_years,"yearmin");
   v_yearMax = i_fnd.TBPL_getCmp(v_years,"yearmax");
-  sess.removeValue("YEARMINMAX");
-  sess.putValue("YEARMINMAX","<"+v_years+">");
+  sess.removeAttribute("YEARMINMAX");
+  sess.setAttribute("YEARMINMAX","<"+v_years+">");
 }
 /////Encontrar todos los retiros en estado vigente dentro del rango de fecha escogido//////
 private void TBPBD_FindAnu()
 {
-    String v_fecha = (String)sess.getValue("FECHA");
+    String v_fecha = (String)sess.getAttribute("FECHA");
     String valores = new String("");
     String fecMin1 = i_fnd.TBPL_getCmp(v_fecha,"diad")+"-"+i_fnd.TBPL_getCmp(v_fecha,"mesd")+"-"+i_fnd.TBPL_getCmp(v_fecha,"anod");
     String fecMax1 = i_fnd.TBPL_getCmp(v_fecha,"diah")+"-"+i_fnd.TBPL_getCmp(v_fecha,"mesh")+"-"+i_fnd.TBPL_getCmp(v_fecha,"anoh");
@@ -316,8 +316,8 @@ private void TBPBD_FindAnu()
     }
    else
     {
-      sess.removeValue("VALRETANU");
-      sess.putValue("VALRETANU",valores);
+      sess.removeAttribute("VALRETANU");
+      sess.setAttribute("VALRETANU",valores);
       TBPL_showAnu(valores);
       //mostrar la información retornada
     }
@@ -375,12 +375,12 @@ private void TBPL_FindRef()
     String v_valor = new String("");
     v_ref          = i_sqlj.TBPBD_BuildRef("STV","1");
     v_sess         = v_ref[0];
-    sess.removeValue("TIPO");
-    sess.putValue("TIPO","<"+v_sess+">");
+    sess.removeAttribute("TIPO");
+    sess.setAttribute("TIPO","<"+v_sess+">");
     v_ref          = i_sqlj.TBPBD_BuildRef("SER","1");
     v_sess         = v_ref[0];
-    sess.removeValue("ESTADO");
-    sess.putValue("ESTADO","<"+v_sess+">");
+    sess.removeAttribute("ESTADO");
+    sess.setAttribute("ESTADO","<"+v_sess+">");
     v_ref          = i_sqlj.TBPBD_BuildRef("SMB","000");
     v_sess         = v_ref[0];
     v_valor        = v_ref[1];
@@ -397,10 +397,10 @@ private void TBPL_FindRef()
     v_sess        += v_ref[0];
     v_valor       += v_ref[1];
     esquema="<"+v_sess+">";
-    sess.removeValue("ESQUEMA");
-    sess.putValue("ESQUEMA","<"+v_sess+">");
-    sess.removeValue("VALORREF");
-    sess.putValue("VALORREF",v_valor);
+    sess.removeAttribute("ESQUEMA");
+    sess.setAttribute("ESQUEMA","<"+v_sess+">");
+    sess.removeAttribute("VALORREF");
+    sess.setAttribute("VALORREF",v_valor);
 }
 ///////////////////////////////////////////////////////////////////////////////////////////
 public String getServletInfo()

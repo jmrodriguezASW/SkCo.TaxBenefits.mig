@@ -21,13 +21,13 @@ public String TBCL_ParamEntr(HttpServletRequest request,HttpSession sess)
         v_keys = "producto='"+request.getParameter("nom_producto")+"' contrato='"+request.getParameter("num_contrato")+"' ";
         if(request.getParameter("usuario")!=null)
            v_keys += "usuario='"+request.getParameter("usuario")+"'";
-        sess.removeValue("KEYS");   
-        sess.putValue("KEYS","<"+v_keys+">");
+        sess.removeAttribute("KEYS");   
+        sess.setAttribute("KEYS","<"+v_keys+">");
       }
     else
       {
-        if(sess.getValue("KEYS")!=null)
-          v_keys = (String)sess.getValue("KEYS");
+        if(sess.getAttribute("KEYS")!=null)
+          v_keys = (String)sess.getAttribute("KEYS");
       }
    return v_keys;
 }
@@ -55,12 +55,12 @@ public String TBCL_ParamEntr(HttpServletRequest request,HttpSession sess,PrintWr
       String v_codigounidad  =i_unidad.TBPL_BuscarUnidad(v_unidad);
       String v_codigotipousuario =i_unidad.TBPL_BuscarTipoUsuario(v_tipousu);
 
-    sess.removeValue("s_codigounidad");
-    sess.putValue("s_codigounidad",v_codigounidad);
-    sess.removeValue("s_codigotipousuario");
-    sess.putValue("s_codigotipousuario",v_codigotipousuario);
-    sess.removeValue("s_usuariopipeline");
-    sess.putValue("s_usuariopipeline",v_usuario);
+    sess.removeAttribute("s_codigounidad");
+    sess.setAttribute("s_codigounidad",v_codigounidad);
+    sess.removeAttribute("s_codigotipousuario");
+    sess.setAttribute("s_codigotipousuario",v_codigotipousuario);
+    sess.removeAttribute("s_usuariopipeline");
+    sess.setAttribute("s_usuariopipeline",v_usuario);
 
      //FIN seguridad
     String v_keys = new String("");
@@ -73,17 +73,17 @@ public String TBCL_ParamEntr(HttpServletRequest request,HttpSession sess,PrintWr
         v_keys = "producto='"+v_producto+"' contrato='"+v_contrato+"' ";
         if(v_usuario!=null)
           v_keys += "usuario='"+v_usuario+"'";
-        sess.removeValue("KEYS");
-        sess.putValue("KEYS","<"+v_keys+">");
+        sess.removeAttribute("KEYS");
+        sess.setAttribute("KEYS","<"+v_keys+">");
 
       }
      else
       {
 
-        if(sess.getValue("KEYS")!=null)
+        if(sess.getAttribute("KEYS")!=null)
          {
 
-          v_keys = (String)sess.getValue("KEYS");
+          v_keys = (String)sess.getAttribute("KEYS");
          }
       }
        i_unidad.TBPBD_CerrarConexionBD();

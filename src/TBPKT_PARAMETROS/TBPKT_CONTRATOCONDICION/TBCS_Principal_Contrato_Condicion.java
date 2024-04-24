@@ -9,7 +9,7 @@ import TBPKT_UTILIDADES.TBPKT_PLANTILLA.STBCL_GenerarBaseHTML;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 
-public class TBCS_Principal_Contrato_Condicion extends HttpServlet implements SingleThreadModel{
+public class TBCS_Principal_Contrato_Condicion extends HttpServlet{
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
 private String v_nuevaCadena ="";

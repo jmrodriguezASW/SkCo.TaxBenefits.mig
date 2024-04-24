@@ -10,7 +10,7 @@ import TBPKT_UTILIDADES.TBPKT_PLANTILLA.STBCL_GenerarBaseHTML;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 //Nomre de la clase
-public class TBCS_ConceptoTipoCargo extends HttpServlet implements SingleThreadModel{
+public class TBCS_ConceptoTipoCargo extends HttpServlet{
 private PrintWriter out;//Clase que permite imprimir el código HTML
 private TBCL_Consulta v_Consulta;//Clase que permite ejecutar las declaraciones
 private String v_nuevaCadena ="";

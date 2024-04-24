@@ -9,7 +9,7 @@ import TBPKT_UTILIDADES.TBPKT_PLANTILLA.STBCL_GenerarBaseHTML;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 //Nombre de la clase que se encarga de eliminar
-public class TBCS_EliminaFestivos extends HttpServlet implements SingleThreadModel{
+public class TBCS_EliminaFestivos extends HttpServlet{
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
 private String v_nuevaCadena;

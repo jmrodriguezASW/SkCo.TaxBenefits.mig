@@ -13,7 +13,7 @@ import java.io.*;
 *Este servlet servirá para actualizar la disponibilidad de contratos asociados a una empresa
 */
 
-public class TBS_EMPRESA_DISPO extends HttpServlet implements SingleThreadModel
+public class TBS_EMPRESA_DISPO extends HttpServlet
 {
    int v_historia = -1;
    //---------------------------------------------------------------------------------------------------------------

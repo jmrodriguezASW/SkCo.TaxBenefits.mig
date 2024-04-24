@@ -15,7 +15,7 @@ import java.io.*;
 *hacia tax
 */
 
-public class TBS_INFORMACION_TRASLADO extends HttpServlet implements SingleThreadModel
+public class TBS_INFORMACION_TRASLADO extends HttpServlet
 {
 
   public void init(ServletConfig config) throws ServletException

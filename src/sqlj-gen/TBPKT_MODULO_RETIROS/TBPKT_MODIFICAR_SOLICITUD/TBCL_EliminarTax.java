@@ -83,13 +83,13 @@ implements sqlj.runtime.NamedIterator
    int v_consecutivo2   = 0;
    int indicador        = 0;
    /**Verificar que las variables de session no expiren*/
-   if((java.lang.String)session.getValue("s_contrato")!= null ||(java.lang.String)session.getValue("s_producto") != null)
+   if((java.lang.String)session.getAttribute("s_contrato")!= null ||(java.lang.String)session.getAttribute("s_producto") != null)
    {
     /**Capturar variables de session*/
-    v_contra =(java.lang.String)session.getValue("s_contrato");/**Tomar contrato*/
-    v_pro = (java.lang.String)session.getValue("s_producto");/**Tomar producto*/
-    v_consecutivo = (java.lang.String)session.getValue("s_conret");/**Tomar consecutivo del retiro a eliminar*/
-    v_usuario  = (java.lang.String)session.getValue("s_usuariopipe");/**Tomar nombre de usuario*/
+    v_contra =(java.lang.String)session.getAttribute("s_contrato");/**Tomar contrato*/
+    v_pro = (java.lang.String)session.getAttribute("s_producto");/**Tomar producto*/
+    v_consecutivo = (java.lang.String)session.getAttribute("s_conret");/**Tomar consecutivo del retiro a eliminar*/
+    v_usuario  = (java.lang.String)session.getAttribute("s_usuariopipe");/**Tomar nombre de usuario*/
     v_consecutivo2 = new Integer(v_consecutivo).intValue();/**Consecutivo numerico*/
 
     /**Consultar valor de unidad del retiro*/

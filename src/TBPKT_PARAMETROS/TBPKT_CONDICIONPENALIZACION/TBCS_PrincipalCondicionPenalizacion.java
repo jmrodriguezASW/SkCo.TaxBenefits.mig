@@ -10,7 +10,7 @@ import TBPKT_UTILIDADES.TBPKT_PLANTILLA.STBCL_GenerarBaseHTML;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 //Nombre  de la página principal de condiciones de penalización
-public class TBCS_PrincipalCondicionPenalizacion extends HttpServlet implements SingleThreadModel{
+public class TBCS_PrincipalCondicionPenalizacion extends HttpServlet{
 private PrintWriter out;//Clase que me permite imprimir el código HTML
 private TBCL_Consulta v_Consulta;//Clase que se encarga de ejecutar las declaraciones SQL
 private String v_nuevaCadena ="";

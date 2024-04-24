@@ -11,7 +11,7 @@ import TBPKT_UTILIDADES.TBPKT_PLANTILLA.STBCL_GenerarBaseHTML;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 //Nombre de la clase principal de festivos
-public class TBCS_PrincipalFestivos extends HttpServlet implements SingleThreadModel{
+public class TBCS_PrincipalFestivos extends HttpServlet{
 private PrintWriter out;//Clase que nos sirve para imprimir el código HTLML
 private TBCL_Consulta v_Consulta;//Clase que se encarga de ejecutar todas las Consultas
 private Date currentDate = new Date();

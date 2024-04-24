@@ -11,7 +11,7 @@ import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 /**
 *Servlet principal de la Consulta de aportes
 */
-public class TBCS_PrincipalConsultaAporte extends HttpServlet implements SingleThreadModel
+public class TBCS_PrincipalConsultaAporte extends HttpServlet
 {
  private PrintWriter out;
  private TBCL_Consulta v_Consulta;

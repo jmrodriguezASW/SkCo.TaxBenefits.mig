@@ -8,7 +8,7 @@ import TBPKT_UTILIDADES.TBPKT_PLANTILLA.*;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 
-public class TBS_SininfRetiro2 extends HttpServlet implements SingleThreadModel
+public class TBS_SininfRetiro2 extends HttpServlet
 {
 
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -43,34 +43,34 @@ public class TBS_SininfRetiro2 extends HttpServlet implements SingleThreadModel
    v_tipousu = parametros[4];
    v_idworker = parametros[5];
 
-  if((java.lang.String)session.getValue("s_contrato")!= null || (java.lang.String)session.getValue("s_producto")!= null)
+  if((java.lang.String)session.getAttribute("s_contrato")!= null || (java.lang.String)session.getAttribute("s_producto")!= null)
      {
-        String v_pro = (java.lang.String)session.getValue("s_producto");//"MFUND";
-        String v_contra = (java.lang.String)session.getValue("s_contrato");//"000011425";
-        String v_nom    = (java.lang.String)session.getValue("s_nombres");
-        String v_ape    = (java.lang.String)session.getValue("s_apellidos");
-        String v_nota = (java.lang.String)session.getValue("s_nota");
+        String v_pro = (java.lang.String)session.getAttribute("s_producto");//"MFUND";
+        String v_contra = (java.lang.String)session.getAttribute("s_contrato");//"000011425";
+        String v_nom    = (java.lang.String)session.getAttribute("s_nombres");
+        String v_ape    = (java.lang.String)session.getAttribute("s_apellidos");
+        String v_nota = (java.lang.String)session.getAttribute("s_nota");
         String v_pintar=    i_pagina.TBFL_CABEZA("Calcular Solicitud de Retiro","Calcular Solicitud de Retiro","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_CalcularRetiro","",true,"modulo_retiros.js","return validar_retiro(this)");
         out.println(""+v_pintar+"");
         /**Modificado 2009/10/27 Variable Id Saro*/
         try{
-          if((java.lang.String)session.getValue("v_idsaro")!= null){
-            v_idsaro = (java.lang.String)session.getValue("v_idsaro");
-            session.removeValue("v_idsaro");
-            session.putValue("v_idsaro",v_idsaro);
+          if((java.lang.String)session.getAttribute("v_idsaro")!= null){
+            v_idsaro = (java.lang.String)session.getAttribute("v_idsaro");
+            session.removeAttribute("v_idsaro");
+            session.setAttribute("v_idsaro",v_idsaro);
           }
         }catch (Exception e)  { e.printStackTrace(); }
      
         /*Cambio para manejo de referencia unica 2009/03/30 MOS */
-        String v_contrato_unif = (java.lang.String)session.getValue("s_contra_unif");
+        String v_contrato_unif = (java.lang.String)session.getAttribute("s_contra_unif");
         out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
         out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nom+"  <b> Apellidos </b>"+v_ape+" </CENTER></font>");
         out.println("<br>");
         out.println("<br>");
         if(v_nota.equals("S"))
         {
-         session.removeValue("s_indinformacion");
-         session.putValue("s_indinformacion","S");
+         session.removeAttribute("s_indinformacion");
+         session.setAttribute("s_indinformacion","S");
          out.println("<center><font face='Verdana, Arial, Helvetica, sans-serif' size='2' color='#000000'>Se tienen aportes sin información de traslado.¿Desea realizar la solicitud de retiro?</font></center>");
          out.println("<br>");
          out.println("<PRE>");
@@ -84,8 +84,8 @@ public class TBS_SininfRetiro2 extends HttpServlet implements SingleThreadModel
         }
        else
        {
-         session.removeValue("s_indinformacion");
-         session.putValue("s_indinformacion","N");
+         session.removeAttribute("s_indinformacion");
+         session.setAttribute("s_indinformacion","N");
          out.println("<center><font face='Verdana, Arial, Helvetica, sans-serif' size='2' color='#000000'>¿Desea realizar la solicitud de retiro?</font></center>");
          out.println("<br>");
          out.println("<PRE>");

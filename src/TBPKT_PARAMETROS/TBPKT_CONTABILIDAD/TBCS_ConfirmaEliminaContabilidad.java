@@ -10,7 +10,7 @@ import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 
 //Nombre de la clase que v_confirma la eliminación de contabilidad
-public class TBCS_ConfirmaEliminaContabilidad extends HttpServlet implements SingleThreadModel{
+public class TBCS_ConfirmaEliminaContabilidad extends HttpServlet{
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
   /**

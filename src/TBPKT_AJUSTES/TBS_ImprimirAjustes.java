@@ -13,7 +13,7 @@ import java.io.*;
 */
 
 
-public class TBS_ImprimirAjustes extends HttpServlet implements SingleThreadModel{
+public class TBS_ImprimirAjustes extends HttpServlet{
 
   TBCL_FndCmp i_fnd = new TBCL_FndCmp();
   String cadena     = new String("");
@@ -40,7 +40,7 @@ public void doGet(HttpServletRequest request, HttpServletResponse response) thro
     out                         = new PrintWriter (response.getOutputStream());
     sess                        = request.getSession(true);
     sess.setMaxInactiveInterval(3600);
-    String cadena               = (String)sess.getValue("cadena");
+    String cadena               = (String)sess.getAttribute("cadena");
     //INICIO seguridad
     String parametros[]         = new String[8];
     String ip_tax               = request.getRemoteAddr();
@@ -75,9 +75,9 @@ private void buildPage()
     out.println("<td align='center' BGCOLOR='#DCDCDC' width='20%' style='border: thin solid'><font face='Verdana' size='1'><strong>Nombres Apellidos</strong></font></td><td align='center' width='12%' BGCOLOR='#DCDCDC' style='border: thin solid'><font face='Verdana' size='1'><strong>Contrato</strong></font></td><td align='center' width='12%' BGCOLOR='#DCDCDC' style='border: thin solid'><font face='Verdana' size='1'><strong>Fecha Ajuste</strong></font></td><td align='center' width='10%' BGCOLOR='#DCDCDC' style='border: thin solid'><font face='Verdana' size='1'><strong>Monto</strong></font></td><td align='center' width='20%' BGCOLOR='#DCDCDC' style='border: thin solid'><font face='Verdana' size='1'><strong>Banco-Cuenta Egreso Original</strong></font></td><td align='center' width='12%' BGCOLOR='#DCDCDC' style='border: thin solid'><font face='Verdana' size='1'><strong>Fecha de la Decisión</strong></font></td>");
     out.println("<td align='center' width='14%' BGCOLOR='#DCDCDC' style='border: thin solid'><font face='Verdana' size='1'><strong>Decisión</strong></font></td></tr>");
     //tomar la información de los ajustes con acción
-    if(sess.getValue("VALREPORTE")!=null)
+    if(sess.getAttribute("VALREPORTE")!=null)
      {
-      TBPL_showReporte((String)sess.getValue("VALREPORTE"));//mostrar el reporte
+      TBPL_showReporte((String)sess.getAttribute("VALREPORTE"));//mostrar el reporte
      }
     out.println("</table></center>");
     out.println("</table></center>");

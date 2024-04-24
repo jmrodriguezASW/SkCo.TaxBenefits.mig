@@ -10,7 +10,7 @@ import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 
 //Nombre de la clase que eliminara la condición penalización
-public class TBCS_EliminaCondicionPenalizacion extends HttpServlet implements SingleThreadModel{
+public class TBCS_EliminaCondicionPenalizacion extends HttpServlet{
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
 private String v_nuevaCadena ="";

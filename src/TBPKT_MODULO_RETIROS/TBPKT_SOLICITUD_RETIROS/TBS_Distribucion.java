@@ -8,7 +8,7 @@ import TBPKT_UTILIDADES.TBPKT_PLANTILLA.*;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 
-public class TBS_Distribucion extends HttpServlet implements SingleThreadModel
+public class TBS_Distribucion extends HttpServlet
 {
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
  {
@@ -48,8 +48,8 @@ public class TBS_Distribucion extends HttpServlet implements SingleThreadModel
    try { v_retotal = request.getParameter("v_retotal"); }
    catch (Exception e) { e.printStackTrace(); }
 
-   String v_total = (java.lang.String)session.getValue("s_total");
-    if((java.lang.String)session.getValue("s_total") != null)
+   String v_total = (java.lang.String)session.getAttribute("s_total");
+    if((java.lang.String)session.getAttribute("s_total") != null)
    {
     if( v_total.equals("N"))
     {

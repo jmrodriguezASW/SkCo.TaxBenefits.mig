@@ -13,7 +13,7 @@ import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 
 //Nombre de la clase
-public class TBCS_ConceptoTransaccion extends HttpServlet implements SingleThreadModel{
+public class TBCS_ConceptoTransaccion extends HttpServlet{
 private PrintWriter out;//clase que nos sirve para mostrar el código HTML
 private TBCL_Consulta v_Consulta;//Clase que ejecuta las Consultas y me devulve un vector de respuesta
 private String v_nuevaCadena ="";

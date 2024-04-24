@@ -15,7 +15,7 @@ import co.oldmutual.taxbenefit.util.DataSourceWrapper;
 
 //import PKT_ACTUALIZA_APORTES.*;
 
-public class TBS_SininfRetiro extends HttpServlet implements SingleThreadModel
+public class TBS_SininfRetiro extends HttpServlet
 {
 
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -89,41 +89,41 @@ public class TBS_SininfRetiro extends HttpServlet implements SingleThreadModel
    boolean v_indtraslado = false;
    int v_con  = 0;
    
-   if((java.lang.String)session.getValue("s_contrato")!= null || (java.lang.String)session.getValue("s_producto")!= null)
+   if((java.lang.String)session.getAttribute("s_contrato")!= null || (java.lang.String)session.getAttribute("s_producto")!= null)
      {
-        String v_pro = (java.lang.String)session.getValue("s_producto");//"MFUND";
-        String v_contra = (java.lang.String)session.getValue("s_contrato");//"000011425";
-        String v_tipo = (java.lang.String)session.getValue("s_tipotran");//"UTT001";
-        String v_clase = (java.lang.String)session.getValue("s_clasetran");//"UCT001";
-        String v_valor =(java.lang.String)session.getValue("s_valor");//"100000";//
+        String v_pro = (java.lang.String)session.getAttribute("s_producto");//"MFUND";
+        String v_contra = (java.lang.String)session.getAttribute("s_contrato");//"000011425";
+        String v_tipo = (java.lang.String)session.getAttribute("s_tipotran");//"UTT001";
+        String v_clase = (java.lang.String)session.getAttribute("s_clasetran");//"UCT001";
+        String v_valor =(java.lang.String)session.getAttribute("s_valor");//"100000";//
         double v_valor2 = new Double(v_valor).doubleValue();
-        String v_tipov =(java.lang.String)session.getValue("s_tipov");//"STV001";
-        String v_valoruni2 =(java.lang.String)session.getValue("s_valuni");//"1000";
+        String v_tipov =(java.lang.String)session.getAttribute("s_tipov");//"STV001";
+        String v_valoruni2 =(java.lang.String)session.getAttribute("s_valuni");//"1000";
         double  v_valoruni = new Double(v_valoruni2).doubleValue();
-        String v_sistema = (java.lang.String)session.getValue("s_sistema");
-        String v_usumfund= (java.lang.String)session.getValue("s_usumfund");
-        String v_passmfund= (java.lang.String)session.getValue("s_passmfund");
-        String v_libreria = (java.lang.String)session.getValue("s_libreria");
-        String v_orden =(java.lang.String)session.getValue("s_orden");//"SMO001";//
-        String v_respetar =(java.lang.String)session.getValue("s_respetar");//"SMO001";//
-        String v_naturaleza =(java.lang.String)session.getValue("s_naturaleza");//"SNR001";//
-        String v_nom    = (java.lang.String)session.getValue("s_nombres");
-        String v_ape    = (java.lang.String)session.getValue("s_apellidos");
-        String v_tipopenaliza  = (java.lang.String)session.getValue("s_penaliza");
-        String v_fecha      =(java.lang.String)session.getValue("s_fecefectiva");//tomo fecha efectiva del retirpo
+        String v_sistema = (java.lang.String)session.getAttribute("s_sistema");
+        String v_usumfund= (java.lang.String)session.getAttribute("s_usumfund");
+        String v_passmfund= (java.lang.String)session.getAttribute("s_passmfund");
+        String v_libreria = (java.lang.String)session.getAttribute("s_libreria");
+        String v_orden =(java.lang.String)session.getAttribute("s_orden");//"SMO001";//
+        String v_respetar =(java.lang.String)session.getAttribute("s_respetar");//"SMO001";//
+        String v_naturaleza =(java.lang.String)session.getAttribute("s_naturaleza");//"SNR001";//
+        String v_nom    = (java.lang.String)session.getAttribute("s_nombres");
+        String v_ape    = (java.lang.String)session.getAttribute("s_apellidos");
+        String v_tipopenaliza  = (java.lang.String)session.getAttribute("s_penaliza");
+        String v_fecha      =(java.lang.String)session.getAttribute("s_fecefectiva");//tomo fecha efectiva del retirpo
         java.sql.Date v_fecharetiro = new java.sql.Date(4);
         v_fecharetiro = java.sql.Date.valueOf(v_fecha);
-        v_cargo1       = (java.lang.String)session.getValue("s_cargo1");
-        v_cargo2       = (java.lang.String)session.getValue("s_cargo2");
-        v_cargo3       = (java.lang.String)session.getValue("s_cargo3");
-        v_cargo4       = (java.lang.String)session.getValue("s_cargo4");
+        v_cargo1       = (java.lang.String)session.getAttribute("s_cargo1");
+        v_cargo2       = (java.lang.String)session.getAttribute("s_cargo2");
+        v_cargo3       = (java.lang.String)session.getAttribute("s_cargo3");
+        v_cargo4       = (java.lang.String)session.getAttribute("s_cargo4");
 
         /**Modificado 2009/10/27 Variable Id Saro*/
         try{
-          if((java.lang.String)session.getValue("v_idsaro")!= null){
-            v_idsaro = (java.lang.String)session.getValue("v_idsaro");
-            session.removeValue("v_idsaro");
-            session.putValue("v_idsaro",v_idsaro);
+          if((java.lang.String)session.getAttribute("v_idsaro")!= null){
+            v_idsaro = (java.lang.String)session.getAttribute("v_idsaro");
+            session.removeAttribute("v_idsaro");
+            session.setAttribute ("v_idsaro",v_idsaro);
           }
         }catch (Exception e)  { e.printStackTrace(); }
      
@@ -319,8 +319,8 @@ public class TBS_SininfRetiro extends HttpServlet implements SingleThreadModel
 
 
               }
-               session.removeValue("s_sel"+v_con);
-               session.putValue("s_sel"+v_con,(java.lang.Object)vec2[v_con].substring(1,v));
+               session.removeAttribute("s_sel"+v_con);
+               session.setAttribute ("s_sel"+v_con,(java.lang.Object)vec2[v_con].substring(1,v));
 
 
            }
@@ -362,8 +362,8 @@ public class TBS_SininfRetiro extends HttpServlet implements SingleThreadModel
         if(v_cumple)
         {
             t_tax.rollback();
-            session.removeValue("s_contador");
-            session.putValue("s_contador",(java.lang.Object)new Integer(v_con).toString());
+            session.removeAttribute("s_contador");
+            session.setAttribute ("s_contador",(java.lang.Object)new Integer(v_con).toString());
             String v_pintar=    i_pagina.TBFL_CABEZA("Calcular Solicitud de Retiro","Calcular Solicitud de Retiro","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_CalcularRetiro","",true,"modulo_retiros.js","return validar_retiro(this)");
             out.println(""+v_pintar+"");
             /*Cambio para manejo de referencia unica 2009/03/30 MOS */
@@ -383,8 +383,8 @@ public class TBS_SininfRetiro extends HttpServlet implements SingleThreadModel
             out.println("<br>");
             if(v_indtraslado)
             {
-              session.removeValue("s_indinformacion");
-              session.putValue("s_indinformacion","S");
+              session.removeAttribute("s_indinformacion");
+              session.setAttribute ("s_indinformacion","S");
               out.println("<center><font face='Verdana, Arial, Helvetica, sans-serif' size='2' color='#000000'>De los aportes seleccionados hay  aportes sin información de traslado, ¿Desea realizar la solicitud de retiro?</font></center>");
               out.println("<br>");
               out.println("<PRE>");
@@ -399,8 +399,8 @@ public class TBS_SininfRetiro extends HttpServlet implements SingleThreadModel
             }
             else
             {
-              session.removeValue("s_indinformacion");
-              session.putValue("s_indinformacion","N");
+              session.removeAttribute("s_indinformacion");
+              session.setAttribute ("s_indinformacion","N");
               out.println("<center><font face='Verdana, Arial, Helvetica, sans-serif' size='2' color='#000000'>¿Desea realizar la solicitud de retiro?</font></center>");
               out.println("<br>");
               out.println("<PRE>");

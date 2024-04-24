@@ -11,7 +11,7 @@ import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 
 //Nombre de la clase
-public class TBCS_CierreUnidad extends HttpServlet implements SingleThreadModel{
+public class TBCS_CierreUnidad extends HttpServlet{
 private PrintWriter out;//Se enjcarga de imprimir el v_codigo html
 //Clase que se encarga de manejar las declaraciones que se harán con la base de datos
 private TBCL_Consulta v_Consulta;

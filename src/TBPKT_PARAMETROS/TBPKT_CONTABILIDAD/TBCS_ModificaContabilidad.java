@@ -13,7 +13,7 @@ import org.owasp.validator.html.*; // INT20131108
 //Nombre de la clase que se encarga de modificar la contabilidad
 import TBPKT_UTILIDADES.TBPKT_REFERENCIAS.TBCL_REFERENCIAS;// INT20131108
 
-public class TBCS_ModificaContabilidad extends HttpServlet implements SingleThreadModel{
+public class TBCS_ModificaContabilidad extends HttpServlet{
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
 

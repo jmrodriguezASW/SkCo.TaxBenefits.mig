@@ -9,7 +9,7 @@ import TBPKT_UTILIDADES.TBPKT_PLANTILLA.STBCL_GenerarBaseHTML;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 //Clase que se encarga de mostrar las paginas de modificar o eliminar festivos
-public class TBCS_AEMFestivos extends HttpServlet implements SingleThreadModel{
+public class TBCS_AEMFestivos extends HttpServlet{
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
 private String v_nuevaCadena;

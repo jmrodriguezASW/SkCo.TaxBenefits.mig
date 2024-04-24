@@ -18,7 +18,7 @@ import TBPKT_UTILIDADES.TBPKT_CONEXIONBASEDATOS.*;
 import co.oldmutual.taxbenefit.util.DataSourceWrapper;
 
 
-public class TBCS_InformativoAporte extends HttpServlet implements SingleThreadModel{
+public class TBCS_InformativoAporte extends HttpServlet{
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
 private String v_nuevaCadena ="";
@@ -274,7 +274,7 @@ double[] v_valuni2     = new double[3];/**Valor unidad*/
       if (!v_descripcion.elementAt(0).toString().equals("No hay elementos"))
         {
 
-        if( (java.lang.String)session.getValue("s_consultaas") == null)
+        if( (java.lang.String)session.getAttribute("s_consultaas") == null)
         {
            v_valuni2 =i_unidad.TBF_CALCULO_VALOR_UNIDAD(TBFL_FechaMenosUno(),TBFL_FechaMenosUno(), v_Nocontrato, v_codigo, false,0);
 
@@ -283,8 +283,8 @@ double[] v_valuni2     = new double[3];/**Valor unidad*/
              ValorUnidad = v_valuni2[0] ;
              //out.println("Valor unidad =" + ValorUnidad + "<br>");
              imprimir = true;
-             session.removeValue("s_consultaas");
-             session.putValue("s_consultaas",(java.lang.Object)new Double(v_valuni2[0]).toString());
+             session.removeAttribute("s_consultaas");
+             session.setAttribute("s_consultaas",(java.lang.Object)new Double(v_valuni2[0]).toString());
 
            }
            else
@@ -296,7 +296,7 @@ double[] v_valuni2     = new double[3];/**Valor unidad*/
         else
         {
 
-          ValorUnidad =  new Double((java.lang.String)session.getValue("s_consultaas")).doubleValue();
+          ValorUnidad =  new Double((java.lang.String)session.getAttribute("s_consultaas")).doubleValue();
           imprimir = true;
          }
         

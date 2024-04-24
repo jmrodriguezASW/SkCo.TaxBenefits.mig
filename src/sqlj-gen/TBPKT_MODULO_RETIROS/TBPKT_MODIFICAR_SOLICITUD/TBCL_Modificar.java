@@ -131,12 +131,12 @@ implements sqlj.runtime.NamedIterator
    boolean v_nopintar  = true;/**Verificar que en el primer dato se captura datos contrato*/
 
    /**Verificar que las variables de session no expiren*/
-   if((java.lang.String)session.getValue("s_contrato")!= null ||(java.lang.String)session.getValue("s_producto")!= null)
+   if((java.lang.String)session.getAttribute("s_contrato")!= null ||(java.lang.String)session.getAttribute("s_producto")!= null)
    {
     /**Capturar variables de session*/
-    v_contra     = (java.lang.String)session.getValue("s_contrato");//toam contrato
-    v_pro        = (java.lang.String)session.getValue("s_producto");//toma producto
-    v_tusupipe   = (java.lang.String)session.getValue("s_usuariopipe");//toma unidad
+    v_contra     = (java.lang.String)session.getAttribute("s_contrato");//toam contrato
+    v_pro        = (java.lang.String)session.getAttribute("s_producto");//toma producto
+    v_tusupipe   = (java.lang.String)session.getAttribute("s_usuariopipe");//toma unidad
 
     /**Seleccionar información del retiro pendiente a enviar a multifund*/
     /*@lineinfo:generated-code*//*@lineinfo:68^5*/
@@ -213,11 +213,11 @@ implements sqlj.runtime.NamedIterator
      if(v_nopintar)
      {
       v_nombre= v_retiro.CON_NOMBRES().trim();
-      session.removeValue("s_nombres");
-      session.putValue("s_nombres",(java.lang.Object)v_nombre);
+      session.removeAttribute("s_nombres");
+      session.setAttribute("s_nombres",(java.lang.Object)v_nombre);
       v_apellidos = v_retiro.CON_APELLIDOS().trim();
-      session.removeValue("s_apellidos");
-      session.putValue("s_apellidos",(java.lang.Object)v_apellidos);
+      session.removeAttribute("s_apellidos");
+      session.setAttribute("s_apellidos",(java.lang.Object)v_apellidos);
       /*Cambio para manejo de referencia unica 2009/03/30 MOS */
       String v_contrato_unif = "";
       /*@lineinfo:generated-code*//*@lineinfo:123^7*/

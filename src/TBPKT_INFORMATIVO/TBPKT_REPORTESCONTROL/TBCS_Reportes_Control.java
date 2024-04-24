@@ -16,7 +16,7 @@ import TBPKT_UTILIDADES.TBPKT_PLANTILLA.STBCL_GenerarBaseHTML;
 
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
-public class TBCS_Reportes_Control extends HttpServlet implements SingleThreadModel {
+public class TBCS_Reportes_Control extends HttpServlet {
     private PrintWriter out;
     private TBCL_Consulta v_Consulta;
     private String v_nuevaCadena = "";
@@ -81,18 +81,18 @@ public class TBCS_Reportes_Control extends HttpServlet implements SingleThreadMo
             vusuario = request.getParameter("vusuario");
             producto = request.getParameter("producto");
 
-            session.removeValue("s_fechaini");
-            session.putValue("s_fechaini", (java.lang.Object)fechaini);
-            session.removeValue("s_fechafin");
-            session.putValue("s_fechafin", (java.lang.Object)fechafin);
-            session.removeValue("s_unipro");
-            session.putValue("s_unipro", (java.lang.Object)unipro);
-            session.removeValue("s_tran");
-            session.putValue("s_tran", (java.lang.Object)tran);
-            session.removeValue("s_usuario");
-            session.putValue("s_usuario", (java.lang.Object)vusuario);
-            session.removeValue("s_producto");
-            session.putValue("s_producto", (java.lang.Object)producto);
+            session.removeAttribute("s_fechaini");
+            session.setAttribute("s_fechaini", (java.lang.Object)fechaini);
+            session.removeAttribute("s_fechafin");
+            session.setAttribute("s_fechafin", (java.lang.Object)fechafin);
+            session.removeAttribute("s_unipro");
+            session.setAttribute("s_unipro", (java.lang.Object)unipro);
+            session.removeAttribute("s_tran");
+            session.setAttribute("s_tran", (java.lang.Object)tran);
+            session.removeAttribute("s_usuario");
+            session.setAttribute("s_usuario", (java.lang.Object)vusuario);
+            session.removeAttribute("s_producto");
+            session.setAttribute("s_producto", (java.lang.Object)producto);
 
 
         } catch (Exception e) {
@@ -709,8 +709,8 @@ public class TBCS_Reportes_Control extends HttpServlet implements SingleThreadMo
                 }
         out.println("</TABLE>");
         out.println("<input type='hidden' id='cadena' name='cadena' value='" + v_nuevaCadena + "'>");
-        session.removeValue("s_cadena");
-        session.putValue("s_cadena", (java.lang.Object)v_nuevaCadena);
+        session.removeAttribute("s_cadena");
+        session.setAttribute("s_cadena", (java.lang.Object)v_nuevaCadena);
         out.println("<a href='TBPKT_INFORMATIVO.TBPKT_REPORTESCONTROL.TBCS_Reporte_NO_Impresion' target='impresion' style='font-style: normal; text-decoration:none'><font face='Verdana' size='1'><img src='imagenes/PRINTER.gif' alt='Version para Imprimir' border='0'></font></a>");
         //        out.println("<A HREF=\"TBPKT_INFORMATIVO.TBPKT_REPORTESCONTROL.TBCS_Reporte_NO_Impresion?fechaini="+fechaini+"&fechafin="+fechafin+"&unipro="+unipro+"&tran="+tran+"\" target=\"VentanaNueva\"><IMG SRC=\"imagenes/PRINTER.gif\" ALT=\"Versión de impresión\" BORDER=\"0\" align=\"right\"></A>");
         out.println("<BR>&nbsp;&nbsp;<BR><CENTER><font face='Verdana, Arial, Helvetica, sans-serif'><font size='1'><INPUT TYPE=BUTTON VALUE=Regresar ONCLICK=history.go(-1);></font></CENTER>");
@@ -759,8 +759,8 @@ public class TBCS_Reportes_Control extends HttpServlet implements SingleThreadMo
                             "</FONT></TD></TR>");
                 out.println("</TBODY></TABLE>");
                 out.println("<input type='hidden' id='cadena' name='cadena' value='" + v_nuevaCadena + "'>");
-                session.removeValue("s_cadena");
-                session.putValue("s_cadena", (java.lang.Object)v_nuevaCadena);
+                session.removeAttribute("s_cadena");
+                session.setAttribute("s_cadena", (java.lang.Object)v_nuevaCadena);
                 out.println("<a href='TBPKT_INFORMATIVO.TBPKT_REPORTESCONTROL.TBCS_Reporte_Retiros_Impresion' target='impresion' style='font-style: normal; text-decoration:none'><font face='Verdana' size='1'><img src='imagenes/PRINTER.gif' alt='Version para Imprimir' border='0'></font></a>");
                 //out.println("<A HREF=\"TBPKT_INFORMATIVO.TBPKT_REPORTESCONTROL.TBCS_Reporte_Retiros_Impresion?fechaini="+fechaini+"&fechafin="+fechafin+"&unipro="+unipro+"&
                 String vlrneto =
@@ -771,14 +771,14 @@ public class TBCS_Reportes_Control extends HttpServlet implements SingleThreadMo
                     NumberFormat.getCurrencyInstance().format(Double.parseDouble(valor2.elementAt(2).toString()));
                 String vlrren =
                     NumberFormat.getCurrencyInstance().format(Double.parseDouble(valor2.elementAt(3).toString()));
-                session.removeValue("s_vlrneto");
-                session.putValue("s_vlrneto", (java.lang.Object)vlrneto);
-                session.removeValue("s_vlrbrto");
-                session.putValue("s_vlrbrto", (java.lang.Object)vlrbrto);
-                session.removeValue("s_vlrcap");
-                session.putValue("s_vlrcap", (java.lang.Object)vlrcap);
-                session.removeValue("s_vlrren");
-                session.putValue("s_vlrren", (java.lang.Object)vlrren);
+                session.removeAttribute("s_vlrneto");
+                session.setAttribute("s_vlrneto", (java.lang.Object)vlrneto);
+                session.removeAttribute("s_vlrbrto");
+                session.setAttribute("s_vlrbrto", (java.lang.Object)vlrbrto);
+                session.removeAttribute("s_vlrcap");
+                session.setAttribute("s_vlrcap", (java.lang.Object)vlrcap);
+                session.removeAttribute("s_vlrren");
+                session.setAttribute("s_vlrren", (java.lang.Object)vlrren);
 
             } else {
                 out.println("<TABLE bgColor=white border=2 borderColor=silver cellPadding=2 cellSpacing=0 cols=2 rules=all width=\"100%\"><TBODY>");
@@ -848,8 +848,8 @@ public class TBCS_Reportes_Control extends HttpServlet implements SingleThreadMo
                             "</FONT></TD></TR>");
                 out.println("</TBODY></TABLE>");
                 out.println("<input type='hidden' id='cadena' name='cadena' value='" + v_nuevaCadena + "'>");
-                session.removeValue("s_cadena");
-                session.putValue("s_cadena", (java.lang.Object)v_nuevaCadena);
+                session.removeAttribute("s_cadena");
+                session.setAttribute("s_cadena", (java.lang.Object)v_nuevaCadena);
                 out.println("<a href='TBPKT_INFORMATIVO.TBPKT_REPORTESCONTROL.TBCS_Reporte_Retiros_Impresion' target='impresion' style='font-style: normal; text-decoration:none'><font face='Verdana' size='1'><img src='imagenes/PRINTER.gif' alt='Version para Imprimir' border='0'></font></a>");
                 //out.println("<A HREF=\"TBPKT_INFORMATIVO.TBPKT_REPORTESCONTROL.TBCS_Reporte_Retiros_Impresion?fechaini="+fechaini+"&fechafin="+fechafin+"&unipro="+unipro+"&
                 String vlrneto =
@@ -860,14 +860,14 @@ public class TBCS_Reportes_Control extends HttpServlet implements SingleThreadMo
                     NumberFormat.getCurrencyInstance().format(Double.parseDouble(valor.elementAt(3).toString()));
                 String vlrren =
                     NumberFormat.getCurrencyInstance().format(Double.parseDouble(valor.elementAt(4).toString()));
-                session.removeValue("s_vlrneto");
-                session.putValue("s_vlrneto", (java.lang.Object)vlrneto);
-                session.removeValue("s_vlrbrto");
-                session.putValue("s_vlrbrto", (java.lang.Object)vlrbrto);
-                session.removeValue("s_vlrcap");
-                session.putValue("s_vlrcap", (java.lang.Object)vlrcap);
-                session.removeValue("s_vlrren");
-                session.putValue("s_vlrren", (java.lang.Object)vlrren);
+                session.removeAttribute("s_vlrneto");
+                session.setAttribute("s_vlrneto", (java.lang.Object)vlrneto);
+                session.removeAttribute("s_vlrbrto");
+                session.setAttribute("s_vlrbrto", (java.lang.Object)vlrbrto);
+                session.removeAttribute("s_vlrcap");
+                session.setAttribute("s_vlrcap", (java.lang.Object)vlrcap);
+                session.removeAttribute("s_vlrren");
+                session.setAttribute("s_vlrren", (java.lang.Object)vlrren);
 
             } else {
                 out.println("<TABLE bgColor=white border=2 borderColor=silver cellPadding=2 cellSpacing=0 cols=2 rules=all width=\"100%\"><TBODY>");
@@ -949,8 +949,8 @@ public class TBCS_Reportes_Control extends HttpServlet implements SingleThreadMo
         }
         out.println("</TABLE>");
         out.println("<input type='hidden' id='cadena' name='cadena' value='" + v_nuevaCadena + "'>");
-        session.removeValue("s_cadena");
-        session.putValue("s_cadena", (java.lang.Object)v_nuevaCadena);
+        session.removeAttribute("s_cadena");
+        session.setAttribute("s_cadena", (java.lang.Object)v_nuevaCadena);
         out.println("<a href='TBPKT_INFORMATIVO.TBPKT_REPORTESCONTROL.TBCS_Reporte_NO_Impresion' target='impresion' style='font-style: normal; text-decoration:none'><font face='Verdana' size='1'><img src='imagenes/PRINTER.gif' alt='Version para Imprimir' border='0'></font></a>");
         //        out.println("<A HREF=\"TBPKT_INFORMATIVO.TBPKT_REPORTESCONTROL.TBCS_Reporte_NO_Impresion?fechaini="+fechaini+"&fechafin="+fechafin+"&unipro="+unipro+"&tran="+tran+"\" target=\"VentanaNueva\"><IMG SRC=\"imagenes/PRINTER.gif\" ALT=\"Versión de impresión\" BORDER=\"0\" align=\"right\"></A>");
         out.println("<BR>&nbsp;&nbsp;<BR><CENTER><font face='Verdana, Arial, Helvetica, sans-serif'><font size='1'><INPUT TYPE=BUTTON VALUE=Regresar ONCLICK=history.go(-1);></font></CENTER>");

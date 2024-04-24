@@ -81,7 +81,7 @@ implements sqlj.runtime.NamedIterator
       v_valusu = i_valusu.TBFL_ValidarUsuario();
      DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
       DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));
-      String v_varsession = (java.lang.String)session.getValue("s_cierre");
+      String v_varsession = (java.lang.String)session.getAttribute("s_cierre");
       //************************************************************
       //Verificar si hubo error en algun proceso de cierre anterior
       //************************************************************
@@ -503,7 +503,7 @@ implements sqlj.runtime.NamedIterator
                   sw = 1;
                 }//No hubo error al realizar el cargue de las tablas para el cierre actual
                 else{
-                  //session.putValue("s_cierre","3");
+                  //session.setAttribute("s_cierre","3");
                   out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA ("Cierre Unidades", "Cierre Unidades","","Error en el proceso de cierre: "+v_men_err+"ajkm"+v_retiros+"ajkn"+v_distribucion,false));
                   out.println("<pre>");
                   //out.println("<center> <input type='button' value='Regresar' Onclick=window.location='TBPKT_CIERRE.TBS_CIERRE';></center>");
@@ -514,7 +514,7 @@ implements sqlj.runtime.NamedIterator
                 }//Hubo error al realizar el cargue de las tablas para el cierre actual
               }//Si no hubo error al validar en las tablas de control v_val_cierre = Y
               else{
-                //session.putValue("s_cierre","3");
+                //session.setAttribute("s_cierre","3");
                 out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Cierre Unidades", "Cierre Unidades","","No se puede realizar el cierre. Error: "+v_men_err,false));
                 out.println("<pre>");
                 //out.println("<center> <input type='button' value='Regresar' Onclick=window.location='TBPKT_CIERRE.TBS_CIERRE?cadena=89789655437996452890077676654434579041356';></center>");
@@ -525,7 +525,7 @@ implements sqlj.runtime.NamedIterator
               } //Si hubo error al validar en las tablas de control  v_val_cierre = N
             }//No hubo error al validar cierre
             else{
-              //session.putValue("s_cierre","3");
+              //session.setAttribute("s_cierre","3");
               out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Cierre Unidades", "Cierre Unidades","","Error al validar tablas de control: "+v_men_err,false));
               out.println("<pre>");
               //out.println("<center> <input type='button' value='Regresar' Onclick=window.location='TBPKT_CIERRE.TBS_CIERRE';></center>");
@@ -596,7 +596,7 @@ implements sqlj.runtime.NamedIterator
               v_tipcierre = "P"; //Para proceso de cierre anterior el tipo de cierre sera parcial
             }//No hubo error al realizar el recargue de las tablas para el cierre anterior
             else{
-              //session.putValue("s_cierre","3");
+              //session.setAttribute("s_cierre","3");
               out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Cierre Unidades", "Cierre Unidades","","Advertencia: No se efectuó su cierre actual pues el último proceso de cierre realizado no fue exitoso. Se realizó nuevamente este cierre con tipo Parcial.Hubo error al recargar tablas de proceso de cierre anterior: "+v_men_err,false));
               out.println("<pre>");
               out.println("<center> <input type='button' value='Regresar' ONCLICK=history.go();></center>");
@@ -607,7 +607,7 @@ implements sqlj.runtime.NamedIterator
           }//Cierre anterior no exitoso recargar
         }//No hubo error al validar proceso de cierre anterior
         else{
-          //session.putValue("s_cierre","3");
+          //session.setAttribute("s_cierre","3");
           out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Cierre Unidades", "Cierre Unidades","","Error al validar proceso de cierre anterior: "+v_men_err,false));
           out.println("<pre>");
           //out.println("<center> <input type='button' value='Regresar' Onclick=window.location='TBPKT_CIERRE.TBS_CIERRE';></center>");
@@ -789,7 +789,7 @@ implements sqlj.runtime.NamedIterator
 //  ************************************************************
 
 /*@lineinfo:user-code*//*@lineinfo:249^35*///De actualizacion e insercion de tabla de control de MF
-                    //session.putValue("s_cierre","3");
+                    //session.setAttribute("s_cierre","3");
                     out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Cierre Unidades", "Cierre Unidades","","Error al insertar en la tabla de control de Multifund "+v_men_err,false));
                     out.println("<pre>");
                     //out.println("<center> <input type='button' value='Regresar' Onclick=window.location='TBPKT_CIERRE.TBS_CIERRE';></center>");
@@ -831,7 +831,7 @@ implements sqlj.runtime.NamedIterator
                 }//No se cierra paso 1 ct!=0
               }//No hubo error en verificar paso 1
               else{
-                //session.putValue("s_cierre","3");
+                //session.setAttribute("s_cierre","3");
                 /*@lineinfo:generated-code*//*@lineinfo:271^17*/
 
 //  ************************************************************
@@ -870,7 +870,7 @@ implements sqlj.runtime.NamedIterator
             }//Tipo de cierre es parcial
           }//No hubo error al actualizar tabla de control ajkpcpp
           else{
-            //session.putValue("s_cierre","3");
+            //session.setAttribute("s_cierre","3");
             /*@lineinfo:generated-code*//*@lineinfo:288^13*/
 
 //  ************************************************************
@@ -1092,7 +1092,7 @@ implements sqlj.runtime.NamedIterator
 /*@lineinfo:user-code*//*@lineinfo:356^75*/
               if (v_cod_err == 0){
                 if (v_proceso == 3){
-                  //session.putValue("s_cierre","3");
+                  //session.setAttribute("s_cierre","3");
                 
                     //Se almacena información de resultado en LOG de TAX
                     v_mensajeLog = "Advertencia: No se efectuó su cierre actual pues el último proceso de cierre realizado no fue exitoso. Se realizó nuevamente este cierre con tipo Parcial. Proceso de Cierre Anterior Exitoso. Numero total de registros cargados: " +v_total_reg;
@@ -1195,7 +1195,7 @@ implements sqlj.runtime.NamedIterator
 
 /*@lineinfo:user-code*//*@lineinfo:386^35*/
                     
-                  //session.putValue("s_cierre","3");
+                  //session.setAttribute("s_cierre","3");
                   out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Cierre Unidades", "Cierre Unidades","","Proceso de Cierre Exitoso. Numero total de registros cargados: "+v_total_reg,false));
                   out.println("<pre>");
                   //out.println("<center> <input type='button' value='Regresar' Onclick=window.location='TBPKT_CIERRE.TBS_CIERRE';></center>");
@@ -1206,7 +1206,7 @@ implements sqlj.runtime.NamedIterator
                 }//Si proceso no fue anterior v_proceso != 3
               }//No hubo error en el commit;
               else{
-                //session.putValue("s_cierre","3");
+                //session.setAttribute("s_cierre","3");
                   
                 //Se almacena información de resultado en LOG de TAX
                 v_mensajeLog = "Error al hacer commit de la actualizacion de tablas de control "+v_men_err;
@@ -1272,7 +1272,7 @@ implements sqlj.runtime.NamedIterator
 //  ************************************************************
 
 /*@lineinfo:user-code*//*@lineinfo:416^31*/
-              //session.putValue("s_cierre","3");
+              //session.setAttribute("s_cierre","3");
                 
                 //Se almacena información de resultado en LOG de TAX
                 v_mensajeLog = "Error al actualizar el estado de cargue de Distribucción de Fondos "+v_men_err;
@@ -1338,7 +1338,7 @@ implements sqlj.runtime.NamedIterator
 //  ************************************************************
 
 /*@lineinfo:user-code*//*@lineinfo:434^29*/
-            //session.putValue("s_cierre","3");
+            //session.setAttribute("s_cierre","3");
             
             //Se almacena información de resultado en LOG de TAX
             v_mensajeLog = "Error al actualizar el estado de cargue de retiros "+v_men_err;
@@ -1404,7 +1404,7 @@ implements sqlj.runtime.NamedIterator
 //  ************************************************************
 
 /*@lineinfo:user-code*//*@lineinfo:452^27*/
-          //session.putValue("s_cierre","3");
+          //session.setAttribute("s_cierre","3");
           
         //Se almacena información de resultado en LOG de TAX
         v_mensajeLog = "Error al actualizar el estado de cargue de Temporal de Retiros de Taxbenefit "+v_men_err;

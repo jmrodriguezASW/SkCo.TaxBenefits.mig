@@ -11,7 +11,7 @@ import org.owasp.validator.html.*; // INT20131108
 import TBPKT_UTILIDADES.TBPKT_REFERENCIAS.TBCL_REFERENCIAS;// INT20131108
 
 
-public class TBCS_ModificaProducto extends HttpServlet implements SingleThreadModel{
+public class TBCS_ModificaProducto extends HttpServlet{
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
 private String v_nuevaCadena ="";

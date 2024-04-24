@@ -27,10 +27,9 @@ import TBPKT_UTILIDADES.TBPKT_FUNCIONES_AS400.TBCL_FuncionesAs400_Oblig;
 
 import java.text.DecimalFormat;
 
-import javax.servlet.SingleThreadModel;
 import javax.servlet.http.HttpServlet;
 
-public class TBCS_InformativoAporte_Oblig extends HttpServlet implements SingleThreadModel{
+public class TBCS_InformativoAporte_Oblig extends HttpServlet{
     private PrintWriter out;
     private TBCL_Consulta v_Consulta;
     private String v_nuevaCadena ="";

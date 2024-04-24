@@ -12,7 +12,7 @@ import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 import co.oldmutual.taxbenefit.util.DataSourceWrapper;
 
 /**Clase que hace llamado a una función almacenada  que se encarga de eliminar la solicitud de retiro no porcesada*/
-public class TBS_EliminarNoProcesado extends HttpServlet implements SingleThreadModel
+public class TBS_EliminarNoProcesado extends HttpServlet
 {
 
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -50,13 +50,13 @@ public class TBS_EliminarNoProcesado extends HttpServlet implements SingleThread
    t_tax =   DataSourceWrapper.getInstance().getConnection();
    
 
-   if((java.lang.String)session.getValue("s_producto") != null || (java.lang.String)session.getValue("s_contrato")!= null)
+   if((java.lang.String)session.getAttribute("s_producto") != null || (java.lang.String)session.getAttribute("s_contrato")!= null)
    {
-    String v_pro = (java.lang.String)session.getValue("s_producto");
-    String v_contra =(java.lang.String)session.getValue("s_contrato");
-    String v_usuario2 = (java.lang.String)session.getValue("s_usuariopipe");
-    String v_fecha    = (java.lang.String)session.getValue("s_fechaeliminacion");
-    String v_unidad_pro  = (java.lang.String)session.getValue("s_unidad_proceso");
+    String v_pro = (java.lang.String)session.getAttribute("s_producto");
+    String v_contra =(java.lang.String)session.getAttribute("s_contrato");
+    String v_usuario2 = (java.lang.String)session.getAttribute("s_usuariopipe");
+    String v_fecha    = (java.lang.String)session.getAttribute("s_fechaeliminacion");
+    String v_unidad_pro  = (java.lang.String)session.getAttribute("s_unidad_proceso");
 
 
     String v_fecefe = "";

@@ -12,7 +12,7 @@ import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 /**
 */
-public class TBCS_ConsultaAporte extends HttpServlet implements SingleThreadModel{
+public class TBCS_ConsultaAporte extends HttpServlet{
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
 HttpSession session  = null;
@@ -41,7 +41,7 @@ private String v_v_nuevaCadena ="";
        //response.setHeader("Pragma", "No-Cache");
        //response.setDateHeader("Expires", 0);
        String  cadena = request.getParameter("cadena");
-       session.removeValue("s_consultaas");
+       session.removeAttribute("s_consultaas");
        v_v_nuevaCadena = cadena;
        String ip_tax = request.getRemoteAddr();
        TBCL_Seguridad Seguridad = new TBCL_Seguridad();

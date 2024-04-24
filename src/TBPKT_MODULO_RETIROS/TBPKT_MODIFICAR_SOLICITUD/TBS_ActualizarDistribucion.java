@@ -8,7 +8,7 @@ import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 
 
-public class TBS_ActualizarDistribucion extends HttpServlet implements SingleThreadModel
+public class TBS_ActualizarDistribucion extends HttpServlet
 
 {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

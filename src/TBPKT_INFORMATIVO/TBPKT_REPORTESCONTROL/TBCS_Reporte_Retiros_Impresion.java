@@ -8,7 +8,7 @@ import java.text.NumberFormat;
 import TBPKT_UTILIDADES.TBPKT_CONSULTA.TBCL_Consulta;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
-public class TBCS_Reporte_Retiros_Impresion extends HttpServlet implements SingleThreadModel
+public class TBCS_Reporte_Retiros_Impresion extends HttpServlet
 {
    private PrintWriter out;
    private TBCL_Consulta v_Consulta = new TBCL_Consulta();
@@ -44,7 +44,7 @@ public class TBCS_Reporte_Retiros_Impresion extends HttpServlet implements Singl
          String cadena  = "";
          try
          {
-            cadena               = (String)session.getValue("s_cadena");
+            cadena               = (String)session.getAttribute("s_cadena");
          }
          catch (Exception e)
          {
@@ -82,47 +82,47 @@ public class TBCS_Reporte_Retiros_Impresion extends HttpServlet implements Singl
       
       try
       {
-         fechaini = (java.lang.String)session.getValue("s_fechaini");//request.getParameter("fechaini").trim();
+         fechaini = (java.lang.String)session.getAttribute("s_fechaini");//request.getParameter("fechaini").trim();
       }
       catch (Exception e) { e.printStackTrace(); }
       try
       {
-         fechafin = (java.lang.String)session.getValue("s_fechafin");//request.getParameter("fechafin").trim();
+         fechafin = (java.lang.String)session.getAttribute("s_fechafin");//request.getParameter("fechafin").trim();
       }
       catch (Exception e) { e.printStackTrace(); }
       try
       {
-         VlrNeto = (java.lang.String)session.getValue("s_vlrneto");//request.getParameter("vlrneto").trim();
+         VlrNeto = (java.lang.String)session.getAttribute("s_vlrneto");//request.getParameter("vlrneto").trim();
       }
       catch (Exception e) { e.printStackTrace(); }
       try
       {
-         VlrBrto = (java.lang.String)session.getValue("s_vlrbrto");//request.getParameter("vlrbrto").trim();
+         VlrBrto = (java.lang.String)session.getAttribute("s_vlrbrto");//request.getParameter("vlrbrto").trim();
       }
       catch (Exception e) { e.printStackTrace(); }
       try
       {
-         VlrCap = (java.lang.String)session.getValue("s_vlrcap");//request.getParameter("vlrcap").trim();
+         VlrCap = (java.lang.String)session.getAttribute("s_vlrcap");//request.getParameter("vlrcap").trim();
       }
       catch (Exception e) { e.printStackTrace(); }
       try
       {
-         VlrRen = (java.lang.String)session.getValue("s_vlrren");//request.getParameter("vlrren").trim();
+         VlrRen = (java.lang.String)session.getAttribute("s_vlrren");//request.getParameter("vlrren").trim();
       }
       catch (Exception e) { e.printStackTrace(); }
       try
       {
-         unipro = (java.lang.String)session.getValue("s_unipro");//request.getParameter("unipro");
+         unipro = (java.lang.String)session.getAttribute("s_unipro");//request.getParameter("unipro");
       }
       catch (Exception e) { e.printStackTrace(); }
       try
       {
-         vusuario = (java.lang.String)session.getValue("s_usuario");request.getParameter("s_tran");
+         vusuario = (java.lang.String)session.getAttribute("s_usuario");request.getParameter("s_tran");
       }
       catch (Exception e) { vusuario= ""; }
       
       try{
-          producto = (java.lang.String)session.getValue("s_producto");
+          producto = (java.lang.String)session.getAttribute("s_producto");
           }
       catch (Exception e) { vusuario= ""; }
        

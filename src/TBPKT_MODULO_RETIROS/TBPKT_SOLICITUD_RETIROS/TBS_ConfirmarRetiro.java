@@ -16,14 +16,13 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 import javax.servlet.ServletException;
-import javax.servlet.SingleThreadModel;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.math.RoundingMode;
 
-public class TBS_ConfirmarRetiro extends HttpServlet implements SingleThreadModel {
+public class TBS_ConfirmarRetiro extends HttpServlet {
     
     PrintWriter out; 
     String v_ruta_serv = "";
@@ -72,7 +71,7 @@ public class TBS_ConfirmarRetiro extends HttpServlet implements SingleThreadMode
          double v_ret_rend = 0.0;
          double v_cc = 0.0;
             
-         v_ruta_serv     = (java.lang.String)session.getValue("s_ruta_serv");
+         v_ruta_serv     = (java.lang.String)session.getAttribute("s_ruta_serv");
         
          //Se obtienen los datos de session y request para hacer las validaciones necesarias para confirmar el retiro
          if (request.getParameter("v_orden_apli") != null)
@@ -84,14 +83,14 @@ public class TBS_ConfirmarRetiro extends HttpServlet implements SingleThreadMode
          String v_cuenta        = request.getParameter("v_cuenta");            
          String v_concepto      = request.getParameter("v_concepto");                           
          String finalizar       = request.getParameter("finalizar");
-         String v_total         = (java.lang.String)session.getValue("s_total");
-         String v_contrato_unif = (java.lang.String)session.getValue("s_contrato_unif");
-         String v_nombre        = (java.lang.String)session.getValue("s_nombres");
-         String v_apellidos     = (java.lang.String)session.getValue("s_apellidos"); 
-         String v_fecefe        = (java.lang.String)session.getValue("s_fecefectiva"); 
-         String v_fecpro        = (java.lang.String)session.getValue("s_fecpro"); 
-         String v_tiporetiro    = (java.lang.String)session.getValue("s_tiporetiro");
-         String v_esTercero     = (java.lang.String)session.getValue("esTercero");                    
+         String v_total         = (java.lang.String)session.getAttribute("s_total");
+         String v_contrato_unif = (java.lang.String)session.getAttribute("s_contrato_unif");
+         String v_nombre        = (java.lang.String)session.getAttribute("s_nombres");
+         String v_apellidos     = (java.lang.String)session.getAttribute("s_apellidos"); 
+         String v_fecefe        = (java.lang.String)session.getAttribute("s_fecefectiva"); 
+         String v_fecpro        = (java.lang.String)session.getAttribute("s_fecpro"); 
+         String v_tiporetiro    = (java.lang.String)session.getAttribute("s_tiporetiro");
+         String v_esTercero     = (java.lang.String)session.getAttribute("esTercero");                    
             
         DecimalFormat v_format = new  DecimalFormat("¤###,###,###,###,###,###.##");
         
@@ -287,42 +286,42 @@ public class TBS_ConfirmarRetiro extends HttpServlet implements SingleThreadMode
                 v_pintar=    i_pagina.TBFL_CABEZA("Resumen de la Solicitud","Resumen de la Solicitud","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_FinalizarRetiro","",true,"modulo_retiros_oblig.js","return validar_retiro(this)");                
                 out.println(""+v_pintar+"");       
                 
-                session.removeValue("v_disponible_neto");
-                session.removeValue("v_prov_comi_rend");
-                session.removeValue("v_prov_comi_cap");
-                session.removeValue("v_prov_comi_rend");
-                session.removeValue("v_prov_comi_cap");
+                session.removeAttribute("v_disponible_neto");
+                session.removeAttribute("v_prov_comi_rend");
+                session.removeAttribute("v_prov_comi_cap");
+                session.removeAttribute("v_prov_comi_rend");
+                session.removeAttribute("v_prov_comi_cap");
                   
                 if (v_concepto.toString().trim().equals("0")) {             
                     s_concepto = "Aportes Voluntarios Afiliado";
-                    session.putValue("v_disponible_neto", Double.valueOf(Double.parseDouble(request.getParameter("obDispAVA"))));
-                    session.putValue("v_prov_comi_rend", Double.parseDouble(session.getValue("v_prov_comi_rend_AVA").toString()));
-                    session.putValue("v_prov_comi_cap", Double.parseDouble(session.getValue("v_prov_comi_capital_AVA").toString()));
-                    session.putValue("v_ret_rend", Double.parseDouble(session.getValue("v_retencion_rend_AVA").toString()));
-                    session.putValue("v_cc", Double.parseDouble(session.getValue("v_retencion_cont_AVA").toString()));
+                    session.setAttribute("v_disponible_neto", Double.valueOf(Double.parseDouble(request.getParameter("obDispAVA"))));
+                    session.setAttribute("v_prov_comi_rend", Double.parseDouble(session.getAttribute("v_prov_comi_rend_AVA").toString()));
+                    session.setAttribute("v_prov_comi_cap", Double.parseDouble(session.getAttribute("v_prov_comi_capital_AVA").toString()));
+                    session.setAttribute("v_ret_rend", Double.parseDouble(session.getAttribute("v_retencion_rend_AVA").toString()));
+                    session.setAttribute("v_cc", Double.parseDouble(session.getAttribute("v_retencion_cont_AVA").toString()));
                     }
                 
                 if (v_concepto.toString().trim().equals("1")) {
                     s_concepto = "Aportes Voluntarios Empleador";
-                    session.putValue("v_disponible_neto", Double.valueOf(Double.parseDouble(request.getParameter("obDispAVE"))));
-                    session.putValue("v_prov_comi_rend", Double.parseDouble(session.getValue("v_prov_comi_rend_AVE").toString()));
-                    session.putValue("v_prov_comi_cap", Double.parseDouble(session.getValue("v_prov_comi_capital_AVE").toString()));
-                    session.putValue("v_ret_rend", Double.parseDouble(session.getValue("v_retencion_rend_AVE").toString()));
-                    session.putValue("v_cc", Double.parseDouble(session.getValue("v_retencion_cont_AVE").toString()));
+                    session.setAttribute("v_disponible_neto", Double.valueOf(Double.parseDouble(request.getParameter("obDispAVE"))));
+                    session.setAttribute("v_prov_comi_rend", Double.parseDouble(session.getAttribute("v_prov_comi_rend_AVE").toString()));
+                    session.setAttribute("v_prov_comi_cap", Double.parseDouble(session.getAttribute("v_prov_comi_capital_AVE").toString()));
+                    session.setAttribute("v_ret_rend", Double.parseDouble(session.getAttribute("v_retencion_rend_AVE").toString()));
+                    session.setAttribute("v_cc", Double.parseDouble(session.getAttribute("v_retencion_cont_AVE").toString()));
                     }
                 
                 if (v_concepto.toString().trim().equals("2")){
                     s_concepto = "AVA + AVE";    
-                    session.putValue("v_disponible_neto_AVA", Double.valueOf(Double.parseDouble(request.getParameter("obDispAVA"))));
-                    session.putValue("v_prov_comi_rend_AVA", Double.parseDouble(session.getValue("v_prov_comi_rend_AVA").toString()));
-                    session.putValue("v_prov_comi_cap_AVA", Double.parseDouble(session.getValue("v_prov_comi_capital_AVA").toString()));
-                    session.putValue("v_ret_rend_AVA", Double.parseDouble(session.getValue("v_retencion_rend_AVA").toString()));
-                    session.putValue("v_cc_AVA", Double.parseDouble(session.getValue("v_retencion_cont_AVA").toString()));
-                    session.putValue("v_disponible_neto_AVE", Double.valueOf(Double.parseDouble(request.getParameter("obDispAVE"))));
-                    session.putValue("v_prov_comi_rend_AVE", Double.parseDouble(session.getValue("v_prov_comi_rend_AVE").toString()));
-                    session.putValue("v_prov_comi_cap_AVE", Double.parseDouble(session.getValue("v_prov_comi_capital_AVE").toString()));
-                    session.putValue("v_ret_rend_AVE", Double.parseDouble(session.getValue("v_retencion_rend_AVE").toString()));
-                    session.putValue("v_cc_AVE", Double.parseDouble(session.getValue("v_retencion_cont_AVE").toString()));                    
+                    session.setAttribute("v_disponible_neto_AVA", Double.valueOf(Double.parseDouble(request.getParameter("obDispAVA"))));
+                    session.setAttribute("v_prov_comi_rend_AVA", Double.parseDouble(session.getAttribute("v_prov_comi_rend_AVA").toString()));
+                    session.setAttribute("v_prov_comi_cap_AVA", Double.parseDouble(session.getAttribute("v_prov_comi_capital_AVA").toString()));
+                    session.setAttribute("v_ret_rend_AVA", Double.parseDouble(session.getAttribute("v_retencion_rend_AVA").toString()));
+                    session.setAttribute("v_cc_AVA", Double.parseDouble(session.getAttribute("v_retencion_cont_AVA").toString()));
+                    session.setAttribute("v_disponible_neto_AVE", Double.valueOf(Double.parseDouble(request.getParameter("obDispAVE"))));
+                    session.setAttribute("v_prov_comi_rend_AVE", Double.parseDouble(session.getAttribute("v_prov_comi_rend_AVE").toString()));
+                    session.setAttribute("v_prov_comi_cap_AVE", Double.parseDouble(session.getAttribute("v_prov_comi_capital_AVE").toString()));
+                    session.setAttribute("v_ret_rend_AVE", Double.parseDouble(session.getAttribute("v_retencion_rend_AVE").toString()));
+                    session.setAttribute("v_cc_AVE", Double.parseDouble(session.getAttribute("v_retencion_cont_AVE").toString()));                    
                 }
                 
                 monto_retiro = v_format.format(Double.parseDouble(monto_retiro));
@@ -370,17 +369,17 @@ public class TBS_ConfirmarRetiro extends HttpServlet implements SingleThreadMode
                          v_ret_rend += Double.parseDouble(saldos[4]);
                      }
                      
-                     session.removeValue("seleccion");
-                     session.putValue("seleccion", num_aportes);
+                     session.removeAttribute("seleccion");
+                     session.setAttribute("seleccion", num_aportes);
                      
-                     session.removeValue("v_disponible_neto");
-                     session.putValue("v_disponible_neto", Double.valueOf(monto_selec));
+                     session.removeAttribute("v_disponible_neto");
+                     session.setAttribute("v_disponible_neto", Double.valueOf(monto_selec));
                      
-                     session.removeValue("v_cc");
-                     session.putValue("v_cc", Double.valueOf(v_cc));
+                     session.removeAttribute("v_cc");
+                     session.setAttribute("v_cc", Double.valueOf(v_cc));
                      
-                     session.removeValue("v_ret_rend");
-                     session.putValue("v_ret_rend", Double.valueOf(v_ret_rend));                     
+                     session.removeAttribute("v_ret_rend");
+                     session.setAttribute("v_ret_rend", Double.valueOf(v_ret_rend));                     
                      
                      if (monto_selec > Double.parseDouble(monto_retiro)) {                     
                          v_pintar=    i_pagina.TBFL_CABEZA("Resumen de la Solicitud","Resumen de la Solicitud","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_FinalizarRetiro","",true,"modulo_retiros_oblig.js","return validar_retiro(this)");                

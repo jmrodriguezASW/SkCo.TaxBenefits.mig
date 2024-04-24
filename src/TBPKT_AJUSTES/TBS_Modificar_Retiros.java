@@ -35,7 +35,7 @@ import TBPKT_UTILIDADES.TBPKT_REFERENCIAS.TBCL_REFERENCIAS;// INT20131108
  * @return   ninguno
  */
 
-public class TBS_Modificar_Retiros extends HttpServlet implements SingleThreadModel
+public class TBS_Modificar_Retiros extends HttpServlet
 {
   //DEFINICIONES INICIALES
   TBCL_LoadPage i_LP;
@@ -152,7 +152,7 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
           {
             //REALIZACION DEL PROCESO DE REVERSAR EL RETIRO ORIGINAL
             boolean v_AnularModificar = false;
-            if(TBPBD_AnularModificar(v_conexion_taxb)&&sess.getValue("refresh")!=null)
+            if(TBPBD_AnularModificar(v_conexion_taxb)&&sess.getAttribute("refresh")!=null)
              {
                //REALIZACION DEL PROCESO DE GENERACION DEL RETIRO PRIMA, DEL AJUSTE Y DE LOS CARGOS AJUSTES CORRESPONDIENTES
                v_AnularModificar = true;
@@ -162,7 +162,7 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
                   if(TBPL_TransaccionLog(v_conexion_taxb))
                    {
                      pintar_decision = true;
-                     sess.removeValue("refresh");
+                     sess.removeAttribute("refresh");
                      v_conexion_taxb.commit();
                      v_conexion_taxb.close();
                      Dibujo_Error(out);
@@ -170,7 +170,7 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
                   else
                    {
                      v_conexion_taxb.rollback();v_conexion_taxb.close();
-                     sess.removeValue("refresh");
+                     sess.removeAttribute("refresh");
                      Dibujo_Error(out); //para transaccion logs
                    }//if(!TBPL_TransaccionLog(v_conexion_taxb))
                 }//if(TBPL_Aplicar(v_conexion_taxb))
@@ -179,7 +179,7 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
                   v_conexion_taxb.rollback();v_conexion_taxb.close();
                   Dibujo_Error(out); //para Retiro Prima
                 }//if(!TBPL_Aplicar(v_conexion_taxb))
-             }//if(TBPBD_AnularModificar(v_conexion_taxb)&&sess.getValue("refresh")!=null)
+             }//if(TBPBD_AnularModificar(v_conexion_taxb)&&sess.getAttribute("refresh")!=null)
             else
              {
                v_conexion_taxb.rollback();v_conexion_taxb.close();
@@ -193,7 +193,7 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
                 out.println(plantilla.TBFL_PIE);
                 out.close();
                }
-             }//if(!TBPBD_AnularModificar(v_conexion_taxb)&&sess.getValue("refresh")==null)
+             }//if(!TBPBD_AnularModificar(v_conexion_taxb)&&sess.getAttribute("refresh")==null)
           }//if(TBPL_validar())
          else
           {
@@ -317,15 +317,15 @@ private void TBPL_BuildPage1(String msgErr1,String num)
       out.println(codHtm.TBFL_PIE);
       out.close();
      }
-    if(sess.getValue("VALRETSEL")!=null && num.equals("2"))
+    if(sess.getAttribute("VALRETSEL")!=null && num.equals("2"))
      {
-      valores=(String)sess.getValue("VALRETSEL");//información del retiro
+      valores=(String)sess.getAttribute("VALRETSEL");//información del retiro
      }
     else
     {
       valores = TBPBD_RetSel();
-      sess.removeValue("VALRETSEL");
-      sess.putValue("VALRETSEL",valores);
+      sess.removeAttribute("VALRETSEL");
+      sess.setAttribute("VALRETSEL",valores);
     }
     if(!valores.equals(""))
     {
@@ -425,8 +425,8 @@ private void TBPL_BuildPage1(String msgErr1,String num)
 */
    private String TBPBD_RetSel(){
     String v_rta=new String("");
-    if(sess.getValue("VALRETANU")!=null){
-      v_rta=(String)sess.getValue("VALRETANU");
+    if(sess.getAttribute("VALRETANU")!=null){
+      v_rta=(String)sess.getAttribute("VALRETANU");
       String v_ii=new String("0");
       int ii=0;
       while(true){//buscar datos del consecutivo del retiro
@@ -459,13 +459,13 @@ private void TBPL_BuildPage1(String msgErr1,String num)
 */
   private boolean TBPL_getParams_Sess1(){
     String refresh   = new String("X");
-    sess.putValue("refresh",refresh);
+    sess.setAttribute("refresh",refresh);
     boolean v_exist = false;
     v_cons          = v_fecha  = v_valor = v_nombApel = num_contrato = cod_producto = v_tipo = v_estado = v_esquema = "";
-    if(sess.getValue("NOMBAPEL")!=null &&    sess.getValue("KEYS")!=null && sess.getValue("TIPO")!=null &&
-         sess.getValue("ESTADO")!=null && sess.getValue("ESQUEMA")!=null)
+    if(sess.getAttribute("NOMBAPEL")!=null &&    sess.getAttribute("KEYS")!=null && sess.getAttribute("TIPO")!=null &&
+         sess.getAttribute("ESTADO")!=null && sess.getAttribute("ESQUEMA")!=null)
        {
-        String v_keys  = (String)sess.getValue("KEYS");
+        String v_keys  = (String)sess.getAttribute("KEYS");
         cod_producto   = i_fnd.TBPL_getCmp(v_keys,"producto");
         num_contrato   = i_fnd.TBPL_getCmp(v_keys,"contrato");
         //tomar el consecutivo del retiro escogido
@@ -473,12 +473,12 @@ private void TBPL_BuildPage1(String msgErr1,String num)
         v_cons         = v_cons1.substring(0,v_cons1.indexOf("fec"));
         v_fecha        = v_cons1.substring(v_cons1.indexOf("fec")+3,v_cons1.indexOf("val"));
         v_valor        = v_cons1.substring(v_cons1.indexOf("val")+3);
-        sess.removeValue("BUSQUEDA");
-        sess.putValue("BUSQUEDA","<cons='"+v_cons+"' fec='"+v_fecha+"' val='"+v_valor+"'>");
-        v_nombApel     = (String)sess.getValue("NOMBAPEL");//nombres y apellidos
-        v_tipo         = (String)sess.getValue("TIPO");// ref.tipo de valor
-        v_estado       = (String)sess.getValue("ESTADO");//ref.estado del retiro
-        v_esquema      = (String)sess.getValue("ESQUEMA");//ref. del esquema
+        sess.removeAttribute("BUSQUEDA");
+        sess.setAttribute("BUSQUEDA","<cons='"+v_cons+"' fec='"+v_fecha+"' val='"+v_valor+"'>");
+        v_nombApel     = (String)sess.getAttribute("NOMBAPEL");//nombres y apellidos
+        v_tipo         = (String)sess.getAttribute("TIPO");// ref.tipo de valor
+        v_estado       = (String)sess.getAttribute("ESTADO");//ref.estado del retiro
+        v_esquema      = (String)sess.getAttribute("ESQUEMA");//ref. del esquema
         v_exist        = true;
       }
       else
@@ -553,21 +553,21 @@ private boolean TBPL_getParams_Sess2(Connection v_conexion_taxb)
          } //INT20131108
         if(v_razon.length()>100)
           v_razon = v_razon.substring(0,100);
-        if(sess.getValue("BUSQUEDA")!=null && sess.getValue("KEYS")!=null &&
-         sess.getValue("NOMBAPEL")!=null && sess.getValue("VALRETSEL")!=null)
+        if(sess.getAttribute("BUSQUEDA")!=null && sess.getAttribute("KEYS")!=null &&
+         sess.getAttribute("NOMBAPEL")!=null && sess.getAttribute("VALRETSEL")!=null)
          {
-          String busq  = (String)sess.getValue("BUSQUEDA");
+          String busq  = (String)sess.getAttribute("BUSQUEDA");
           v_cons       = i_fnd.TBPL_getCmp(busq,"cons");
           //v_fecha=i_fnd.TBPL_formatDate(i_fnd.TBPL_getCmp(busq,"fec"));
           v_fecha       = i_fnd.TBPL_getCmp(busq,"fec");
           v_valor       = i_fnd.TBPL_getCmp(busq,"val");
-          String v_keys = (String)sess.getValue("KEYS");
+          String v_keys = (String)sess.getAttribute("KEYS");
           cod_producto  = i_fnd.TBPL_getCmp(v_keys,"producto");
           num_contrato  = i_fnd.TBPL_getCmp(v_keys,"contrato");
           usuario       = i_fnd.TBPL_getCmp(v_keys,"usuario");
-          v_nombApel    = (String)sess.getValue("NOMBAPEL");
-          v_esquema     = (String)sess.getValue("ESQUEMA");
-          valores       = (String)sess.getValue("VALRETSEL");
+          v_nombApel    = (String)sess.getAttribute("NOMBAPEL");
+          v_esquema     = (String)sess.getAttribute("ESQUEMA");
+          valores       = (String)sess.getAttribute("VALRETSEL");
           v_exist       = true;
         }
      }
@@ -588,7 +588,7 @@ private boolean TBPL_getParams_Sess2(Connection v_conexion_taxb)
     v_error          = new String("");
     boolean v_ok     = false;
     //esquema anterior del retiro
-    String v_esq_old = i_fnd.TBPL_getCmp((String)sess.getValue("VALRETSEL"),"esquema");
+    String v_esq_old = i_fnd.TBPL_getCmp((String)sess.getAttribute("VALRETSEL"),"esquema");
     //VALIDAR QUE ESTEN VACIOS O LLENOS
     if((vrespetarn.equals("") && vorden.equalsIgnoreCase("SMO000") &&
         vbenef.equalsIgnoreCase("SMB000") && vpenal.equalsIgnoreCase("SMP000") &&
@@ -635,7 +635,7 @@ private boolean TBPL_getParams_Sess2(Connection v_conexion_taxb)
     String VU  = i_fnd.TBPL_getCmp(valores,"unidad");
     Double vu  = new Double(VU);
     valUnidRet = vu.doubleValue();
-    String busq           = (String)sess.getValue("BUSQUEDA");
+    String busq           = (String)sess.getAttribute("BUSQUEDA");
     String ret_c          = i_fnd.TBPL_getCmp(busq,"cons");
      String v_retestado = "";
    try

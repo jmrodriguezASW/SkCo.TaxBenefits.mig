@@ -11,7 +11,7 @@ import TBPKT_UTILIDADES.TBPKT_PLANTILLA.*;
 *  ajustes.
 */
 
-public class TBS_AmpliarAjuste extends HttpServlet implements SingleThreadModel{
+public class TBS_AmpliarAjuste extends HttpServlet{
   STBCL_GenerarBaseHTML codHtm;
   TBCL_FndCmp i_fnd=new TBCL_FndCmp();
   TBCL_LoadPage i_LP;
@@ -66,15 +66,15 @@ public class TBS_AmpliarAjuste extends HttpServlet implements SingleThreadModel{
   }
 /////////////////////////////tomar parametros de entrada a la página///////////////////
   private boolean takeParameter(){
-    if(request.getParameter("cons")!=null && sess.getValue("NOMBAPEL")!=null &&
-       sess.getValue("VALRETDEC")!=null
+    if(request.getParameter("cons")!=null && sess.getAttribute("NOMBAPEL")!=null &&
+       sess.getAttribute("VALRETDEC")!=null
        ){
        v_cons=request.getParameter("cons");//consecutivo del ajuste
-       v_nombApel=(String)sess.getValue("NOMBAPEL");//nombres y apellidos
-       sess.removeValue("CONTRATO");
-       cod_producto = (String)sess.getValue("PRODUCTO");//producto
-       num_contrato = (String)sess.getValue("CONTRATO");//contrato
-       v_detalle=(String)sess.getValue("VALRETDEC");
+       v_nombApel=(String)sess.getAttribute("NOMBAPEL");//nombres y apellidos
+       sess.removeAttribute("CONTRATO");
+       cod_producto = (String)sess.getAttribute("PRODUCTO");//producto
+       num_contrato = (String)sess.getAttribute("CONTRATO");//contrato
+       v_detalle=(String)sess.getAttribute("VALRETDEC");
        return true;
     }else{
        i_LP.TBPL_PrintMsgErr(out,"Problemas con las variables de session y parámetros de entrada",true,k_cabeza,codHtm.TBFL_PIE);

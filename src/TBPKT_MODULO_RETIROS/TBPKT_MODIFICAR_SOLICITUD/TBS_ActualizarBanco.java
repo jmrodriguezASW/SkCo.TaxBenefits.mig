@@ -12,7 +12,7 @@ import co.oldmutual.taxbenefit.util.DataSourceWrapper;
 
 /*Clase que hace llamado al procedimiento almacenado que actualiza la información de banco*/
 
-public class TBS_ActualizarBanco extends HttpServlet implements SingleThreadModel
+public class TBS_ActualizarBanco extends HttpServlet
 {
 
  public void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -53,20 +53,20 @@ public class TBS_ActualizarBanco extends HttpServlet implements SingleThreadMode
   //se hace conexion a taxbenefit
   
   t_tax =   DataSourceWrapper.getInstance().getConnection();
-  if((java.lang.String)session.getValue("s_producto") != null ||(java.lang.String)session.getValue("s_contrato") != null)
+  if((java.lang.String)session.getAttribute("s_producto") != null ||(java.lang.String)session.getAttribute("s_contrato") != null)
   {
-   String v_pro    = (java.lang.String)session.getValue("s_producto");//se toma producto
-   String v_contra =(java.lang.String)session.getValue("s_contrato");//se toma contrato
-   String v_usuario =(java.lang.String)session.getValue("s_usuariopipe");//se toma contrato
+   String v_pro    = (java.lang.String)session.getAttribute("s_producto");//se toma producto
+   String v_contra =(java.lang.String)session.getAttribute("s_contrato");//se toma contrato
+   String v_usuario =(java.lang.String)session.getAttribute("s_usuariopipe");//se toma contrato
    String v_sele="";//se toma el dato para actualizar
    try {  v_sele= request.getParameter("v_seleccion");  }
    catch (Exception e) { e.printStackTrace();  }
-   String v_conret = (java.lang.String)session.getValue("s_conret"); //se toma consecutivo del retiro
+   String v_conret = (java.lang.String)session.getAttribute("s_conret"); //se toma consecutivo del retiro
    int v_conse = new Integer(v_conret).intValue();
    String  v_banco = "   ";//codigo del banco
    String  v_numcuen ="    ";//numero de cuenta
-   String  v_bancoviejo = (java.lang.String)session.getValue("s_bancoviejo");
-   String  v_cuentaviejo = (java.lang.String)session.getValue("s_cuentaviejo");
+   String  v_bancoviejo = (java.lang.String)session.getAttribute("s_bancoviejo");
+   String  v_cuentaviejo = (java.lang.String)session.getAttribute("s_cuentaviejo");
    if(!v_sele.substring(0,1).equals(" "))
    {
     v_banco =  v_sele.substring(0,2);

@@ -16,13 +16,12 @@ import java.sql.Connection;
 import java.sql.Types;
 
 import javax.servlet.ServletException;
-import javax.servlet.SingleThreadModel;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class TBS_FinalizarRetiro extends HttpServlet implements SingleThreadModel{
+public class TBS_FinalizarRetiro extends HttpServlet{
             
     private String[]        v_valusu;
     private String[] resul = null;   
@@ -64,15 +63,15 @@ public class TBS_FinalizarRetiro extends HttpServlet implements SingleThreadMode
                         
             String[] saldos = null;
             
-            v_ruta_serv = (java.lang.String)session.getValue("s_ruta_serv");
+            v_ruta_serv = (java.lang.String)session.getAttribute("s_ruta_serv");
             
-            if((java.lang.String)session.getValue("s_contrato")!= null || (java.lang.String)session.getValue("s_producto")!= null) {
-                String v_pro            = (java.lang.String)session.getValue("s_producto");
-                String v_contra         = (java.lang.String)session.getValue("s_contrato");
-                String v_fecpro         =(java.lang.String)session.getValue("s_fecpro");
-                String v_fecefe         = (java.lang.String)session.getValue("s_fecefectiva");                
-                String v_tipotran       = (java.lang.String)session.getValue("v_tipotran"); 
-                String v_clasetran      = (java.lang.String)session.getValue("v_clasetran");
+            if((java.lang.String)session.getAttribute("s_contrato")!= null || (java.lang.String)session.getAttribute("s_producto")!= null) {
+                String v_pro            = (java.lang.String)session.getAttribute("s_producto");
+                String v_contra         = (java.lang.String)session.getAttribute("s_contrato");
+                String v_fecpro         =(java.lang.String)session.getAttribute("s_fecpro");
+                String v_fecefe         = (java.lang.String)session.getAttribute("s_fecefectiva");                
+                String v_tipotran       = (java.lang.String)session.getAttribute("v_tipotran"); 
+                String v_clasetran      = (java.lang.String)session.getAttribute("v_clasetran");
                 String v_cuenta         = request.getParameter("v_cuenta");
                 String v_tipodoc_ter    = request.getParameter("v_tipodoc_ter");
                 String v_doc_ter        = request.getParameter("v_doc_ter"); 
@@ -80,18 +79,18 @@ public class TBS_FinalizarRetiro extends HttpServlet implements SingleThreadMode
                 String v_apell_terc     = request.getParameter("v_apell_terc");
                 String v_concepto       = request.getParameter("v_concepto");
                 String v_orden_apli     = request.getParameter("v_orden_apli");
-                String s_usuario        = (java.lang.String)session.getValue("s_usuariopipe");
-                String v_saldoTOblig    = (java.lang.String)session.getValue("v_saldoTOblig");
-                double v_saldoAVA       = (java.lang.Double)session.getValue("v_saldoAVA");
-                double v_saldoAVE       = (java.lang.Double)session.getValue("v_saldoAVE");
-                String v_esTercero      = (java.lang.String)session.getValue("esTercero");
-                String v_total          = (java.lang.String) session.getValue("s_total"); 
+                String s_usuario        = (java.lang.String)session.getAttribute("s_usuariopipe");
+                String v_saldoTOblig    = (java.lang.String)session.getAttribute("v_saldoTOblig");
+                double v_saldoAVA       = (java.lang.Double)session.getAttribute("v_saldoAVA");
+                double v_saldoAVE       = (java.lang.Double)session.getAttribute("v_saldoAVE");
+                String v_esTercero      = (java.lang.String)session.getAttribute("esTercero");
+                String v_total          = (java.lang.String) session.getAttribute("s_total"); 
                 String v_tipo_valor     = "";
                 String v_banco          = ""; 
                 String numerocuenta     = "";
                 double monto_retiro     = 0.0;
-                String s_comisionava    = (java.lang.String) session.getValue("s_comisionava"); 
-                String s_comisionave    = (java.lang.String) session.getValue("s_comisionave");
+                String s_comisionava    = (java.lang.String) session.getAttribute("s_comisionava"); 
+                String s_comisionave    = (java.lang.String) session.getAttribute("s_comisionave");
                 double v_comision_ava   = 0.0;
                 double v_comision_ave   = 0.0; 
                 double v_cc             = 0.0; 
@@ -107,23 +106,23 @@ public class TBS_FinalizarRetiro extends HttpServlet implements SingleThreadMode
                 double soliAVA          = 0.0;
                     
                 if (v_concepto.equals("2")){
-                    v_disponible_neto = ((Double)session.getValue("v_disponible_neto_AVA")).doubleValue(); 
-                    v_prov_comi_rend = ((Double)session.getValue("v_prov_comi_rend_AVA")).doubleValue();
-                    v_prov_comi_cap = ((Double)session.getValue("v_prov_comi_cap_AVA")).doubleValue();
-                    v_ret_rend = ((Double)session.getValue("v_ret_rend_AVA")).doubleValue();
-                    v_cc = ((Double)session.getValue("v_cc_AVA")).doubleValue();
-                    v_disponible_neto_AVE =((Double)session.getValue("v_disponible_neto_AVE")).doubleValue(); 
-                    v_prov_comi_rend_AVE = ((Double)session.getValue("v_prov_comi_rend_AVE")).doubleValue();
-                    v_prov_comi_cap_AVE = ((Double)session.getValue("v_prov_comi_cap_AVE")).doubleValue();
-                    v_ret_rend_AVE = ((Double)session.getValue("v_ret_rend_AVE")).doubleValue();
-                    v_cc_AVE = ((Double)session.getValue("v_cc_AVE")).doubleValue();
+                    v_disponible_neto = ((Double)session.getAttribute("v_disponible_neto_AVA")).doubleValue(); 
+                    v_prov_comi_rend = ((Double)session.getAttribute("v_prov_comi_rend_AVA")).doubleValue();
+                    v_prov_comi_cap = ((Double)session.getAttribute("v_prov_comi_cap_AVA")).doubleValue();
+                    v_ret_rend = ((Double)session.getAttribute("v_ret_rend_AVA")).doubleValue();
+                    v_cc = ((Double)session.getAttribute("v_cc_AVA")).doubleValue();
+                    v_disponible_neto_AVE =((Double)session.getAttribute("v_disponible_neto_AVE")).doubleValue(); 
+                    v_prov_comi_rend_AVE = ((Double)session.getAttribute("v_prov_comi_rend_AVE")).doubleValue();
+                    v_prov_comi_cap_AVE = ((Double)session.getAttribute("v_prov_comi_cap_AVE")).doubleValue();
+                    v_ret_rend_AVE = ((Double)session.getAttribute("v_ret_rend_AVE")).doubleValue();
+                    v_cc_AVE = ((Double)session.getAttribute("v_cc_AVE")).doubleValue();
                 }                
                 else{
-                    v_cc             = ((Double)session.getValue("v_cc")).doubleValue();
-                    v_ret_rend       = ((Double)session.getValue("v_ret_rend")).doubleValue();
-                    v_prov_comi_rend = ((Double)session.getValue("v_prov_comi_rend")).doubleValue();
-                    v_prov_comi_cap  = ((Double)session.getValue("v_prov_comi_cap")).doubleValue();
-                    v_disponible_neto = ((Double)session.getValue("v_disponible_neto")).doubleValue(); 
+                    v_cc             = ((Double)session.getAttribute("v_cc")).doubleValue();
+                    v_ret_rend       = ((Double)session.getAttribute("v_ret_rend")).doubleValue();
+                    v_prov_comi_rend = ((Double)session.getAttribute("v_prov_comi_rend")).doubleValue();
+                    v_prov_comi_cap  = ((Double)session.getAttribute("v_prov_comi_cap")).doubleValue();
+                    v_disponible_neto = ((Double)session.getAttribute("v_disponible_neto")).doubleValue(); 
                 }
                 
                 if (v_total.equals("N")) {
@@ -156,10 +155,10 @@ public class TBS_FinalizarRetiro extends HttpServlet implements SingleThreadMode
                         v_tipodoc_ter   = "";
                         v_doc_ter       = "";                                
                         if (v_esTercero.equals("S")) {   
-                            v_tipodoc_ter   = (java.lang.String)session.getValue("s_tipoidentificacion");
-                            v_doc_ter       = (java.lang.String)session.getValue("s_identificacion");
-                            v_nomb_terc     = (java.lang.String)session.getValue("s_nombres");
-                            v_apell_terc    = (java.lang.String)session.getValue("s_apellidos");                       
+                            v_tipodoc_ter   = (java.lang.String)session.getAttribute("s_tipoidentificacion");
+                            v_doc_ter       = (java.lang.String)session.getAttribute("s_identificacion");
+                            v_nomb_terc     = (java.lang.String)session.getAttribute("s_nombres");
+                            v_apell_terc    = (java.lang.String)session.getAttribute("s_apellidos");                       
                         }
                     }
                     else {
@@ -197,7 +196,7 @@ public class TBS_FinalizarRetiro extends HttpServlet implements SingleThreadMode
                 
                 if (v_orden_apli.equals("2"))
                 {            
-                    String seleccion = session.getValue("seleccion").toString();                
+                    String seleccion = session.getAttribute("seleccion").toString();                
                     saldos = seleccion.split(";");                    
                      
                     for (int v_con=0;v_con < seleccion.split(";").length; v_con++)

@@ -38,7 +38,7 @@ public class TBF_RES_CARGUE extends JFrame {
  {
    this.invocar = invocar;
    this.invocar.setEnabled(false);
-   this.show();
+   this.setVisible(true);
  }
  //Mensajes de la ventana
  public void ejemplo (String v_contrato,String v_aporte, String v_retiro, String v_aporet,String v_penaliza, String v_log ,String v_borrado)

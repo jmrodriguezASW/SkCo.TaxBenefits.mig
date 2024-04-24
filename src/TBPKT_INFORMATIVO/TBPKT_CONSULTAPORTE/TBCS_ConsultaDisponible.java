@@ -13,7 +13,7 @@ import javax.servlet.http.*;
 
 import javax.swing.text.html.HTML;
 
-public class TBCS_ConsultaDisponible extends HttpServlet implements SingleThreadModel{
+public class TBCS_ConsultaDisponible extends HttpServlet{
 
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
@@ -41,7 +41,7 @@ private String v_nuevaCadena ="";
           session.setMaxInactiveInterval(3600);
           response.setContentType("text/html");
           String  cadena = request.getParameter("cadena");
-          session.removeValue("s_consultaas");
+          session.removeAttribute("s_consultaas");
           v_nuevaCadena = cadena;
           ip_tax = request.getRemoteAddr();
           TBCL_Seguridad Seguridad = new TBCL_Seguridad();

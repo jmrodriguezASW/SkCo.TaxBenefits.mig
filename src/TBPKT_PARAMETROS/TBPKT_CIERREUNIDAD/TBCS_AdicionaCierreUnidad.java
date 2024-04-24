@@ -10,7 +10,7 @@ import TBPKT_UTILIDADES.TBPKT_PLANTILLA.STBCL_GenerarBaseHTML;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 //Nombre de la clase
-public class TBCS_AdicionaCierreUnidad extends HttpServlet implements SingleThreadModel{
+public class TBCS_AdicionaCierreUnidad extends HttpServlet{
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
 private String v_nuevaCadena ="";

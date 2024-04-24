@@ -8,7 +8,7 @@ import java.text.NumberFormat;
 import TBPKT_UTILIDADES.TBPKT_CONSULTA.TBCL_Consulta;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
-public class TBCS_Reporte_NO_Impresion extends HttpServlet implements SingleThreadModel{
+public class TBCS_Reporte_NO_Impresion extends HttpServlet{
 private PrintWriter out;
 private TBCL_Consulta v_Consulta;
 
@@ -41,7 +41,7 @@ private TBCL_Consulta v_Consulta;
      String parametros[] = new String[8];
      try
      {
-      cadena               = (String)session.getValue("s_cadena");
+      cadena               = (String)session.getAttribute("s_cadena");
      }
      catch (Exception e)
      {
@@ -79,28 +79,28 @@ private TBCL_Consulta v_Consulta;
     String producto = "";
 
     try{
-       fechaini = (java.lang.String)session.getValue("s_fechaini");//request.getParameter("fechaini").trim();
+       fechaini = (java.lang.String)session.getAttribute("s_fechaini");//request.getParameter("fechaini").trim();
        }
     catch (Exception e) { fechaini = ""; }
     try{
-       fechafin = (java.lang.String)session.getValue("s_fechafin");//request.getParameter("fechafin").trim();
+       fechafin = (java.lang.String)session.getAttribute("s_fechafin");//request.getParameter("fechafin").trim();
        }
     catch (Exception e) { fechafin = ""; }
     try{
-       unipro = (java.lang.String)session.getValue("s_unipro");//quest.getParameter("unipro");
+       unipro = (java.lang.String)session.getAttribute("s_unipro");//quest.getParameter("unipro");
        }
     catch (Exception e) { unipro = ""; }
     try{
-       tran = (java.lang.String)session.getValue("s_tran");request.getParameter("s_tran");
+       tran = (java.lang.String)session.getAttribute("s_tran");request.getParameter("s_tran");
        }
     catch (Exception e) { tran= ""; }
     try{
-       vusuario = (java.lang.String)session.getValue("s_usuario");request.getParameter("s_tran");
+       vusuario = (java.lang.String)session.getAttribute("s_usuario");request.getParameter("s_tran");
        }
     catch (Exception e) { vusuario= ""; }
     
     try{
-        producto = (java.lang.String)session.getValue("s_producto");
+        producto = (java.lang.String)session.getAttribute("s_producto");
         }
     catch (Exception e) { vusuario= ""; }
     

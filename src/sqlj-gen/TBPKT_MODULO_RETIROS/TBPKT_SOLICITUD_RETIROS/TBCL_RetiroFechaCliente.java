@@ -233,10 +233,10 @@ implements sqlj.runtime.NamedIterator
    String v_pie       = "";/**Variable dibujar final página*/
    String v_pintar    = "";   /**Variable dibujar inicio página*/
    String v_fechasol  = "";/**Fecha de proceso del retiro en string*/
-   //String v_contra    = (java.lang.String)session.getValue("s_contrato");/**Variable numero del contrato*/
-  // String v_pro       = (java.lang.String)session.getValue("s_producto");/**Variable código del producto*/
-  // String v_tusu      = (java.lang.String)session.getValue("s_usuario");/**Variable código tipo de usuario As400*/
-  //String v_tuni      = (java.lang.String)session.getValue("s_unidad");/**Variable código unidad As400*/
+   //String v_contra    = (java.lang.String)session.getAttribute("s_contrato");/**Variable numero del contrato*/
+  // String v_pro       = (java.lang.String)session.getAttribute("s_producto");/**Variable código del producto*/
+  // String v_tusu      = (java.lang.String)session.getAttribute("s_usuario");/**Variable código tipo de usuario As400*/
+  //String v_tuni      = (java.lang.String)session.getAttribute("s_unidad");/**Variable código unidad As400*/
    /**Tipo int */
    int v_resmulti     = 0;/**Indicador de exito o fracaso */
    /**Tipo boolean */
@@ -307,10 +307,10 @@ implements sqlj.runtime.NamedIterator
 
 /*@lineinfo:user-code*//*@lineinfo:103^62*/
    /**Variable de session tipo de uisuario y unidad de proceso */
-   session.removeValue("s_usuariotax");
-   session.removeValue("s_unidadtax");
-   session.putValue("s_usuariotax",(java.lang.Object)v_codusu);
-   session.putValue("s_unidadtax",(java.lang.Object)v_coduni);
+   session.removeAttribute("s_usuariotax");
+   session.removeAttribute("s_unidadtax");
+   session.setAttribute("s_usuariotax",(java.lang.Object)v_codusu);
+   session.setAttribute("s_unidadtax",(java.lang.Object)v_coduni);
    /**Si el tipo de usuario es valido*/
    if(!v_codusu.equals("XXXXXX"))
    {//if usuario
@@ -542,10 +542,10 @@ implements sqlj.runtime.NamedIterator
      {
       v_fechasol = v_fecha.toString();
       /**Variable de session fecha proceso y efectiva */
-      session.removeValue("s_fecpro");
-      session.removeValue("s_fecefectiva");
-      session.putValue("s_fecpro",(java.lang.Object)v_fechasol);
-      session.putValue("s_fecefectiva",(java.lang.Object)v_fechasol);
+      session.removeAttribute("s_fecpro");
+      session.removeAttribute("s_fecefectiva");
+      session.setAttribute("s_fecpro",(java.lang.Object)v_fechasol);
+      session.setAttribute("s_fecefectiva",(java.lang.Object)v_fechasol);
       /**Consultar datos del contrato*/
       /*@lineinfo:generated-code*//*@lineinfo:167^7*/
 
@@ -589,26 +589,26 @@ implements sqlj.runtime.NamedIterator
       while (v_cum.next())
       {
        v_nombre= v_cum.CON_NOMBRES().trim();
-       session.removeValue("s_nombres");
-       session.putValue("s_nombres",(java.lang.Object)v_nombre);
+       session.removeAttribute("s_nombres");
+       session.setAttribute("s_nombres",(java.lang.Object)v_nombre);
        v_apellidos = v_cum.CON_APELLIDOS().trim();
-       session.removeValue("s_apellidos");
-       session.putValue("s_apellidos",(java.lang.Object)v_apellidos);
+       session.removeAttribute("s_apellidos");
+       session.setAttribute("s_apellidos",(java.lang.Object)v_apellidos);
        v_feccan = v_cum.v_fecha_cancelacion();
-       session.removeValue("s_feccan");
-       session.putValue("s_feccan",(java.lang.Object)v_feccan);
+       session.removeAttribute("s_feccan");
+       session.setAttribute("s_feccan",(java.lang.Object)v_feccan);
        v_valmin = new Double(v_cum.pro_retiro_minimo()).toString();
-       session.removeValue("s_valmin");
-       session.putValue("s_valmin",(java.lang.Object)v_valmin);
+       session.removeAttribute("s_valmin");
+       session.setAttribute("s_valmin",(java.lang.Object)v_valmin);
        v_canje2 =  new Integer(v_cum.PRO_DIAS_CANJE()).toString();
-       session.removeValue("s_diascanje");
-       session.putValue("s_diascanje",(java.lang.Object)v_canje2);
+       session.removeAttribute("s_diascanje");
+       session.setAttribute("s_diascanje",(java.lang.Object)v_canje2);
        v_tipoiden = v_cum.CON_REF_TIPO_IDENTIFICACION();
-       session.removeValue("s_tipoidentificacion");
-       session.putValue("s_tipoidentificacion",(java.lang.Object)v_tipoiden);
+       session.removeAttribute("s_tipoidentificacion");
+       session.setAttribute("s_tipoidentificacion",(java.lang.Object)v_tipoiden);
        v_identificacion = v_cum.CON_NUMERO_IDENTIFICACION();
-       session.removeValue("s_identificacion");
-       session.putValue("s_identificacion",(java.lang.Object)v_identificacion);
+       session.removeAttribute("s_identificacion");
+       session.setAttribute("s_identificacion",(java.lang.Object)v_identificacion);
        v_validacontrato = true;
       }
       v_cum.close();
@@ -668,14 +668,14 @@ implements sqlj.runtime.NamedIterator
 
 /*@lineinfo:user-code*//*@lineinfo:220^27*/
          /**Variable de session de conexion del as400*/
-        session.removeValue("s_sistema");
-        session.removeValue("s_usumfund");
-        session.removeValue("s_passmfund");
-        session.removeValue("s_libreria");
-        session.putValue("s_sistema",(java.lang.Object)v_sistema);
-        session.putValue("s_usumfund",(java.lang.Object)v_usumfund);
-        session.putValue("s_passmfund",(java.lang.Object)v_passmfund);
-        session.putValue("s_libreria",(java.lang.Object)v_libreria);
+        session.removeAttribute("s_sistema");
+        session.removeAttribute("s_usumfund");
+        session.removeAttribute("s_passmfund");
+        session.removeAttribute("s_libreria");
+        session.setAttribute("s_sistema",(java.lang.Object)v_sistema);
+        session.setAttribute("s_usumfund",(java.lang.Object)v_usumfund);
+        session.setAttribute("s_passmfund",(java.lang.Object)v_passmfund);
+        session.setAttribute("s_libreria",(java.lang.Object)v_libreria);
         /**Consultar bloqueo de egresos para el contrato*/
         //v_bloqueo = i_fondos.TBFL_BloqueoEgresos(v_contrato,v_sistema,v_usumfund,v_passmfund,v_libreria);
         /*

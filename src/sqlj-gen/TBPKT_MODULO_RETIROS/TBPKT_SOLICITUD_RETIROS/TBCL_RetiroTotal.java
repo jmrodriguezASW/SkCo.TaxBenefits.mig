@@ -197,43 +197,43 @@ implements sqlj.runtime.NamedIterator
    double v_saldodispo2  = 0;/**Saldo disponible bruto del contrato*/
    String v_mensLista  ="";
    /**Verificar que las variables de session no expiren*/
-   if((java.lang.String)session.getValue("s_contrato") != null || (java.lang.String)session.getValue("s_producto") != null)
+   if((java.lang.String)session.getAttribute("s_contrato") != null || (java.lang.String)session.getAttribute("s_producto") != null)
    {
     /**Capturar variables de session*/
-    v_contra   = (java.lang.String)session.getValue("s_contrato");
-    v_pro      = (java.lang.String)session.getValue("s_producto");
-    v_nom      = (java.lang.String)session.getValue("s_nombres");
-    v_ape      = (java.lang.String)session.getValue("s_apellidos");
-    v_canje    = (java.lang.String)session.getValue("s_diascanje");
-    v_fecefe   =(java.lang.String)session.getValue("s_fecefectiva");
-     v_fecpro  = (java.lang.String)session.getValue("s_fecpro");
-    //v_cumple  = (java.lang.String)session.getValue("s_cumes");
-    v_cumes2   = new Double((java.lang.String)session.getValue("s_cumes")).doubleValue();
-    v_tipoiden = (java.lang.String)session.getValue("s_tipoidentificacion");
-    v_identificacion  = (java.lang.String)session.getValue("s_identificacion");
-    //v_saldodispo    = (java.lang.String)session.getValue("s_saldispo");
-    v_saldodispo2     = new Double((java.lang.String)session.getValue("s_saldispo")).doubleValue();
-    v_sistema      = (java.lang.String)session.getValue("s_sistema");
-    v_usumfund     = (java.lang.String)session.getValue("s_usumfund");
-    v_passmfund    = (java.lang.String)session.getValue("s_passmfund");
-    v_libreria     = (java.lang.String)session.getValue("s_libreria");
+    v_contra   = (java.lang.String)session.getAttribute("s_contrato");
+    v_pro      = (java.lang.String)session.getAttribute("s_producto");
+    v_nom      = (java.lang.String)session.getAttribute("s_nombres");
+    v_ape      = (java.lang.String)session.getAttribute("s_apellidos");
+    v_canje    = (java.lang.String)session.getAttribute("s_diascanje");
+    v_fecefe   =(java.lang.String)session.getAttribute("s_fecefectiva");
+     v_fecpro  = (java.lang.String)session.getAttribute("s_fecpro");
+    //v_cumple  = (java.lang.String)session.getAttribute("s_cumes");
+    v_cumes2   = new Double((java.lang.String)session.getAttribute("s_cumes")).doubleValue();
+    v_tipoiden = (java.lang.String)session.getAttribute("s_tipoidentificacion");
+    v_identificacion  = (java.lang.String)session.getAttribute("s_identificacion");
+    //v_saldodispo    = (java.lang.String)session.getAttribute("s_saldispo");
+    v_saldodispo2     = new Double((java.lang.String)session.getAttribute("s_saldispo")).doubleValue();
+    v_sistema      = (java.lang.String)session.getAttribute("s_sistema");
+    v_usumfund     = (java.lang.String)session.getAttribute("s_usumfund");
+    v_passmfund    = (java.lang.String)session.getAttribute("s_passmfund");
+    v_libreria     = (java.lang.String)session.getAttribute("s_libreria");
     
     
     /**Si saldo disponible mayor que cero*/
     if (v_saldodispo2 > 0)
     {
      /**Capturar variables de session*/
-     v_tipotran   =  (java.lang.String)session.getValue("s_tipotran");
+     v_tipotran   =  (java.lang.String)session.getAttribute("s_tipotran");
      if(v_tipotran.equals("UTT012")){
         v_tipotran =  "UTT003";
-        session.putValue("s_tipotran",v_tipotran);
+        session.setAttribute("s_tipotran",v_tipotran);
      }
-     v_clasetran  =  (java.lang.String)session.getValue("s_clasetran");
-     v_traslado   =  (java.lang.String)session.getValue("s_traslado");
-     v_total      =  (java.lang.String)session.getValue("s_total");
-     v_diasmenor  =  (java.lang.String)session.getValue("s_diasmenor");
+     v_clasetran  =  (java.lang.String)session.getAttribute("s_clasetran");
+     v_traslado   =  (java.lang.String)session.getAttribute("s_traslado");
+     v_total      =  (java.lang.String)session.getAttribute("s_total");
+     v_diasmenor  =  (java.lang.String)session.getAttribute("s_diasmenor");
 
-     v_diasmayor  =  (java.lang.String)session.getValue("s_diasmayor");
+     v_diasmayor  =  (java.lang.String)session.getAttribute("s_diasmayor");
 
      /* Agregado por Marcela Ortiz Sandoval 
       * 2009/10/27
@@ -242,8 +242,8 @@ implements sqlj.runtime.NamedIterator
      /**Capturar el id del evento de Saro */
      try { 
      v_idsaro = request.getParameter("v_idsaro"); 
-     session.removeValue("v_idsaro");
-     session.putValue("v_idsaro",v_idsaro);
+     session.removeAttribute("v_idsaro");
+     session.setAttribute("v_idsaro",v_idsaro);
      /**Validar el id del evento de Saro */
      if (!v_idsaro.trim().equals("")){
       CallableStatement cs1 = t_tax.prepareCall ( "{? = call TBCL_FUNCIONESAS400.TBPL_ValidarSaro(?,?,?,?,?)}");
@@ -323,33 +323,33 @@ implements sqlj.runtime.NamedIterator
       {
         /**Para todos los traslado el tercero siempre es N a menos que sea de Ley1111 */  
         v_esTercero ="N";
-        session.removeValue("esTercero");
-        session.putValue("esTercero",v_esTercero);
+        session.removeAttribute("esTercero");
+        session.setAttribute("esTercero",v_esTercero);
         
        /**Variable de session banco y cuentao*/
-       session.removeValue("s_banco");
-       session.removeValue("s_cuenta");
-       session.putValue("s_banco"," ");
-       session.putValue("s_cuenta"," ");
+       session.removeAttribute("s_banco");
+       session.removeAttribute("s_cuenta");
+       session.setAttribute("s_banco"," ");
+       session.setAttribute("s_cuenta"," ");
        /**Capturar código afp*/
        try { v_afp = request.getParameter("v_afp"); } catch (Exception e) { e.printStackTrace(); }
        if(!v_afp.substring(0,1).equals(" "))
        {
         v_intext = v_afp.substring(2,8);
         v_afp2   = v_afp.substring(0,2);
-        session.removeValue("s_afp");
-        session.putValue("s_afp",v_afp2);
+        session.removeAttribute("s_afp");
+        session.setAttribute("s_afp",v_afp2);
         /** Fin agregado 20091118*/
        }
        else
        {
-        session.removeValue("s_afp");
-        session.putValue("s_afp",v_afp);
+        session.removeAttribute("s_afp");
+        session.setAttribute("s_afp",v_afp);
        }
        /**Capturar código producto traslado*/
        try { v_proti = request.getParameter("v_proti"); } catch (Exception e) { e.printStackTrace(); }
-       session.removeValue("s_proti");
-       session.putValue("s_proti",v_proti);
+       session.removeAttribute("s_proti");
+       session.setAttribute("s_proti",v_proti);
        /**Capturar numero de contrato traslado*/
        try { v_conti = request.getParameter("v_conti"); } catch (Exception e) { e.printStackTrace(); }
        v_conconti =  v_conti.trim().length();
@@ -358,8 +358,8 @@ implements sqlj.runtime.NamedIterator
         v_cadena +="0";
        }
        v_conti2 = v_cadena.trim() +v_conti.trim();
-       session.removeValue("s_conti");
-       session.putValue("s_conti",v_conti2.trim());
+       session.removeAttribute("s_conti");
+       session.setAttribute("s_conti",v_conti2.trim());
        v_conti2 = v_conti2.trim();
        /**Si el concepto es traslado y el tipo de afp es interno*/
        if(v_traslado.equals("S") && v_intext.equals("STA001"))
@@ -500,10 +500,10 @@ implements sqlj.runtime.NamedIterator
        }
        else
        {
-        session.removeValue("s_conti");
-        session.removeValue("s_proti");
-        session.putValue("s_proti","  ");
-        session.putValue("s_conti","  ");
+        session.removeAttribute("s_conti");
+        session.removeAttribute("s_proti");
+        session.setAttribute("s_proti","  ");
+        session.setAttribute("s_conti","  ");
         v_encontro = true;
        }
       }
@@ -513,13 +513,13 @@ implements sqlj.runtime.NamedIterator
             if(v_traslado.equals("N")){
               v_encontro = true;
               /**Variable de session producto y contrato traslado*/
-              session.removeValue("s_conti");
-              session.removeValue("s_proti");
-              session.putValue("s_proti","  ");
-              session.putValue("s_conti","  ");
+              session.removeAttribute("s_conti");
+              session.removeAttribute("s_proti");
+              session.setAttribute("s_proti","  ");
+              session.setAttribute("s_conti","  ");
               /**Variable de session código afp*/
-              session.removeValue("s_afp");
-              session.putValue("s_afp","   ");
+              session.removeAttribute("s_afp");
+              session.setAttribute("s_afp","   ");
               /**Capturar cadena banco y cuenta*/
               try { v_cuenta = request.getParameter("v_cuenta"); } catch (Exception e) { e.printStackTrace(); }
               if(!v_cuenta.trim().equals(""))
@@ -530,10 +530,10 @@ implements sqlj.runtime.NamedIterator
                v_numcuen =  v_cuenta.substring(v_cadena2+1,u);
   
                /**Variable de session código banco y numero cuenta*/
-               session.removeValue("s_banco");
-               session.removeValue("s_cuenta");
-               session.putValue("s_banco",v_banco);
-               session.putValue("s_cuenta",v_numcuen);
+               session.removeAttribute("s_banco");
+               session.removeAttribute("s_cuenta");
+               session.setAttribute("s_banco",v_banco);
+               session.setAttribute("s_cuenta",v_numcuen);
                v_existeCuenta = true;
               }
 
@@ -553,24 +553,24 @@ implements sqlj.runtime.NamedIterator
                         v_numcuen      =  v_cuentaLey1607.substring(v_cadena2+1,v_tamañocuenta);
                         
                         /**Variable de session del código de banco y número de cuenta*/
-                        session.removeValue("s_banco");
-                        session.removeValue("s_cuenta");
-                        session.putValue("s_banco",v_banco);
-                        session.putValue("s_cuenta",v_numcuen);
+                        session.removeAttribute("s_banco");
+                        session.removeAttribute("s_cuenta");
+                        session.setAttribute("s_banco",v_banco);
+                        session.setAttribute("s_cuenta",v_numcuen);
                         v_existeCuenta = true;
                         
                         try {
-                          v_esTercero =(java.lang.String)session.getValue("esTercero"); 
-                          session.removeValue("esTercero");
-                          session.putValue("esTercero",v_esTercero); 
+                          v_esTercero =(java.lang.String)session.getAttribute("esTercero"); 
+                          session.removeAttribute("esTercero");
+                          session.setAttribute("esTercero",v_esTercero); 
                         }catch (Exception e)  { e.printStackTrace(); }
               
                        }
                        else
                        {
                            v_esTercero ="S"; 
-                          session.removeValue("esTercero");
-                          session.putValue("esTercero",v_esTercero); 
+                          session.removeAttribute("esTercero");
+                          session.setAttribute("esTercero",v_esTercero); 
                         }
                      
                      } catch (Exception e) { e.printStackTrace(); }
@@ -589,24 +589,24 @@ implements sqlj.runtime.NamedIterator
                         v_numcuen      =  v_cuenta.substring(v_cadena2+1,v_tamañocuenta);
                         
                         /**Variable de session del código de banco y número de cuenta*/
-                        session.removeValue("s_banco");
-                        session.removeValue("s_cuenta");
-                        session.putValue("s_banco",v_banco);
-                        session.putValue("s_cuenta",v_numcuen);
+                        session.removeAttribute("s_banco");
+                        session.removeAttribute("s_cuenta");
+                        session.setAttribute("s_banco",v_banco);
+                        session.setAttribute("s_cuenta",v_numcuen);
                         v_existeCuenta = true;
                         
                         try {
-                          v_esTercero =(java.lang.String)session.getValue("esTercero"); 
-                          session.removeValue("esTercero");
-                          session.putValue("esTercero",v_esTercero); 
+                          v_esTercero =(java.lang.String)session.getAttribute("esTercero"); 
+                          session.removeAttribute("esTercero");
+                          session.setAttribute("esTercero",v_esTercero); 
                         }catch (Exception e)  { e.printStackTrace(); }
               
                        }
                         else
                        {
                            v_esTercero ="S"; 
-                          session.removeValue("esTercero");
-                          session.putValue("esTercero",v_esTercero); 
+                          session.removeAttribute("esTercero");
+                          session.setAttribute("esTercero",v_esTercero); 
                         }
                      } catch (Exception e) { e.printStackTrace(); }
                     }
@@ -615,7 +615,7 @@ implements sqlj.runtime.NamedIterator
             //else
             //{
              try { 
-              v_esTercero =(java.lang.String)session.getValue("esTercero"); 
+              v_esTercero =(java.lang.String)session.getAttribute("esTercero"); 
               if (v_esTercero.equals("S") && v_cuenta.trim().equals("") && v_cuentaLey1607.trim().equals(""))   
               {
                 try { v_doc_ter = request.getParameter("v_doc_ter"); } catch (Exception e) { e.printStackTrace(); }
@@ -628,14 +628,14 @@ implements sqlj.runtime.NamedIterator
                  if ((!v_doc_ter.trim().equals("")&&!v_tipodoc_ter.trim().equals("")&&
                       !v_apell_terc.trim().equals("")))
                  {
-                   session.removeValue("v_doc_ter");
-                   session.putValue("v_doc_ter",v_doc_ter);
-                   session.removeValue("v_tipodoc_ter");
-                   session.putValue("v_tipodoc_ter",v_tipodoc_ter);
-                   session.removeValue("v_nomb_terc");
-                   session.putValue("v_nomb_terc",v_nomb_terc);
-                   session.removeValue("v_apell_terc");
-                   session.putValue("v_apell_terc",v_apell_terc);
+                   session.removeAttribute("v_doc_ter");
+                   session.setAttribute("v_doc_ter",v_doc_ter);
+                   session.removeAttribute("v_tipodoc_ter");
+                   session.setAttribute("v_tipodoc_ter",v_tipodoc_ter);
+                   session.removeAttribute("v_nomb_terc");
+                   session.setAttribute("v_nomb_terc",v_nomb_terc);
+                   session.removeAttribute("v_apell_terc");
+                   session.setAttribute("v_apell_terc",v_apell_terc);
                    v_tercero=false;
                    v_encontro=true;
                    
@@ -651,10 +651,10 @@ implements sqlj.runtime.NamedIterator
                } 
              /**Variable de session código banco y numero cuenta*/
              if(!v_existeCuenta){
-               session.removeValue("s_banco");
-               session.removeValue("s_cuenta");
-               session.putValue("s_banco"," ");
-               session.putValue("s_cuenta"," ");
+               session.removeAttribute("s_banco");
+               session.removeAttribute("s_cuenta");
+               session.setAttribute("s_banco"," ");
+               session.setAttribute("s_cuenta"," ");
              }
              }catch (Exception e)  { e.printStackTrace(); }
              
@@ -662,8 +662,8 @@ implements sqlj.runtime.NamedIterator
             //}
           
 
-      session.removeValue("s_fondo");
-      session.putValue("s_fondo","S");
+      session.removeAttribute("s_fondo");
+      session.setAttribute("s_fondo","S");
       /**Si la validacipon de contrato traslado estuvo correcta*/
 
       if(v_encontro && !v_saro)

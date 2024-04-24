@@ -13,7 +13,7 @@ import java.io.*;
 */
 
 
-public class TBS_ReporteAjustes extends HttpServlet implements SingleThreadModel{
+public class TBS_ReporteAjustes extends HttpServlet{
   STBCL_GenerarBaseHTMLII codHtm;
   HttpServletRequest request;
   HttpServletResponse response;
@@ -228,8 +228,8 @@ private void findAjustes()
       String valores = i_sqlj.TBPBD_AllRepAjustes(v_mostrar,v_fecDesde,v_fecHasta,v_contDesde,v_contHasta);
       if(!valores.equals("") && valores.indexOf("Exception")==-1)
       {
-        sess.putValue("VALREPORTE",valores);
-        sess.putValue("cadena",cadena);
+        sess.setAttribute ("VALREPORTE",valores);
+        sess.setAttribute ("cadena",cadena);
         //mostrar la información
         TBPL_showReporte(valores);
         v_buscar = true;

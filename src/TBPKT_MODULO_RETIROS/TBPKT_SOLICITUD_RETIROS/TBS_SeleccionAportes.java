@@ -7,7 +7,7 @@ import java.util.*;
 import TBPKT_UTILIDADES.TBPKT_PLANTILLA.*;
 import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
-public class TBS_SeleccionAportes extends HttpServlet implements SingleThreadModel {
+public class TBS_SeleccionAportes extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         PrintWriter out = new PrintWriter (response.getOutputStream());

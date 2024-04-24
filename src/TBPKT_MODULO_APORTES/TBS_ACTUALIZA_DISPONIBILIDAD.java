@@ -17,7 +17,7 @@ import co.oldmutual.taxbenefit.util.DataSourceWrapper; // INT20131108
  *Este servlet sirve para actualizar un aportes en su calidad de disponibilidad
  */
 
-public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleThreadModel
+public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
 {
    int v_historia = -1;
    public void init(ServletConfig config) throws ServletException

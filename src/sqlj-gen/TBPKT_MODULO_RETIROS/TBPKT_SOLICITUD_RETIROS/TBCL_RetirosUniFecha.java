@@ -286,10 +286,10 @@ procedimiento de la base de datos
    String v_identificacion = "";/**Número de identificación*/
    String v_pintar    = "";/**Dibujar inicio página*/
    String v_pie       = "";/**Dibujar final de página*/
-   //String v_contra    = (java.lang.String)session.getValue("s_contrato");/**Número de contrato*/
-   //String v_pro       = (java.lang.String)session.getValue("s_producto");/**Código de producto*/
-   //String v_tusu      = (java.lang.String)session.getValue("s_usuario");/**Código Tipo de usuario*/
-   String v_tuni      = (java.lang.String)session.getValue("s_unidad");/**Código unidad de proceso*/
+   //String v_contra    = (java.lang.String)session.getAttribute("s_contrato");/**Número de contrato*/
+   //String v_pro       = (java.lang.String)session.getAttribute("s_producto");/**Código de producto*/
+   //String v_tusu      = (java.lang.String)session.getAttribute("s_usuario");/**Código Tipo de usuario*/
+   String v_tuni      = (java.lang.String)session.getAttribute("s_unidad");/**Código unidad de proceso*/
       
    String v_coderr = "";
    String v_msgErr = "";
@@ -306,10 +306,10 @@ procedimiento de la base de datos
    /*Agregado por Marcela Ortiz Sandoval 
     * 30/08/2007
     * Incluye parametros para manejo de contratos corporativos*/
-   String permiteRetiros = (java.lang.String)session.getValue("permiteRetiros");
-   String montoMinRetiro = (java.lang.String)session.getValue("montoMinRetiro");
-   String saldoMinRetiro = (java.lang.String)session.getValue("saldoMinRetiro");
-   String permiteCerrados = (java.lang.String)session.getValue("permiteCerrados");
+   String permiteRetiros = (java.lang.String)session.getAttribute("permiteRetiros");
+   String montoMinRetiro = (java.lang.String)session.getAttribute("montoMinRetiro");
+   String saldoMinRetiro = (java.lang.String)session.getAttribute("saldoMinRetiro");
+   String permiteCerrados = (java.lang.String)session.getAttribute("permiteCerrados");
    
    String fechaE1 = "";
    String fechaE2 = "";
@@ -322,7 +322,7 @@ procedimiento de la base de datos
    /* Agregado por Marcela Ortiz Sandoval 
     * 18/08/2009
     * Incluye parametro para manejo de retiro express */
-   String permiteExpress = (java.lang.String)session.getValue("permiteExpress");
+   String permiteExpress = (java.lang.String)session.getAttribute("permiteExpress");
    
    if (permiteRetiros!=null){
      if (permiteRetiros.equals("N")){
@@ -414,10 +414,10 @@ procedimiento de la base de datos
 
 /*@lineinfo:user-code*//*@lineinfo:173^62*/
    /**Variable de session tipo de uisuario y unidad de proceso */
-   session.removeValue("s_usuariotax");
-   session.removeValue("s_unidadtax");
-   session.putValue("s_usuariotax",(java.lang.Object)v_codusu);
-   session.putValue("s_unidadtax",(java.lang.Object)v_coduni);
+   session.removeAttribute("s_usuariotax");
+   session.removeAttribute("s_unidadtax");
+   session.setAttribute("s_usuariotax",(java.lang.Object)v_codusu);
+   session.setAttribute("s_unidadtax",(java.lang.Object)v_coduni);
     /**Si el tipo de usuario es valido*/
    if(!v_codusu.equals("XXXXXX"))
    {//if usuario
@@ -648,8 +648,8 @@ procedimiento de la base de datos
      if(v_validafecha)
      {
       /**Variable de session fecha proceso */
-      session.removeValue("s_fecpro");
-      session.putValue("s_fecpro",(java.lang.Object)v_fecha.toString());
+      session.removeAttribute("s_fecpro");
+      session.setAttribute("s_fecpro",(java.lang.Object)v_fecha.toString());
       /**Consultar datos del contrato*/
       /*@lineinfo:generated-code*//*@lineinfo:234^7*/
 
@@ -693,27 +693,27 @@ procedimiento de la base de datos
       while (v_cum.next())
       {
        v_nombre= v_cum.CON_NOMBRES().trim();
-       session.removeValue("s_nombres");
-       session.putValue("s_nombres",(java.lang.Object)v_nombre);
+       session.removeAttribute("s_nombres");
+       session.setAttribute("s_nombres",(java.lang.Object)v_nombre);
        v_apellidos = v_cum.CON_APELLIDOS().trim();
-       session.removeValue("s_apellidos");
-       session.putValue("s_apellidos",(java.lang.Object)v_apellidos);
+       session.removeAttribute("s_apellidos");
+       session.setAttribute("s_apellidos",(java.lang.Object)v_apellidos);
        v_feccan = v_cum.v_fecha_cancelacion();
-       session.removeValue("s_feccan");
-       session.putValue("s_feccan",(java.lang.Object)v_feccan);
+       session.removeAttribute("s_feccan");
+       session.setAttribute("s_feccan",(java.lang.Object)v_feccan);
        v_valmin = new Double(v_cum.pro_retiro_minimo()).toString();
-       session.removeValue("s_valmin");
-       session.putValue("s_valmin",(java.lang.Object)v_valmin);
+       session.removeAttribute("s_valmin");
+       session.setAttribute("s_valmin",(java.lang.Object)v_valmin);
        v_canje2 =  new Integer(v_cum.PRO_DIAS_CANJE()).toString();
-       session.removeValue("s_diascanje");
-       session.putValue("s_diascanje",(java.lang.Object)v_canje2);
+       session.removeAttribute("s_diascanje");
+       session.setAttribute("s_diascanje",(java.lang.Object)v_canje2);
        v_validacontrato = true;
        v_tipoiden = v_cum.CON_REF_TIPO_IDENTIFICACION();
-       session.removeValue("s_tipoidentificacion");
-       session.putValue("s_tipoidentificacion",(java.lang.Object)v_tipoiden);
+       session.removeAttribute("s_tipoidentificacion");
+       session.setAttribute("s_tipoidentificacion",(java.lang.Object)v_tipoiden);
        v_identificacion = v_cum.CON_NUMERO_IDENTIFICACION();
-       session.removeValue("s_identificacion");
-       session.putValue("s_identificacion",(java.lang.Object)v_identificacion);
+       session.removeAttribute("s_identificacion");
+       session.setAttribute("s_identificacion",(java.lang.Object)v_identificacion);
       }
       v_cum.close();
       
@@ -754,8 +754,8 @@ procedimiento de la base de datos
       while (v_pac.next())
       {
         v_canje2 =  new Integer(v_pac.dias_canje()).toString();
-        session.removeValue("s_diascanje");
-        session.putValue("s_diascanje",(java.lang.Object)v_canje2);
+        session.removeAttribute("s_diascanje");
+        session.setAttribute("s_diascanje",(java.lang.Object)v_canje2);
       }
       
       v_pac.close();
@@ -810,14 +810,14 @@ procedimiento de la base de datos
 
 /*@lineinfo:user-code*//*@lineinfo:300^130*/
         /**Variable de session de conexion del as400*/
-        session.removeValue("s_sistema");
-        session.removeValue("s_usumfund");
-        session.removeValue("s_passmfund");
-        session.removeValue("s_libreria");
-        session.putValue("s_sistema",(java.lang.Object)v_sistema);
-        session.putValue("s_usumfund",(java.lang.Object)v_usumfund);
-        session.putValue("s_passmfund",(java.lang.Object)v_passmfund);
-        session.putValue("s_libreria",(java.lang.Object)v_libreria);
+        session.removeAttribute("s_sistema");
+        session.removeAttribute("s_usumfund");
+        session.removeAttribute("s_passmfund");
+        session.removeAttribute("s_libreria");
+        session.setAttribute("s_sistema",(java.lang.Object)v_sistema);
+        session.setAttribute("s_usumfund",(java.lang.Object)v_usumfund);
+        session.setAttribute("s_passmfund",(java.lang.Object)v_passmfund);
+        session.setAttribute("s_libreria",(java.lang.Object)v_libreria);
 
        /**Consultar bloqueo de egresos para el contrato*/
         
@@ -847,9 +847,9 @@ procedimiento de la base de datos
         v_fechaEfect = "";
         v_fechaProceso = "";
     }
-      session.removeValue("s_fecefectiva");
-      session.putValue("s_fecefectiva",(java.lang.Object)v_fechaEfect );
-      session.putValue("s_fecpro",(java.lang.Object)v_fechaProceso );
+      session.removeAttribute("s_fecefectiva");
+      session.setAttribute("s_fecefectiva",(java.lang.Object)v_fechaEfect );
+      session.setAttribute("s_fecpro",(java.lang.Object)v_fechaProceso );
       
     /**Fin fecha efectiva*/  
         

@@ -200,24 +200,24 @@ procedimiento de la base de datos
    
       
    /**Verificar que las variables de session no expiren*/
-   if((java.lang.String)session.getValue("s_contrato") != null || (java.lang.String)session.getValue("s_producto") != null)
+   if((java.lang.String)session.getAttribute("s_contrato") != null || (java.lang.String)session.getAttribute("s_producto") != null)
    {//4
     /**Capturar variables de session*/
 
-    v_contra         = (java.lang.String)session.getValue("s_contrato");
-    v_pro            = (java.lang.String)session.getValue("s_producto");
-    v_nom            = (java.lang.String)session.getValue("s_nombres");
-    v_ape            =  (java.lang.String)session.getValue("s_apellidos");
-    v_tipoiden       = (java.lang.String)session.getValue("s_tipoidentificacion");
-    v_identificacion = (java.lang.String)session.getValue("s_identificacion");
-    v_sistema        = (java.lang.String)session.getValue("s_sistema");
-    v_usumfund       = (java.lang.String)session.getValue("s_usumfund");
-    v_passmfund      = (java.lang.String)session.getValue("s_passmfund");
-    v_libreria       = (java.lang.String)session.getValue("s_libreria");
-    //v_dim2           = (java.lang.String)session.getValue("s_dim");
-    v_dim            = new Integer((java.lang.String)session.getValue("s_dim")).intValue();
-    v_fecefe         = (java.lang.String)session.getValue("s_fecefectiva");
-    v_fecpro         = (java.lang.String)session.getValue("s_fecpro");
+    v_contra         = (java.lang.String)session.getAttribute("s_contrato");
+    v_pro            = (java.lang.String)session.getAttribute("s_producto");
+    v_nom            = (java.lang.String)session.getAttribute("s_nombres");
+    v_ape            =  (java.lang.String)session.getAttribute("s_apellidos");
+    v_tipoiden       = (java.lang.String)session.getAttribute("s_tipoidentificacion");
+    v_identificacion = (java.lang.String)session.getAttribute("s_identificacion");
+    v_sistema        = (java.lang.String)session.getAttribute("s_sistema");
+    v_usumfund       = (java.lang.String)session.getAttribute("s_usumfund");
+    v_passmfund      = (java.lang.String)session.getAttribute("s_passmfund");
+    v_libreria       = (java.lang.String)session.getAttribute("s_libreria");
+    //v_dim2           = (java.lang.String)session.getAttribute("s_dim");
+    v_dim            = new Integer((java.lang.String)session.getAttribute("s_dim")).intValue();
+    v_fecefe         = (java.lang.String)session.getAttribute("s_fecefectiva");
+    v_fecpro         = (java.lang.String)session.getAttribute("s_fecpro");
     /* Agregado por Marcela Ortiz Sandoval 
      * 2009/10/27
      * Inclusión del id del evento de Saro
@@ -225,8 +225,8 @@ procedimiento de la base de datos
     /**Capturar el id del evento de Saro */
     try { 
     v_idsaro = request.getParameter("v_idsaro"); 
-    session.removeValue("v_idsaro");
-    session.putValue("v_idsaro",v_idsaro);
+    session.removeAttribute("v_idsaro");
+    session.setAttribute("v_idsaro",v_idsaro);
     /**Validar el id del evento de Saro */
     if (!v_idsaro.trim().equals("")){
       CallableStatement cs1 = t_tax.prepareCall ( "{? = call TBCL_FUNCIONESAS400.TBPL_ValidarSaro(?,?,?,?,?)}");
@@ -251,8 +251,8 @@ procedimiento de la base de datos
     } catch (Exception e) { e.printStackTrace(); }
 
        
-    //v_cumple         = (java.lang.String)session.getValue("s_cumes");
-    v_cumes2         = new Double((java.lang.String)session.getValue("s_cumes")).doubleValue();
+    //v_cumple         = (java.lang.String)session.getAttribute("s_cumes");
+    v_cumes2         = new Double((java.lang.String)session.getAttribute("s_cumes")).doubleValue();
     /**Pasar fecha efectiva del retiro a formato YYYYMMDD*/
 
     v_efe            =i_fecha.TBFL_Fecha(v_fecefe);
@@ -266,7 +266,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 */
        /**Capturar el tipo de transacción*/
-       v_tipotran =  (java.lang.String)session.getValue("s_tipotran");
+       v_tipotran =  (java.lang.String)session.getAttribute("s_tipotran");
        
 //  out.println("Llamado al programa en as 400: <br>vcontra="+v_contra+"<br>vefe="+v_efe+"<br>E<br>vsistema="+v_sistema+"<br>vusumfund="+v_usumfund+"<br>vpassmfund="+v_passmfund+"<br>vlibreria="+v_libreria);
 
@@ -338,15 +338,15 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
           v_codfon = v_res2.ref_codigo();
           v_fon.addElement(v_codfon);
           /**Variable de session código del fondo */
-          session.removeValue("s_codfon"+v_num+"");
-          session.putValue("s_codfon"+v_num+"",(java.lang.Object)v_codfon);
+          session.removeAttribute("s_codfon"+v_num+"");
+          session.setAttribute("s_codfon"+v_num+"",(java.lang.Object)v_codfon);
 
           
           double  l      = new Double(v_fonsal2[y+1]).doubleValue();
           v_valort = l/100;
           /**Variable de session saldo del fondo */
-          session.removeValue("s_valfon"+v_num+"");
-          session.putValue("s_valfon"+v_num+"",(java.lang.Object)new Double(v_valort).toString());
+          session.removeAttribute("s_valfon"+v_num+"");
+          session.setAttribute("s_valfon"+v_num+"",(java.lang.Object)new Double(v_valort).toString());
           //out.print("Codigo del fondo [" + v_num + "] es = " + v_codfon + ", y el valor es ="+v_valort + "<br>");
           
           /**Consultar valores retirados en otras solicitudes de retiro para restar, y presentar@
@@ -378,15 +378,15 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
           v_minfon.addElement(v_res2.v_porcentaje());
           /**Variable de session minimo porcentaje a dejar en el fondo */
-          session.removeValue("s_minfon"+v_num+"");
-          session.putValue("s_minfon"+v_num+"",(java.lang.Object)v_res2.v_porcentaje());
+          session.removeAttribute("s_minfon"+v_num+"");
+          session.setAttribute("s_minfon"+v_num+"",(java.lang.Object)v_res2.v_porcentaje());
 
 
           v_desfon =  v_res2.ref_descripcion();
           v_desc.addElement(v_desfon);
           /**Variable de session descripción del fondo */
-          session.removeValue("s_desfon"+v_num+"");
-          session.putValue("s_desfon"+v_num+"",(java.lang.Object)v_desfon);
+          session.removeAttribute("s_desfon"+v_num+"");
+          session.setAttribute("s_desfon"+v_num+"",(java.lang.Object)v_desfon);
           v_validarfondo = true;
          }//termina while  10
          v_res2.close();
@@ -410,14 +410,14 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
        /**Capturar tipo de transacción*/
 
-       v_tipotran  =   (java.lang.String)session.getValue("s_tipotran");
+       v_tipotran  =   (java.lang.String)session.getAttribute("s_tipotran");
        /**Capturar clase de transacción*/
-       v_clasetran =  (java.lang.String)session.getValue("s_clasetran");
+       v_clasetran =  (java.lang.String)session.getAttribute("s_clasetran");
        /**Capturar parametrización de días menores*/
-       v_diasmenor  =  (java.lang.String)session.getValue("s_diasmenor");
+       v_diasmenor  =  (java.lang.String)session.getAttribute("s_diasmenor");
 
        /**Capturar parametrización de días mayores*/
-       v_diasmayor  =  (java.lang.String)session.getValue("s_diasmayor");
+       v_diasmayor  =  (java.lang.String)session.getAttribute("s_diasmayor");
 
 
 
@@ -472,19 +472,19 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
        if(v_pasa == 0  && v_pasa2 == 0)
        {//15
         /**Capturar concepto de retiro traslado*/
-        v_traslado    =  (java.lang.String)session.getValue("s_traslado");
+        v_traslado    =  (java.lang.String)session.getAttribute("s_traslado");
         /**Capturar concepto de retiro total*/
-        v_total       =  (java.lang.String)session.getValue("s_total");
+        v_total       =  (java.lang.String)session.getAttribute("s_total");
 
 
         /**Si el retiro es para traslado*/
         if(v_traslado.equalsIgnoreCase("S"))
         {//16
          /**Variable de session código del banco y númeroi de cuenta*/
-         session.removeValue("s_banco");
-         session.removeValue("s_cuenta");
-         session.putValue("s_banco",v_cadblanco);
-         session.putValue("s_cuenta",v_cadblanco);
+         session.removeAttribute("s_banco");
+         session.removeAttribute("s_cuenta");
+         session.setAttribute("s_banco",v_cadblanco);
+         session.setAttribute("s_cuenta",v_cadblanco);
 
          /**Capturar cadena con código afp e identificador de afp externa o interna*/
          try { v_afp = request.getParameter("v_afp"); } catch (Exception e) { e.printStackTrace(); }
@@ -493,21 +493,21 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
           v_intext = v_afp.substring(2,8);
           v_afp2 = v_afp.substring(0,2);
           /**Variable de session del código de la afp*/
-          session.removeValue("s_afp");
-          session.putValue("s_afp",v_afp2);
+          session.removeAttribute("s_afp");
+          session.setAttribute("s_afp",v_afp2);
          }
          else
          {
           /**Variable de session del código de la afp*/
-          session.removeValue("s_afp");
-          session.putValue("s_afp",v_afp);
+          session.removeAttribute("s_afp");
+          session.setAttribute("s_afp",v_afp);
          }//17
 
          /**Capturar código producto traslado destino*/
          try { v_proti = request.getParameter("v_proti"); } catch (Exception e) { e.printStackTrace(); }
          /**Variable de session codigo de producto destino*/
-         session.removeValue("s_proti");
-         session.putValue("s_proti",v_proti);
+         session.removeAttribute("s_proti");
+         session.setAttribute("s_proti",v_proti);
          /**Capturar numero contrato traslado destino*/
 
          try { v_conti = request.getParameter("v_conti"); } catch (Exception e) { e.printStackTrace(); }
@@ -518,8 +518,8 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
          }
          v_conti2 = v_cadena.trim() +v_conti.trim();
          /**Variable de session numero contrato destino*/
-         session.removeValue("s_conti");
-         session.putValue("s_conti",v_conti2.trim());
+         session.removeAttribute("s_conti");
+         session.setAttribute("s_conti",v_conti2.trim());
          v_contratotraslado = v_conti2.trim();
          /**Capturar tipo de contrato traslado destino*/
          try { v_tipoconti = request.getParameter("v_tipocontrato"); } catch (Exception e) { e.printStackTrace(); }
@@ -598,10 +598,10 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
          }
          else
          {
-          session.removeValue("s_conti");
-          session.removeValue("s_proti");
-          session.putValue("s_proti","  ");
-          session.putValue("s_conti","  ");
+          session.removeAttribute("s_conti");
+          session.removeAttribute("s_proti");
+          session.setAttribute("s_proti","  ");
+          session.setAttribute("s_conti","  ");
           v_encontro = true;
          }
          
@@ -610,23 +610,23 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
          if(v_traslado.equals("S"))
          {
              v_esTercero ="N";
-             session.removeValue("esTercero");
-             session.putValue("esTercero",v_esTercero);
+             session.removeAttribute("esTercero");
+             session.setAttribute("esTercero",v_esTercero);
          }         
          /** Agregado 20091118 MOS 
           *  Manejo de terceros en caso de ley 1111*/
          if(v_traslado.equals("S") && v_intext.equals("STA003")){
             v_esTercero ="S";
-            session.removeValue("esTercero");
-            session.putValue("esTercero",v_esTercero);
+            session.removeAttribute("esTercero");
+            session.setAttribute("esTercero",v_esTercero);
          }
          
         /** Agregado 20150107 GAV 
           *  Manejo de terceros en caso de ley 1607*/
          if(v_traslado.equals("S") && v_intext.equals("STA004")){
             v_esTercero ="S";
-            session.removeValue("esTercero");
-            session.putValue("esTercero",v_esTercero);
+            session.removeAttribute("esTercero");
+            session.setAttribute("esTercero",v_esTercero);
          }
          
          
@@ -638,13 +638,13 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
         {
          if(v_traslado.equals("N")){ 
            /**Variable de session del código de la afp*/
-           session.removeValue("s_conti");
-           session.removeValue("s_proti");
-           session.putValue("s_proti","  ");
-           session.putValue("s_conti","  ");
+           session.removeAttribute("s_conti");
+           session.removeAttribute("s_proti");
+           session.setAttribute("s_proti","  ");
+           session.setAttribute("s_conti","  ");
            v_encontro = true;
-           session.removeValue("s_afp");
-           session.putValue("s_afp","   ");
+           session.removeAttribute("s_afp");
+           session.setAttribute("s_afp","   ");
 
              /**Capturar cadena con código del banco y número de cuenta*/
              try { v_cuenta = request.getParameter("v_cuenta"); 
@@ -656,16 +656,16 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
                 v_numcuen      =  v_cuenta.substring(v_cadena2+1,v_tamañocuenta);
                 
                 /**Variable de session del código de banco y número de cuenta*/
-                session.removeValue("s_banco");
-                session.removeValue("s_cuenta");
-                session.putValue("s_banco",v_banco);
-                session.putValue("s_cuenta",v_numcuen);
+                session.removeAttribute("s_banco");
+                session.removeAttribute("s_cuenta");
+                session.setAttribute("s_banco",v_banco);
+                session.setAttribute("s_cuenta",v_numcuen);
                 v_existeCuenta = true;
                 
                 try {
-                  v_esTercero =(java.lang.String)session.getValue("esTercero"); 
-                  session.removeValue("esTercero");
-                  session.putValue("esTercero",v_esTercero); 
+                  v_esTercero =(java.lang.String)session.getAttribute("esTercero"); 
+                  session.removeAttribute("esTercero");
+                  session.setAttribute("esTercero",v_esTercero); 
                 }catch (Exception e)  { e.printStackTrace(); }
       
                }} catch (Exception e) { e.printStackTrace(); }
@@ -683,16 +683,16 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
                         v_numcuen      =  v_cuentaLey1607.substring(v_cadena2+1,v_tamañocuenta);
                         
                         /**Variable de session del código de banco y número de cuenta*/
-                        session.removeValue("s_banco");
-                        session.removeValue("s_cuenta");
-                        session.putValue("s_banco",v_banco);
-                        session.putValue("s_cuenta",v_numcuen);
+                        session.removeAttribute("s_banco");
+                        session.removeAttribute("s_cuenta");
+                        session.setAttribute("s_banco",v_banco);
+                        session.setAttribute("s_cuenta",v_numcuen);
                         v_existeCuenta = true;
                         
                         try {
-                          v_esTercero =(java.lang.String)session.getValue("esTercero"); 
-                          session.removeValue("esTercero");
-                          session.putValue("esTercero",v_esTercero); 
+                          v_esTercero =(java.lang.String)session.getAttribute("esTercero"); 
+                          session.removeAttribute("esTercero");
+                          session.setAttribute("esTercero",v_esTercero); 
                         }catch (Exception e)  { e.printStackTrace(); }
               
                        }} catch (Exception e) { e.printStackTrace(); }
@@ -709,16 +709,16 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
                         v_numcuen      =  v_cuenta.substring(v_cadena2+1,v_tamañocuenta);
                         
                         /**Variable de session del código de banco y número de cuenta*/
-                        session.removeValue("s_banco");
-                        session.removeValue("s_cuenta");
-                        session.putValue("s_banco",v_banco);
-                        session.putValue("s_cuenta",v_numcuen);
+                        session.removeAttribute("s_banco");
+                        session.removeAttribute("s_cuenta");
+                        session.setAttribute("s_banco",v_banco);
+                        session.setAttribute("s_cuenta",v_numcuen);
                         v_existeCuenta = true;
                         
                         try {
-                          v_esTercero =(java.lang.String)session.getValue("esTercero"); 
-                          session.removeValue("esTercero");
-                          session.putValue("esTercero",v_esTercero); 
+                          v_esTercero =(java.lang.String)session.getAttribute("esTercero"); 
+                          session.removeAttribute("esTercero");
+                          session.setAttribute("esTercero",v_esTercero); 
                         }catch (Exception e)  { e.printStackTrace(); }
               
                        }} catch (Exception e) { e.printStackTrace(); }
@@ -728,8 +728,8 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
         
 
           try {  
-          v_esTercero =(java.lang.String)session.getValue("esTercero"); 
-          session.putValue("esTercero",v_esTercero); 
+          v_esTercero =(java.lang.String)session.getAttribute("esTercero"); 
+          session.setAttribute("esTercero",v_esTercero); 
           if (v_esTercero.equals("S") && v_cuenta.trim().equals("") && v_cuentaLey1607.trim().equals(""))  /**Se agrega la validacion para que la cuenta de titulares y terceros este vacia*/
           {
               try { v_doc_ter = request.getParameter("v_doc_ter"); } catch (Exception e) { e.printStackTrace(); }
@@ -743,14 +743,14 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
                if ((!v_doc_ter.trim().equals("")&&!v_tipodoc_ter.trim().equals("")&&
                     !v_apell_terc.trim().equals("")))
                {
-                 session.removeValue("v_doc_ter");
-                 session.putValue("v_doc_ter",v_doc_ter);
-                 session.removeValue("v_tipodoc_ter");
-                 session.putValue("v_tipodoc_ter",v_tipodoc_ter);
-                 session.removeValue("v_nomb_terc");
-                 session.putValue("v_nomb_terc",v_nomb_terc);
-                 session.removeValue("v_apell_terc");
-                 session.putValue("v_apell_terc",v_apell_terc);
+                 session.removeAttribute("v_doc_ter");
+                 session.setAttribute("v_doc_ter",v_doc_ter);
+                 session.removeAttribute("v_tipodoc_ter");
+                 session.setAttribute("v_tipodoc_ter",v_tipodoc_ter);
+                 session.removeAttribute("v_nomb_terc");
+                 session.setAttribute("v_nomb_terc",v_nomb_terc);
+                 session.removeAttribute("v_apell_terc");
+                 session.setAttribute("v_apell_terc",v_apell_terc);
                  v_encontro=true;
                  v_tercero=false;
                    
@@ -769,10 +769,10 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
                
           /**Variable de session del código de banco y número de cuenta*/
           if (!v_existeCuenta ){
-          session.removeValue("s_banco");
-          session.removeValue("s_cuenta");
-          session.putValue("s_banco",v_cadblanco);
-          session.putValue("s_cuenta",v_cadblanco);
+          session.removeAttribute("s_banco");
+          session.removeAttribute("s_cuenta");
+          session.setAttribute("s_banco",v_cadblanco);
+          session.setAttribute("s_cuenta",v_cadblanco);
           }
 
         }
@@ -784,8 +784,8 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
          
          /**Capturar tipo de valor del retiro*/
          try { v_tipov = request.getParameter("v_tipov"); } catch (Exception e) { e.printStackTrace(); }
-         session.removeValue("s_tipov");
-         session.putValue("s_tipov",v_tipov);
+         session.removeAttribute("s_tipov");
+         session.setAttribute("s_tipov",v_tipov);
 
 
          /**Aumentar el cobro de 4x1000 s es un retiro parcial para tercero*/
@@ -804,26 +804,26 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
              out.println("v_valor"+v_valor);
            }
          }
-         session.removeValue("s_valor");
-         session.putValue("s_valor",v_valor);
+         session.removeAttribute("s_valor");
+         session.setAttribute("s_valor",v_valor);
 
          /**Capturar tipo de distribución de fondo*/
          try { v_distribucion = request.getParameter("v_fondo"); } catch (Exception e) { e.printStackTrace(); }
          /**Variable de session del tipo de distribución de fondos*/
-         session.removeValue("s_fondo");
-         session.putValue("s_fondo",v_distribucion);
+         session.removeAttribute("s_fondo");
+         session.setAttribute("s_fondo",v_distribucion);
          /**Si es a prorrata*/
          if(v_distribucion.equals("0"))
          {
           /**Variable de session de tipo de distribución*/
-          session.removeValue("s_prorrata");
-          session.putValue("s_prorrata","S");
+          session.removeAttribute("s_prorrata");
+          session.setAttribute("s_prorrata","S");
          }
          else/**Valor o porcentaje*/
          {
           /**Variable de session de tipo de distribución*/
-          session.removeValue("s_prorrata");
-          session.putValue("s_prorrata","N");
+          session.removeAttribute("s_prorrata");
+          session.setAttribute("s_prorrata","N");
          }
         }
 

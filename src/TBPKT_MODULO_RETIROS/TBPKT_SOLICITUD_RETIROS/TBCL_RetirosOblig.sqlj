@@ -55,15 +55,15 @@ public class TBCL_RetirosOblig extends HttpServlet{
            String v_apellidos = "";/**Apellido del afiliado*/ 
            String v_tipoiden = "";/**Tipo de Identificacion Afiliiado*/ 
            String v_identificacion = "";/**Numero de Identificacion Afiliado*/ 
-           String v_contra    = (java.lang.String)session.getValue("s_contrato");/**Número de contrato*/
-           String v_pro       = (java.lang.String)session.getValue("s_producto");/**Código de producto*/
+           String v_contra    = (java.lang.String)session.getAttribute("s_contrato");/**Número de contrato*/
+           String v_pro       = (java.lang.String)session.getAttribute("s_producto");/**Código de producto*/
               
            String v_coderr = "";
            String v_msgErr = "";                    
                           
            String v_fechaActual;
               
-           String permiteRetiros = (java.lang.String)session.getValue("permiteRetiros");
+           String permiteRetiros = (java.lang.String)session.getAttribute("permiteRetiros");
             
            String bloqueoRetiroTotal = "";                    
            String v_contrato_unif = "";                    
@@ -75,8 +75,8 @@ public class TBCL_RetirosOblig extends HttpServlet{
            }
           //Obtener direccion servidor TAX  
           #sql {select ref_descripcion into :s_ruta_serv from tbreferencias WHERE REF_CODIGO='DSR001'};  
-          session.removeValue("s_ruta_serv");
-          session.putValue("s_ruta_serv",(java.lang.Object)s_ruta_serv);  
+          session.removeAttribute("s_ruta_serv");
+          session.setAttribute("s_ruta_serv",(java.lang.Object)s_ruta_serv);  
             
           /**Consultar datos del contrato*/
           #sql v_cum ={select   CON_NOMBRES
@@ -92,17 +92,17 @@ public class TBCL_RetirosOblig extends HttpServlet{
           while (v_cum.next())
           {
             v_nombre= v_cum.CON_NOMBRES().trim();
-            session.removeValue("s_nombres");
-            session.putValue("s_nombres",(java.lang.Object)v_nombre);
+            session.removeAttribute("s_nombres");
+            session.setAttribute("s_nombres",(java.lang.Object)v_nombre);
             v_apellidos = v_cum.CON_APELLIDOS().trim();
-            session.removeValue("s_apellidos");
-            session.putValue("s_apellidos",(java.lang.Object)v_apellidos);
+            session.removeAttribute("s_apellidos");
+            session.setAttribute("s_apellidos",(java.lang.Object)v_apellidos);
             v_tipoiden = v_cum.REF_VALOR();
-            session.removeValue("s_tipoidentificacion");
-            session.putValue("s_tipoidentificacion",(java.lang.Object)v_tipoiden);
+            session.removeAttribute("s_tipoidentificacion");
+            session.setAttribute("s_tipoidentificacion",(java.lang.Object)v_tipoiden);
             v_identificacion = v_cum.CON_NUMERO_IDENTIFICACION();
-            session.removeValue("s_identificacion");
-            session.putValue("s_identificacion",(java.lang.Object)v_identificacion);
+            session.removeAttribute("s_identificacion");
+            session.setAttribute("s_identificacion",(java.lang.Object)v_identificacion);
            }
            v_cum.close();
                         
@@ -166,7 +166,7 @@ public class TBCL_RetirosOblig extends HttpServlet{
             
             /*try {        
             SQL_PTB_RETIROS_OBLIG objSQL_PTB_RETIROS_OBLIG = new SQL_PTB_RETIROS_OBLIG();
-            objSQL_PTB_RETIROS_OBLIG.INSERT_EVENTS_OBLIG("0",""+Integer.parseInt(session.getValue("s_contrato").toString()),session.getValue("s_producto").toString(),"E",session.getValue("s_usuariopipe").toString(),ex.toString());
+            objSQL_PTB_RETIROS_OBLIG.INSERT_EVENTS_OBLIG("0",""+Integer.parseInt(session.getAttribute("s_contrato").toString()),session.getAttribute("s_producto").toString(),"E",session.getAttribute("s_usuariopipe").toString(),ex.toString());
             } catch(Exception ex1) {
                 System.out.println("ERROR SQL_CIERRE: "+ex1);  
             }  */   

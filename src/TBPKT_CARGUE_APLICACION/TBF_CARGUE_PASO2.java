@@ -115,7 +115,7 @@ public class TBF_CARGUE_PASO2 extends JFrame {
     System.out.println("Error en el proceso "+e);
     i_men.setModal2(this);
     i_men.mensaje("Mensaje de error "+e);
-    i_men.show();
+    i_men.setVisible(true);
    }
    catch(Exception ex) {}
   }
@@ -182,7 +182,7 @@ public class TBF_CARGUE_PASO2 extends JFrame {
    {
     i_mensaje.setModal2(this);
     i_mensaje.mensaje("Favor digitar la fecha en la que desea hacer el cargue de información.");
-    i_mensaje.show();
+    i_mensaje.setVisible(true);
    }
    else
    {
@@ -259,7 +259,7 @@ public class TBF_CARGUE_PASO2 extends JFrame {
                         "Total de elementos duplicados: "+vregfal+"",
                         "Total de registros procesados: "+vregistro+"",
                         v_menlog);
-       men.show();
+       men.setVisible(true);
       }
       else
       {
@@ -278,7 +278,7 @@ public class TBF_CARGUE_PASO2 extends JFrame {
                         "Total de elementos duplicados: "+vregfal+"",
                         "Total de registros procesados: "+vregistro+"",
                         v_menlog);
-       men.show();
+       men.setVisible(true);
       }
      }
      else
@@ -287,7 +287,7 @@ public class TBF_CARGUE_PASO2 extends JFrame {
       t_tax.commit();
       i_mensaje.setModal2(this);
       i_mensaje.mensaje("La información de contratos para la fecha "+fecha+" ya ha sido cargada al sistema. ");
-      i_mensaje.show();
+      i_mensaje.setVisible(true);
      }
     }//Si se escoje cargar aportes y retiros
     else if(v_escoje.trim().equals("Información de Aportes y Retiros"))
@@ -307,7 +307,7 @@ public class TBF_CARGUE_PASO2 extends JFrame {
            t_tax.commit();
            i_mensaje.setModal2(this);
            i_mensaje.mensaje("Error en el proceso. La información de contratos para la fecha "+fecha+" no ha sido cargada.");
-           i_mensaje.show();
+           i_mensaje.setVisible(true);
           }//2
           else
           {//2
@@ -387,7 +387,7 @@ public class TBF_CARGUE_PASO2 extends JFrame {
                                  "Total de elementos no cargados: "+nocargado+"",
                                  "Total de registros procesados: "+registro+"",
                                  v_menlog);
-             i_aporet.show();
+             i_aporet.setVisible(true);
             }//4
             else
             {//4
@@ -411,7 +411,7 @@ public class TBF_CARGUE_PASO2 extends JFrame {
                                  "Total de elementos no cargados: "+nocargado+"",
                                  "Total de registros procesados: "+registro+"",
                                  v_menlog);
-             i_aporet.show();
+             i_aporet.setVisible(true);
             }//4
            }
            else
@@ -420,7 +420,7 @@ public class TBF_CARGUE_PASO2 extends JFrame {
             t_tax.commit();
             i_mensaje.setModal2(this);
             i_mensaje.mensaje("La información de aportes y retiros para la fecha "+fecha+" ya ha sido cargada.");
-            i_mensaje.show();
+            i_mensaje.setVisible(true);
            }//3
           }//2
          }//Se escoje ralizar el proceso de calculo de numero de unidades retiradas
@@ -450,7 +450,7 @@ public class TBF_CARGUE_PASO2 extends JFrame {
                //t_tax.close();
                i_mensaje.setModal2(this);
                i_mensaje.mensaje(v_menconnumuni);
-               i_mensaje.show();
+               i_mensaje.setVisible(true);
               }//tercero
    }
   }//manejo de errores
@@ -461,7 +461,7 @@ public class TBF_CARGUE_PASO2 extends JFrame {
     t_tax.rollback();
     i_mensaje.setModal2(this);
     i_mensaje.mensaje("Mensaje de error "+ex);
-    i_mensaje.show();
+    i_mensaje.setVisible(true);
    }
    catch(Exception ex2)
    {
@@ -472,7 +472,7 @@ public class TBF_CARGUE_PASO2 extends JFrame {
     System.out.println("Error en el proceso "+ex);
     i_men.setModal2(this);
     i_men.mensaje("Mensaje de error "+ex);
-    i_men.show();
+    i_men.setVisible(true);
    }
    catch(Exception exc) {}
 

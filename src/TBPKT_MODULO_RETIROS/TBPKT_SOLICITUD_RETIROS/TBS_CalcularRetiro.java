@@ -19,7 +19,7 @@ import TBPKT_UTILIDADES.TBPKT_SEGURIDAD.*;
 
 import co.oldmutual.taxbenefit.util.DataSourceWrapper;
 
-public class TBS_CalcularRetiro extends HttpServlet implements SingleThreadModel
+public class TBS_CalcularRetiro extends HttpServlet
 {
 
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -109,72 +109,72 @@ procedimiento de la base de datos
    double v_formula2      = 0;
    double v_formulapor   = 0;
    double v_sumporcentaje = 0;
-   String v_esquema = (java.lang.String)session.getValue("s_esquema");
+   String v_esquema = (java.lang.String)session.getAttribute("s_esquema");
      
    /**Modificado 2009/10/27 Variable Id Saro*/
    try {
-   if((java.lang.String)session.getValue("v_idsaro")!= null){
-       v_idsaro = (java.lang.String)session.getValue("v_idsaro");
-       session.removeValue("v_idsaro");
-       session.putValue("v_idsaro",v_idsaro);
+   if((java.lang.String)session.getAttribute("v_idsaro")!= null){
+       v_idsaro = (java.lang.String)session.getAttribute("v_idsaro");
+       session.removeAttribute("v_idsaro");
+       session.setAttribute("v_idsaro",v_idsaro);
      }
    }
    catch (Exception e) { e.printStackTrace(); }
   
-   if((java.lang.String)session.getValue("s_naturaleza")!= null || v_esquema.equals("0"))
+   if((java.lang.String)session.getAttribute("s_naturaleza")!= null || v_esquema.equals("0"))
    {
-    if((java.lang.String)session.getValue("s_contrato")!= null || (java.lang.String)session.getValue("s_producto")!= null)
+    if((java.lang.String)session.getAttribute("s_contrato")!= null || (java.lang.String)session.getAttribute("s_producto")!= null)
     {
 
      if(!v_esquema.equals("0"))
      {
-          String v_pro = (java.lang.String)session.getValue("s_producto");//"MFUND";
-          String v_contra = (java.lang.String)session.getValue("s_contrato");//"000011425";
-          String v_fecpro =(java.lang.String)session.getValue("s_fecpro");//"2001-01-23";
+          String v_pro = (java.lang.String)session.getAttribute("s_producto");//"MFUND";
+          String v_contra = (java.lang.String)session.getAttribute("s_contrato");//"000011425";
+          String v_fecpro =(java.lang.String)session.getAttribute("s_fecpro");//"2001-01-23";
 
 
      
           //Date v_fecpro2 = v_fecpro2.valueOf(v_fecpro);
           java.sql.Date v_fecpro2 = new java.sql.Date(4);
           v_fecpro2 = java.sql.Date.valueOf(v_fecpro);
-          String v_fecefe = (java.lang.String)session.getValue("s_fecefectiva");// "2001-01-23";
+          String v_fecefe = (java.lang.String)session.getAttribute("s_fecefectiva");// "2001-01-23";
           //Date v_fecefe2 = v_fecefe2.valueOf(v_fecefe);
           java.sql.Date v_fecefe2 = new java.sql.Date(4);
           v_fecefe2 = java.sql.Date.valueOf(v_fecefe);
      
-          String v_tipo = (java.lang.String)session.getValue("s_tipotran");//"UTT001";
-          String v_clase = (java.lang.String)session.getValue("s_clasetran");//"UCT001";
-          String v_valor =(java.lang.String)session.getValue("s_valor");//"100000";//
+          String v_tipo = (java.lang.String)session.getAttribute("s_tipotran");//"UTT001";
+          String v_clase = (java.lang.String)session.getAttribute("s_clasetran");//"UCT001";
+          String v_valor =(java.lang.String)session.getAttribute("s_valor");//"100000";//
           double v_valor2 = new Double(v_valor).doubleValue();
           String v_tranmulti = null;
-          String v_tipov =(java.lang.String)session.getValue("s_tipov");//"STV001";
-          String v_valoruni2 =(java.lang.String)session.getValue("s_valuni");//"1000";
+          String v_tipov =(java.lang.String)session.getAttribute("s_tipov");//"STV001";
+          String v_valoruni2 =(java.lang.String)session.getAttribute("s_valuni");//"1000";
           double  v_valoruni = new Double(v_valoruni2).doubleValue();
-          String v_penalizar =(java.lang.String)session.getValue("s_penaliza");
-          String v_prorrata = (java.lang.String)session.getValue("s_prorrata");
-          String v_fondo = (java.lang.String)session.getValue("s_fondo");
-          String v_usuariopipe =(java.lang.String)session.getValue("s_usuariopipe");
-          String v_tuni =(java.lang.String)session.getValue("s_unidadtax");
-          String  v_banco =(java.lang.String)session.getValue("s_banco");
-          String  v_numcuen =(java.lang.String)session.getValue("s_cuenta");
-          String v_afp =(java.lang.String)session.getValue("s_afp");
-          String v_proti =(java.lang.String)session.getValue("s_proti");
-          String v_conti =(java.lang.String)session.getValue("s_conti");
-          String v_maximo =(java.lang.String)session.getValue("s_maximo2");
-          String v_sistema = (java.lang.String)session.getValue("s_sistema");
-          String v_usumfund= (java.lang.String)session.getValue("s_usumfund");
-          String v_passmfund= (java.lang.String)session.getValue("s_passmfund");
-          String v_libreria = (java.lang.String)session.getValue("s_libreria");
+          String v_penalizar =(java.lang.String)session.getAttribute("s_penaliza");
+          String v_prorrata = (java.lang.String)session.getAttribute("s_prorrata");
+          String v_fondo = (java.lang.String)session.getAttribute("s_fondo");
+          String v_usuariopipe =(java.lang.String)session.getAttribute("s_usuariopipe");
+          String v_tuni =(java.lang.String)session.getAttribute("s_unidadtax");
+          String  v_banco =(java.lang.String)session.getAttribute("s_banco");
+          String  v_numcuen =(java.lang.String)session.getAttribute("s_cuenta");
+          String v_afp =(java.lang.String)session.getAttribute("s_afp");
+          String v_proti =(java.lang.String)session.getAttribute("s_proti");
+          String v_conti =(java.lang.String)session.getAttribute("s_conti");
+          String v_maximo =(java.lang.String)session.getAttribute("s_maximo2");
+          String v_sistema = (java.lang.String)session.getAttribute("s_sistema");
+          String v_usumfund= (java.lang.String)session.getAttribute("s_usumfund");
+          String v_passmfund= (java.lang.String)session.getAttribute("s_passmfund");
+          String v_libreria = (java.lang.String)session.getAttribute("s_libreria");
           String v_bloqueo = "";
-          String v_naturaleza =(java.lang.String)session.getValue("s_naturaleza");//"SNR001";//
-          String v_respetar =(java.lang.String)session.getValue("s_respetar");
-          String v_orden =(java.lang.String)session.getValue("s_orden");//"SMO001";//
-          String v_indinformacion =(java.lang.String)session.getValue("s_indinformacion");//"SMO001";//
-          String v_beneficio =(java.lang.String)session.getValue("s_beneficio");//"SMB003";//
-          String v_metpen =(java.lang.String)session.getValue("s_metpen");//"SMP003";//
-          String v_cuencon=(java.lang.String)session.getValue("s_cuencon");//"SMC003";//
-          String v_actualizar =(java.lang.String)session.getValue("s_actualizar");//"SMC003";//
-          String v_contador =(java.lang.String)session.getValue("s_contador");
+          String v_naturaleza =(java.lang.String)session.getAttribute("s_naturaleza");//"SNR001";//
+          String v_respetar =(java.lang.String)session.getAttribute("s_respetar");
+          String v_orden =(java.lang.String)session.getAttribute("s_orden");//"SMO001";//
+          String v_indinformacion =(java.lang.String)session.getAttribute("s_indinformacion");//"SMO001";//
+          String v_beneficio =(java.lang.String)session.getAttribute("s_beneficio");//"SMB003";//
+          String v_metpen =(java.lang.String)session.getAttribute("s_metpen");//"SMP003";//
+          String v_cuencon=(java.lang.String)session.getAttribute("s_cuencon");//"SMC003";//
+          String v_actualizar =(java.lang.String)session.getAttribute("s_actualizar");//"SMC003";//
+          String v_contador =(java.lang.String)session.getAttribute("s_contador");
           int v_con = new Integer (v_contador).intValue();
 
           if(v_actualizar.equals("S"))
@@ -288,8 +288,8 @@ procedimiento de la base de datos
             for ( int i=1;i<= new Integer(v_maximo).intValue();i++)
             {
             out.println("Llega aca 4");
-             v_codfon = (java.lang.String)session.getValue("s_codfon"+i+"");
-             v_valorfon = (java.lang.String)session.getValue("s_valorcli"+i+"");
+             v_codfon = (java.lang.String)session.getAttribute("s_codfon"+i+"");
+             v_valorfon = (java.lang.String)session.getAttribute("s_valorcli"+i+"");
              if(!v_valorfon.trim().equals("0") && !v_valorfon.trim().equals("")  )
              {
              out.println("Llega aca 5");
@@ -345,8 +345,8 @@ procedimiento de la base de datos
             {
              for ( int i=1;i<= new Integer(v_maximo).intValue();i++)
              {
-              v_codfon = (java.lang.String)session.getValue("s_codfon"+i+"");
-              v_porcenfon = (java.lang.String)session.getValue("s_porcencli"+i+"");
+              v_codfon = (java.lang.String)session.getAttribute("s_codfon"+i+"");
+              v_porcenfon = (java.lang.String)session.getAttribute("s_porcencli"+i+"");
               if( !v_porcenfon.trim().equals("0") && !v_porcenfon.trim().equals("") )
               {
                v_porcenfon2     = new Double(v_porcenfon).doubleValue();
@@ -387,7 +387,7 @@ procedimiento de la base de datos
              int z = 0;
              for (int y=0;y < v_con; y++)
              {
-              String vec = (java.lang.String)session.getValue("s_sel"+y+"");//"MFUND";
+              String vec = (java.lang.String)session.getAttribute("s_sel"+y+"");//"MFUND";
               double v_aporte = new Double(vec).doubleValue();
               z++;
               CallableStatement l_stmt3 = t_tax.prepareCall("{? = call  TB_FINSERTAR_APORSEL(?,?,?,?,?,?)}");
@@ -498,14 +498,14 @@ procedimiento de la base de datos
              l_stmt1.close();
              
               try {  
-                    String v_esTercero =(java.lang.String)session.getValue("esTercero"); 
+                    String v_esTercero =(java.lang.String)session.getAttribute("esTercero"); 
                     String v_doc_ter="", v_tipodoc_ter="", v_nomb_terc="", v_apell_terc ="";
                     if (v_esTercero.equals("S"))
                     {
-                        try { v_doc_ter = (java.lang.String)session.getValue("v_doc_ter"); } catch (Exception e) { e.printStackTrace(); }
-                        try { v_tipodoc_ter = (java.lang.String)session.getValue("v_tipodoc_ter"); } catch (Exception e) { e.printStackTrace(); }
-                        try { v_nomb_terc = (java.lang.String)session.getValue("v_nomb_terc"); } catch (Exception e) { e.printStackTrace(); }
-                        try { v_apell_terc = (java.lang.String)session.getValue("v_apell_terc"); } catch (Exception e) { e.printStackTrace(); }
+                        try { v_doc_ter = (java.lang.String)session.getAttribute("v_doc_ter"); } catch (Exception e) { e.printStackTrace(); }
+                        try { v_tipodoc_ter = (java.lang.String)session.getAttribute("v_tipodoc_ter"); } catch (Exception e) { e.printStackTrace(); }
+                        try { v_nomb_terc = (java.lang.String)session.getAttribute("v_nomb_terc"); } catch (Exception e) { e.printStackTrace(); }
+                        try { v_apell_terc = (java.lang.String)session.getAttribute("v_apell_terc"); } catch (Exception e) { e.printStackTrace(); }
                         if ((!v_doc_ter.trim().equals("") &&
                              !v_tipodoc_ter.trim().equals("")&&
                              !v_apell_terc.trim().equals(""))&& 
@@ -590,7 +590,7 @@ procedimiento de la base de datos
 
              if(v_indiretiro == 0)
              {
-              session.removeValue("s_naturaleza");
+              session.removeAttribute("s_naturaleza");
               
               t_tax.commit();
               String v_pintar=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Solicitud de Retiro","","<center>Solicitud de Retiro "+Math.round(v_conret)+" realizada con exito.</center>",false);
@@ -700,16 +700,16 @@ procedimiento de la base de datos
      }
      else
      {
-        String v_pro = (java.lang.String)session.getValue("s_producto");//"MFUND";
-        String v_contra = (java.lang.String)session.getValue("s_contrato");//"000011425";
-        String v_fecpro =(java.lang.String)session.getValue("s_fecpro");//"2001-01-23";
+        String v_pro = (java.lang.String)session.getAttribute("s_producto");//"MFUND";
+        String v_contra = (java.lang.String)session.getAttribute("s_contrato");//"000011425";
+        String v_fecpro =(java.lang.String)session.getAttribute("s_fecpro");//"2001-01-23";
         java.sql.Date v_fecpro2 = new java.sql.Date(4);
         v_fecpro2 = java.sql.Date.valueOf(v_fecpro);
         String v_fecefe = (java.lang.String)session.getAttribute("s_fecefectiva");// "2001-01-23";      
         java.sql.Date v_fecefe2 = new java.sql.Date(4);
         v_fecefe2 = java.sql.Date.valueOf(v_fecefe);
 
-        String v_tipov =(java.lang.String)session.getValue("s_tipov");//"STV001";
+        String v_tipov =(java.lang.String)session.getAttribute("s_tipov");//"STV001";
         String v_valor =(java.lang.String)session.getAttribute("s_valor");//"100000";//
         String v_tipo = (java.lang.String)session.getAttribute("s_tipotran");//"UTT001";
         String v_clase = (java.lang.String)session.getAttribute("s_clasetran");//"UCT001";
@@ -762,14 +762,14 @@ procedimiento de la base de datos
 //        out.println( "longitud="+ v_afp.length() );
         
         try {  
-              String v_esTercero =(java.lang.String)session.getValue("esTercero"); 
+              String v_esTercero =(java.lang.String)session.getAttribute("esTercero"); 
               String v_doc_ter="", v_tipodoc_ter="", v_nomb_terc="", v_apell_terc ="";
               if (v_esTercero.equals("S"))
               {
-                  try { v_doc_ter = (java.lang.String)session.getValue("v_doc_ter"); } catch (Exception e) { e.printStackTrace(); }
-                  try { v_tipodoc_ter = (java.lang.String)session.getValue("v_tipodoc_ter"); } catch (Exception e) { e.printStackTrace(); }
-                  try { v_nomb_terc = (java.lang.String)session.getValue("v_nomb_terc"); } catch (Exception e) { e.printStackTrace(); }
-                  try { v_apell_terc = (java.lang.String)session.getValue("v_apell_terc"); } catch (Exception e) { e.printStackTrace(); }
+                  try { v_doc_ter = (java.lang.String)session.getAttribute("v_doc_ter"); } catch (Exception e) { e.printStackTrace(); }
+                  try { v_tipodoc_ter = (java.lang.String)session.getAttribute("v_tipodoc_ter"); } catch (Exception e) { e.printStackTrace(); }
+                  try { v_nomb_terc = (java.lang.String)session.getAttribute("v_nomb_terc"); } catch (Exception e) { e.printStackTrace(); }
+                  try { v_apell_terc = (java.lang.String)session.getAttribute("v_apell_terc"); } catch (Exception e) { e.printStackTrace(); }
                   if ((!v_doc_ter.trim().equals("")&&!v_tipodoc_ter.trim().equals("")&&
                         !v_apell_terc.trim().equals(""))&& 
                              (v_numcuen== null || v_numcuen.trim().equals(""))

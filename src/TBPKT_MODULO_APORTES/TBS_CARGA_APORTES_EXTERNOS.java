@@ -16,7 +16,7 @@ import java.io.*;
 *función cargar temporalmente los aportes desde un plano hacia tax
 */
 
-public class TBS_CARGA_APORTES_EXTERNOS extends HttpServlet implements SingleThreadModel{
+public class TBS_CARGA_APORTES_EXTERNOS extends HttpServlet{
 public void init(ServletConfig config)
        throws ServletException
        { super.init(config);}
