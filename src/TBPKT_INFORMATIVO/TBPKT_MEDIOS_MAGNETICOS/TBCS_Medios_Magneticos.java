@@ -163,10 +163,17 @@ public class TBCS_Medios_Magneticos extends HttpServlet {
     try {
       TBPL_GetRutas();
       java.util.Date fHoy= new java.util.Date();
+        
+      /*[SO_396]Se realiza modificación para suprimir el uso de los métodos getYear, getMonth y getDate ya que han sido deprecados
+       *se cambia implementación por el uso de la clase SimpleDateFormat y su método format*/
+      /*
       String anio= ""+ (fHoy.getYear()+1900);
       String mes= "00"+ (fHoy.getMonth()+1);
       String dia= "00"+ fHoy.getDate();
       hoy= anio+ mes.substring(mes.length()-2)+ dia.substring(dia.length()-2);
+      */
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+      hoy = sdf.format(fHoy);  
 
       String arTmp= rutaFisica+ strArchivo.substring(0, strArchivo.length()-1);
 
@@ -265,10 +272,17 @@ public class TBCS_Medios_Magneticos extends HttpServlet {
     try {
       TBPL_GetRutas();
       java.util.Date fHoy= new java.util.Date();
+        
+      /*[SO_396]Se realiza modificación para suprimir el uso de los métodos getYear, getMonth y getDate ya que han sido deprecados
+       *se cambia implementación por el uso de la clase SimpleDateFormat y su método format*/
+      /*
       String anio= ""+ (fHoy.getYear()+1900);
       String mes= "00"+ (fHoy.getMonth()+1);
       String dia= "00"+ fHoy.getDate();
       hoy= anio+ mes.substring(mes.length()-2)+ dia.substring(dia.length()-2);
+      */
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+      hoy = sdf.format(fHoy); 
 
       String arTmp= rutaFisica + strArchivo.substring(0, strArchivo.length()-1);
 

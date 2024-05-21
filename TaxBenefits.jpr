@@ -97,9 +97,9 @@
       </list>
    </hash>
    <hash n="oracle.jdeveloper.ant.AntRunConfiguration">
-      <url n="antHome" protocol="file" path="/Programs/apache-ant-1.9.6/"/>
+      <url n="antHome" path="../../Program Files/Ant/apache-ant-1.9.16/"/>
       <list n="propertyFiles">
-         <string v="D:\TFS\Tax Benefits\TaxBenefits\build.properties"/>
+         <string v="C:\SKANDIA\SkCo.TaxBenefits.mig\build.properties"/>
       </list>
    </hash>
    <hash n="oracle.jdeveloper.compiler.ant.AntConfiguration">
@@ -210,6 +210,29 @@
                      <hash n="filters">
                         <list n="rules">
                            <hash>
+                              <value n="pattern" v="WEB-INF/.svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="imagenes/.svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="filesjs/.svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="filescss/.svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v=".svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="**"/>
+                           </hash>
+                           <hash>
                               <value n="DefaultFilters" v=""/>
                            </hash>
                         </list>
@@ -229,6 +252,29 @@
                      <value n="displayName" v="WEB-INF/classes"/>
                      <hash n="filters">
                         <list n="rules">
+                           <hash>
+                              <value n="pattern" v="lib/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v=".wlsjsps/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v=".wlLibs/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v=".data/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v=".adf/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="**"/>
+                           </hash>
                            <hash>
                               <value n="DefaultFilters" v=""/>
                            </hash>

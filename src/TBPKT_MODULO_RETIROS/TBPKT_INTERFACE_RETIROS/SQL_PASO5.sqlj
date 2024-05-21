@@ -1,4 +1,3 @@
-// Copyright (c) 2000 Sk
 package TBPKT_MODULO_RETIROS.TBPKT_INTERFACE_RETIROS;
 
 import sqlj.runtime.*;

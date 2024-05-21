@@ -2,6 +2,14 @@
 <jws:workspace xmlns:jws="http://xmlns.oracle.com/ide/project">
    <hash n="adrs-workspace-properties">
       <value n="adrs-instance-binding" v="DefaultServer"/>
+      <value n="deploy-timeout" v="0"/>
+      <value n="runtime-application-name" v=""/>
+   </hash>
+   <url n="application-source-directory" path="src/"/>
+   <hash n="appWebServicePolicy">
+      <value n="location"/>
+      <value n="LOCATION_TYPE" v="policy.config.PolicyOptions.LocationType.FILE_STORE"/>
+      <value n="SERVER_LOCATION" v="IntegratedWebLogicServer"/>
    </hash>
    <hash n="component-versions">
       <value n="oracle.adf.share.dt.migration.jps.JaznCredStoreMigratorHelper" v="11.1.1.1.0"/>
@@ -33,19 +41,20 @@
             <hash n="archiveOptions">
                <value n="hasManifest" v="false"/>
             </hash>
+            <value n="defaultConnection"/>
             <hash n="dependencies">
                <list n="dependencyList">
                   <hash>
-                     <value n="adapterClass" v="oracle.jdevimpl.deploy.common.ArchiveProfileDependable"/>
+                     <value n="adapterClass" v="oracle.jdevimpl.deploy.common.DataContainerNodeDependable"/>
                      <url n="ownerURL" path="TaxBenefits.jpr"/>
                      <value n="pathInEar" v=""/>
-                     <value n="profileName" v="webapp1"/>
+                     <url n="sourceURL" path="public_html/WEB-INF/lib/bc4jstruts.jar"/>
                   </hash>
                   <hash>
                      <value n="adapterClass" v="oracle.jdevimpl.deploy.common.DataContainerNodeDependable"/>
                      <url n="ownerURL" path="TaxBenefits.jpr"/>
                      <value n="pathInEar" v=""/>
-                     <url n="sourceURL" path="public_html/WEB-INF/lib/struts.jar"/>
+                     <url n="sourceURL" path="public_html/WEB-INF/lib/commons-beanutils.jar"/>
                   </hash>
                   <hash>
                      <value n="adapterClass" v="oracle.jdevimpl.deploy.common.DataContainerNodeDependable"/>
@@ -63,13 +72,13 @@
                      <value n="adapterClass" v="oracle.jdevimpl.deploy.common.DataContainerNodeDependable"/>
                      <url n="ownerURL" path="TaxBenefits.jpr"/>
                      <value n="pathInEar" v=""/>
-                     <url n="sourceURL" path="public_html/WEB-INF/lib/commons-lang.jar"/>
+                     <url n="sourceURL" path="public_html/WEB-INF/lib/commons-fileupload.jar"/>
                   </hash>
                   <hash>
                      <value n="adapterClass" v="oracle.jdevimpl.deploy.common.DataContainerNodeDependable"/>
                      <url n="ownerURL" path="TaxBenefits.jpr"/>
                      <value n="pathInEar" v=""/>
-                     <url n="sourceURL" path="public_html/WEB-INF/lib/commons-validator.jar"/>
+                     <url n="sourceURL" path="public_html/WEB-INF/lib/commons-lang.jar"/>
                   </hash>
                   <hash>
                      <value n="adapterClass" v="oracle.jdevimpl.deploy.common.DataContainerNodeDependable"/>
@@ -81,25 +90,25 @@
                      <value n="adapterClass" v="oracle.jdevimpl.deploy.common.DataContainerNodeDependable"/>
                      <url n="ownerURL" path="TaxBenefits.jpr"/>
                      <value n="pathInEar" v=""/>
-                     <url n="sourceURL" path="public_html/WEB-INF/lib/commons-beanutils.jar"/>
-                  </hash>
-                  <hash>
-                     <value n="adapterClass" v="oracle.jdevimpl.deploy.common.DataContainerNodeDependable"/>
-                     <url n="ownerURL" path="TaxBenefits.jpr"/>
-                     <value n="pathInEar" v=""/>
-                     <url n="sourceURL" path="public_html/WEB-INF/lib/commons-fileupload.jar"/>
-                  </hash>
-                  <hash>
-                     <value n="adapterClass" v="oracle.jdevimpl.deploy.common.DataContainerNodeDependable"/>
-                     <url n="ownerURL" path="TaxBenefits.jpr"/>
-                     <value n="pathInEar" v=""/>
-                     <url n="sourceURL" path="public_html/WEB-INF/lib/bc4jstruts.jar"/>
+                     <url n="sourceURL" path="public_html/WEB-INF/lib/commons-validator.jar"/>
                   </hash>
                   <hash>
                      <value n="adapterClass" v="oracle.jdevimpl.deploy.common.DataContainerNodeDependable"/>
                      <url n="ownerURL" path="TaxBenefits.jpr"/>
                      <value n="pathInEar" v=""/>
                      <url n="sourceURL" path="public_html/WEB-INF/lib/runtime12ee.jar"/>
+                  </hash>
+                  <hash>
+                     <value n="adapterClass" v="oracle.jdevimpl.deploy.common.DataContainerNodeDependable"/>
+                     <url n="ownerURL" path="TaxBenefits.jpr"/>
+                     <value n="pathInEar" v=""/>
+                     <url n="sourceURL" path="public_html/WEB-INF/lib/struts.jar"/>
+                  </hash>
+                  <hash>
+                     <value n="adapterClass" v="oracle.jdevimpl.deploy.common.DefaultProfileDependable"/>
+                     <url n="ownerURL" path="TaxBenefits.jpr"/>
+                     <value n="pathInEar" v=""/>
+                     <value n="profileName" v="webapp1"/>
                   </hash>
                </list>
             </hash>
@@ -117,6 +126,65 @@
                      <hash n="filters">
                         <list n="rules">
                            <hash>
+                              <value n="pattern" v="sqlj-gen/TBPKT_INFORMATIVO/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="TBPKT_UTILIDADES/.svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="TBPKT_PARAMETROS/.svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="TBPKT_MODULO_RETIROS/.svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="TBPKT_MODULO_APORTES/.svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="TBPKT_INFORMATIVO/.svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="TBPKT_IAS/.svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="TBPKT_EXCEPCIONES/.svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="TBPKT_CARGUE_APLICACION/.svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="TBPKT_AJUSTES/.svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="sqlj-gen/.svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="META-INF/.svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="co/.svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v=".svn/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="**"/>
+                           </hash>
+                           <hash>
                               <value n="DefaultFilters" v=""/>
                            </hash>
                         </list>
@@ -130,10 +198,12 @@
                         <list n="rules">
                            <hash>
                               <value n="pattern" v="**"/>
+                              <value n="type" v="1"/>
                            </hash>
                         </list>
                      </hash>
                      <value n="internalName" v="libraries"/>
+                     <list n="selectedLibraries"/>
                      <value n="targetWithinJar" v="lib"/>
                      <value n="type" v="3"/>
                   </hash>
@@ -141,6 +211,7 @@
             </hash>
             <hash n="libraryDependencies">
                <value n="IncludeLibrariesFromOtherContainers" v="true"/>
+               <list n="unselectedLibraries"/>
             </hash>
             <value n="profileClass" v="oracle.jdeveloper.deploy.ear.EarProfile"/>
             <value n="profileName" v="webapp1"/>
@@ -149,6 +220,7 @@
       <list n="profileList">
          <string v="webapp1"/>
       </list>
+      <value n="Security-Deployment-Migrate-Users-And-Groups-Key" v="false"/>
       <value n="Security-Deployment-Overwrite-Application-Policies-Key" v="false"/>
       <value n="Security-Deployment-Overwrite-Credentials-Key" v="false"/>
       <value n="Security-Deployment-Update-Weblogic-Application-Key" v="false"/>

@@ -82,6 +82,7 @@ implements sqlj.runtime.NamedIterator
    /**Tipo int*/
    int v_consecutivo2   = 0;
    int indicador        = 0;
+         
    /**Verificar que las variables de session no expiren*/
    if((java.lang.String)session.getAttribute("s_contrato")!= null ||(java.lang.String)session.getAttribute("s_producto") != null)
    {
@@ -93,7 +94,7 @@ implements sqlj.runtime.NamedIterator
     v_consecutivo2 = new Integer(v_consecutivo).intValue();/**Consecutivo numerico*/
 
     /**Consultar valor de unidad del retiro*/
-    /*@lineinfo:generated-code*//*@lineinfo:66^5*/
+    /*@lineinfo:generated-code*//*@lineinfo:67^5*/
 
 //  ************************************************************
 //  #sql v_valor = { SELECT RET_VALOR_UNIDAD
@@ -125,7 +126,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:72^21*/
+/*@lineinfo:user-code*//*@lineinfo:73^21*/
 
     /**Mientras se encuentren datos*/
     while (v_valor.next())
@@ -138,7 +139,7 @@ implements sqlj.runtime.NamedIterator
     if (v_encontro)
     {//1
      /**Llamar función que reversa, elimina relacion aportexretiro y actualiza estado*/
-     /*@lineinfo:generated-code*//*@lineinfo:85^6*/
+     /*@lineinfo:generated-code*//*@lineinfo:86^6*/
 
 //  ************************************************************
 //  #sql indicador = { values (TB_FACTUALIZAR_ESTADO(:v_pro, :v_contra,:v_consecutivo2,:v_valuni,'SER002' ,'Se elimino la Solicitud de Retiro antes de ser enviada a Multifund',:v_usuario,:v_mensaje)) };
@@ -174,11 +175,11 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:85^205*/
+/*@lineinfo:user-code*//*@lineinfo:86^205*/
      /**Si no hubo error*/
      if (indicador == 0)
      {//1
-      /*@lineinfo:generated-code*//*@lineinfo:89^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:90^7*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -189,7 +190,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:89^19*/
+/*@lineinfo:user-code*//*@lineinfo:90^19*/
       /**Dibujar página de respuesta*/
       v_pintar=    i_pagina.TBFL_CABEZA("Eliminar Solicitud de Retiro","Eliminar Solicitud de Retiro","","<center>"+v_mensaje+"</center>",false);
       out.println(""+v_pintar+"");
@@ -201,7 +202,7 @@ implements sqlj.runtime.NamedIterator
      }
      else
      {/**Si hubo error*/
-      /*@lineinfo:generated-code*//*@lineinfo:101^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:102^7*/
 
 //  ************************************************************
 //  #sql { ROLLBACK };
@@ -212,7 +213,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:101^21*/
+/*@lineinfo:user-code*//*@lineinfo:102^21*/
       v_pintar=    i_pagina.TBFL_CABEZA("Eliminar Solicitud de Retiro","Error al Eliminar Solicitud de Retiro","","<center>"+v_mensaje+"</center>",false);
       out.println(""+v_pintar+"");
       v_pie = i_pagina.TBFL_PIE;
@@ -224,7 +225,7 @@ implements sqlj.runtime.NamedIterator
     }
     else
     {/**No se encontraron datos para el número del retiro*/
-     /*@lineinfo:generated-code*//*@lineinfo:113^6*/
+     /*@lineinfo:generated-code*//*@lineinfo:114^6*/
 
 //  ************************************************************
 //  #sql { ROLLBACK };
@@ -235,7 +236,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:113^20*/
+/*@lineinfo:user-code*//*@lineinfo:114^20*/
      v_pintar=    i_pagina.TBFL_CABEZA("Eliminar Solicitud de Retiro","Error al Eliminar Solicitud de Retiro","","<center>Solicitud de Retiro número "+v_consecutivo+" no se encontro en el sistema.</center>",false);
      out.println(""+v_pintar+"");
      v_pie = i_pagina.TBFL_PIE;

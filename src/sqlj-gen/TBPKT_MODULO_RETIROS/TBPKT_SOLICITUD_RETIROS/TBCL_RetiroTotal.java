@@ -218,7 +218,6 @@ implements sqlj.runtime.NamedIterator
     v_passmfund    = (java.lang.String)session.getAttribute("s_passmfund");
     v_libreria     = (java.lang.String)session.getAttribute("s_libreria");
     
-    
     /**Si saldo disponible mayor que cero*/
     if (v_saldodispo2 > 0)
     {
@@ -370,7 +369,7 @@ implements sqlj.runtime.NamedIterator
         {
          if(!v_conti.trim().equals("") && !v_proti.substring(0,1).equals(" "))
          {
-          /*@lineinfo:generated-code*//*@lineinfo:302^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:301^11*/
 
 //  ************************************************************
 //  #sql v_resp = { SELECT CON_NUMERO
@@ -401,7 +400,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:308^28*/
+/*@lineinfo:user-code*//*@lineinfo:307^28*/
 
           while(v_resp.next())
           {
@@ -425,7 +424,7 @@ implements sqlj.runtime.NamedIterator
             v_efe =i_fecha.TBFL_Fecha(v_fecefe);
             //out.println("contrato destino:" + v_conti2);
             
-            /*@lineinfo:generated-code*//*@lineinfo:332^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:331^13*/
 
 //  ************************************************************
 //  #sql v_retorno_programa = { values (TBCL_FuncionesAs400.TBPL_ProgramaContrato(:v_conti2,
@@ -464,7 +463,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:337^89*/
+/*@lineinfo:user-code*//*@lineinfo:336^89*/
             
             String v_programa = v_retorno_programa.substring(0,v_retorno_programa.indexOf(";",0));
             
@@ -674,7 +673,7 @@ implements sqlj.runtime.NamedIterator
        out.println(""+v_mensLista+"");
        /*Cambio para manejo de referencia unica 2009/03/30 MOS */
        String v_contrato_unif = "";
-       /*@lineinfo:generated-code*//*@lineinfo:547^8*/
+       /*@lineinfo:generated-code*//*@lineinfo:546^8*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -705,12 +704,12 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:547^81*/
+/*@lineinfo:user-code*//*@lineinfo:546^81*/
        out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
        out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nom+"  <b> Apellidos </b>"+v_ape+" </CENTER></font>");
        out.println("<br>");
        /**Consultar aportes del contrato, deben cumplir con las condiciones para retiro total*/
-       /*@lineinfo:generated-code*//*@lineinfo:552^8*/
+       /*@lineinfo:generated-code*//*@lineinfo:551^8*/
 
 //  ************************************************************
 //  #sql v_aportes = { values (TB_FSELECCION_RETTOTAL( :v_pro
@@ -769,13 +768,13 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:562^59*/
+/*@lineinfo:user-code*//*@lineinfo:561^59*/
        /**Función sin error*/
        
 
        if(v_aportes == 0)
        {//1
-          /*@lineinfo:generated-code*//*@lineinfo:568^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:567^11*/
 
 //  ************************************************************
 //  #sql { SELECT  COUNT(1)
@@ -818,7 +817,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:575^16*/
+/*@lineinfo:user-code*//*@lineinfo:574^16*/
         /**Dibujar que condiciones se estan violando  para hacer un retiro total*/
         v_sumtotal = v_certifi + v_canje2 + v_disponi + v_fecmay+v_retirovigente+v_indtras;
         if (v_sumtotal != 0)
@@ -900,7 +899,7 @@ implements sqlj.runtime.NamedIterator
        out.println(""+v_pintar+"");
        /*Cambio para manejo de referencia unica 2009/03/30 MOS */
        String v_contrato_unif = "";
-       /*@lineinfo:generated-code*//*@lineinfo:657^8*/
+       /*@lineinfo:generated-code*//*@lineinfo:656^8*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -931,7 +930,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:657^81*/
+/*@lineinfo:user-code*//*@lineinfo:656^81*/
        out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
        out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nom+"  <b> Apellidos </b>"+v_ape+" </CENTER></font>");
        out.println("<br>");
@@ -979,7 +978,7 @@ implements sqlj.runtime.NamedIterator
       out.println(""+v_pintar+"");
       /*Cambio para manejo de referencia unica 2009/03/30 MOS */
       String v_contrato_unif = "";
-      /*@lineinfo:generated-code*//*@lineinfo:705^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:704^7*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -1010,7 +1009,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:705^80*/
+/*@lineinfo:user-code*//*@lineinfo:704^80*/
       out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
       out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nom+"  <b> Apellidos </b>"+v_ape+" </CENTER></font>");
       out.println("<br>");

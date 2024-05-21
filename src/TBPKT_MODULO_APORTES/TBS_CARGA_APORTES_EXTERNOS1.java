@@ -306,7 +306,9 @@ try
     double valor_d               = 0;
     String beneficiado_aporte    = "N";
     String razon_beneficio       = " ";
-    java.sql.Date fecha_beneficio= new java.sql.Date(1,1,1);
+    /*[SO_396]Se realiza modificación para suprimir el uso del constructorSe new java.sql.Date ya que ha sido deprecado,
+     *se elimina linea ya que la variable no es usada en el código*/
+    //java.sql.Date fecha_beneficio= new java.sql.Date(1,1,1);
     String detalle_condicion     = new String(" ");
     String ref_condicion         = new String(" ");
     String empresa_x             = new String(" ");
@@ -1466,7 +1468,9 @@ try
     double valor_d               = 0;
     String beneficiado_aporte    = "N";
     String razon_beneficio       = " ";
-    java.sql.Date fecha_beneficio= new java.sql.Date(1,1,1);
+    /*[SO_396]Se realiza modificación para suprimir el uso del constructorSe new java.sql.Date ya que ha sido deprecado,
+     *se elimina linea ya que la variable no es usada en el código*/
+    //java.sql.Date fecha_beneficio= new java.sql.Date(1,1,1);
     String detalle_condicion     = new String(" ");
     String ref_condicion         = new String(" ");
     String empresa_x             = new String(" ");

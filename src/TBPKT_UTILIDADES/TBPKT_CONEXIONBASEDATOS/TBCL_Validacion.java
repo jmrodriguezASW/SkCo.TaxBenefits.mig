@@ -16,9 +16,14 @@ public static String[] TBFL_ValidarUsuario()
   byte v_parametros[] = new byte[500];/**Variable que toma cadena de conexión.*/
   String v_cadena;/**Variable que toma la variable parametros.*/
   String v_valusu[] = new String[3];/**Variable que se retorna con la información para la conexión.*/
-  FileInputStream   v_leer = new FileInputStream( "c:/Taxbenefits/taxb/Conexion/Connection.properties" );/**Variable para leer archivo de connection.properties*/
+  FileInputStream   v_leer = new FileInputStream( "E:/Taxbenefits/taxb/Conexion/Connection.properties" );/**Variable para leer archivo de connection.properties*/
   v_leer.read(v_parametros);
-  v_cadena = new String( v_parametros,0 );
+  
+  /*[SO_396]Se realiza modificación para suprimir el uso del constructorSe new String( byte[],int ) ya que ha sido deprecado,
+   *se cambia implementación por new String( byte[] )*/
+  //v_cadena = new String( v_parametros ,0);
+  v_cadena = new String( v_parametros );
+     
   int index_s1,index_s2,index_s3,index_s4,index_s5,index_s6,index_s7,index_s8,index_s9,index_s10,index_s11,index_s12;/**Variable para tomar el tamaño de las cadenas*/
   index_s1=index_s2=index_s3=index_s4=0;
 

@@ -928,17 +928,23 @@ private boolean TBPL_getParams_Sess2(Connection v_conexion_taxb)
       cs2.close();
       v_programa = v_retorno_programa.substring(0,v_retorno_programa.indexOf(";",0));
       /*FIN Modificación hecha por APC para manejar el nuevo reglamento 2006-06-22*/          
-
-
+        
+     /*[SO_396]Se realiza modificación para suprimir el uso del constructor new java.sql.Date ya que ha sido deprecado,
+     *se cambia implementación por System.currentTimeMillis()*/
+       
      //calculo fecha de proceso
-     DateFormat currentDateFormat;
+     /*DateFormat currentDateFormat;
      java.util.Date currentDate = new java.util.Date();
      currentDateFormat          = DateFormat.getDateInstance(DateFormat.DEFAULT, java.util.Locale.PRC);
      String d                   = currentDateFormat.format(currentDate);
      int ano                    = Integer.parseInt(d.substring(0,4))-1900;
      int mes                    = Integer.parseInt(d.substring(5,d.lastIndexOf("-")))-1;
      int dia                    = Integer.parseInt(d.substring(d.lastIndexOf("-")+1,d.length()));
-     java.sql.Date hoy          = new java.sql.Date(ano,mes,dia);
+     java.sql.Date hoy          = new java.sql.Date(ano,mes,dia);*/  
+            
+     long millis = System.currentTimeMillis();
+     java.sql.Date hoy = new java.sql.Date(millis);
+       
      CallableStatement l_stmt1 = v_conexion_taxb.prepareCall("{call TBPBD_RETIRO(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
      l_stmt1.registerOutParameter(31,Types.VARCHAR);   
      l_stmt1.registerOutParameter(32,Types.VARCHAR);

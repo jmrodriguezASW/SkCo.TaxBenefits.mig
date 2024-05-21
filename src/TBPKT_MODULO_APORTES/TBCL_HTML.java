@@ -514,6 +514,8 @@ salida.flush();
 * @param   f_a           = FECHA STRING QUE SUFRIRÁ LA TRANSFORMACION<BR>
 * @return  JAVA.SQL.DATE = FECHA FORMATEADA
 */
+/*[SO_396]Se cambia implementación del método para realizar la misma acción sin usar el constructor new java.sql.Date ya que ha sido deprecado
+ * 
 public static java.sql.Date TBPL_date(String f_a)
 {
   //FECHA DE ENTRADA RRRR-MM-DD
@@ -543,7 +545,12 @@ public static java.sql.Date TBPL_date(String f_a)
   diaint     = i3.intValue();
   java.sql.Date date = new java.sql.Date(añoint,mesint,diaint);
   return date;
+}*/
+public static java.sql.Date TBPL_date(String f_a) throws ParseException {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    return new java.sql.Date(sdf.parse(f_a).getTime());
 }
+
 //-----------------------------------------------------------------------------
 /**
 * <font face='Verdana' size='2' color='#324395'>

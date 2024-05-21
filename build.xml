@@ -186,8 +186,8 @@
       </zipfileset>
       
       <zipfileset dir="./classes" prefix="WEB-INF/classes">
-        <exclude name=".adf/" />
-        <exclude name="lib/" />
+        <!--exclude name=".adf/" />
+        <exclude name="lib/" /-->
         <exclude name="build.properties" />
         <exclude name="build.xml" />
       </zipfileset>
@@ -203,7 +203,8 @@
       
       <zipfileset dir=".adf/META-INF" includes="adf-config.xml" fullpath="adf/META-INF/adf-config.xml"/>
       <zipfileset file="./lib/adf-loc.jar" prefix="lib" />
-      <zipfileset file="./lib/runtime12ee.jar" />
+      <zipfileset file="./lib/**.jar" />
+      <!--zipfileset file="./lib/runtime12ee.jar" /-->
       <zipfileset file="${dist.dir}/${dist.warfile}" />
     </zip>
   </target>

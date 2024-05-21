@@ -1,5 +1,4 @@
-/*@lineinfo:filename=SQL_PASO5*//*@lineinfo:user-code*//*@lineinfo:1^1*/// Copyright (c) 2000 Sk
-package TBPKT_MODULO_RETIROS.TBPKT_INTERFACE_RETIROS;
+/*@lineinfo:filename=SQL_PASO5*//*@lineinfo:user-code*//*@lineinfo:1^1*/package TBPKT_MODULO_RETIROS.TBPKT_INTERFACE_RETIROS;
 
 import sqlj.runtime.*;
 import sqlj.runtime.ref.*;
@@ -23,7 +22,7 @@ import com.ibm.as400.access.*;
 public class SQL_PASO5 extends Object {
 
   //Interector o cursor de la tabla TBRETIROS con los campos seleccionados
-  /*@lineinfo:generated-code*//*@lineinfo:26^3*/
+  /*@lineinfo:generated-code*//*@lineinfo:25^3*/
 
 //  ************************************************************
 //  SQLJ iterator declaration:
@@ -73,7 +72,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:26^136*/
+/*@lineinfo:user-code*//*@lineinfo:25^136*/
 
   public static void TBP_PASO5(int v_veces, int v_proceso) {
     int               v_cod_err         = 0;
@@ -138,7 +137,7 @@ Conexion con la base de datos Oracle*
       //debido a que los valores brutos del paso 4 pueden cambiar
       //en tal caso se debe volver a correr el paso 5
       //**********************************************************
-      /*@lineinfo:generated-code*//*@lineinfo:91^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:90^7*/
 
 //  ************************************************************
 //  #sql { call TBPBD_CRONE_LOG('5',
@@ -179,7 +178,7 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:95^51*/
+/*@lineinfo:user-code*//*@lineinfo:94^51*/
       out.println("v_ejecutar "+v_ejecutar);
       out.println("v_consecutivo "+v_consecutivo_log);
       if (v_cod_err == 0){
@@ -189,7 +188,7 @@ Conexion con la base de datos Oracle*
         while ((v_proceso_exitoso == "N") && (v_cont <= v_veces)) {
           v_cod_err = 0;
           v_men_err = " ";
-          /*@lineinfo:generated-code*//*@lineinfo:105^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:104^11*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INTERF_RET_GRAL('5',
@@ -232,7 +231,7 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:110^61*/
+/*@lineinfo:user-code*//*@lineinfo:109^61*/
           out.println("v_cod_err  de TBPBD_INTERF_RET_GRAL "+v_cod_err);
           if (v_cod_err == 0){
             v_fecha_c = v_fecha_control.toString();
@@ -252,7 +251,7 @@ Conexion con la base de datos Oracle*
           //Buscar en la tabla de control en que proceso se debe iniciar
           //el paso 5
           //**************************************************************
-          /*@lineinfo:generated-code*//*@lineinfo:130^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:129^11*/
 
 //  ************************************************************
 //  #sql v_proceso = { values (TBFBD_BUSCAR_PROCESO( '5',
@@ -291,7 +290,7 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:133^77*/
+/*@lineinfo:user-code*//*@lineinfo:132^77*/
           out.println("Proceso "+v_proceso);
           out.println(" v_cod_err en TBFBD_BUSCAR_PROCESO "+ v_cod_err);
           if ( v_cod_err == 0 ){
@@ -305,7 +304,7 @@ Conexion con la base de datos Oracle*
             if (v_proceso == 0){//proceso 0
               v_proceso         = 1;
               v_consecutivo_log = 0;//se coloca consecutivo en 0 por que se borraran todas las tablas
-              /*@lineinfo:generated-code*//*@lineinfo:147^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:146^15*/
 
 //  ************************************************************
 //  #sql { DELETE tbinterface_logs
@@ -330,9 +329,9 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:150^83*/
+/*@lineinfo:user-code*//*@lineinfo:149^83*/
               out.println("Borrado tbinterface_logs");
-              /*@lineinfo:generated-code*//*@lineinfo:152^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:151^15*/
 
 //  ************************************************************
 //  #sql { DELETE tbinterface_retiros
@@ -356,11 +355,11 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:154^51*/
+/*@lineinfo:user-code*//*@lineinfo:153^51*/
               out.println("Borrado tbinterface_retiros");
 
 
-              /*@lineinfo:generated-code*//*@lineinfo:158^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:157^15*/
 
 //  ************************************************************
 //  #sql { call TBPBD_BORRAR_VALOR_UNIDAD( :v_fecha_control
@@ -390,10 +389,10 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:162^21*/
+/*@lineinfo:user-code*//*@lineinfo:161^21*/
 
                     
-              /*@lineinfo:generated-code*//*@lineinfo:165^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:164^15*/
 
 //  ************************************************************
 //  #sql { DELETE tbinterface_aportes
@@ -417,9 +416,9 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:167^47*/
+/*@lineinfo:user-code*//*@lineinfo:166^47*/
               out.println("Borrado tbinterface_aportes");
-              /*@lineinfo:generated-code*//*@lineinfo:169^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:168^15*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -430,9 +429,9 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:169^28*/
+/*@lineinfo:user-code*//*@lineinfo:168^28*/
               out.println("Borrado TBPBD_BORRAR_VALOR_UNIDAD");
-              /*@lineinfo:generated-code*//*@lineinfo:171^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:170^15*/
 
 //  ************************************************************
 //  #sql { DELETE ajkmcpp@mfund  };
@@ -452,8 +451,8 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:171^44*/
-              /*@lineinfo:generated-code*//*@lineinfo:172^15*/
+/*@lineinfo:user-code*//*@lineinfo:170^44*/
+              /*@lineinfo:generated-code*//*@lineinfo:171^15*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -464,9 +463,9 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:172^28*/
+/*@lineinfo:user-code*//*@lineinfo:171^28*/
               out.println("Borrado ajkmcpp");
-              /*@lineinfo:generated-code*//*@lineinfo:174^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:173^15*/
 
 //  ************************************************************
 //  #sql { DELETE ajklcpp@mfund  };
@@ -486,8 +485,8 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:174^44*/
-              /*@lineinfo:generated-code*//*@lineinfo:175^15*/
+/*@lineinfo:user-code*//*@lineinfo:173^44*/
+              /*@lineinfo:generated-code*//*@lineinfo:174^15*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -498,7 +497,7 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:175^28*/
+/*@lineinfo:user-code*//*@lineinfo:174^28*/
              // #sql  {alter session close DATABASE LINK mfund};
               out.println("Borrado ajklcpp");
             }//Si el proceso a ejecutar es 0
@@ -513,7 +512,7 @@ Conexion con la base de datos Oracle*
                {
                 v_cod_err = 0;
                 v_men_err = " ";
-                /*@lineinfo:generated-code*//*@lineinfo:190^17*/
+                /*@lineinfo:generated-code*//*@lineinfo:189^17*/
 
 //  ************************************************************
 //  #sql { call TBPBD_PASO5(:v_fecha_control,
@@ -553,7 +552,7 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:193^57*/
+/*@lineinfo:user-code*//*@lineinfo:192^57*/
                 out.println("v_cod_err en  TBPBD_PASO5"+v_cod_err);
 
                 if (v_cod_err == 0)
@@ -569,7 +568,7 @@ Conexion con la base de datos Oracle*
             //Conexion al AS400. Buscar elementos de conexion
             // al As400 en referencias
             //*************************************************
-            /*@lineinfo:generated-code*//*@lineinfo:209^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:208^13*/
 
 //  ************************************************************
 //  #sql v_sw = { values(TB_FREFERENCIAS_MULTI(:v_sistema,
@@ -613,7 +612,7 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:212^76*/
+/*@lineinfo:user-code*//*@lineinfo:211^76*/
 
             if (v_sw == 0){
               //Conectarse al AS400
@@ -693,7 +692,7 @@ Conexion con la base de datos Oracle*
                       v_men_err = " ";
                     }//Mientras se calcula el valor de la unidad de los retiros a procesar en paso 5
                     --*/
-                    /*@lineinfo:generated-code*//*@lineinfo:292^21*/
+                    /*@lineinfo:generated-code*//*@lineinfo:291^21*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INSERTARSALDOSRETIROS(TO_DATE(:v_fecha_control,'RRRR-MM-DD'),
@@ -729,11 +728,11 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:294^61*/
+/*@lineinfo:user-code*//*@lineinfo:293^61*/
                     //vreg_retiro.close();
 
                     if (v_cod_err != 0 ){
-                      /*@lineinfo:generated-code*//*@lineinfo:298^23*/
+                      /*@lineinfo:generated-code*//*@lineinfo:297^23*/
 
 //  ************************************************************
 //  #sql { ROLLBACK };
@@ -744,12 +743,12 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:298^37*/
+/*@lineinfo:user-code*//*@lineinfo:297^37*/
                       v_cont            = v_cont + 1;
                       v_proceso_exitoso = "N";
                     }
                     else{
-                      /*@lineinfo:generated-code*//*@lineinfo:303^23*/
+                      /*@lineinfo:generated-code*//*@lineinfo:302^23*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG',
@@ -779,10 +778,10 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:309^69*/
+/*@lineinfo:user-code*//*@lineinfo:308^69*/
                       v_proceso_exitoso = "S";
                       v_proceso          = 3;
-                      /*@lineinfo:generated-code*//*@lineinfo:312^23*/
+                      /*@lineinfo:generated-code*//*@lineinfo:311^23*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -793,7 +792,7 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:312^35*/
+/*@lineinfo:user-code*//*@lineinfo:311^35*/
                     }
                   }//Mientras calculo del valor de unidad no se realice exitosamente
 
@@ -815,7 +814,7 @@ Conexion con la base de datos Oracle*
                     out.println("v_proceso "+v_proceso);
                     out.println("v_codigo "+v_cod_err);
                     out.println("v_men_err "+v_men_err);
-                    /*@lineinfo:generated-code*//*@lineinfo:334^21*/
+                    /*@lineinfo:generated-code*//*@lineinfo:333^21*/
 
 //  ************************************************************
 //  #sql { call TBPBD_PASO5(:v_fecha_control,
@@ -855,7 +854,7 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:337^61*/
+/*@lineinfo:user-code*//*@lineinfo:336^61*/
                     out.println("llamo paso5");
                     out.println("Mensaje de error en paso5 " + v_men_err + ", codigo de error " + v_cod_err);
                     if (v_cod_err == 0){
@@ -879,7 +878,7 @@ Conexion con la base de datos Oracle*
                   // En el segundo caso se debe seguir con la ejecucion normal.
 
                   // Se consulta el codigo de la unidad Total en la Tabla de Referencias
-                  /*@lineinfo:generated-code*//*@lineinfo:361^19*/
+                  /*@lineinfo:generated-code*//*@lineinfo:360^19*/
 
 //  ************************************************************
 //  #sql v_unidad_total = { values(TBFBD_TBREFERENCIAS( 'UUP099',
@@ -916,12 +915,12 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:363^90*/
+/*@lineinfo:user-code*//*@lineinfo:362^90*/
 
 
                   if( v_cod_err == 0 ) // si no hubo error
                    // Se consulta si existe el paso 5 en la tabla de control.
-                   { /*@lineinfo:generated-code*//*@lineinfo:368^22*/
+                   { /*@lineinfo:generated-code*//*@lineinfo:367^22*/
 
 //  ************************************************************
 //  #sql v_existe_paso = { values(TBFBD_EXISTE_PASO( 5,
@@ -962,14 +961,14 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:372^88*/
+/*@lineinfo:user-code*//*@lineinfo:371^88*/
 
                    if (v_cod_err == 0) // si no hubo error
                    {
                      if (v_existe_paso == 0) // El paso 5 no existe
                      {
                        // Inserta en la tabla de control paso 5 en YES
-                       /*@lineinfo:generated-code*//*@lineinfo:379^24*/
+                       /*@lineinfo:generated-code*//*@lineinfo:378^24*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_AJKPCPP(:v_fecha_control,
@@ -1010,11 +1009,11 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:385^71*/
+/*@lineinfo:user-code*//*@lineinfo:384^71*/
 
                       if(v_cod_err == 0 ) // si no hubo error
                       {
-                        /*@lineinfo:generated-code*//*@lineinfo:389^25*/
+                        /*@lineinfo:generated-code*//*@lineinfo:388^25*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -1025,7 +1024,7 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:389^37*/
+/*@lineinfo:user-code*//*@lineinfo:388^37*/
                         v_existe_paso = 5;
                         v_estado_paso = "Y";
                       }
@@ -1033,7 +1032,7 @@ Conexion con la base de datos Oracle*
                      else  // El paso 5 ya existe
                      {
                         // Se verifica que el paso 5 este es estado YES.
-                        /*@lineinfo:generated-code*//*@lineinfo:397^25*/
+                        /*@lineinfo:generated-code*//*@lineinfo:396^25*/
 
 //  ************************************************************
 //  #sql v_estado_paso = { values(TBFBD_ESTADO_PASO( 5,
@@ -1074,7 +1073,7 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:401^92*/
+/*@lineinfo:user-code*//*@lineinfo:400^92*/
                      }//existe paso
                    }//codigo de error
                   }//codigo erro uni
@@ -1097,7 +1096,7 @@ Conexion con la base de datos Oracle*
                     catch(Exception e){ v_cod_err = -3;}
                     if (v_cod_err == 0 )
                     {//1
-                     /*@lineinfo:generated-code*//*@lineinfo:424^22*/
+                     /*@lineinfo:generated-code*//*@lineinfo:423^22*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -1108,8 +1107,8 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:424^34*/
-                     /*@lineinfo:generated-code*//*@lineinfo:425^22*/
+/*@lineinfo:user-code*//*@lineinfo:423^34*/
+                     /*@lineinfo:generated-code*//*@lineinfo:424^22*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG',
@@ -1139,7 +1138,7 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:431^66*/
+/*@lineinfo:user-code*//*@lineinfo:430^66*/
                     }//1
                     else
                     {//1
@@ -1147,7 +1146,7 @@ Conexion con la base de datos Oracle*
                      if (v_cod_err == -2){v_men_err = "No corrio el Paso 6";}
                      if (v_cod_err == -3){v_men_err = "Excepcion en el llamado del Paso 6 TBP_PASO5";}
                      String v_men_paso6 = "Error Proceso 9: Paso 6 "+v_men_err;
-                     /*@lineinfo:generated-code*//*@lineinfo:439^22*/
+                     /*@lineinfo:generated-code*//*@lineinfo:438^22*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -1158,8 +1157,8 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:439^34*/
-                     /*@lineinfo:generated-code*//*@lineinfo:440^22*/
+/*@lineinfo:user-code*//*@lineinfo:438^34*/
+                     /*@lineinfo:generated-code*//*@lineinfo:439^22*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG',
@@ -1190,13 +1189,13 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:446^66*/
+/*@lineinfo:user-code*//*@lineinfo:445^66*/
                      }//1
                    }//No hubo error al Seleccionar de parametros de Multifund 0
                   }//
                   else
                   {
-                      /*@lineinfo:generated-code*//*@lineinfo:452^23*/
+                      /*@lineinfo:generated-code*//*@lineinfo:451^23*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -1207,8 +1206,8 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:452^35*/
-                     /*@lineinfo:generated-code*//*@lineinfo:453^22*/
+/*@lineinfo:user-code*//*@lineinfo:451^35*/
+                     /*@lineinfo:generated-code*//*@lineinfo:452^22*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG',
@@ -1238,7 +1237,7 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:459^66*/
+/*@lineinfo:user-code*//*@lineinfo:458^66*/
 
                   }
                 }//Proceso = 9
@@ -1259,7 +1258,7 @@ Conexion con la base de datos Oracle*
             out.println("Valido y no error exitoso");
             if (v_consecutivo_log == 0)
             {
-              /*@lineinfo:generated-code*//*@lineinfo:480^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:479^15*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG',
@@ -1289,8 +1288,8 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:486^59*/
-              /*@lineinfo:generated-code*//*@lineinfo:487^15*/
+/*@lineinfo:user-code*//*@lineinfo:485^59*/
+              /*@lineinfo:generated-code*//*@lineinfo:486^15*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -1301,11 +1300,11 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:487^27*/
+/*@lineinfo:user-code*//*@lineinfo:486^27*/
             }
             else
             {
-              /*@lineinfo:generated-code*//*@lineinfo:491^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:490^15*/
 
 //  ************************************************************
 //  #sql { call TBPBD_UPDATE_TBINTERFACE_LOGS( :v_fecha_control,
@@ -1333,8 +1332,8 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:494^82*/
-              /*@lineinfo:generated-code*//*@lineinfo:495^15*/
+/*@lineinfo:user-code*//*@lineinfo:493^82*/
+              /*@lineinfo:generated-code*//*@lineinfo:494^15*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -1345,7 +1344,7 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:495^27*/
+/*@lineinfo:user-code*//*@lineinfo:494^27*/
             }
           }//No hubo error en la ejecucion del paso 5
           else
@@ -1354,7 +1353,7 @@ Conexion con la base de datos Oracle*
             //error para que el crone lo vuelva a ejecutar
             if (v_consecutivo_log == 0)
             {
-              /*@lineinfo:generated-code*//*@lineinfo:504^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:503^15*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG',
@@ -1384,8 +1383,8 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:510^59*/
-              /*@lineinfo:generated-code*//*@lineinfo:511^15*/
+/*@lineinfo:user-code*//*@lineinfo:509^59*/
+              /*@lineinfo:generated-code*//*@lineinfo:510^15*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -1396,11 +1395,11 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:511^27*/
+/*@lineinfo:user-code*//*@lineinfo:510^27*/
             }
             else
             {
-              /*@lineinfo:generated-code*//*@lineinfo:515^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:514^15*/
 
 //  ************************************************************
 //  #sql { call TBPBD_UPDATE_TBINTERFACE_LOGS( :v_fecha_control,
@@ -1428,8 +1427,8 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:518^80*/
-              /*@lineinfo:generated-code*//*@lineinfo:519^15*/
+/*@lineinfo:user-code*//*@lineinfo:517^80*/
+              /*@lineinfo:generated-code*//*@lineinfo:518^15*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -1440,11 +1439,11 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:519^27*/
+/*@lineinfo:user-code*//*@lineinfo:518^27*/
             }
             //Borrar en la tabla de control el paso 5 para que la validacion en el proximo
             //intento sea correcta.
-            /*@lineinfo:generated-code*//*@lineinfo:523^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:522^13*/
 
 //  ************************************************************
 //  #sql { DELETE ajkpcpp@mfund
@@ -1469,8 +1468,8 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:526^42*/
-            /*@lineinfo:generated-code*//*@lineinfo:527^13*/
+/*@lineinfo:user-code*//*@lineinfo:525^42*/
+            /*@lineinfo:generated-code*//*@lineinfo:526^13*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -1481,7 +1480,7 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:527^25*/
+/*@lineinfo:user-code*//*@lineinfo:526^25*/
             out.println("Borro");
           }//Hubo error en la ejecucion del paso 5
         }//Fue valido ejecutar paso 5
@@ -1519,7 +1518,7 @@ Conexion con la base de datos Oracle*
      {
        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("c:\\TaxBenefits\\Taxb\\Pasos_logs\\paso5.log", true)));
        out.println("Error Paso 5 "+e );
-       /*@lineinfo:generated-code*//*@lineinfo:565^8*/
+       /*@lineinfo:generated-code*//*@lineinfo:564^8*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG',
@@ -1550,8 +1549,8 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:571^57*/
-       /*@lineinfo:generated-code*//*@lineinfo:572^8*/
+/*@lineinfo:user-code*//*@lineinfo:570^57*/
+       /*@lineinfo:generated-code*//*@lineinfo:571^8*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -1562,7 +1561,7 @@ Conexion con la base de datos Oracle*
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:572^20*/
+/*@lineinfo:user-code*//*@lineinfo:571^20*/
        out.close();
        }
       catch (Exception e1)

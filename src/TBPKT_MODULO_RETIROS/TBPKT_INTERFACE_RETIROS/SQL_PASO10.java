@@ -11,6 +11,8 @@ import oracle.jdbc.*;
 import TBPKT_EXCEPCIONES.*;
 
 import co.oldmutual.taxbenefit.util.DataSourceWrapper;
+
+import java.text.SimpleDateFormat;
 //import org.apache.log4j.Logger;
 //import org.apache.log4j.PropertyConfigurator;
 
@@ -513,6 +515,8 @@ public class SQL_PASO10 extends Object{
    * Obtener la hora completa para registrar la operación
    * @param  Integer hora de cierre
    */
+  /*[SO_396]Se cambia implementación del método para realizar la misma acción sin usar los métodos getHours, getMinutes y getSeconds ya que han sido deprecados
+   *
   public String obtenerHora() {
       int pos = 0;
       String hora = null;
@@ -548,8 +552,12 @@ public class SQL_PASO10 extends Object{
     } finally{
             return hora;
     }
-  }
+  }*/
 
-
+    public String obtenerHora() {
+        java.util.Date fHoy= new java.util.Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
+        return sdf.format(fHoy);
+    }
 
 }

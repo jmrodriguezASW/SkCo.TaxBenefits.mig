@@ -11,6 +11,11 @@ import TBPKT_UTILIDADES.TBPKT_FECHAS.*;
 import co.oldmutual.taxbenefit.util.DataSourceWrapper;
 
 import java.sql.*;
+
+import java.text.SimpleDateFormat;
+
+import java.util.Locale;
+
 import oracle.sql.*;
 import oracle.jdbc.driver.*;
 /**Dibujar Frame que permite al usuario iniciar el proceso de cargue*/
@@ -98,6 +103,7 @@ public class TBF_CARGUE extends JFrame
    TBCL_Validacion  i_valusu = new TBCL_Validacion();
    TBCL_Fecha        i_fecha  =  new    TBCL_Fecha();
    int v_contador   = 0;
+   SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a", Locale.getDefault());
    //Consultar uurl,usuario y password
    
    //se hace conexion a taxbenefit
@@ -114,7 +120,12 @@ catch (Exception E)
    System.out.println("Error "+E);
    }
     Date p = new Date();
-    System.out.println("hora  "+p.toLocaleString());
+    /*[SO_396]Se realiza modificación para suprimir el uso del método toLocaleString ya que ha sido deprecado
+    *se cambia implementación por el uso de la clase SimpleDateFormat y su método format*/
+  
+    //System.out.println("hora  "+p.toLocaleString());
+    System.out.println("hora  "+sdf.format(p));   
+      
    //Consultar en  la tabla de control si la informacion  esta cargada
    int v_ensayo = 0;
    while (v_ensayo < 2)
@@ -187,7 +198,13 @@ catch (Exception E)
     int suma    = 0;
     System.out.println("Se llama función almacenada en la base de datos.");
     Date d = new Date();
-    System.out.println("hora inicio ."+d.toLocaleString());
+    
+    /*[SO_396]Se realiza modificación para suprimir el uso del método toLocaleString ya que ha sido deprecado
+    *se cambia implementación por el uso de la clase SimpleDateFormat y su método format*/
+   
+    //System.out.println("hora inicio ."+d.toLocaleString());
+    System.out.println("hora inicio . "+sdf.format(d));  
+    
     //Llamado a la funcion que consulta la información en el as400 y la inserta en tablas temporales de Tax Benefits
     CallableStatement l_stmt0 = t_tax.prepareCall("{? = call TB_FINS_REGISTROS(?,?,?,?,?,?,?,?,?,?,?,?)}");
     l_stmt0.registerOutParameter(1,Types.INTEGER);
@@ -224,7 +241,13 @@ catch (Exception E)
     int v_penfal = l_stmt0.getInt(13);
     l_stmt0.close();
      Date h = new Date();
-    System.out.println("hora final ."+h.toLocaleString());
+     
+    /*[SO_396]Se realiza modificación para suprimir el uso del método toLocaleString ya que ha sido deprecado
+    *se cambia implementación por el uso de la clase SimpleDateFormat y su método format*/
+   
+    //System.out.println("hora final ."+h.toLocaleString());
+    System.out.println("hora final . "+sdf.format(h));
+    
     String delete_01 = "delete cicontrol@mfund";
     t_st.execute(delete_01);
     t_tax.commit();

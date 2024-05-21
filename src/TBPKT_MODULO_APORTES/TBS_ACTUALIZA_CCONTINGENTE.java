@@ -550,10 +550,16 @@ int v_historia  = -1;
        //Valido Si fecha tiene beneficio-->
       //Convierto f_a String a f_a Date
       java.sql.Date f_aDate = new java.sql.Date(1);
-      f_aDate               = date.TBPL_date(f_a);
-      //Convierto f_e String a f_AORIGINAL Date
       java.sql.Date f_aODate = new java.sql.Date(1);
-      f_aODate               = date.TBPL_date(f_ao);
+      //[SO_396] Se realiza cambio en el llamado del método para hacer control del Exception      
+      //f_aDate     = date.TBPL_date(f_a);
+      try {
+          f_aDate =  date.TBPL_date(f_a);
+          //Convierto f_e String a f_AORIGINAL Date          
+          f_aODate = date.TBPL_date(f_ao);
+      }catch (ParseException  e) {
+          System.out.println("Error al convertir fecha: " + e.getMessage());
+      }
        //valido beneficio
 try
 {
@@ -1069,14 +1075,21 @@ for(int i=0;i<total_retiros;i++)
    //CARGOS
    int v_conret = 0;
    boolean v_nuevoretiro = false;
-   DateFormat currentDateFormat;
+   
+   /*[SO_396]Se realiza modificación para suprimir el uso del constructor new java.sql.Date ya que ha sido deprecado,
+    *se cambia implementación por System.currentTimeMillis()*/
+    
+   /*DateFormat currentDateFormat;
    java.util.Date currentDate = new java.util.Date();
    currentDateFormat          = DateFormat.getDateInstance(DateFormat.DEFAULT, java.util.Locale.PRC);
    String d                   = currentDateFormat.format(currentDate);
    int ano                    = Integer.parseInt(d.substring(0,4))-1900;
    int mes                    = Integer.parseInt(d.substring(5,d.lastIndexOf("-")))-1;
    int dia                    = Integer.parseInt(d.substring(d.lastIndexOf("-")+1,d.length()));
-   java.sql.Date hoy          = new java.sql.Date(ano,mes,dia);
+   java.sql.Date hoy          = new java.sql.Date(ano,mes,dia);*/
+    
+   long millis = System.currentTimeMillis();
+   java.sql.Date hoy = new java.sql.Date(millis);
    linea++;
    //SI EL METODO DEL RETIRO ES SELECCIONADO SE CONSULTAN LOS APORTES PARA INSERTAR CON EL NUEVO RETIRO
    try
