@@ -34,7 +34,7 @@ try
     int MAX = 3000;
 
   //salida.println("<BR>Inicio.<BR>");
-  STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII();
+  //STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII;
   //seguridad
   HttpSession session = peticion.getSession(true);
   if (session == null) session = peticion.getSession(true);
@@ -219,13 +219,13 @@ try
     }//si afp se encuentra cargada en TBINTERFACE_TRASLADOS
     else
     {
-      STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML();
-      salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+      //STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML;
+      salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                             "TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS1"," ",true));
       salida.println("<BR><BR>");
       salida.println("<p><B><FONT color=black face=verdana size=2> NO HAY INFORMACION CARGADA PARA LA AFP SELECCIONADA </font></B></p>");
       salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-      salida.println(plantilla1.TBFL_PIE);
+      salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
       salida.close();
     }//si la afp no se encuentra cargada en TBINTERFACE_TRASLADOS
     return;
@@ -1206,13 +1206,13 @@ try
   }
   catch(Exception ex)
   {
-    STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+    //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
     String msj = "SE PRODUJO UN ERROR INESPERADO, "+ex.toString() + " - " + ex.getMessage() +". INTENTE DE NUEVO.";
-    salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+    salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                          "TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS","<CENTER>"+msj+"</CEBTER>",false));
     salida.println("<BR><BR>");
     salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-    salida.println(plantilla.TBFL_PIE);
+    salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
     salida.flush();
     return;
   }
@@ -1387,13 +1387,13 @@ try
     }//si afp se encuentra cargada en TBINTERFACE_TRASLADOS
     else
     {
-      STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML();
-      System.out.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+      //STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML;
+      System.out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                             "TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS1"," ",true));
       System.out.println("<BR><BR>");
       System.out.println("<p><B><FONT color=black face=verdana size=2> NO HAY INFORMACION CARGADA PARA LA AFP SELECCIONADA </font></B></p>");
       System.out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-      System.out.println(plantilla1.TBFL_PIE);
+      System.out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
       //salida.close();
     }//si la afp no se encuentra cargada en TBINTERFACE_TRASLADOS
     return;
@@ -1929,13 +1929,13 @@ try
   }
   catch(Exception ex)
   {
-    STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+    //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
     String msj = "SE PRODUJO UN ERROR INESPERADO, "+ex.toString() + " - " + ex.getMessage() +". INTENTE DE NUEVO.";
-    System.out.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+    System.out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                          "TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS","<CENTER>"+msj+"</CEBTER>",false));
     System.out.println("<BR><BR>");
     System.out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-    System.out.println(plantilla.TBFL_PIE);
+    System.out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
     //salida.flush();
     return;
   }

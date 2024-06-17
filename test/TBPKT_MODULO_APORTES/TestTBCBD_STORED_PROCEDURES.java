@@ -35,9 +35,9 @@ public class TestTBCBD_STORED_PROCEDURES
                                       double[] c_c){
 
       try{
-      
-        TBCBD_STORED_PROCEDURES tras = new TBCBD_STORED_PROCEDURES();
-        tras.TBPBD_Cuenta_Contingente(producto, capital, c_c);
+        /*[SO_396] Se realiza modificación de llamado por ser método estático TBPBD_Cuenta_Contingente de la clase TBCBD_STORED_PROCEDURES, no es necesaria la instancia nueva*/
+        //TBCBD_STORED_PROCEDURES tras = new TBCBD_STORED_PROCEDURES();
+        TBCBD_STORED_PROCEDURES.TBPBD_Cuenta_Contingente(producto, capital, c_c);
 
       }catch (Exception e){
          System.out.println("Error TBPBD_Cuenta_Contingente_Fecha_Test: "+e);
@@ -48,9 +48,13 @@ public class TestTBCBD_STORED_PROCEDURES
     
       try{
           estado[0]="BIEN";
-          TBCL_Validacion  i_valusu  = new     TBCL_Validacion ();
+          
+ 
+ //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
+
+
           String[] v_valusu          = new String[3];
-          v_valusu                   = i_valusu.TBFL_ValidarUsuario();
+          v_valusu                   = TBCL_Validacion.TBFL_ValidarUsuario();
          Class.forName("oracle.jdbc.driver.OracleDriver");
          Connection c = DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
          
@@ -123,13 +127,13 @@ public class TestTBCBD_STORED_PROCEDURES
           String[] password_mfund =   new String[100];
           String resp = "";
           
-          
-        TBCL_FuncionesAs400_Oblig obj2 = new TBCL_FuncionesAs400_Oblig();  
-        TBCBD_STORED_PROCEDURES obj1 = new TBCBD_STORED_PROCEDURES();  
+        /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_COMISION_ADMIN_OBLIG de la clase TBCL_FuncionesAs400_Oblig, no es necesaria la instancia nueva*/  
+        //TBCL_FuncionesAs400_Oblig obj2 = new TBCL_FuncionesAs400_Oblig();  
+        //TBCBD_STORED_PROCEDURES obj1 = new TBCBD_STORED_PROCEDURES();  
         
         //obj.TBPBD_Parametros_FuncionesAS(ruta_funcion, nombre_sistema, usuario_mfund, password_mfund);  
        // obj1.TBPBD_Param_FuncAS_OBLIG("FPOB", ruta_funcion, nombre_sistema, usuario_mfund, password_mfund);
-        obj2.TBFL_COMISION_ADMIN_OBLIG( nombre_sistema[0], ruta_funcion[0], usuario_mfund[0], password_mfund[0],"FPOB","50");  
+        TBCL_FuncionesAs400_Oblig.TBFL_COMISION_ADMIN_OBLIG( nombre_sistema[0], ruta_funcion[0], usuario_mfund[0], password_mfund[0],"FPOB","50");  
         //resp = obj2.TBFL_Reporte_CEI_OBLIG("20180907","/QSYS.LIB/PRBACS.LIB/", nombre_sistema[0], usuario_mfund[0], password_mfund[0]);
          //resp = obj2.TBFL_Procesar_Retiros_OBLIG("20180824",ruta_funcion[0], nombre_sistema[0], usuario_mfund[0], password_mfund[0]);
        //ruta_funcion[0] = "/QSYS.LIB/PRBACS.LIB/";

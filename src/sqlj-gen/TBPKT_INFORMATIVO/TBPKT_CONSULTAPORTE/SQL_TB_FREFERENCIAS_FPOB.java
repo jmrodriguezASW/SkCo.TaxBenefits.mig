@@ -19,16 +19,18 @@ public class SQL_TB_FREFERENCIAS_FPOB extends Object{
     public Modelo_TB_Referencias GET_TB_FREFERENCIAS_FPOB (String producto){
         
         Modelo_TB_Referencias objModelo_TB_Referencias = new Modelo_TB_Referencias();
-        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
         
         try {            
             //Conexion con la base de datos
             v_valusu = new String[3];
-            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));
             
-            /*@lineinfo:generated-code*//*@lineinfo:31^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:33^13*/
 
 //  ************************************************************
 //  #sql v_sw = { values(TB_FREFERENCIAS_FPOB(:producto,
@@ -78,7 +80,7 @@ public class SQL_TB_FREFERENCIAS_FPOB extends Object{
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:36^72*/
+/*@lineinfo:user-code*//*@lineinfo:38^72*/
            if (v_sw == 0){                
                 objModelo_TB_Referencias.setSistema(""+v_sistema+"");
                 objModelo_TB_Referencias.setUsuario(""+v_usuario+"");

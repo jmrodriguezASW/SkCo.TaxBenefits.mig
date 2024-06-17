@@ -14,7 +14,7 @@ import java.io.*;
 
 
 public class TBS_ReporteAjustes extends HttpServlet{
-  STBCL_GenerarBaseHTMLII codHtm;
+  //STBCL_GenerarBaseHTMLII codHtm;
   HttpServletRequest request;
   HttpServletResponse response;
   HttpSession sess;
@@ -43,8 +43,11 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
     String parametros[]         = new String[8];
     cadena                      = request.getParameter("cadena");
     String ip_tax               = request.getRemoteAddr();
-    TBCL_Seguridad Seguridad    = new TBCL_Seguridad();
-    parametros                  = Seguridad.TBFL_Seguridad(cadena,out,ip_tax);
+     
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
+    parametros                  = TBCL_Seguridad.TBFL_Seguridad(cadena,out,ip_tax);
     //FIN seguridad
     v_buscar      = false;
     v_opcion      = new String("");
@@ -60,7 +63,7 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
     response.setContentType("text/html");
     out           = new PrintWriter (response.getOutputStream());
     sess          = request.getSession(true);
-    k_cabeza      = codHtm.TBFL_CABEZA("Reporte de Ajustes","Reporte de Ajustes","TBPKT_AJUSTES.TBS_ReporteAjustes","",true,"moduloparametro.js","return checkrequired(this)");
+    k_cabeza      = STBCL_GenerarBaseHTMLII.TBFL_CABEZA("Reporte de Ajustes","Reporte de Ajustes","TBPKT_AJUSTES.TBS_ReporteAjustes","",true,"moduloparametro.js","return checkrequired(this)");
     //armar diccionario con posibles decisiones
     buildOpcion();
     //contruir página final
@@ -111,7 +114,7 @@ private void buildPage()
        out.println("<td width='15%' align='right' BGCOLOR='#DCDCDC' style='border: thin solid'><a href='TBPKT_AJUSTES.TBS_ImprimirAjustes' target='impresion' style='font-style: normal; text-decoration:none'><font face='Verdana' size='1'><img src='imagenes/PRINTER.gif' alt='Version para Imprimir' border='0'></font></a></td>");
      }
     out.println("</tr></table></center>");
-    out.println(codHtm.TBFL_PIE);
+    out.println(STBCL_GenerarBaseHTMLII.TBFL_PIE);
     out.close();
 }
 ////////////////tomar parametros de la decisión de lo que quiere reportar /////////////////
@@ -220,12 +223,12 @@ private void takeParameter()
 private void findAjustes()
 {
     String v_mostrar=(String)dicOpcion.get(v_opcion);
-    if(i_sqlj.TBPBD_ConexionBD())
+    if(SQL_AJUSTE.TBPBD_ConexionBD())
     {
       v_fecDesde     = i_fnd.TBPL_formatDate(v_fecDesde,"aaaa-mm-dd");
       v_fecHasta     = i_fnd.TBPL_formatDate(v_fecHasta,"aaaa-mm-dd");
       //llamar procedimiento para traer la información de los ajustes de la BD
-      String valores = i_sqlj.TBPBD_AllRepAjustes(v_mostrar,v_fecDesde,v_fecHasta,v_contDesde,v_contHasta);
+      String valores = SQL_AJUSTE.TBPBD_AllRepAjustes(v_mostrar,v_fecDesde,v_fecHasta,v_contDesde,v_contHasta);
       if(!valores.equals("") && valores.indexOf("Exception")==-1)
       {
         sess.setAttribute ("VALREPORTE",valores);

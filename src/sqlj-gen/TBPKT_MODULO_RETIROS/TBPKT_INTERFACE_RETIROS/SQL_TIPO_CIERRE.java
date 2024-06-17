@@ -69,7 +69,9 @@ implements sqlj.runtime.NamedIterator
     String          v_val_cierre   = "N";
     String          v_cod_unidad   = " ";
     String[]        v_valusu;
-    TBCL_Validacion i_valusu       = new TBCL_Validacion();
+    /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
     vinter_fecha    v_fecha_cierre = null;
     Integer         v_fecha        = null;
     String          v_mensajeLog     = "";
@@ -78,7 +80,7 @@ implements sqlj.runtime.NamedIterator
       //Conexion a la base de datos
       //************************************************************
       v_valusu = new String[3];
-      v_valusu = i_valusu.TBFL_ValidarUsuario();
+      v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
      DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
       DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));
       String v_varsession = (java.lang.String)session.getAttribute("s_cierre");
@@ -86,7 +88,7 @@ implements sqlj.runtime.NamedIterator
       //Verificar si hubo error en algun proceso de cierre anterior
       //************************************************************
 
-      /*@lineinfo:generated-code*//*@lineinfo:59^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:61^7*/
 
 //  ************************************************************
 //  #sql v_fecha_cierre = { SELECT TO_NUMBER(SUBSTR(:v_fechac,1,4)||SUBSTR(:v_fechac,6,2)||SUBSTR(:v_fechac,9,2))
@@ -114,11 +116,11 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:61^42*/
+/*@lineinfo:user-code*//*@lineinfo:63^42*/
       while (v_fecha_cierre.next()){
         v_fecha = v_fecha_cierre.fecha_cierre();
       }
-      /*@lineinfo:generated-code*//*@lineinfo:65^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:67^7*/
 
 //  ************************************************************
 //  #sql v_val_cierre = { values (TBFBD_VALIDAR_CIERRE_ANT (:v_retiros,
@@ -166,7 +168,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:69^80*/
+/*@lineinfo:user-code*//*@lineinfo:71^80*/
 
       //********************************************************************
       //Si el cierre anterior no fue exitoso: tablas temporales de
@@ -185,7 +187,7 @@ implements sqlj.runtime.NamedIterator
            //Devolviendo Y si la validacion fue exitosa, junto con la fecha de control
            //N: Si no es posible realizar el cierre
            //***************************************************************************
-            /*@lineinfo:generated-code*//*@lineinfo:88^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:90^13*/
 
 //  ************************************************************
 //  #sql v_val_cierre = { values(TBFBD_VALIDAR_CIERRE(:v_fecha, :v_coduni, :v_producto, 1, :v_tipcierre, :v_cod_err, :v_men_err))  };
@@ -224,7 +226,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:88^152*/
+/*@lineinfo:user-code*//*@lineinfo:90^152*/
             if (v_cod_err == 0) {
               if ( v_val_cierre.charAt(0)== 'Y'){
                 v_proceso      = 1;
@@ -237,7 +239,7 @@ implements sqlj.runtime.NamedIterator
                 //solicitudes de retiros con fecha efectiva igual a la del cierre, estado SER001 y usuarios que son de Portal de clientes e IVR
                 //Customer First - Romel Escorcia - 19/Mayo/2015 
                 //**************************************************************************                
-                 /*@lineinfo:generated-code*//*@lineinfo:101^18*/
+                 /*@lineinfo:generated-code*//*@lineinfo:103^18*/
 
 //  ************************************************************
 //  #sql { call TBPBD_UPDATE_RETIROST0 (:v_fecha, :v_cod_err, :v_men_err)  };
@@ -271,7 +273,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:101^99*/
+/*@lineinfo:user-code*//*@lineinfo:103^99*/
                 if (v_cod_err != 0){
                           out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA ("Cierre Unidades", "Cierre Unidades","","Error en el proceso de cierre: "+v_men_err+"ajkm"+v_retiros+"ajkn"+v_distribucion,false));
                           out.println("<pre>");
@@ -287,7 +289,7 @@ implements sqlj.runtime.NamedIterator
                     //Borrado de C3AICPP (LAAPINTER) antes de cada cierre parcial o total
                     //**************************************************************************             
                    // #sql {call TBPBD_DEL_C3AICPP (:INOUT v_cod_err, :INOUT v_men_err) };                
-                     /*@lineinfo:generated-code*//*@lineinfo:117^22*/
+                     /*@lineinfo:generated-code*//*@lineinfo:119^22*/
 
 //  ************************************************************
 //  #sql { DELETE FROM c3aicpp@mfund };
@@ -307,8 +309,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:117^56*/
-                     /*@lineinfo:generated-code*//*@lineinfo:118^22*/
+/*@lineinfo:user-code*//*@lineinfo:119^56*/
+                     /*@lineinfo:generated-code*//*@lineinfo:120^22*/
 
 //  ************************************************************
 //  #sql { DELETE FROM ajkmcpp@mfund };
@@ -328,8 +330,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:118^56*/
-                     /*@lineinfo:generated-code*//*@lineinfo:119^22*/
+/*@lineinfo:user-code*//*@lineinfo:120^56*/
+                     /*@lineinfo:generated-code*//*@lineinfo:121^22*/
 
 //  ************************************************************
 //  #sql { DELETE FROM ajkncpp@mfund where kngldz<>:v_fecha };
@@ -351,8 +353,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:119^79*/
-                     /*@lineinfo:generated-code*//*@lineinfo:120^22*/
+/*@lineinfo:user-code*//*@lineinfo:121^79*/
+                     /*@lineinfo:generated-code*//*@lineinfo:122^22*/
 
 //  ************************************************************
 //  #sql { DELETE FROM c3ajcpp@mfund };
@@ -372,8 +374,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:120^56*/
-                     /*@lineinfo:generated-code*//*@lineinfo:121^22*/
+/*@lineinfo:user-code*//*@lineinfo:122^56*/
+                     /*@lineinfo:generated-code*//*@lineinfo:123^22*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -384,7 +386,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:121^34*/
+/*@lineinfo:user-code*//*@lineinfo:123^34*/
                                      
                           if (v_cod_err != 0){
                           out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA ("Cierre Unidades", "Cierre Unidades","","Error en el proceso de cierre: "+v_men_err+"ajkm"+v_retiros+"ajkn"+v_distribucion,false));
@@ -403,7 +405,7 @@ implements sqlj.runtime.NamedIterator
                //**************************************************************************  
                 if(v_tipcierre.equals("T"))
                 {
-                    /*@lineinfo:generated-code*//*@lineinfo:140^21*/
+                    /*@lineinfo:generated-code*//*@lineinfo:142^21*/
 
 //  ************************************************************
 //  #sql { DELETE FROM AJKPCPP@MFUND WHERE KPQGNU = 1 AND KPMECX = '000001' };
@@ -423,8 +425,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:140^91*/
-                    /*@lineinfo:generated-code*//*@lineinfo:141^21*/
+/*@lineinfo:user-code*//*@lineinfo:142^91*/
+                    /*@lineinfo:generated-code*//*@lineinfo:143^21*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -435,7 +437,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:141^33*/
+/*@lineinfo:user-code*//*@lineinfo:143^33*/
                 }
                 else
                 {
@@ -449,7 +451,7 @@ implements sqlj.runtime.NamedIterator
                 //**************************************************************************  
                 //Cargar en Temporal de as400
                 //**************************************************************************
-                /*@lineinfo:generated-code*//*@lineinfo:155^17*/
+                /*@lineinfo:generated-code*//*@lineinfo:157^17*/
 
 //  ************************************************************
 //  #sql { call TBPBD_CARGAR (:v_coduni, :v_producto, :v_fecha, '1', :v_proceso, :v_retiros, :v_distribucion, :v_total_reg, :v_cod_err, :v_men_err) };
@@ -497,7 +499,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:155^195*/
+/*@lineinfo:user-code*//*@lineinfo:157^195*/
                 if (v_cod_err == 0){
                   //Realizar las actualizaciones de las tablas de control de Tax y MF
                   sw = 1;
@@ -541,7 +543,7 @@ implements sqlj.runtime.NamedIterator
             v_proceso   = 3;
             v_coduni    = v_cod_unidad;
             v_total_reg = 0;
-            /*@lineinfo:generated-code*//*@lineinfo:199^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:201^13*/
 
 //  ************************************************************
 //  #sql { call TBPBD_CARGAR (:v_coduni, :v_producto, :v_fecha, '1', :v_proceso, :v_retiros, :v_distribucion, :v_total_reg, :v_cod_err, :v_men_err) };
@@ -589,7 +591,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:199^191*/
+/*@lineinfo:user-code*//*@lineinfo:201^191*/
             if (v_cod_err == 0){
               //Realizar las actualizaciones de las tablas de control de Tax y MF
               sw = 1;
@@ -623,7 +625,7 @@ implements sqlj.runtime.NamedIterator
           //tabla de control de MF
           if (v_total_reg>0){
             //Actualizo a Y la tabla de control de MF si se pudo cerrar la unidad
-            /*@lineinfo:generated-code*//*@lineinfo:233^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:235^13*/
 
 //  ************************************************************
 //  #sql { call TBPBD_UPDATE_AJKPCPP(:v_fecha, :v_coduni, 1, :v_cod_err, :v_men_err) };
@@ -658,12 +660,12 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:233^104*/
+/*@lineinfo:user-code*//*@lineinfo:235^104*/
           }//Si se insertaron retiros actualizar en Y tabla de control para informarles que puede MF tomar datos
           else{
             //borrar la unidad insertada en la validacion del cierre debido a que no habian retiros
             //a enviar para el proceso de cierre solicitado
-            /*@lineinfo:generated-code*//*@lineinfo:238^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:240^13*/
 
 //  ************************************************************
 //  #sql { call TBPBD_DEL_AJKPCPP_E(:v_coduni, :v_fecha, 1, :v_cod_err, :v_men_err) };
@@ -698,13 +700,13 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:238^103*/
+/*@lineinfo:user-code*//*@lineinfo:240^103*/
           }//Si no habian retiros borrar la unidad insertada en la tabla de control para que MF no realice proceso de tomar datos
           if (v_cod_err == 0){
             //Si se el tipo de cierre realizado para la unidad de proceso fue total verificar si el resto
             //de unidades ya cerraron para informar a Multifund que paso 1 ha finalizado
             if (v_tipcierre.equals("T")){
-              /*@lineinfo:generated-code*//*@lineinfo:244^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:246^15*/
 
 //  ************************************************************
 //  #sql ct = { values ( TBFBD_VERIFICAR_PASO1(:v_fecha, :v_coduni, :v_cod_err) ) };
@@ -738,10 +740,10 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:244^97*/
+/*@lineinfo:user-code*//*@lineinfo:246^97*/
               if (v_cod_err == 0){
                 if ( ct == 0){
-                  /*@lineinfo:generated-code*//*@lineinfo:247^19*/
+                  /*@lineinfo:generated-code*//*@lineinfo:249^19*/
 
 //  ************************************************************
 //  #sql { call TBPBD_UPDATE_AJKPCPP(:v_fecha, 'UUP099', 1, :v_cod_err, :v_men_err) };
@@ -775,9 +777,9 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:247^109*/
+/*@lineinfo:user-code*//*@lineinfo:249^109*/
                   if (v_cod_err != 0){
-                    /*@lineinfo:generated-code*//*@lineinfo:249^21*/
+                    /*@lineinfo:generated-code*//*@lineinfo:251^21*/
 
 //  ************************************************************
 //  #sql { ROLLBACK };
@@ -788,7 +790,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:249^35*///De actualizacion e insercion de tabla de control de MF
+/*@lineinfo:user-code*//*@lineinfo:251^35*///De actualizacion e insercion de tabla de control de MF
                     //session.setAttribute("s_cierre","3");
                     out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Cierre Unidades", "Cierre Unidades","","Error al insertar en la tabla de control de Multifund "+v_men_err,false));
                     out.println("<pre>");
@@ -799,7 +801,7 @@ implements sqlj.runtime.NamedIterator
                     out.close();
                   }//Hubo error al insertar en ajkpcpp
                   else{
-                    /*@lineinfo:generated-code*//*@lineinfo:260^21*/
+                    /*@lineinfo:generated-code*//*@lineinfo:262^21*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -810,12 +812,12 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:260^33*///De actualizacion o borrado de MF
+/*@lineinfo:user-code*//*@lineinfo:262^33*///De actualizacion o borrado de MF
                     sw = 1; //Proceso de cierre exitoso, actualizar estado de cargue de tablas temporales de tax
                   }//No hubo error al insertar en ajkpcpp
                 }//Se cierra paso 1 ct==0
                 else{
-                  /*@lineinfo:generated-code*//*@lineinfo:265^19*/
+                  /*@lineinfo:generated-code*//*@lineinfo:267^19*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -826,13 +828,13 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:265^31*///De actualizacion o borrado de MF
+/*@lineinfo:user-code*//*@lineinfo:267^31*///De actualizacion o borrado de MF
                   sw = 1; //Proceso de cierre exitoso, actualizar estado de cargue de tablas temporales de tax
                 }//No se cierra paso 1 ct!=0
               }//No hubo error en verificar paso 1
               else{
                 //session.setAttribute("s_cierre","3");
-                /*@lineinfo:generated-code*//*@lineinfo:271^17*/
+                /*@lineinfo:generated-code*//*@lineinfo:273^17*/
 
 //  ************************************************************
 //  #sql { ROLLBACK };
@@ -843,7 +845,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:271^31*///De actualizacion o borrado de tabla de control de MF
+/*@lineinfo:user-code*//*@lineinfo:273^31*///De actualizacion o borrado de tabla de control de MF
                 out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Cierre Unidades", "Cierre Unidades","","Error al verificar si se cierra paso 1",false));
                 out.println("<pre>");
                 //out.println("<center> <input type='button' value='Regresar' Onclick=window.location='TBPKT_CIERRE.TBS_CIERRE';></center>");
@@ -854,7 +856,7 @@ implements sqlj.runtime.NamedIterator
               }//Hubo error en verificar paso 1
             }//Tipo de cierre es total
             else{
-              /*@lineinfo:generated-code*//*@lineinfo:282^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:284^15*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -865,13 +867,13 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:282^27*///De actualizacion de tabla de control MF
+/*@lineinfo:user-code*//*@lineinfo:284^27*///De actualizacion de tabla de control MF
               sw = 1; //Proceso de cierre exitoso, actualizar estado de cargue de tablas temporales de tax
             }//Tipo de cierre es parcial
           }//No hubo error al actualizar tabla de control ajkpcpp
           else{
             //session.setAttribute("s_cierre","3");
-            /*@lineinfo:generated-code*//*@lineinfo:288^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:290^13*/
 
 //  ************************************************************
 //  #sql { ROLLBACK };
@@ -882,7 +884,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:288^27*///De actualizacion o borrado de tabla de control de MF
+/*@lineinfo:user-code*//*@lineinfo:290^27*///De actualizacion o borrado de tabla de control de MF
             out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Cierre Unidades", "Cierre Unidades","","Error al actualizar la tabla de control de Multifund"+v_men_err,false));
             out.println("<pre>");
             //out.println("<center> <input type='button' value='Regresar' Onclick=window.location='TBPKT_CIERRE.TBS_CIERRE';></center>");
@@ -898,7 +900,7 @@ implements sqlj.runtime.NamedIterator
         sw = 0;
         v_cont = 1;
         while ((sw==0) && (v_cont<=3)) {
-          /*@lineinfo:generated-code*//*@lineinfo:304^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:306^11*/
 
 //  ************************************************************
 //  #sql { call TBPBD_UPDATE_TBCIERRES (:v_coduni, :v_fecha, :v_tipcierre, :v_cod_err, :v_men_err) };
@@ -934,7 +936,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:304^116*/
+/*@lineinfo:user-code*//*@lineinfo:306^116*/
 
           //Si actualizacion de tabla de control de Tax se realiza bien seguir
           //en las actualizaciones del estado de cargue de las temporales
@@ -954,7 +956,7 @@ implements sqlj.runtime.NamedIterator
           sw = 0;
           v_cont = 1;
           while ((sw==0) && (v_cont<=3)) {
-             /*@lineinfo:generated-code*//*@lineinfo:324^14*/
+             /*@lineinfo:generated-code*//*@lineinfo:326^14*/
 
 //  ************************************************************
 //  #sql { call TBPBD_UPDATE_INTERF_RETIROS(:v_fecha, '1', :v_coduni, :v_cod_err, :v_men_err) };
@@ -989,7 +991,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:324^114*/
+/*@lineinfo:user-code*//*@lineinfo:326^114*/
 
             if (v_cod_err == 0) {
               sw = 1;
@@ -1007,7 +1009,7 @@ implements sqlj.runtime.NamedIterator
             sw = 0;
             v_cont = 1;
             while ((sw==0) && (v_cont<=3)) {
-               /*@lineinfo:generated-code*//*@lineinfo:342^16*/
+               /*@lineinfo:generated-code*//*@lineinfo:344^16*/
 
 //  ************************************************************
 //  #sql { call TBPBD_UPDATE_INTERF_DISTR(:v_fecha, '1', :v_coduni, :v_cod_err, :v_men_err) };
@@ -1042,7 +1044,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:342^114*/
+/*@lineinfo:user-code*//*@lineinfo:344^114*/
 
               if (v_cod_err == 0) {
                 sw = 1;
@@ -1056,7 +1058,7 @@ implements sqlj.runtime.NamedIterator
               v_cont++;
             }//Mientras la actualizacion del estado de cargue de distribucion no sea exitosa seguir
             if (v_cod_err == 0){
-              /*@lineinfo:generated-code*//*@lineinfo:356^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:358^15*/
 
 //  ************************************************************
 //  #sql { call TBPBD_COMMIT(:v_cod_err, :v_men_err ) };
@@ -1089,14 +1091,14 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:356^75*/
+/*@lineinfo:user-code*//*@lineinfo:358^75*/
               if (v_cod_err == 0){
                 if (v_proceso == 3){
                   //session.setAttribute("s_cierre","3");
                 
                     //Se almacena información de resultado en LOG de TAX
                     v_mensajeLog = "Advertencia: No se efectuó su cierre actual pues el último proceso de cierre realizado no fue exitoso. Se realizó nuevamente este cierre con tipo Parcial. Proceso de Cierre Anterior Exitoso. Numero total de registros cargados: " +v_total_reg;
-                    /*@lineinfo:generated-code*//*@lineinfo:363^21*/
+                    /*@lineinfo:generated-code*//*@lineinfo:365^21*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG', to_date(:v_fecha,'RRRR-MM-DD'), 'P1', :v_mensajeLog, to_char(:v_total_reg), 'MFUND', 0) };
@@ -1122,8 +1124,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:363^152*/
-                    /*@lineinfo:generated-code*//*@lineinfo:364^21*/
+/*@lineinfo:user-code*//*@lineinfo:365^152*/
+                    /*@lineinfo:generated-code*//*@lineinfo:366^21*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -1134,7 +1136,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:364^33*/
+/*@lineinfo:user-code*//*@lineinfo:366^33*/
                 
                   out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Cierre Unidades", "Cierre Unidades","","Advertencia: No se efectuó su cierre actual pues el último proceso de cierre realizado no fue exitoso. Se realizó nuevamente este cierre con tipo Parcial. Proceso de Cierre Anterior Exitoso. Numero total de registros cargados: "+v_total_reg,false));
                   out.println("<pre>");
@@ -1155,7 +1157,7 @@ implements sqlj.runtime.NamedIterator
                       {
                              v_mensajeLog = "Cierre Total Exitoso: Numero total de registros cargados: "+v_total_reg;
                       }    
-                      /*@lineinfo:generated-code*//*@lineinfo:385^23*/
+                      /*@lineinfo:generated-code*//*@lineinfo:387^23*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG', to_date(:v_fecha,'RRRR-MM-DD'), 'P1', :v_mensajeLog, to_char(:v_total_reg), 'MFUND', 0) };
@@ -1181,8 +1183,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:385^154*/
-                      /*@lineinfo:generated-code*//*@lineinfo:386^23*/
+/*@lineinfo:user-code*//*@lineinfo:387^154*/
+                      /*@lineinfo:generated-code*//*@lineinfo:388^23*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -1193,7 +1195,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:386^35*/
+/*@lineinfo:user-code*//*@lineinfo:388^35*/
                     
                   //session.setAttribute("s_cierre","3");
                   out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Cierre Unidades", "Cierre Unidades","","Proceso de Cierre Exitoso. Numero total de registros cargados: "+v_total_reg,false));
@@ -1210,7 +1212,7 @@ implements sqlj.runtime.NamedIterator
                   
                 //Se almacena información de resultado en LOG de TAX
                 v_mensajeLog = "Error al hacer commit de la actualizacion de tablas de control "+v_men_err;
-                /*@lineinfo:generated-code*//*@lineinfo:403^17*/
+                /*@lineinfo:generated-code*//*@lineinfo:405^17*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG', to_date(:v_fecha,'RRRR-MM-DD'), 'P1', :v_mensajeLog, to_char(:v_total_reg), 'MFUND', 0) };
@@ -1236,8 +1238,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:403^148*/
-                /*@lineinfo:generated-code*//*@lineinfo:404^17*/
+/*@lineinfo:user-code*//*@lineinfo:405^148*/
+                /*@lineinfo:generated-code*//*@lineinfo:406^17*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -1248,7 +1250,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:404^29*/  
+/*@lineinfo:user-code*//*@lineinfo:406^29*/  
                   
                 out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Cierre Unidades", "Cierre Unidades","","Error al hacer commit de la actualizacion de tablas de control "+v_men_err,false));
                 out.println("<pre>");
@@ -1260,7 +1262,7 @@ implements sqlj.runtime.NamedIterator
               }//hubo error en el commit;
             }//No hubo error al actualizar estado de cargue en distrib
             else{
-              /*@lineinfo:generated-code*//*@lineinfo:416^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:418^15*/
 
 //  ************************************************************
 //  #sql { ROLLBACK  };
@@ -1271,12 +1273,12 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:416^31*/
+/*@lineinfo:user-code*//*@lineinfo:418^31*/
               //session.setAttribute("s_cierre","3");
                 
                 //Se almacena información de resultado en LOG de TAX
                 v_mensajeLog = "Error al actualizar el estado de cargue de Distribucción de Fondos "+v_men_err;
-                /*@lineinfo:generated-code*//*@lineinfo:421^17*/
+                /*@lineinfo:generated-code*//*@lineinfo:423^17*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG', to_date(:v_fecha,'RRRR-MM-DD'), 'P1', :v_mensajeLog, to_char(:v_total_reg), 'MFUND', 0) };
@@ -1302,8 +1304,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:421^148*/
-                /*@lineinfo:generated-code*//*@lineinfo:422^17*/
+/*@lineinfo:user-code*//*@lineinfo:423^148*/
+                /*@lineinfo:generated-code*//*@lineinfo:424^17*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -1314,7 +1316,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:422^29*/    
+/*@lineinfo:user-code*//*@lineinfo:424^29*/    
                 
               out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Cierre Unidades", "Cierre Unidades","","Error al actualizar el estado de cargue de Distribucción de Fondos "+v_men_err,false));
               out.println("<pre>");
@@ -1326,7 +1328,7 @@ implements sqlj.runtime.NamedIterator
             }
           }//No hubo error al actualizar el estado de cargue de retiros
           else{
-            /*@lineinfo:generated-code*//*@lineinfo:434^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:436^13*/
 
 //  ************************************************************
 //  #sql { ROLLBACK  };
@@ -1337,12 +1339,12 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:434^29*/
+/*@lineinfo:user-code*//*@lineinfo:436^29*/
             //session.setAttribute("s_cierre","3");
             
             //Se almacena información de resultado en LOG de TAX
             v_mensajeLog = "Error al actualizar el estado de cargue de retiros "+v_men_err;
-            /*@lineinfo:generated-code*//*@lineinfo:439^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:441^13*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG', to_date(:v_fecha,'RRRR-MM-DD'), 'P1', :v_mensajeLog, to_char(:v_total_reg), 'MFUND', 0) };
@@ -1368,8 +1370,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:439^144*/
-            /*@lineinfo:generated-code*//*@lineinfo:440^13*/
+/*@lineinfo:user-code*//*@lineinfo:441^144*/
+            /*@lineinfo:generated-code*//*@lineinfo:442^13*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -1380,7 +1382,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:440^25*/    
+/*@lineinfo:user-code*//*@lineinfo:442^25*/    
                   
             out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Cierre Unidades", "Cierre Unidades","","Error al actualizar el estado de cargue de retiros "+v_men_err,false));
             out.println("<pre>");
@@ -1392,7 +1394,7 @@ implements sqlj.runtime.NamedIterator
           }//Hubo error al actualizar el estado de cargue de retiros
         }//No hubo error al actualizar tbcierres
         else{
-          /*@lineinfo:generated-code*//*@lineinfo:452^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:454^11*/
 
 //  ************************************************************
 //  #sql { ROLLBACK  };
@@ -1403,12 +1405,12 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:452^27*/
+/*@lineinfo:user-code*//*@lineinfo:454^27*/
           //session.setAttribute("s_cierre","3");
           
         //Se almacena información de resultado en LOG de TAX
         v_mensajeLog = "Error al actualizar el estado de cargue de Temporal de Retiros de Taxbenefit "+v_men_err;
-        /*@lineinfo:generated-code*//*@lineinfo:457^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:459^9*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG', to_date(:v_fecha,'RRRR-MM-DD'), 'P1', :v_mensajeLog, to_char(:v_total_reg), 'MFUND', 0) };
@@ -1434,8 +1436,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:457^140*/
-        /*@lineinfo:generated-code*//*@lineinfo:458^9*/
+/*@lineinfo:user-code*//*@lineinfo:459^140*/
+        /*@lineinfo:generated-code*//*@lineinfo:460^9*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -1446,7 +1448,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:458^21*/    
+/*@lineinfo:user-code*//*@lineinfo:460^21*/    
             
           out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Cierre Unidades", "Cierre Unidades","","Error al actualizar el estado de cargue de Temporal de Retiros de Taxbenefit "+v_men_err,false));
           out.println("<pre>");

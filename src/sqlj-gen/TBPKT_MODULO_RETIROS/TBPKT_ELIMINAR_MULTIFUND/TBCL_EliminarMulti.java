@@ -105,14 +105,16 @@ implements sqlj.runtime.NamedIterator
  public void TBPL_Eliminar(PrintWriter out,HttpSession session,HttpServletRequest request,String nuevaCadena )
  {
   /**Instancias de clase*/
-  STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();/**Instancia de la clase TBCL_GenerarBaseHTML*/
-  TBCL_Validacion       i_valusu = new TBCL_Validacion ();/**Instancia de la clase TBCL_Validacion*/
+  //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;/**Instancia de la clase TBCL_GenerarBaseHTML*/
+  /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()/**Instancia de la clase TBCL_Validacion*/
   //TBCL_ConexionSqlj    i_conexion = new TBCL_ConexionSqlj();
   try
   {
    /**Leer de archivo connection.properties url,usuario y paswword a la base de datos.*/
    String[] v_valusu = new String[3];
-   v_valusu=i_valusu.TBFL_ValidarUsuario();
+   v_valusu=TBCL_Validacion.TBFL_ValidarUsuario();
    /**Realizar conexion a la base de datos*/
    DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
    DefaultContext ctx4 = new DefaultContext(v_valusu[0],v_valusu[1],v_valusu[2],false);
@@ -152,7 +154,7 @@ implements sqlj.runtime.NamedIterator
     v_tusu       =(java.lang.String)session.getAttribute("s_tipousu");/**Tomar Tipo de usuario*/
     v_tuni       =(java.lang.String)session.getAttribute("s_unidad");/**Tomar unidad de proceso*/
 
-    /*@lineinfo:generated-code*//*@lineinfo:74^5*/
+    /*@lineinfo:generated-code*//*@lineinfo:76^5*/
 
 //  ************************************************************
 //  #sql v_codusu = { values(TBFBD_REFERENCIAS(:v_tusu,'UTU')) };
@@ -182,8 +184,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:74^61*/
-    /*@lineinfo:generated-code*//*@lineinfo:75^5*/
+/*@lineinfo:user-code*//*@lineinfo:76^61*/
+    /*@lineinfo:generated-code*//*@lineinfo:77^5*/
 
 //  ************************************************************
 //  #sql v_coduni = { values(TBFBD_REFERENCIAS(:v_tuni,'UUP')) };
@@ -213,7 +215,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:75^61*/
+/*@lineinfo:user-code*//*@lineinfo:77^61*/
     session.removeAttribute("s_unidad_proceso");
     session.setAttribute("s_unidad_proceso",(java.lang.Object)v_coduni);
 
@@ -223,7 +225,7 @@ implements sqlj.runtime.NamedIterator
      if(!v_coduni.equals("XXXXXX"))
      {//if unidad
       /**Consultar tipo de cierr para la unidad deproceso*/
-      /*@lineinfo:generated-code*//*@lineinfo:85^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:87^7*/
 
 //  ************************************************************
 //  #sql v_tipoci = { values(TB_FTIPO_CIERRE(:v_coduni)) };
@@ -253,11 +255,11 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:85^58*/
+/*@lineinfo:user-code*//*@lineinfo:87^58*/
       if(v_tipoci.equals("T"))
       { //if cierre
        /**Es cierre total entonces la fecha efectiva del retiro es proxima fecha habil*/
-       /*@lineinfo:generated-code*//*@lineinfo:89^8*/
+       /*@lineinfo:generated-code*//*@lineinfo:91^8*/
 
 //  ************************************************************
 //  #sql v_fecha = { values(TB_FFECHA_SIGUIENTE(1)) };
@@ -285,13 +287,13 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:89^54*/
+/*@lineinfo:user-code*//*@lineinfo:91^54*/
       }//cierre
       else
       {
        /**Si el cierre es parcial o aun no se ha hecho ningun tipo de cierre para el dia de hoy
        * se averigua que hora de cierre hay para la unidad y tipo de usuario*/
-       /*@lineinfo:generated-code*//*@lineinfo:95^8*/
+       /*@lineinfo:generated-code*//*@lineinfo:97^8*/
 
 //  ************************************************************
 //  #sql { select to_char(sysdate,'HH24MI') FROM DUAL };
@@ -323,8 +325,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:95^68*/
-       /*@lineinfo:generated-code*//*@lineinfo:96^8*/
+/*@lineinfo:user-code*//*@lineinfo:97^68*/
+       /*@lineinfo:generated-code*//*@lineinfo:98^8*/
 
 //  ************************************************************
 //  #sql v_horacierre = { values(TB_FHORA_CIERRE(:v_pro,:v_coduni,:v_codusu)) };
@@ -356,13 +358,13 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:96^80*/
+/*@lineinfo:user-code*//*@lineinfo:98^80*/
        if(!v_horacierre.equals("ERROR"))
        {
        if( new Integer(v_hora).intValue() > new Integer(v_horacierre).intValue())
        {
         /**Si se ha pasado la hora de cierre la fecha efectiva del retiro es proxima fecha habil*/
-        /*@lineinfo:generated-code*//*@lineinfo:102^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:104^9*/
 
 //  ************************************************************
 //  #sql v_fecha = { values(TB_FFECHA_SIGUIENTE(1)) };
@@ -390,13 +392,13 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:102^55*/
+/*@lineinfo:user-code*//*@lineinfo:104^55*/
 
        }
        else
        {
         /**Queda el dia habil*/
-        /*@lineinfo:generated-code*//*@lineinfo:108^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:110^9*/
 
 //  ************************************************************
 //  #sql v_fecha = { values(TB_FFECHA_SIGUIENTE(0)) };
@@ -424,16 +426,16 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:108^55*/
+/*@lineinfo:user-code*//*@lineinfo:110^55*/
 
        }
       }
       else
       {
        /**Si no esta parametrizada la hora de cierre para la unidad de proceso*/
-       v_pintar=    i_pagina.TBFL_CABEZA("Eliminar Solicitud de Retiro No Procesada","Eliminar Solicitud de Retiro No Procesada","","<center>No esta parametrizada la hora de cierre para el tipo de usuario "+v_tusu+"</center>",false);
+       v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Eliminar Solicitud de Retiro No Procesada","Eliminar Solicitud de Retiro No Procesada","","<center>No esta parametrizada la hora de cierre para el tipo de usuario "+v_tusu+"</center>",false);
        out.println(""+v_pintar+"");
-       v_pie = i_pagina.TBFL_PIE;
+       v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
        out.println("<br>");
        out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
        out.println(""+v_pie+"");
@@ -443,9 +445,9 @@ implements sqlj.runtime.NamedIterator
      }
     else
     {/**Código de unidad de proceso invalido*/
-     v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro" ,"","<center>La Unidad de Proceso "+v_tuni+" es desconocido por el sistema.</center>",false);
+     v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro" ,"","<center>La Unidad de Proceso "+v_tuni+" es desconocido por el sistema.</center>",false);
      out.println(""+v_pintar+"");
-     v_pie = i_pagina.TBFL_PIE;
+     v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println("<br>");
      out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
@@ -455,9 +457,9 @@ implements sqlj.runtime.NamedIterator
    }
    else
    {/**Código tipo de usuario invalido*/
-     v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El tipo de usuariop "+v_tusu+" es desconocido por el sistema.</center>",false);
+     v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El tipo de usuariop "+v_tusu+" es desconocido por el sistema.</center>",false);
      out.println(""+v_pintar+"");
-     v_pie = i_pagina.TBFL_PIE;
+     v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
      out.println(""+v_pie+"");
@@ -468,7 +470,7 @@ implements sqlj.runtime.NamedIterator
     session.setAttribute("s_fechaeliminacion", (java.lang.Object)v_fecha_eliminacion);
 
     /**Seleccionar información de retiros no procesadas por multifund*/
-    /*@lineinfo:generated-code*//*@lineinfo:152^5*/
+    /*@lineinfo:generated-code*//*@lineinfo:154^5*/
 
 //  ************************************************************
 //  #sql v_retiro = { SELECT RET_CONSECUTIVO
@@ -511,10 +513,10 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:170^21*/
+/*@lineinfo:user-code*//*@lineinfo:172^21*/
 
     /**Página de respuesta*/
-    v_pintar=    i_pagina.TBFL_CABEZA("Eliminar Solicitud de Retiro No Procesada","Eliminar Solicitud de Retiro No Procesada","TBPKT_MODULO_RETIROS.TBPKT_ELIMINAR_MULTIFUND.TBS_EliminarNoProcesado","",true,"","");
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Eliminar Solicitud de Retiro No Procesada","Eliminar Solicitud de Retiro No Procesada","TBPKT_MODULO_RETIROS.TBPKT_ELIMINAR_MULTIFUND.TBS_EliminarNoProcesado","",true,"","");
                                                                                                                                
     out.println(""+v_pintar+"");
 
@@ -532,7 +534,7 @@ implements sqlj.runtime.NamedIterator
       session.setAttribute("s_apellidos",(java.lang.Object)v_apellidos);
       /*Cambio para manejo de referencia unica 2009/03/30 MOS */
       String v_contrato_unif = "";
-      /*@lineinfo:generated-code*//*@lineinfo:191^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:193^7*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -563,7 +565,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:191^80*/
+/*@lineinfo:user-code*//*@lineinfo:193^80*/
       out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
       out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nombre+"  <b> Apellidos </b>"+v_apellidos+" </CENTER></font>");
       out.println("<br>");
@@ -615,7 +617,7 @@ implements sqlj.runtime.NamedIterator
      out.println("</table></center>");
      out.println("<br>");
      out.println("<center><input type=button value='Cancelar' onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-     v_pie = i_pagina.TBFL_PIE;
+     v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println(""+v_pie+"");
      out.close();
@@ -624,16 +626,16 @@ implements sqlj.runtime.NamedIterator
     out.println("<PRE>");
     out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
     out.println("<center><input type=submit value='Aceptar'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-    v_pie = i_pagina.TBFL_PIE;
+    v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println(""+v_pie+"");
     out.close();
    }
    else
    {/**Se termina session*/
-    v_pintar=    i_pagina.TBFL_CABEZA(" Eliminar Solicitud de Retiro No Procesada","Error al Eliminar Solicitud de Retiro No Procesada","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA(" Eliminar Solicitud de Retiro No Procesada","Error al Eliminar Solicitud de Retiro No Procesada","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
     out.println(""+v_pintar+"");
-    v_pie = i_pagina.TBFL_PIE;
+    v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'></center>");
     out.println(""+v_pie+"");
@@ -671,11 +673,11 @@ implements sqlj.runtime.NamedIterator
                      {
                        v_menex = "Mensaje de error: "+ex;
                      }
-   String v_pintar=    i_pagina.TBFL_CABEZA (" Eliminar Solicitud de Retiro No Procesada","Error al Eliminar Solicitud de Retiro No Procesada","","<center>"+v_menex+"</center>",false);
+   String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA (" Eliminar Solicitud de Retiro No Procesada","Error al Eliminar Solicitud de Retiro No Procesada","","<center>"+v_menex+"</center>",false);
    out.println(""+v_pintar+"");
    out.println("<BR>");
    out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-   String v_pie = i_pagina.TBFL_PIE;
+   String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println("<br>");
    out.println("<br>");
    out.println(""+v_pie+"");

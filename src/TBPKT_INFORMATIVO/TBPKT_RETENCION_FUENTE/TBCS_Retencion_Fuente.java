@@ -50,9 +50,12 @@ public class TBCS_Retencion_Fuente extends HttpServlet {
     String  cadena = request.getParameter("cadena");
     nuevaCadena = cadena;
     String ip_tax = request.getRemoteAddr();
-    TBCL_Seguridad Seguridad = new TBCL_Seguridad();
+     
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
     PrintWriter out = new PrintWriter (response.getOutputStream());
-    parametros = Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
+    parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
     contrato = parametros[0];
     producto = parametros[1];
     usuario  = parametros[2];
@@ -376,13 +379,13 @@ private String TBFL_Opcion5(String formato, String contrato, String archivo)
 			rtfFile = new TBCL_RTF(rutaFisica + "Header.dat");
 
        //Archivo de salida
-			rtfFile.TBPL_Open(rutaFisica + archivoSalida +".rtf");
+			TBCL_RTF.TBPL_Open(rutaFisica + archivoSalida +".rtf");
 
 			// Item 1  EnTBFL_CABEZAdo de cada página
-       rtfFile.TBPL_AddItem(nit+"\\par\\par", rutaFisica + "HPage1.dat");
-      rtfFile.TBPL_AddValue("");
-	    rtfFile.TBPL_AddItem(pageHeader+"\\par\\par", rutaFisica + "HPage2.dat");
-      rtfFile.TBPL_AddValue("");
+       TBCL_RTF.TBPL_AddItem(nit+"\\par\\par", rutaFisica + "HPage1.dat");
+      TBCL_RTF.TBPL_AddValue("");
+	    TBCL_RTF.TBPL_AddItem(pageHeader+"\\par\\par", rutaFisica + "HPage2.dat");
+      TBCL_RTF.TBPL_AddValue("");
 
        // Items del documento
 	   	while(itQuery.hasNext()){
@@ -393,8 +396,8 @@ private String TBFL_Opcion5(String formato, String contrato, String archivo)
          // Si la posicion es mayor que 90 va en el pie
 	       if (resultQuery[1].compareTo("90") < 0){
 	         if (resultQuery[2].substring(0,1).equals("*")){
-	           rtfFile.TBPL_AddItem(resultQuery[2].substring(1), rutaFisica + "Item1.dat");
-             rtfFile.TBPL_AddValue("-");
+	           TBCL_RTF.TBPL_AddItem(resultQuery[2].substring(1), rutaFisica + "Item1.dat");
+             TBCL_RTF.TBPL_AddValue("-");
              items.ensureCapacity(items.size() + 1);
 	        	 items.add(resultQuery[2].substring(1));
 	        	 values.ensureCapacity(values.size() + 1);
@@ -402,8 +405,8 @@ private String TBFL_Opcion5(String formato, String contrato, String archivo)
 	         }
 	         else
 	         {
-	           rtfFile.TBPL_AddItem(resultQuery[2], rutaFisica + "Item2.dat");
-             rtfFile.TBPL_AddValue("-");
+	           TBCL_RTF.TBPL_AddItem(resultQuery[2], rutaFisica + "Item2.dat");
+             TBCL_RTF.TBPL_AddValue("-");
              items.ensureCapacity(items.size() + 1);
 	      	   items.add(resultQuery[2]);
 	      	   values.ensureCapacity(values.size() + 1);
@@ -413,23 +416,23 @@ private String TBFL_Opcion5(String formato, String contrato, String archivo)
 			}
 
          //  Pie de pagina
-	    rtfFile.TBPL_AddItem("\\par "+pageFooter+"\\par\\par", rutaFisica + "Item1.dat");
-	    rtfFile.TBPL_AddValue("");
-	    footItems = rtfFile.length();
+	    TBCL_RTF.TBPL_AddItem("\\par "+pageFooter+"\\par\\par", rutaFisica + "Item1.dat");
+	    TBCL_RTF.TBPL_AddValue("");
+	    footItems = TBCL_RTF.length();
 	    itQuery = listQuery.iterator();
 
          // Valores para cada Item
 		  while(itQuery.hasNext()){
 		     	resultQuery = (String[]) itQuery.next();
 		       if (resultQuery[1].compareTo("90") >= 0){
-		         rtfFile.TBPL_AddItem(resultQuery[2], rutaFisica + "Item3.dat");
-		 		    rtfFile.TBPL_AddValue("-");
+		         TBCL_RTF.TBPL_AddItem(resultQuery[2], rutaFisica + "Item3.dat");
+		 		    TBCL_RTF.TBPL_AddValue("-");
 		       }
 			}
 
 		     // Ultimo valor Item
-		  rtfFile.TBPL_AddItem("", rutaFisica + "FPage1.dat");
-		  rtfFile.TBPL_AddValue("");
+		  TBCL_RTF.TBPL_AddItem("", rutaFisica + "FPage1.dat");
+		  TBCL_RTF.TBPL_AddValue("");
 
 		// Items del certificado para este contrato
       sContrato += contrato;
@@ -474,7 +477,7 @@ private String TBFL_Opcion5(String formato, String contrato, String archivo)
           item = TBFL_Pos(items2, resultQuery[3]);
 					if (resultQuery[3].compareTo("90") < 0){
           //
-						if (item < rtfFile.length()){
+						if (item < TBCL_RTF.length()){
 							if(resultQuery[2].equals("STD004")){
 								valor = currencyNumberFormat.format(Double.parseDouble(valor));
 							}else if(resultQuery[2].equals("STD001")){
@@ -483,13 +486,13 @@ private String TBFL_Opcion5(String formato, String contrato, String archivo)
                     valor = valor.trim();
 									valor = formatoID.format(Long.parseLong(valor));
 					 	  	}
-									rtfFile.TBPL_SetValue(item+3, valor);
+									TBCL_RTF.TBPL_SetValue(item+3, valor);
                   values.set(item, valor);
 					     	}
 					    }
 					 else
 					 {
-							rtfFile.TBPL_SetValue(item+4, valor);
+							TBCL_RTF.TBPL_SetValue(item+4, valor);
 					 }
 			}
 
@@ -506,8 +509,8 @@ private String TBFL_Opcion5(String formato, String contrato, String archivo)
       }
       html = html + "</TABLE>";
         // Cierra el archivo y termina
-      rtfFile.TBPL_PrintPage();
-    	rtfFile.TBPL_Close();
+      TBCL_RTF.TBPL_PrintPage();
+    	TBCL_RTF.TBPL_Close();
 	   	}
 	   	catch(SQLException sqle)
         {	html = "Excepción: "+ sqle;}

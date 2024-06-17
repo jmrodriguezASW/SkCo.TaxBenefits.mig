@@ -71,18 +71,20 @@ implements sqlj.runtime.NamedIterator
  public void TBPL_ModificarBanco(PrintWriter out,HttpSession session,HttpServletRequest request,String nuevaCadena )
  {
   /**Instancias de clase*/
-  STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();/**Instancia de la clase TBCL_GenerarBaseHTML*/
+  //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;/**Instancia de la clase TBCL_GenerarBaseHTML*/
 
   //TBCL_FuncionesAs400   i_fondos = new TBCL_FuncionesAs400();/**Instancia de la clase TBCL_FuncionesAs400*/
 
 
-  TBCL_Validacion       i_valusu = new TBCL_Validacion ();/**Instancia de la clase TBCL_Validacion*/
+  /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()/**Instancia de la clase TBCL_Validacion*/
   //TBCL_ConexionSqlj    i_conexion = new TBCL_ConexionSqlj();
   try
   {
    /**Leer de archivo connection.properties url,usuario y paswword a la base de datos.*/
    String[] v_valusu = new String[3];
-   v_valusu=i_valusu.TBFL_ValidarUsuario();
+   v_valusu=TBCL_Validacion.TBFL_ValidarUsuario();
    /**Realizar conexion a la base de datos*/
    DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
    Connection t_tax =DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
@@ -130,7 +132,7 @@ implements sqlj.runtime.NamedIterator
     v_consecutivo2    = new Integer(v_consecutivo).intValue();//se pasa consecutivo a númerico
 
     /**Capturar variables de session*/
-    /*@lineinfo:generated-code*//*@lineinfo:97^5*/
+    /*@lineinfo:generated-code*//*@lineinfo:99^5*/
 
 //  ************************************************************
 //  #sql v_bancocon = { SELECT RET_BANCO,RET_CUENTA
@@ -161,7 +163,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:102^23*/
+/*@lineinfo:user-code*//*@lineinfo:104^23*/
 
     /** Si no hubo error al consultar*/
     while (v_bancocon.next())
@@ -205,7 +207,7 @@ implements sqlj.runtime.NamedIterator
     if (v_encontro)
     {
      /** Consultar los parametros de conexion para el AS400*/
-     /*@lineinfo:generated-code*//*@lineinfo:146^6*/
+     /*@lineinfo:generated-code*//*@lineinfo:148^6*/
 
 //  ************************************************************
 //  #sql v_resmulti = { values(TB_FREFERENCIAS_MULTI(:v_sistema,:v_usumfund,:v_passmfund, :v_libreria)) };
@@ -246,7 +248,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:146^127*/
+/*@lineinfo:user-code*//*@lineinfo:148^127*/
      /**Consultar al as400 los códigos de banco y números de cuenta, devuelve una cadena*/
      //v_cuenta_bancaria = i_fondos.TBFL_CuentasBancarias(v_contra,v_sistema,v_usumfund,v_passmfund,v_libreria);
 
@@ -280,10 +282,10 @@ implements sqlj.runtime.NamedIterator
       v_dim = 20;
       String[] v_cuenta_bancaria2= UtilitiesForTax.TBCL_CapturarCadena(v_cuenta_bancaria,v_dim);
       /**Dibujar página de respuesta*/
-      v_pintar=    i_pagina.TBFL_CABEZA("Modificar Solicitud de Retiro","Modificar Código de Banco y Número de cuenta","TBPKT_MODULO_RETIROS.TBPKT_MODIFICAR_SOLICITUD.TBS_ActualizarBanco","",true,"","");
+      v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Solicitud de Retiro","Modificar Código de Banco y Número de cuenta","TBPKT_MODULO_RETIROS.TBPKT_MODIFICAR_SOLICITUD.TBS_ActualizarBanco","",true,"","");
       out.println(""+v_pintar+"");
       String v_contrato_unif = "";
-      /*@lineinfo:generated-code*//*@lineinfo:183^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:185^7*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -314,7 +316,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:183^80*/
+/*@lineinfo:user-code*//*@lineinfo:185^80*/
       out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
       out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nombre+"  <b> Apellidos </b>"+v_apellidos+" </CENTER></font>");
       out.println("<br>");
@@ -372,18 +374,18 @@ implements sqlj.runtime.NamedIterator
       out.println("</pre>");
       out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
       out.println("<center><input type='submit' value='Aceptar'> <input type='Button' value='Regresar' onclick='history.go(-1)'><input type='Button' value='Cancelar' onclick='history.go(-2)'></center>");
-      v_pie = i_pagina.TBFL_PIE;
+      v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
       out.println("<br>");
       out.println(""+v_pie+"");
       out.close();
      }
      else
      {/**Error banco*/
-      v_pintar=    i_pagina.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error en Modificar Código de Banco y Número de cuenta","","<center>Consulta de código banco y número cuenta. Mensaje de error:"+v_banco+"</center>",false);
+      v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error en Modificar Código de Banco y Número de cuenta","","<center>Consulta de código banco y número cuenta. Mensaje de error:"+v_banco+"</center>",false);
       out.println(""+v_pintar+"");
       out.println("<BR>");
       out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-      v_pie = i_pagina.TBFL_PIE;
+      v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
       out.println("<br>");
       out.println("<br>");
       out.println(""+v_pie+"");
@@ -392,9 +394,9 @@ implements sqlj.runtime.NamedIterator
     }
     else
     {/**Si no se encontraron datos*/
-     v_pintar=    i_pagina.TBFL_CABEZA("Modificar Solicitud de Retiro","Error en Modificar Código de Banco y Número de cuenta","","<center>El número de solicitud de retiro "+v_consecutivo+" no existe.</center>",false);
+     v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Solicitud de Retiro","Error en Modificar Código de Banco y Número de cuenta","","<center>El número de solicitud de retiro "+v_consecutivo+" no existe.</center>",false);
      out.println(""+v_pintar+"");
-     v_pie = i_pagina.TBFL_PIE;
+     v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
      out.println(""+v_pie+"");
@@ -403,9 +405,9 @@ implements sqlj.runtime.NamedIterator
    }
    else
    {/**Termina session*/
-    v_pintar=    i_pagina.TBFL_CABEZA("Modificar Solicitud de Retiro","Error en Modificar Código de Banco y Número de cuenta","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Solicitud de Retiro","Error en Modificar Código de Banco y Número de cuenta","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
     out.println(""+v_pintar+"");
-    v_pie = i_pagina.TBFL_PIE;
+    v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'></center>");
     out.println(""+v_pie+"");
@@ -443,11 +445,11 @@ implements sqlj.runtime.NamedIterator
                      {
                        v_menex = "Mensaje de error: "+ex;
                      }
-   String v_pintar=    i_pagina.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error en Modificar Código de Banco y Número de cuenta","","<center>"+v_menex+"</center>",false);
+   String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error en Modificar Código de Banco y Número de cuenta","","<center>"+v_menex+"</center>",false);
    out.println(""+v_pintar+"");
    out.println("<BR>");
    out.println("<center><input type=button value='Aceptar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-   String v_pie = i_pagina.TBFL_PIE;
+   String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println("<br>");
    out.println("<br>");
    out.println(""+v_pie+"");

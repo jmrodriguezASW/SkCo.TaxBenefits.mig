@@ -191,10 +191,9 @@ public class SQL_PASO10 extends Object{
       int pos = 0;
       int retorna;
       Boolean resultado = Boolean.FALSE; 
-      
+      CallableStatement cs = null;
     try{
-
-      CallableStatement cs = con.prepareCall(PROCEDIMIENTO_REP);
+      cs = con.prepareCall(PROCEDIMIENTO_REP);
       String estado = "";
       String codError = "";
       String mensError = "";
@@ -216,16 +215,18 @@ public class SQL_PASO10 extends Object{
       if(retorna == 1){
           resultado = Boolean.TRUE;
       }
-      cs.close();
+      
 
     } catch (Exception e){
       //logger.error
       System.out.println("SQL_PASO10 en el registro del lote de aportes:"+e);
     } finally  {
-      return resultado;
+        try {
+            cs.close();
+        } catch (SQLException e) {
+        }
     }
-
-
+      return resultado;
   }
 
   /**
@@ -249,10 +250,10 @@ public class SQL_PASO10 extends Object{
     int pos = 0;
     int retorna;
     Boolean resultado = Boolean.FALSE; 
-
+    CallableStatement csCont = null;
     try{
 
-      CallableStatement csCont = con.prepareCall(PROCEDIMIENTO_PASO10);
+      csCont = con.prepareCall(PROCEDIMIENTO_PASO10);
       /* Cargue de los parametros de entrada IN */
       csCont.setInt(++pos, fechaControl.intValue());
       csCont.setString(++pos, fecha);
@@ -270,14 +271,16 @@ public class SQL_PASO10 extends Object{
       if(retorna == 0){
           resultado = Boolean.TRUE;
       }
-      csCont.close();
     } catch (Exception e){
       //logger.error
       System.out.println("SQL_PASO10 en la inserción de retiros : "+e);
     } finally  {
-    
-      return resultado;
+        try {
+            csCont.close();
+        } catch (SQLException e) {
+        }
     }
+      return resultado;
   }
 
   
@@ -307,10 +310,10 @@ public class SQL_PASO10 extends Object{
       int pos = 0;
       int retorna;
       Boolean resultado = Boolean.FALSE; 
-
+      CallableStatement csPremium = null;
     try{
       
-      CallableStatement csPremium = con.prepareCall(PROCEDIMIENTO_APORTES_COMP);
+      csPremium = con.prepareCall(PROCEDIMIENTO_APORTES_COMP);
       /* Cargue de los parametros de entrada IN */
       csPremium.setString(++pos, jpfvcd);
       csPremium.setString(++pos, jpscdx);
@@ -331,14 +334,18 @@ public class SQL_PASO10 extends Object{
       if(retorna == 1){
           resultado = Boolean.TRUE;
       }
-      csPremium.close();
+      
 
     } catch (Exception e){
       //logger.error
       System.out.println("SQL_PASO10 en la inserción a la tabla AFTLCPP APS COMPANY HEADER del aporte:"+e);
     } finally  {
-      return resultado;
-    }
+            try {
+                csPremium.close();
+            } catch (SQLException e) {
+            }
+        }
+    return resultado;
   }
 
 
@@ -355,9 +362,9 @@ public class SQL_PASO10 extends Object{
       String codError = "";
       String mensError = "";
       Boolean resultado = Boolean.FALSE; 
-
+      CallableStatement csUndo = null;
     try{
-        CallableStatement csUndo = con.prepareCall(PROCEDIMIENTO_DESHACER);
+        csUndo = con.prepareCall(PROCEDIMIENTO_DESHACER);
         /* Cargue de los parametros de entrada IN */
         csUndo.setString(++pos, codError);
         csUndo.setString(++pos, mensError);
@@ -368,13 +375,16 @@ public class SQL_PASO10 extends Object{
         if(retorna == 1){
             resultado = Boolean.TRUE;
         }
-        csUndo.close();
     } catch (Exception e){
         //logger.error
         System.out.println("SQL_PASO10 deshaciendo las acciones del paso:"+e);
     } finally  {
-      return resultado;
-    }
+            try {
+                csUndo.close();
+            } catch (SQLException e) {
+            }
+        }
+    return resultado;
   }
 
   /**
@@ -450,10 +460,10 @@ public class SQL_PASO10 extends Object{
   public Integer obtenerFechaControl() {
       int pos = 0;
       Integer fecha = null;
-
+      CallableStatement csInicial = null;
     try{
       /* Consultar fecha de salida */
-      CallableStatement csInicial =  con.prepareCall(PROCEDIMIENTO_FECHA);
+      csInicial =  con.prepareCall(PROCEDIMIENTO_FECHA);
       csInicial.setString(1,"10");
       csInicial.registerOutParameter(2,oracle.jdbc.OracleTypes.INTEGER);
       csInicial.registerOutParameter(3,oracle.jdbc.OracleTypes.VARCHAR);
@@ -465,13 +475,16 @@ public class SQL_PASO10 extends Object{
       if (valido.equals("S")){
           fecha  = new Integer(csInicial.getInt(2));
       }
-      csInicial.close();
     } catch (Exception e){
         //logger.error
         System.out.println("SQL_PASO10 guardando registro de control:"+e);
     } finally{
-            return fecha;
-    }
+            try {
+                csInicial.close();
+            } catch (SQLException e) {
+            }
+        }
+    return fecha;
   }
 
 
@@ -483,10 +496,11 @@ public class SQL_PASO10 extends Object{
   public String cajasPrimasAS400(String fechaSigHabil, String equipo, String tipo, String codAgente, String hora, String sistema, String usuario, String password, String libreria) {
       String v_retorno_programa = new String("");
       String v_programa;
+      CallableStatement cs2 = null;
     try{
       /* Consultar fecha de salida */
       //CallableStatement cs2 =  con.prepareCall(PROCEDIMIENTO_CAJAS_PRIMAS);
-      CallableStatement cs2 = con.prepareCall ( "{? = call TBCL_FuncionesAs400.tbpl_generarcajasprimas(?,?,?,?,?,?,?,?,?)}");
+      cs2 = con.prepareCall ( "{? = call TBCL_FuncionesAs400.tbpl_generarcajasprimas(?,?,?,?,?,?,?,?,?)}");
       cs2.registerOutParameter(1,Types.CHAR);
       cs2.setString(2,fechaSigHabil);
       cs2.setString(3,equipo);
@@ -500,14 +514,18 @@ public class SQL_PASO10 extends Object{
       
       cs2.execute();
       v_retorno_programa = cs2.getString(1);
-      cs2.close();
-      con.commit();
+      
     } catch (Exception e){
         //logger.error
         System.out.println("SQL_PASO10 guardando registro de control:"+e);
     } finally{
-            return v_retorno_programa;
+        try {
+            cs2.close();
+            con.commit();   
+        } catch (SQLException e) {
+        }
     }
+    return v_retorno_programa;
   }
   
   /**

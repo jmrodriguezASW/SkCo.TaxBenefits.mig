@@ -190,7 +190,7 @@ implements sqlj.runtime.NamedIterator
  public void TBPL_FechaCliente(PrintWriter out,HttpSession session,HttpServletRequest request,String nuevaCadena,String v_contrato,String v_producto,String v_unidad ,String v_tipousu)
  {
   /**Instancias de clase*/
-  STBCL_GenerarBaseHTML   i_pagina = new STBCL_GenerarBaseHTML();/**Instancia de la clase TBCL_GenerarBaseHTML*/
+  //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;/**Instancia de la clase TBCL_GenerarBaseHTML*/
   TBCL_Validacion     i_valusu = new  TBCL_Validacion ();/**Instancia de la clase TBCL_Validacion*/
   //TBCL_ConexionSqlj    i_conexion = new TBCL_ConexionSqlj();/**Instancia de la clase TBCL_ConexionSqlj*/
 
@@ -528,9 +528,9 @@ implements sqlj.runtime.NamedIterator
       {
        /**Si no esta parametrizada la hora de cierre para la unidad de proceso*/
        v_validafecha = false;
-       v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>No esta parametrizada la hora de cierre para el tipo de usuario "+v_tipousu+"</center>",false);
+       v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>No esta parametrizada la hora de cierre para el tipo de usuario "+v_tipousu+"</center>",false);
        out.println(""+v_pintar+"");
-       v_pie = i_pagina.TBFL_PIE;
+       v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
        out.println("<br>");
        out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
        out.println(""+v_pie+"");
@@ -701,7 +701,7 @@ implements sqlj.runtime.NamedIterator
         if(v_bloqueo.equals("N"))
         {//3
          /**Dibbujar pagina de respuesta*/
-         v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Solicitud de Retiro","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_Retiros","",true,"modulo_retiros.js","return validar_fecha(this)");
+         v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Solicitud de Retiro","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_Retiros","",true,"modulo_retiros.js","return validar_fecha(this)");
          out.println(""+v_pintar+"");
          /*Cambio para manejo de referencia unica 2009/03/30 MOS */
          String v_contrato_unif = "";
@@ -798,7 +798,7 @@ implements sqlj.runtime.NamedIterator
          out.println("<br>");
          out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
          out.println("<center><input type=submit value='Aceptar'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-         v_pie = i_pagina.TBFL_PIE;
+         v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
          out.println(""+v_pie+"");
          out.println("<br>");
          out.close();
@@ -807,9 +807,9 @@ implements sqlj.runtime.NamedIterator
         {/**El contrato tiene bloqueo de egresos o hubo error al consultar en el as400*/
          if(v_bloqueo.equals("Y"))
          {
-          v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El contrato "+v_contrato+" tiene bloqueo de egresos, no es posible realizar la solicitud.</center>",false);
+          v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El contrato "+v_contrato+" tiene bloqueo de egresos, no es posible realizar la solicitud.</center>",false);
           out.println(""+v_pintar+"");
-          v_pie = i_pagina.TBFL_PIE;
+          v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
           out.println("<br>");
           out.println("<br>");
           out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
@@ -818,9 +818,9 @@ implements sqlj.runtime.NamedIterator
          }
          else
          {
-          v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>No se establecio comunicación con el AS/400.</center>",false);
+          v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>No se establecio comunicación con el AS/400.</center>",false);
           out.println(""+v_pintar+"");
-          v_pie = i_pagina.TBFL_PIE;
+          v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
           out.println("<br>");
           out.println("<br>");
           out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
@@ -831,9 +831,9 @@ implements sqlj.runtime.NamedIterator
        }
        else
        {/**Si el contrato tiene fecha de cancelación*/
-        v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El contrato "+v_contrato+" ,tiene fecha de cancelación "+v_feccan+".</center>",false);
+        v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El contrato "+v_contrato+" ,tiene fecha de cancelación "+v_feccan+".</center>",false);
         out.println(""+v_pintar+"");
-        v_pie = i_pagina.TBFL_PIE;
+        v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
         out.println("<br>");
         out.println("<br>");
         out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
@@ -843,9 +843,9 @@ implements sqlj.runtime.NamedIterator
       }
       else
       {/**Si no se encuantran datos para el contrato*/
-       v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El contrato "+v_contrato+" ,no existe en el sistema.</center>",false);
+       v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El contrato "+v_contrato+" ,no existe en el sistema.</center>",false);
        out.println(""+v_pintar+"");
-       v_pie = i_pagina.TBFL_PIE;
+       v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
        out.println("<br>");
        out.println("<br>");
        out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
@@ -855,9 +855,9 @@ implements sqlj.runtime.NamedIterator
      }
      else
      {/**Error al consultar fecha de proceso del retiro*/
-      v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro" ,"","<center>Error al consultar fecha de proceso para la solicitud de retiro.</center>",false);
+      v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro" ,"","<center>Error al consultar fecha de proceso para la solicitud de retiro.</center>",false);
       out.println(""+v_pintar+"");
-      v_pie = i_pagina.TBFL_PIE;
+      v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
       out.println("<br>");
       out.println("<br>");
       out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
@@ -867,9 +867,9 @@ implements sqlj.runtime.NamedIterator
     }
     else
     {/**Código de unidad de proceso invalido*/
-     v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro" ,"","<center>La Unidad de Proceso "+v_unidad+" es desconocido por el sistema.</center>",false);
+     v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro" ,"","<center>La Unidad de Proceso "+v_unidad+" es desconocido por el sistema.</center>",false);
      out.println(""+v_pintar+"");
-     v_pie = i_pagina.TBFL_PIE;
+     v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println("<br>");
      out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
@@ -879,9 +879,9 @@ implements sqlj.runtime.NamedIterator
    }
    else
    {/**Código tipo de usuario invalido*/
-     v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El tipo de usuariop "+v_tipousu+" es desconocido por el sistema.</center>",false);
+     v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El tipo de usuariop "+v_tipousu+" es desconocido por el sistema.</center>",false);
      out.println(""+v_pintar+"");
-     v_pie = i_pagina.TBFL_PIE;
+     v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
      out.println(""+v_pie+"");
@@ -898,28 +898,28 @@ implements sqlj.runtime.NamedIterator
    String error = ex.toString();
    if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
    {
-    v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
    }
    else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
         {
-         v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
+         v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
         }
            else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
                 {
-                 v_pintar = i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
+                 v_pintar = STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
                 }
                 else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
                      {
-                       v_pintar =  i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
+                       v_pintar =  STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
                      }
                   else
                   {
-                   v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Mensaje de Error :"+ex+".</center>",false);
+                   v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Mensaje de Error :"+ex+".</center>",false);
                   }
    out.println(""+v_pintar+"");
    out.println("<BR>");
    out.println("<center><input type=button value='Cancelar' onclick=' history.go(-1)'></center>");
-   String v_pie = i_pagina.TBFL_PIE;
+   String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println("<br>");
    out.println("<br>");
    out.println(""+v_pie+"");

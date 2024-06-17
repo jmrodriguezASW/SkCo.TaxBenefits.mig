@@ -128,13 +128,15 @@ implements sqlj.runtime.NamedIterator
     public void TBPL_FechaRetiro(PrintWriter out,HttpSession session,HttpServletRequest request,String nuevaCadena)
     {
         /**Instancias de clase*/
-        STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML(); /**Instancia de la clase TBCL_GenerarBaseHTML*/        
-        TBCL_Validacion       i_valusu = new TBCL_Validacion();/**Instancia de la clase TBCL_Validacion*/
+        //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML; /**Instancia de la clase TBCL_GenerarBaseHTML*/        
+        /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()/**Instancia de la clase TBCL_Validacion*/
         String s_ruta_serv = "";
         try
         {
            String[] v_valusu = new String[3];
-           v_valusu=i_valusu.TBFL_ValidarUsuario();
+           v_valusu=TBCL_Validacion.TBFL_ValidarUsuario();
            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
            Connection t_tax =DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);   
            DefaultContext ctx12 = new DefaultContext(v_valusu[0],v_valusu[1],v_valusu[2],false);
@@ -168,7 +170,7 @@ implements sqlj.runtime.NamedIterator
              }
            }
           //Obtener direccion servidor TAX  
-          /*@lineinfo:generated-code*//*@lineinfo:77^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:79^11*/
 
 //  ************************************************************
 //  #sql { select ref_descripcion  from tbreferencias WHERE REF_CODIGO='DSR001' };
@@ -200,12 +202,12 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:77^102*/  
+/*@lineinfo:user-code*//*@lineinfo:79^102*/  
           session.removeAttribute("s_ruta_serv");
           session.setAttribute("s_ruta_serv",(java.lang.Object)s_ruta_serv);  
             
           /**Consultar datos del contrato*/
-          /*@lineinfo:generated-code*//*@lineinfo:82^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:84^11*/
 
 //  ************************************************************
 //  #sql v_cum = { select   CON_NOMBRES
@@ -238,7 +240,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:90^24*/
+/*@lineinfo:user-code*//*@lineinfo:92^24*/
                        
           while (v_cum.next())
           {
@@ -257,10 +259,10 @@ implements sqlj.runtime.NamedIterator
            }
            v_cum.close();
                         
-           v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Solicitud de Retiro","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_Retiros","","modulo_retiros_oblig.js","return validarFecha_tiporetiro(obligatoriov_fecefectiva,v_retiro)");
+           v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Solicitud de Retiro","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_Retiros","","modulo_retiros_oblig.js","return validarFecha_tiporetiro(obligatoriov_fecefectiva,v_retiro)");
            out.println(""+v_pintar+"");
             
-           /*@lineinfo:generated-code*//*@lineinfo:112^12*/
+           /*@lineinfo:generated-code*//*@lineinfo:114^12*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -291,11 +293,11 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:112^85*/
+/*@lineinfo:user-code*//*@lineinfo:114^85*/
            out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
            out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nombre+"  <b> Apellidos </b>"+v_apellidos+" </CENTER></font>");
            out.println("<br>");                             
-           /*@lineinfo:generated-code*//*@lineinfo:116^12*/
+           /*@lineinfo:generated-code*//*@lineinfo:118^12*/
 
 //  ************************************************************
 //  #sql { select TO_CHAR(to_date(sysdate, 'DD/MM/RR'), 'yyyy-mm-dd') fecha_actual  from dual };
@@ -327,10 +329,10 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:116^119*/           
+/*@lineinfo:user-code*//*@lineinfo:118^119*/           
            out.println("<input type='hidden' name='txtfechaActual' value='"+v_fechaActual+"'>");            
            
-           /*@lineinfo:generated-code*//*@lineinfo:119^12*/
+           /*@lineinfo:generated-code*//*@lineinfo:121^12*/
 
 //  ************************************************************
 //  #sql { call TBPBD_APLICA_RET_TOTAL_OBLIG( :v_pro
@@ -372,11 +374,11 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:123^66*/
+/*@lineinfo:user-code*//*@lineinfo:125^66*/
            out.println("<table width='100%' border='0' cellspacing='0' cellpadding='0'>");                                                        
            out.println("<tr><td><font face='Verdana, Arial, Helvetica, sans-serif' size='2' color='#000000'><b>Tipo de Retiro</b></font></td><td align=right> <select name=v_retiro>");   
            
-           /*@lineinfo:generated-code*//*@lineinfo:127^12*/
+           /*@lineinfo:generated-code*//*@lineinfo:129^12*/
 
 //  ************************************************************
 //  #sql v_tipo = { SELECT COT_DESCRIPCION
@@ -411,7 +413,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:138^49*/
+/*@lineinfo:user-code*//*@lineinfo:140^49*/
            out.println("               <option VALUE ='  '>                         ");
          
          while (v_tipo.next())
@@ -433,7 +435,7 @@ implements sqlj.runtime.NamedIterator
          out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
          out.println("<br>");         
          out.println("<center><input type=submit value='Aceptar'></center>");
-         v_pie = i_pagina.TBFL_PIE;
+         v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
          out.println(""+v_pie+"");
          out.println("<br>");
          out.close();              
@@ -451,17 +453,17 @@ implements sqlj.runtime.NamedIterator
             String error = ex.toString();
             if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
             {
-                v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
+                v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
             } else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
                 {
-                    v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
+                    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
                 } else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection")) {
-                        v_pintar = i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
+                        v_pintar = STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
                     } else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
                         {
-                            v_pintar =  i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
+                            v_pintar =  STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
                         } else {
-                            v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Mensaje de Error :"+ex+".</center>",false);
+                            v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Mensaje de Error :"+ex+".</center>",false);
                         }
    out.println(""+v_pintar+"");
    out.println("<BR>");
@@ -472,7 +474,7 @@ implements sqlj.runtime.NamedIterator
                      "<input type=submit name = 'Cancelar' value='Cancelar'>"+
                      "</FORM>");
    out.println("<input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-   String v_pie = i_pagina.TBFL_PIE;
+   String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println("<br>");
    out.println("<br>");
    out.println(""+v_pie+"");

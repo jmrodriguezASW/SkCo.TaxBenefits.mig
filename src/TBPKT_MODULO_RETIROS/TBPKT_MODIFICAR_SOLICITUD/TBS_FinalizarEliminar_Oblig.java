@@ -20,7 +20,8 @@ public class TBS_FinalizarEliminar_Oblig extends HttpServlet
   String v_ruta_serv = ""; 
   
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { PrintWriter out = new PrintWriter(response.getOutputStream());
-    STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML();
+    /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase STBCL_GenerarBaseHTML, no es necesaria la instancia nueva*/ 
+ //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;
     
     try
     {
@@ -38,7 +39,10 @@ public class TBS_FinalizarEliminar_Oblig extends HttpServlet
       String cadena = request.getParameter("cadena");
       nuevaCadena = cadena;
       String ip_tax = request.getRemoteAddr();
-      TBCL_Seguridad Seguridad = new TBCL_Seguridad();
+       
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
       parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
       v_contrato = parametros[0];
       v_producto = parametros[1];

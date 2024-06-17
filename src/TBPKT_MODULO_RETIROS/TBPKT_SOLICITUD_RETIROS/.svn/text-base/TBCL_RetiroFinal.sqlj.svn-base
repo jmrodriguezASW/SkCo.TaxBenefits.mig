@@ -63,7 +63,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
 {//2
    /**Instancias de clase*/
    TBCL_Validacion      i_valusu = new TBCL_Validacion ();/**Instancia de la clase TBCL_Validacion */
-   STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();/**Instancia de la clase  TBCL_GenerarBaseHTML*/
+   //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;/**Instancia de la clase  TBCL_GenerarBaseHTML*/
    //TBCL_ConexionSqlj    i_conexion = new TBCL_ConexionSqlj();/**Instancia de la clase TBCL_ConexionSqlj*/
 
 //   TBCL_FuncionesAs400  i_fondos = new TBCL_FuncionesAs400();/**Instancia de la clase TBCL_FuncionesAs400*/
@@ -327,7 +327,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
      /**Falta seleccion del esquema retiro*/
      if(numnat !=0 || numres !=0 || numord !=0 || numben!=0 || numcue != 0 || numpen != 0)
      {//10
-      v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","error esquema del Retiro","","",true,"","");
+      v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","error esquema del Retiro","","",true,"","");
      out.println(""+v_pintar+"");
       out.println("<pre>");
       out.println("<font face='Verdana, Arial, Helvetica, sans-serif' size='2' color='#000000'>            Favor Digitar</font>");
@@ -365,7 +365,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
       out.println("<br>");
       out.println("<PRE>");
       out.println("<center><input type=button value='Cancelar' onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-      v_pie = i_pagina.TBFL_PIE;
+      v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
       out.println("<br>");
       out.println(""+v_pie+"");
       out.close();
@@ -390,7 +390,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
         v_servlet="TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_SininfRetiro";
        }
        /**Dibujar pagina de respuesta*/
-       v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Detalle del Retiro",""+v_servlet+"","",true,"modulo_retiros.js","");
+       v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Detalle del Retiro",""+v_servlet+"","",true,"modulo_retiros.js","");
        out.println(""+v_pintar+"");
        /*Cambio para manejo de referencia unica 2009/03/30 MOS */
        String v_contrato_unif = "";
@@ -791,7 +791,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
           out.println("</table></center>");
           out.println("<br>");
           out.println("<center><input type=button value='Cancelar' onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-          v_pie = i_pagina.TBFL_PIE;
+          v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
           out.println("<br>");
           out.println(""+v_pie+"");
           out.close();
@@ -858,7 +858,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
              out.println("<br>");
              out.println("<PRE>");
              out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-             v_pie = i_pagina.TBFL_PIE;
+             v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
              out.println("<br>");
              out.println(""+v_pie+"");
               out.close();
@@ -874,7 +874,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
               out.println("<br>");
               out.println("<PRE>");
               out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-              v_pie = i_pagina.TBFL_PIE;
+              v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
               out.println("<br>");
               out.println(""+v_pie+"");
               out.close();
@@ -896,7 +896,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
              out.println("<br>");
              out.println("<PRE>");
              out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-             v_pie = i_pagina.TBFL_PIE;
+             v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
              out.println("<br>");
              out.println(""+v_pie+"");
              out.close();
@@ -911,7 +911,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
               out.println("<br>");
               out.println("<PRE>");
               out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-              v_pie = i_pagina.TBFL_PIE;
+              v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
               out.println("<br>");
               out.println(""+v_pie+"");
               out.close();
@@ -928,7 +928,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
               out.println("<br>");
               out.println("<PRE>");
               out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-              v_pie = i_pagina.TBFL_PIE;
+              v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
               out.println("<br>");
               out.println(""+v_pie+"");
               out.close();
@@ -943,7 +943,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
                out.println("<br>");
                out.println("<PRE>");
                out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-               v_pie = i_pagina.TBFL_PIE;
+               v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                out.println("<br>");
                out.println(""+v_pie+"");
                out.close();
@@ -996,7 +996,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
             out.println("<br>");
             out.println("<PRE>");
             out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-            v_pie = i_pagina.TBFL_PIE;
+            v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
             out.println("<br>");
             out.println(""+v_pie+"");
             out.close();
@@ -1053,7 +1053,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
            out.println("<br>");
            out.println("<PRE>");
            out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-           v_pie = i_pagina.TBFL_PIE;
+           v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
            out.println("<br>");
            out.println(""+v_pie+"");
            out.close();
@@ -1099,7 +1099,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
             out.println("<br>");
             out.println("<PRE>");
             out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-            v_pie = i_pagina.TBFL_PIE;
+            v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
             out.println("<br>");
             out.println(""+v_pie+"");
             out.close();
@@ -1113,7 +1113,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
            out.println("<br>");
            out.println("<PRE>");
            out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-           v_pie = i_pagina.TBFL_PIE;
+           v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
            out.println("<br>");
            out.println("<br>");
            out.println(""+v_pie+"");
@@ -1161,7 +1161,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
             out.println("<br>");
             out.println("<PRE>");
             out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-            v_pie= i_pagina.TBFL_PIE;
+            v_pie= STBCL_GenerarBaseHTML.TBFL_PIE;
             out.println("<br>");
             out.println(""+v_pie+"");
             out.close();
@@ -1175,7 +1175,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
            out.println("<br>");
            out.println("<PRE>");
            out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-           v_pie = i_pagina.TBFL_PIE;
+           v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
            out.println("<br>");
            out.println("<br>");
            out.println(""+v_pie+"");
@@ -1192,7 +1192,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
           out.println("<PRE>");
           out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
           out.println("<center><input type=submit value='Aceptar' ><input type=button value='Regresar'  onclick=' history.go(-1)'><input type=button value = 'Cancelar' name='cancelar2' onclick=' history.go(-5)'></center>");
-          v_pie = i_pagina.TBFL_PIE;
+          v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
           out.println("<br>");
           out.println(""+v_pie+"");
           out.close();
@@ -1205,7 +1205,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
           out.println("<PRE>");
           out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
           out.println("<center><input type=submit value='Aceptar' ><input type=button value='Regresar' onclick=' history.go(-1)'><input type=button value='Cancelar' name='cancelar2' onclick=' history.go(-5)'></center>");
-          v_pie = i_pagina.TBFL_PIE;
+          v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
           out.println("<br>");
           out.println(""+v_pie+"");
           out.close();
@@ -1564,7 +1564,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
                out.println("</table></center>");
                out.println("<br>");
                out.println("<center><input type=button value='Cancelar' onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-               v_pie = i_pagina.TBFL_PIE;
+               v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                out.println("<br>");
                out.println(""+v_pie+"");
                out.close();
@@ -1630,7 +1630,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
              out.println("<br>");
              out.println("<PRE>");
              out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-             v_pie = i_pagina.TBFL_PIE;
+             v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
              out.println("<br>");
              out.println(""+v_pie+"");
               out.close();
@@ -1646,7 +1646,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
               out.println("<br>");
               out.println("<PRE>");
               out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-              v_pie = i_pagina.TBFL_PIE;
+              v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
               out.println("<br>");
               out.println(""+v_pie+"");
               out.close();
@@ -1668,7 +1668,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
              out.println("<br>");
              out.println("<PRE>");
              out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-             v_pie = i_pagina.TBFL_PIE;
+             v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
              out.println("<br>");
              out.println(""+v_pie+"");
              out.close();
@@ -1683,7 +1683,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
               out.println("<br>");
               out.println("<PRE>");
               out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-              v_pie = i_pagina.TBFL_PIE;
+              v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
               out.println("<br>");
               out.println(""+v_pie+"");
               out.close();
@@ -1700,7 +1700,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
               out.println("<br>");
               out.println("<PRE>");
               out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-              v_pie = i_pagina.TBFL_PIE;
+              v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
               out.println("<br>");
               out.println(""+v_pie+"");
               out.close();
@@ -1715,7 +1715,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
                out.println("<br>");
                out.println("<PRE>");
                out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-               v_pie = i_pagina.TBFL_PIE;
+               v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                out.println("<br>");
                out.println(""+v_pie+"");
                out.close();
@@ -1768,7 +1768,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
             out.println("<br>");
             out.println("<PRE>");
             out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-            v_pie = i_pagina.TBFL_PIE;
+            v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
             out.println("<br>");
             out.println(""+v_pie+"");
             out.close();
@@ -1825,7 +1825,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
            out.println("<br>");
            out.println("<PRE>");
            out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-           v_pie = i_pagina.TBFL_PIE;
+           v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
            out.println("<br>");
            out.println(""+v_pie+"");
            out.close();
@@ -1870,7 +1870,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
                  out.println("<br>");
                  out.println("<PRE>");
                  out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-                 v_pie = i_pagina.TBFL_PIE;
+                 v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                  out.println("<br>");
                  out.println(""+v_pie+"");
                  out.close();
@@ -1884,7 +1884,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
                 out.println("<br>");
                 out.println("<PRE>");
                 out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-                v_pie = i_pagina.TBFL_PIE;
+                v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                 out.println("<br>");
                 out.println("<br>");
                 out.println(""+v_pie+"");
@@ -1932,7 +1932,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
                  out.println("<br>");
                  out.println("<PRE>");
                  out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-                 v_pie = i_pagina.TBFL_PIE;
+                 v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                  out.println("<br>");
                  out.println(""+v_pie+"");
                  out.close();
@@ -1946,7 +1946,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
                 out.println("<br>");
                 out.println("<PRE>");
                 out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-                v_pie = i_pagina.TBFL_PIE;
+                v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                 out.println("<br>");
                 out.println("<br>");
                 out.println(""+v_pie+"");
@@ -1961,7 +1961,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
                out.println("<PRE>");
                out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
                out.println("<center><input type=submit value='Aceptar' ><input type=button value='Regresar' onclick=' history.go(-1)'><input type=button value='Cancelar' name = 'cancelar' onclick=' history.go(-5)'></center>");
-               v_pie = i_pagina.TBFL_PIE;
+               v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                out.println("<br>");
                out.println(""+v_pie+"");
                out.close();
@@ -1972,7 +1972,7 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
                out.println("<PRE>");
                out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
                out.println("<center><input type=submit value='Aceptar' ><input type=button value='Regresar' onclick=' history.go(-1)'><input type=button value='Cancelar' onclick=' history.go(-5)'></center>");
-               v_pie = i_pagina.TBFL_PIE;
+               v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                out.println("<br>");
                out.println(""+v_pie+"");
                out.close();
@@ -1982,9 +1982,9 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
       }
       else
       {
-       v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Detalle del Retiro","","<center>"+v_menesquema+"</center>",false);
+       v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Detalle del Retiro","","<center>"+v_menesquema+"</center>",false);
        out.println(""+v_pintar+"");
-       v_pie = i_pagina.TBFL_PIE;
+       v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
        out.println("<br>");
        out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-5)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
        out.println(""+v_pie+"");
@@ -1994,9 +1994,9 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
     }
     else
     {
-    v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Detalle del Retiro","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Detalle del Retiro","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
      out.println(""+v_pintar+"");
-     v_pie = i_pagina.TBFL_PIE;
+     v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-7)'></center>");
      out.println(""+v_pie+"");
@@ -2012,30 +2012,30 @@ public void TBPL_Final(HttpSession session,HttpServletRequest request,PrintWrite
    String error = ex.toString();
    if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
    {
-    v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Detalle del Retiro","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Detalle del Retiro","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
    }
    else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
         {
-         v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Detalle del Retiro","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
+         v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Detalle del Retiro","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
         }
            else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
                 {
-                 v_pintar = i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Detalle del Retiro","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
+                 v_pintar = STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Detalle del Retiro","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
                 }
                 else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
                      {
-                       v_pintar =  i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Detalle del Retiro","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
+                       v_pintar =  STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Detalle del Retiro","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
                      }
                   else
                   {
-                   v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Detalle del Retiro","","<center>Mensaje de Error :"+ex+".</center>",false);
+                   v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Detalle del Retiro","","<center>Mensaje de Error :"+ex+".</center>",false);
                    
                   }
    out.println(""+v_pintar+"");
    ex.printStackTrace(out);
    out.println("<BR>");
    out.println("<center><input type=button value='cancelar'  onclick=' history.go(-5)'></center>");
-   String v_pie = i_pagina.TBFL_PIE;
+   String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println("<br>");
    out.println(""+v_pie+"");
    out.close();

@@ -99,7 +99,7 @@ implements sqlj.runtime.NamedIterator
 
  public void TBPL_ModificarSol(PrintWriter out,HttpSession session,HttpServletRequest request,String nuevaCadena )
  {
-  STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();/**Instancia de la clase TBCL_GenerarBaseHTML*/
+  //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;/**Instancia de la clase TBCL_GenerarBaseHTML*/
   TBCL_Validacion        i_valusu = new TBCL_Validacion();/**Instancia de la clase TBCL_GenerarBaseHTML*/
   //TBCL_ConexionSqlj    i_conexion = new TBCL_ConexionSqlj();/**Instancia de la clase TBCL_ConexionSqlj*/
   try
@@ -205,7 +205,7 @@ implements sqlj.runtime.NamedIterator
 /*@lineinfo:user-code*//*@lineinfo:105^23*/
 
     /**Dibujar página de respuesta*/
-    v_pintar=    i_pagina.TBFL_CABEZA("Modificar Solicitud de Retiro","Modificar Solicitud de Retiro","TBPKT_MODULO_RETIROS.TBPKT_MODIFICAR_SOLICITUD.TBS_Penalizacion","",true,"","");
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Solicitud de Retiro","Modificar Solicitud de Retiro","TBPKT_MODULO_RETIROS.TBPKT_MODIFICAR_SOLICITUD.TBS_Penalizacion","",true,"","");
     out.println(""+v_pintar+"");
     while(v_retiro.next())
     {
@@ -300,7 +300,7 @@ implements sqlj.runtime.NamedIterator
      out.println("</table></center>");
      out.println("<br>");
      out.println("<center><input type=button value='Aceptar' onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-     v_pie = i_pagina.TBFL_PIE;
+     v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println(""+v_pie+"");
      out.close();
@@ -313,16 +313,16 @@ implements sqlj.runtime.NamedIterator
     out.println("<PRE>");
     out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
     out.println("<center><input type=submit value='Aceptar'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-    v_pie = i_pagina.TBFL_PIE;
+    v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println(""+v_pie+"");
     out.close();
    }
    else
    {/**Termino session*/
-    v_pintar=    i_pagina.TBFL_CABEZA("Modificar Solicitud de Retiro","Error al Modificar  Solicitud de Retiro","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Solicitud de Retiro","Error al Modificar  Solicitud de Retiro","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
     out.println(""+v_pintar+"");
-    v_pie = i_pagina.TBFL_PIE;
+    v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println("<center><input type=button value='Aceptar'  onclick=' history.go(-2)'></center>");
     out.println(""+v_pie+"");
@@ -361,11 +361,11 @@ implements sqlj.runtime.NamedIterator
                      {
                        v_menex = "Mensaje de error: "+ex;
                      }
-   String v_pintar=    i_pagina.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error al Modificar Solicitud de Retiro","","<center>"+v_menex+"</center>",false);
+   String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error al Modificar Solicitud de Retiro","","<center>"+v_menex+"</center>",false);
    out.println(""+v_pintar+"");
    out.println("<BR>");
    out.println("<center><input type=button value='Aceptar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-   String v_pie = i_pagina.TBFL_PIE;
+   String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println("<br>");
    out.println("<br>");
    out.println(""+v_pie+"");

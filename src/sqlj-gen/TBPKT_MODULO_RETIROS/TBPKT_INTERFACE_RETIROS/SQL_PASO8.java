@@ -124,7 +124,9 @@ implements sqlj.runtime.NamedIterator
     String            v_fecha_c          = " ";
     vint_retiros      vreg_retiro        = null;
     Date              v_fecha_d          = null;
-    TBCL_Validacion   i_valusu           = new TBCL_Validacion();
+    /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
     String            v_fecha_contrato;
     String            v_fecha_unidad;
     double[]          v_vector;
@@ -143,7 +145,7 @@ implements sqlj.runtime.NamedIterator
       
        //Conexion con la base de datos
       v_valusu = new String[3];
-      v_valusu = i_valusu.TBFL_ValidarUsuario();
+      v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
       DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
       Connection t_tax =DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
       DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));
@@ -155,7 +157,7 @@ implements sqlj.runtime.NamedIterator
       //****************************************************
 
 
-      /*@lineinfo:generated-code*//*@lineinfo:86^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:88^7*/
 
 //  ************************************************************
 //  #sql { call TBPBD_CRONE_LOG('8',
@@ -196,7 +198,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:90^51*/
+/*@lineinfo:user-code*//*@lineinfo:92^51*/
       System.out.println("v_ejecutar "+v_ejecutar);
       System.out.println("v_consecutivo "+v_consecutivo_log);
       if (v_cod_err == 0){
@@ -208,7 +210,7 @@ implements sqlj.runtime.NamedIterator
            {
             v_cod_err = 0;
             v_men_err = " ";
-            /*@lineinfo:generated-code*//*@lineinfo:102^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:104^13*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INTERF_RET_GRAL('8',
@@ -251,7 +253,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:107^63*/
+/*@lineinfo:user-code*//*@lineinfo:109^63*/
             if (v_cod_err == 0){
               v_proceso_exitoso = "S";
             }
@@ -279,7 +281,7 @@ implements sqlj.runtime.NamedIterator
               // -2: Si no corrio 
               //*******************************************************************
               System.out.println("Inicia ejecución csaf");
-              /*@lineinfo:generated-code*//*@lineinfo:135^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:137^15*/
 
 //  ************************************************************
 //  #sql v_sw = { values(TB_FREFERENCIAS_MULTI(:v_sistema,
@@ -323,7 +325,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:138^78*/
+/*@lineinfo:user-code*//*@lineinfo:140^78*/
               if (v_sw == 0){
                 //Conectarse al AS400
                 as400 = new AS400(""+v_sistema+"");
@@ -350,7 +352,7 @@ implements sqlj.runtime.NamedIterator
               /*Fin del bloque agregado*/
              
              String v_eje_interfaces = "";
-             /*@lineinfo:generated-code*//*@lineinfo:165^14*/
+             /*@lineinfo:generated-code*//*@lineinfo:167^14*/
 
 //  ************************************************************
 //  #sql i_interface = { SELECT  KPGLDZ
@@ -375,7 +377,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:168^52*/
+/*@lineinfo:user-code*//*@lineinfo:170^52*/
              if(i_interface.next())
              {
                 v_eje_interfaces = i_interface.KPGLDZ();
@@ -402,7 +404,7 @@ implements sqlj.runtime.NamedIterator
                  v_cod_err_aportes = -1;
                  System.out.println("Antes de TBPBD_INS_TBINTERFACE_LOGS por error.");
                  System.out.println("Va a insertar a interface logs 'EG'," +v_fecha_control+",'8','Error en  el procedimiento de ingreso y reversión de aportes.','XXXXX','XXXXX',null");
-                 /*@lineinfo:generated-code*//*@lineinfo:195^18*/
+                 /*@lineinfo:generated-code*//*@lineinfo:197^18*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG',
@@ -432,8 +434,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:201^63*/
-                 /*@lineinfo:generated-code*//*@lineinfo:202^18*/
+/*@lineinfo:user-code*//*@lineinfo:203^63*/
+                 /*@lineinfo:generated-code*//*@lineinfo:204^18*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -444,7 +446,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:202^30*/
+/*@lineinfo:user-code*//*@lineinfo:204^30*/
                  System.out.println("Insertó en TBPBD_INS_TBINTERFACE_LOGS por error");
                 }
                 else
@@ -452,7 +454,7 @@ implements sqlj.runtime.NamedIterator
                  System.out.println("Antes de TBPBD_INS_TBINTERFACE_LOGS por exitoso");
                  System.out.println("Va a insertar a interface logs 'EG'," +v_fecha_control+"'8','Se realizo procedimiento de ingreso y reversión de aportes.','XXXXX','XXXXX',null");
                  v_proceso_exitoso = "S";
-                 /*@lineinfo:generated-code*//*@lineinfo:210^18*/
+                 /*@lineinfo:generated-code*//*@lineinfo:212^18*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG',
@@ -482,8 +484,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:216^62*/
-                 /*@lineinfo:generated-code*//*@lineinfo:217^18*/
+/*@lineinfo:user-code*//*@lineinfo:218^62*/
+                 /*@lineinfo:generated-code*//*@lineinfo:219^18*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -494,7 +496,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:217^30*/
+/*@lineinfo:user-code*//*@lineinfo:219^30*/
                  System.out.println("Insertó en TBPBD_INS_TBINTERFACE_LOGS por exitoso");
                 }
               }//Mientras paso 2 de interface de aportes no se realice exitosamente
@@ -508,7 +510,7 @@ implements sqlj.runtime.NamedIterator
               {
                 v_cod_err = 0;
                 // La variable v_usuario fue cambiada para enviar como usuario a PINEDALU
-                /*@lineinfo:generated-code*//*@lineinfo:231^17*/
+                /*@lineinfo:generated-code*//*@lineinfo:233^17*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INTERFACECONTABLE(TO_DATE(TO_CHAR(:v_fecha_control),'RRRR-MM-DD'),
@@ -545,13 +547,13 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:234^78*/
+/*@lineinfo:user-code*//*@lineinfo:236^78*/
                 if (v_cod_err_contable != 0)
                 {
                  v_cont            = v_cont + 1;
                  v_proceso_exitoso = "N";
                  String v_mensaje2 = "Error en la interface contable: "+v_men_err_contable+".";
-                 /*@lineinfo:generated-code*//*@lineinfo:240^18*/
+                 /*@lineinfo:generated-code*//*@lineinfo:242^18*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG',
@@ -582,8 +584,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:246^64*/
-                 /*@lineinfo:generated-code*//*@lineinfo:247^18*/
+/*@lineinfo:user-code*//*@lineinfo:248^64*/
+                 /*@lineinfo:generated-code*//*@lineinfo:249^18*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -594,12 +596,12 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:247^30*/
+/*@lineinfo:user-code*//*@lineinfo:249^30*/
                 }
                 else
                 {
                  v_proceso_exitoso = "S";
-                 /*@lineinfo:generated-code*//*@lineinfo:252^18*/
+                 /*@lineinfo:generated-code*//*@lineinfo:254^18*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG',
@@ -629,8 +631,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:258^62*/
-                 /*@lineinfo:generated-code*//*@lineinfo:259^18*/
+/*@lineinfo:user-code*//*@lineinfo:260^62*/
+                 /*@lineinfo:generated-code*//*@lineinfo:261^18*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -641,7 +643,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:259^30*/
+/*@lineinfo:user-code*//*@lineinfo:261^30*/
                 }
               }//Mientras interface contable no se realice exitosamente
               System.out.println("Despues de llamar Interface Contable v_men_err_contable "+v_men_err_contable+" Proceso exitoso"+v_proceso_exitoso);
@@ -782,7 +784,7 @@ implements sqlj.runtime.NamedIterator
               {
                if (v_consecutivo_log == 0)
                {
-                /*@lineinfo:generated-code*//*@lineinfo:400^17*/
+                /*@lineinfo:generated-code*//*@lineinfo:402^17*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG',
@@ -812,8 +814,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:406^62*/
-                /*@lineinfo:generated-code*//*@lineinfo:407^17*/
+/*@lineinfo:user-code*//*@lineinfo:408^62*/
+                /*@lineinfo:generated-code*//*@lineinfo:409^17*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -824,11 +826,11 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:407^29*/
+/*@lineinfo:user-code*//*@lineinfo:409^29*/
                }//Primer intento del Task
                else
                {
-                /*@lineinfo:generated-code*//*@lineinfo:411^17*/
+                /*@lineinfo:generated-code*//*@lineinfo:413^17*/
 
 //  ************************************************************
 //  #sql { call TBPBD_UPDATE_TBINTERFACE_LOGS( :v_fecha_control,
@@ -856,8 +858,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:414^84*/
-                /*@lineinfo:generated-code*//*@lineinfo:415^17*/
+/*@lineinfo:user-code*//*@lineinfo:416^84*/
+                /*@lineinfo:generated-code*//*@lineinfo:417^17*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -868,7 +870,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:415^29*/
+/*@lineinfo:user-code*//*@lineinfo:417^29*/
                }
 
 
@@ -877,7 +879,7 @@ implements sqlj.runtime.NamedIterator
               {
                if (v_consecutivo_log == 0)
                {
-                /*@lineinfo:generated-code*//*@lineinfo:424^17*/
+                /*@lineinfo:generated-code*//*@lineinfo:426^17*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG',
@@ -907,8 +909,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:430^62*/
-                /*@lineinfo:generated-code*//*@lineinfo:431^17*/
+/*@lineinfo:user-code*//*@lineinfo:432^62*/
+                /*@lineinfo:generated-code*//*@lineinfo:433^17*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -919,12 +921,12 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:431^29*/
+/*@lineinfo:user-code*//*@lineinfo:433^29*/
 
                }//Primer intento del Task
                else
                {
-                /*@lineinfo:generated-code*//*@lineinfo:436^17*/
+                /*@lineinfo:generated-code*//*@lineinfo:438^17*/
 
 //  ************************************************************
 //  #sql { call TBPBD_UPDATE_TBINTERFACE_LOGS( :v_fecha_control,
@@ -952,8 +954,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:439^82*/
-                /*@lineinfo:generated-code*//*@lineinfo:440^17*/
+/*@lineinfo:user-code*//*@lineinfo:441^82*/
+                /*@lineinfo:generated-code*//*@lineinfo:442^17*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -964,11 +966,11 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:440^29*/
+/*@lineinfo:user-code*//*@lineinfo:442^29*/
                }
                //Borrar en la tabla de control el paso 8 para que la validacion en el proximo
                //intento sea correcta.
-               /*@lineinfo:generated-code*//*@lineinfo:444^16*/
+               /*@lineinfo:generated-code*//*@lineinfo:446^16*/
 
 //  ************************************************************
 //  #sql { DELETE ajkpcpp@mfund
@@ -993,8 +995,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:447^44*/
-               /*@lineinfo:generated-code*//*@lineinfo:448^16*/
+/*@lineinfo:user-code*//*@lineinfo:449^44*/
+               /*@lineinfo:generated-code*//*@lineinfo:450^16*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -1005,7 +1007,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:448^28*/
+/*@lineinfo:user-code*//*@lineinfo:450^28*/
               }//Hubo error al ejecutar paso8
              }
              else

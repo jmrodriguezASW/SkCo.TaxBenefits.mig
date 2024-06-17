@@ -40,7 +40,7 @@ public class TBS_Modificar_Retiros extends HttpServlet implements SingleThreadMo
   //DEFINICIONES INICIALES
   TBCL_LoadPage i_LP;
   STBCL_GenerarBaseHTML codHtm;
-  STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+  //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
   boolean pintar_decision= false;
   String msje_final      = new String("");
   String fecharetiro     = new String("");
@@ -187,20 +187,20 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
                   Dibujo_Error(out); //para Reversar
                else
                {
-                out.println(plantilla.TBFL_CABEZA("Modificar Retiros","Modificar Retiros"," ","<CENTER>Su Transacción Ya ha sido Realizada</CENTER>",false));
+                out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Retiros","Modificar Retiros"," ","<CENTER>Su Transacción Ya ha sido Realizada</CENTER>",false));
                 out.println("<BR><BR>");
                 out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-2);></center>");
-                out.println(plantilla.TBFL_PIE);
+                out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                 out.close();
                }
              }//if(!TBPBD_AnularModificar(v_conexion_taxb)&&sess.getValue("refresh")==null)
           }//if(TBPL_validar())
          else
           {
-            out.println(plantilla.TBFL_CABEZA("Modificar Retiros","Modificar Retiros"," ","<left>"+msje_final+"</left>",false));
+            out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Retiros","Modificar Retiros"," ","<left>"+msje_final+"</left>",false));
             out.println("<BR><BR>");
             out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-            out.println(plantilla.TBFL_PIE);
+            out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
             out.close();
           }//if(!TBPL_validar())
        }//if(TBPL_getParams_Sess2())
@@ -258,7 +258,7 @@ private void Dibujo_Error(PrintWriter salida)
 {
 try
  {
-   salida.println(plantilla.TBFL_CABEZA("Modificar Retiros","Modificar Retiros"," ","<left>"+msje_final+"</left>",false));
+   salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Retiros","Modificar Retiros"," ","<left>"+msje_final+"</left>",false));
    salida.println("<BR><BR>");
    if(pintar_decision)
     {
@@ -283,7 +283,7 @@ try
     }
    else
      salida.println("<center><input type='button' value='Regresar' Onclick=history.go(-1);></center>");
-   salida.println(plantilla.TBFL_PIE);
+   salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
    salida.close();
  }
 catch(Exception ex){}

@@ -192,8 +192,10 @@ implements sqlj.runtime.NamedIterator
  public void TBPL_SolicitudOperativo(PrintWriter out,HttpSession session,HttpServletRequest request,String nuevaCadena)
  {
   /**Instancias de clase*/
-  STBCL_GenerarBaseHTML  i_pagina = new STBCL_GenerarBaseHTML();/**Instancia de la clase TBCL_GenerarBaseHTML*/
-  TBCL_Validacion       i_valusu = new TBCL_Validacion();/**Instancia de la clase TBCL_Validacion*/
+  //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;/**Instancia de la clase TBCL_GenerarBaseHTML*/
+  /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()/**Instancia de la clase TBCL_Validacion*/
   TBCL_ConsultaClienteLista i_consultaC = new TBCL_ConsultaClienteLista(); /**Instancia de la clase TBCL_ConsultaClienteLista*/
   //TBCL_ConexionSqlj   i_conexion = new TBCL_ConexionSqlj();/**Instancia de la clase TBCL_ConexionSqlj*/
 
@@ -224,7 +226,7 @@ procedimiento de la base de datos
   try
   {
    String[] v_valusu = new String[3];
-   v_valusu=i_valusu.TBFL_ValidarUsuario();
+   v_valusu=TBCL_Validacion.TBFL_ValidarUsuario();
    DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
    Connection t_tax =DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
    DefaultContext ctx11 = new DefaultContext(v_valusu[0],v_valusu[1],v_valusu[2],false);
@@ -368,7 +370,7 @@ procedimiento de la base de datos
     }
     /*Fin codigo agregado segunda parte*/    
    
-    /*@lineinfo:generated-code*//*@lineinfo:240^5*/
+    /*@lineinfo:generated-code*//*@lineinfo:242^5*/
 
 //  ************************************************************
 //  #sql { SELECT TO_CHAR(to_date(tbf_getbusinessdate(0, SYSDATE), 'DD/MM/RR'), 'yyyy-mm-dd') DIA_HABIL
@@ -403,7 +405,7 @@ procedimiento de la base de datos
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:243^5*/
+/*@lineinfo:user-code*//*@lineinfo:245^5*/
 
     //***VALIDA QUE FECHA EFECTIVA INGRESADA SEA MAYOR O IGUAL A LA FECHA DEL DIA
     v_calfec       = v_fecha_actual.compareTo(v_fecefe); // v_fecefe.compareTo(v_fecpro);
@@ -417,7 +419,7 @@ procedimiento de la base de datos
     {
      if(v_calfec <= 0)/**Fechas efectiva y de proceso iguales*/
      {
-      /*@lineinfo:generated-code*//*@lineinfo:257^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:259^7*/
 
 //  ************************************************************
 //  #sql { SELECT TO_CHAR(TO_DATE(:v_fecefe,'RRRR-MM-DD')-1,'RRRRMMDD')
@@ -454,7 +456,7 @@ procedimiento de la base de datos
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:260^12*/
+/*@lineinfo:user-code*//*@lineinfo:262^12*/
       
            v_fecpro = v_fecefe;
            session.removeAttribute("s_fecpro");
@@ -468,7 +470,7 @@ procedimiento de la base de datos
            session.setAttribute("s_fecpro", v_fecpro);
           }
      /**Consultar tiempo del contrato*/
-     /*@lineinfo:generated-code*//*@lineinfo:274^6*/
+     /*@lineinfo:generated-code*//*@lineinfo:276^6*/
 
 //  ************************************************************
 //  #sql v_contrato = { SELECT TO_DATE(:v_fecefe,'RRRR-MM-DD') - con_fecha_apertura  as v_fechacontrato
@@ -498,7 +500,7 @@ procedimiento de la base de datos
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:278^25*/
+/*@lineinfo:user-code*//*@lineinfo:280^25*/
      while(v_contrato.next())
      {
       v_cum2 = new Double(v_contrato.v_fechacontrato()).toString();
@@ -642,7 +644,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
     
         
      /**Contador fondos*/
-     /*@lineinfo:generated-code*//*@lineinfo:422^6*/
+     /*@lineinfo:generated-code*//*@lineinfo:424^6*/
 
 //  ************************************************************
 //  #sql { SELECT count(1)
@@ -678,7 +680,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:426^11*/
+/*@lineinfo:user-code*//*@lineinfo:428^11*/
      v_dim = (v_dim - 1) * 2;
      session.removeAttribute("s_dim");
      session.setAttribute("s_dim",(java.lang.Object)new Integer(v_dim).toString());
@@ -725,7 +727,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 /* Final de la modificacion */
 
 
-      /*@lineinfo:generated-code*//*@lineinfo:473^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:475^7*/
 
 //  ************************************************************
 //  #sql { commit };
@@ -736,7 +738,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:473^19*/
+/*@lineinfo:user-code*//*@lineinfo:475^19*/
       if(v_valuni2[2] == 0.0)
       {
        // v_saldo  = v_valuni2[1];
@@ -749,7 +751,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
        session.setAttribute("s_valuni",(java.lang.Object)new Double(v_valuni2[0]).toString());
 
        /**Consultar cargos para el tipo de retiro*/
-       /*@lineinfo:generated-code*//*@lineinfo:486^8*/
+       /*@lineinfo:generated-code*//*@lineinfo:488^8*/
 
 //  ************************************************************
 //  #sql v_codcargo = { values ( TB_FDATOS_CARGOS ( :v_pro
@@ -800,7 +802,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:494^55*/
+/*@lineinfo:user-code*//*@lineinfo:496^55*/
         /**Variables de session cargos*/
        session.removeAttribute("s_cargo1");
        session.setAttribute("s_cargo1",(java.lang.Object)v_cargo1);
@@ -821,7 +823,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
       
       //String v_retorno_programa = new String("");
       String v_retorno_fondo = null;
-      /*@lineinfo:generated-code*//*@lineinfo:515^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:517^7*/
 
 //  ************************************************************
 //  #sql v_retorno_fondo = { values (TBCL_FuncionesAs400.TBPL_DisponiblesPorContrato(:v_contra,
@@ -863,7 +865,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:522^88*/
+/*@lineinfo:user-code*//*@lineinfo:524^88*/
       
       
       //out.println("<b>Retorno</b> "+v_retorno_fondo+"    <b>;</b>");
@@ -891,7 +893,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
        * MOS Se quita temporalmente :v_programa
        * Se agregó nuevamente
        */
-       /*@lineinfo:generated-code*//*@lineinfo:550^8*/
+       /*@lineinfo:generated-code*//*@lineinfo:552^8*/
 
 //  ************************************************************
 //  #sql { call TBPBD_SaldoContratoRet( :v_pro
@@ -966,7 +968,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:568^59*/
+/*@lineinfo:user-code*//*@lineinfo:570^59*/
        /**Si no hay error al consultar el saldo disponible*/
        if(v_coderr == 0)
        {//1
@@ -1015,11 +1017,11 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
         if( v_saldispo > 0 && v_saldisponeto>0)
         {//2
          /**Dibujar página de respuesta*/
-         v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Solicitud de Retiro","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_Distribucion","",true,"modulo_retiros.js","return checkrequired(this)");
+         v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Solicitud de Retiro","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_Distribucion","",true,"modulo_retiros.js","return checkrequired(this)");
          out.println(""+v_pintar+"");
          /*Cambio para manejo de referencia unica 2009/03/30 MOS */
          String v_contrato_unif = "";
-         /*@lineinfo:generated-code*//*@lineinfo:621^10*/
+         /*@lineinfo:generated-code*//*@lineinfo:623^10*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -1050,7 +1052,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:621^83*/
+/*@lineinfo:user-code*//*@lineinfo:623^83*/
          out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
          out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nombre+"  <b> Apellidos </b>"+v_apellidos+" </CENTER></font>");
          out.println("<br>");
@@ -1071,7 +1073,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
          double v_ret_pendien_express=0;
          Double v_apo_no_dispon= new Double(0);
          double v_total_desc = 0;
-         /*@lineinfo:generated-code*//*@lineinfo:642^10*/
+         /*@lineinfo:generated-code*//*@lineinfo:644^10*/
 
 //  ************************************************************
 //  #sql { call tbpbd_calculo_val_disponible(:v_contra,
@@ -1145,7 +1147,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:654^65*/
+/*@lineinfo:user-code*//*@lineinfo:656^65*/
            if (v_coderr ==0){
                if (v_ret_rendi == null)
                    v_ret_rendi  =new Double(0);
@@ -1176,7 +1178,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
           double v_fondos_liq=0;
           String v_retorno_liq = null;
-          /*@lineinfo:generated-code*//*@lineinfo:685^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:687^11*/
 
 //  ************************************************************
 //  #sql v_retorno_liq = { values (TBCL_FuncionesAs400.TBPL_SaldoLiquidezContrato(:v_contra,
@@ -1219,13 +1221,13 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:693^96*/ 
+/*@lineinfo:user-code*//*@lineinfo:695^96*/ 
             v_fondos_liq =  new Double(v_retorno_liq).doubleValue()/100;  
             
             if((v_fondos_liq==saldoT) && (v_pro.equals("MFUND")) && (v_tipotran.equals("UTT003")||v_tipotran.equals("UTT002")||v_tipotran.equals("UTT012")))
             {
                 //Obtenemos Fecha Efectiva para retiro Express Total
-                   /*@lineinfo:generated-code*//*@lineinfo:699^20*/
+                   /*@lineinfo:generated-code*//*@lineinfo:701^20*/
 
 //  ************************************************************
 //  #sql { SELECT tbf_obtener_fechas_x_tranx('MFUND', 'UTT015', 'UCT001') FECHA_EFECTIVA
@@ -1259,7 +1261,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:701^29*/
+/*@lineinfo:user-code*//*@lineinfo:703^29*/
                    
                    //si fecha efectiva es menor a la del dia (SARO) no se hace nada
                    
@@ -1477,7 +1479,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
          }
          
          /**Consultar administradora de fondos*/
-         /*@lineinfo:generated-code*//*@lineinfo:919^10*/
+         /*@lineinfo:generated-code*//*@lineinfo:921^10*/
 
 //  ************************************************************
 //  #sql v_afp = { SELECT AFP_DESCRIPCION
@@ -1503,7 +1505,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:923^47*/
+/*@lineinfo:user-code*//*@lineinfo:925^47*/
 
          /**Si el concepto de retiro es traslado*/
          if(v_traslado.equals("S"))
@@ -1523,7 +1525,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
           out.println("</OPTION></SELECT></FONT>");
           out.println("<DIV id=section5 style='DISPLAY: none'>");
           /**Consultar código producto*/
-          /*@lineinfo:generated-code*//*@lineinfo:943^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:945^11*/
 
 //  ************************************************************
 //  #sql v_productotraslado = { SELECT  PRO_CODIGO
@@ -1547,7 +1549,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:945^35*/
+/*@lineinfo:user-code*//*@lineinfo:947^35*/
           out.println("<SPAN  ID=plural5></SPAN>");
           out.println("<font face='Verdana, Arial, Helvetica, sans-serif' size='2' color='#000000'><b>        Producto Destino</b>       <select name=v_proti> </font>");
           while (v_productotraslado.next())
@@ -1769,18 +1771,18 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
          }
          out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
          out.println("<center><input type=submit value='Aceptar'  ><input type=button value='Regresar' onclick=' history.go(-1)'><input type=button value='Cancelar' onclick=' history.go(-2)'></center>");
-         v_pie = i_pagina.TBFL_PIE;
+         v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
          out.println(""+v_pie+"");
          out.println("<br>");
          out.close();
         }//2
         else
         {/**Saldo disponible menor que cero*/
-         v_pintar=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Error Solicitud de Retiro","","<center>No es posible realizar la Solicitud de Retiro el saldo disponible es "+NumberFormat.getCurrencyInstance().format(v_saldisponeto)+"</center>",false);
+         v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Solicitud de Retiro","Error Solicitud de Retiro","","<center>No es posible realizar la Solicitud de Retiro el saldo disponible es "+NumberFormat.getCurrencyInstance().format(v_saldisponeto)+"</center>",false);
          out.println(""+v_pintar+"");
          out.println("<BR>");
          out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-         v_pie = i_pagina.TBFL_PIE;
+         v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
          out.println("<br>");
          out.println("<br>");
          out.println(""+v_pie+"");
@@ -1791,7 +1793,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
        {
         /*Cambio para manejo de referencia unica 2009/04/01 MOS */
         String v_contrato_unif = "";
-        /*@lineinfo:generated-code*//*@lineinfo:1189^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:1191^9*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -1822,15 +1824,15 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1189^82*/
+/*@lineinfo:user-code*//*@lineinfo:1191^82*/
            
            
         /**Error al consultar saldo contrato*/
-        v_pintar=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Error Solicitud de Retiro","","<center>No fue posible consultar el saldo disponible para el contrato "+v_contrato_unif+", Error "+v_msgErr+".</center>",false);
+        v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Solicitud de Retiro","Error Solicitud de Retiro","","<center>No fue posible consultar el saldo disponible para el contrato "+v_contrato_unif+", Error "+v_msgErr+".</center>",false);
         out.println(""+v_pintar+"");
         out.println("<BR>");
         out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-        v_pie = i_pagina.TBFL_PIE;
+        v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
         out.println("<br>");
         out.println("<br>");
         out.println(""+v_pie+"");
@@ -1839,11 +1841,11 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
       }
       else
       {/**Error al calcular valor unidad*/
-       v_pintar=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error consulta de saldo y valor de unidad. Mensaje de error:"+v_valuni2[2]+"</center>",false);
+       v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error consulta de saldo y valor de unidad. Mensaje de error:"+v_valuni2[2]+"</center>",false);
        out.println(""+v_pintar+"");
        out.println("<BR>");
        out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-       v_pie = i_pagina.TBFL_PIE;
+       v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
        out.println("<br>");
        out.println("<br>");
        out.println(""+v_pie+"");
@@ -1852,11 +1854,11 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
      }
      else
      {/**Error  al consultar código de banco y número de cuenta*/
-      v_pintar=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Consulta de código banco y número cuenta. Mensaje de error:"+v_banco+"</center>",false);
+      v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Consulta de código banco y número cuenta. Mensaje de error:"+v_banco+"</center>",false);
       out.println(""+v_pintar+"");
       out.println("<BR>");
       out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-      v_pie = i_pagina.TBFL_PIE;
+      v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
       out.println("<br>");
       out.println("<br>");
       out.println(""+v_pie+"");
@@ -1865,11 +1867,11 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
     }
     else
     {/**Fecha efectiva mayor que fecha de proceso*/
-     v_pintar=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Favor digitar fecha efectiva menor o igual a la fecha de proceso.</center>",false);
+     v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Favor digitar fecha efectiva menor o igual a la fecha de proceso.</center>",false);
      out.println(""+v_pintar+"");
      out.println("<BR>");
      out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-     v_pie = i_pagina.TBFL_PIE;
+     v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println("<br>");
      out.println(""+v_pie+"");
@@ -1878,9 +1880,9 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
    }
    else
    {/**Termina session*/
-    v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
     out.println(""+v_pintar+"");
-    v_pie = i_pagina.TBFL_PIE;
+    v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'></center>");
     out.println(""+v_pie+"");
@@ -1896,28 +1898,28 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
    String error = ex.toString();
    if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
    {
-    v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Solicitud de Retiro","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Solicitud de Retiro","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
    }
    else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
         {
-         v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
+         v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
         }
            else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
                 {
-                 v_pintar = i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
+                 v_pintar = STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
                 }
                 else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
                      {
-                       v_pintar =  i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
+                       v_pintar =  STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
                      }
                   else
                   {
-                   v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Mensaje de Error :"+ex+".</center>",false);
+                   v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Mensaje de Error :"+ex+".</center>",false);
                   }
    out.println(""+v_pintar+"");
    out.println("<BR>");
    out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'></center>");
-   String v_pie = i_pagina.TBFL_PIE;
+   String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println("<br>");
    out.println("<br>");
    out.println(""+v_pie+"");

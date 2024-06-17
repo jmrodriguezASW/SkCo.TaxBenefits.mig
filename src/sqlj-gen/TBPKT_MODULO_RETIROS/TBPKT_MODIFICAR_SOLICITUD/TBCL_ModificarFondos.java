@@ -96,14 +96,16 @@ implements sqlj.runtime.NamedIterator
  public void TBPL_ModificarFondos (HttpSession session,HttpServletRequest request,PrintWriter out,String nuevaCadena )
  {
   /**Instancias de clase*/
-  STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();/**Instancia de la clase TBCL_GenerarBaseHTML*/
-  TBCL_Validacion     i_valusu = new     TBCL_Validacion ();/**Instancia de la clase TBCL_Validacion*/
+  //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;/**Instancia de la clase TBCL_GenerarBaseHTML*/
+  /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()/**Instancia de la clase TBCL_Validacion*/
   //TBCL_ConexionSqlj    i_conexion = new TBCL_ConexionSqlj();/**Instancia de la clase TBCL_ConexionSqlj*/
   try
   {
    DecimalFormat v_format = new  DecimalFormat("####,####.##");
    String[] v_valusu = new String[3];
-   v_valusu=i_valusu.TBFL_ValidarUsuario();
+   v_valusu=TBCL_Validacion.TBFL_ValidarUsuario();
    DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
    DefaultContext ctx8 = new DefaultContext(v_valusu[0],v_valusu[1],v_valusu[2],false);
    DefaultContext.setDefaultContext(ctx8);
@@ -177,7 +179,7 @@ implements sqlj.runtime.NamedIterator
      v_valort         = new Double((java.lang.String)session.getAttribute("s_valfon"+i+"")).doubleValue();
 
      /**Consulta valor de fondos retirados para esa fecha*/
-     /*@lineinfo:generated-code*//*@lineinfo:112^6*/
+     /*@lineinfo:generated-code*//*@lineinfo:114^6*/
 
 //  ************************************************************
 //  #sql { SELECT NVL(SUM(DIF_VALOR),0) 
@@ -225,7 +227,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:123^11*/
+/*@lineinfo:user-code*//*@lineinfo:125^11*/
      if(vsumvalor != 0)
      {
       v_valort = v_valort - vsumvalor;
@@ -237,7 +239,7 @@ implements sqlj.runtime.NamedIterator
       v_val.addElement(new Double(v_valort));
      }
      /**Consultar valores y porcentajes retirados*/
-     /*@lineinfo:generated-code*//*@lineinfo:135^6*/
+     /*@lineinfo:generated-code*//*@lineinfo:137^6*/
 
 //  ************************************************************
 //  #sql v_distri2 = { SELECT DIF_VALOR,DIF_PORCENTAJE
@@ -271,7 +273,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:142^23*/
+/*@lineinfo:user-code*//*@lineinfo:144^23*/
 
      while(v_distri2.next())
      {
@@ -327,11 +329,11 @@ implements sqlj.runtime.NamedIterator
     if(v_fondo.equals("0"))
     {
      /**Página de respuesta*/
-     v_pintar=    i_pagina.TBFL_CABEZA("Modificar Solicitud de Retiro","Modificar Distribución de Fondos","TBPKT_MODULO_RETIROS.TBPKT_MODIFICAR_SOLICITUD.TBS_ActualizarDistrifon","",true,"modulo_retiros.js","");
+     v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Solicitud de Retiro","Modificar Distribución de Fondos","TBPKT_MODULO_RETIROS.TBPKT_MODIFICAR_SOLICITUD.TBS_ActualizarDistrifon","",true,"modulo_retiros.js","");
      out.println(""+v_pintar+"");
      /*Cambio para manejo de referencia unica 2009/03/30 MOS */
      String v_contrato_unif = "";
-     /*@lineinfo:generated-code*//*@lineinfo:202^6*/
+     /*@lineinfo:generated-code*//*@lineinfo:204^6*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -362,7 +364,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:202^79*/
+/*@lineinfo:user-code*//*@lineinfo:204^79*/
      out.println("<center><FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
      out.println("<center><FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nom+"  <b> Apellidos </b>"+v_ape+" </CENTER></font>");
      out.println("<br>");
@@ -417,18 +419,18 @@ implements sqlj.runtime.NamedIterator
      out.println("<br>");
      out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
      out.println("<center><input type=submit value='Aceptar'><input type=button value='Regresar' onclick=' history.go(-1)'><input type=button value='Cancelar' onclick=' history.go(-3)'></center>");
-     v_pie = i_pagina.TBFL_PIE;
+     v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println(""+v_pie+"");
      out.close();
     }
     else if(v_fondo.equals("1"))/**Retiro distribución por valor*/
          {
-          v_pintar=    i_pagina.TBFL_CABEZA("Modificar Solicitud de Retiro","Modificar Distribución de Fondos","TBPKT_MODULO_RETIROS.TBPKT_MODIFICAR_SOLICITUD.TBS_ActualizarDistrifon","",true,"modulo_retiros.js","");
+          v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Solicitud de Retiro","Modificar Distribución de Fondos","TBPKT_MODULO_RETIROS.TBPKT_MODIFICAR_SOLICITUD.TBS_ActualizarDistrifon","",true,"modulo_retiros.js","");
           out.println(""+v_pintar+"");
           /*Cambio para manejo de referencia unica 2009/03/30 MOS */
           String v_contrato_unif = "";
-         /*@lineinfo:generated-code*//*@lineinfo:268^10*/
+         /*@lineinfo:generated-code*//*@lineinfo:270^10*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -459,7 +461,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:268^83*/
+/*@lineinfo:user-code*//*@lineinfo:270^83*/
           out.println("<center><FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
           out.println("<center><FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nom+"  <b> Apellidos </b>"+v_ape+" </CENTER></font>");
           out.println("<br>");
@@ -503,18 +505,18 @@ implements sqlj.runtime.NamedIterator
           }
           out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
           out.println("<center><input type=submit value='Aceptar' onclick='if(maximo("+v_valre2+",v_codigo.totalesDesde)==1)return false;' ><input type=button value='Regresar' onclick=' history.go(-1)'><input type=button value='Cancelar' onclick=' history.go(-3)'></center>");
-          v_pie = i_pagina.TBFL_PIE;
+          v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
           out.println("<br>");
           out.println(""+v_pie+"");
           out.close();
          }
          else if(v_fondo.equals("2"))/**Retiro distribución por porcentaje*/
               {
-               v_pintar=    i_pagina.TBFL_CABEZA("Modificar Solicitud de Retiros","Modificar Distribución de Fondos","TBPKT_MODULO_RETIROS.TBPKT_MODIFICAR_SOLICITUD.TBS_ActualizarDistrifon","",true,"modulo_retiros.js","");
+               v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Solicitud de Retiros","Modificar Distribución de Fondos","TBPKT_MODULO_RETIROS.TBPKT_MODIFICAR_SOLICITUD.TBS_ActualizarDistrifon","",true,"modulo_retiros.js","");
                out.println(""+v_pintar+"");
                /*Cambio para manejo de referencia unica 2009/03/30 MOS */
                String v_contrato_unif = "";
-              /*@lineinfo:generated-code*//*@lineinfo:323^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:325^15*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -545,7 +547,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:323^88*/
+/*@lineinfo:user-code*//*@lineinfo:325^88*/
                out.println("<center><FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
                out.println("<center><FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nom+"  <b> Apellidos </b>"+v_ape+" </CENTER></font>");
                out.println("<br>");
@@ -589,7 +591,7 @@ implements sqlj.runtime.NamedIterator
                }
                out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
                out.println("<center><input type=submit value='Aceptar' onclick='if(maximo2(v_codigo.totalesDesde)==1)return false;'><input type=button value='Regresar' onclick=' history.go(-1)'><input type=button value='Cancelar' onclick=' history.go(-3)'></center>");
-               v_pie = i_pagina.TBFL_PIE;
+               v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                out.println("<br>");
                out.println(""+v_pie+"");
                out.close();
@@ -598,9 +600,9 @@ implements sqlj.runtime.NamedIterator
    }
    else/**Termina session*/
    {
-    v_pintar=    i_pagina.TBFL_CABEZA("Modificar Solicitud de Retiro","Error al Modificar Distribución de Fondos","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Solicitud de Retiro","Error al Modificar Distribución de Fondos","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
     out.println(""+v_pintar+"");
-    v_pie = i_pagina.TBFL_PIE;
+    v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-3)'></center>");
     out.println(""+v_pie+"");
@@ -640,11 +642,11 @@ implements sqlj.runtime.NamedIterator
                        v_menex = "Mensaje de error: "+ex;
                      }
 
-   String v_pintar=    i_pagina.TBFL_CABEZA("Modificar Solicitud de Retiro","Error al Modificar Distribución de Fondos","","<center>"+v_menex+"<center>",false);
+   String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Solicitud de Retiro","Error al Modificar Distribución de Fondos","","<center>"+v_menex+"<center>",false);
    out.println(""+v_pintar+"");
    out.println("<br>");
    out.println("<center><input type=button value='Cancelar' onclick=' history.go(-3)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-   String v_pie = i_pagina.TBFL_PIE;
+   String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println(""+v_pie+"");
    out.close();
   }

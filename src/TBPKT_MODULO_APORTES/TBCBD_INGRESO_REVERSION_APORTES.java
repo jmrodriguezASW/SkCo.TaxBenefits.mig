@@ -1027,9 +1027,10 @@ public static void TBPL_Validaciones(Connection c,int fecha_cargue)
      try
        {
          //calculo el valor de la unidad
-         SQL_VALOR_UNIDAD_CC i_valUnid      = new SQL_VALOR_UNIDAD_CC();
+         /*[SO_396] Se realiza modificación de llamado por ser método estático TBF_CALCULO_VALOR_UNIDAD de la clase SQL_VALOR_UNIDAD_CC, no es necesaria la instancia nueva*/
+         //SQL_VALOR_UNIDAD_CC i_valUnid      = new SQL_VALOR_UNIDAD_CC();
          double matUnidad[]                 = new double[3];
-         matUnidad                          = i_valUnid.TBF_CALCULO_VALOR_UNIDAD(fecha,fecha,pr,co,false,0);
+         matUnidad                          = SQL_VALOR_UNIDAD_CC.TBF_CALCULO_VALOR_UNIDAD(fecha,fecha,pr,co,false,0);
 //         matUnidad                          = i_valUnid.TBF_CALCULO_VALOR_UNIDAD(fecha,fecha,rs8i_2.getString(1),rs8i_2.getString(2),true,0);
          v_valorUnidad                      = matUnidad[0];
          if(matUnidad[2]!=0.0)

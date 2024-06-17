@@ -1695,9 +1695,13 @@ public static void TBPBD_Tiene_Beneficio_Externos(String producto,String contrat
 try
   {
      //PHTM 2016-02-09 Se cambia metodo de la conexion c por la de DriverManager que utiliza el archivo Connection.Properties
-     TBCL_Validacion       i_valusu = new TBCL_Validacion();/**Instancia de la clase TBCL_Validacion*/
+     
+ 
+ //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
+
+/**Instancia de la clase TBCL_Validacion*/
      String[] v_valusu = new String[3];
-     v_valusu=i_valusu.TBFL_ValidarUsuario();
+     v_valusu=TBCL_Validacion.TBFL_ValidarUsuario();
      DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
      Connection c =DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]); 
      

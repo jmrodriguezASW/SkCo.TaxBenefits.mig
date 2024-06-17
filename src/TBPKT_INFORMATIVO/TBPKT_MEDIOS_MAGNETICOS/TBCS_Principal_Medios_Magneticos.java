@@ -40,9 +40,12 @@ public class TBCS_Principal_Medios_Magneticos  extends HttpServlet {
     String  cadena = request.getParameter("cadena");
     nuevaCadena = cadena;
     String ip_tax = request.getRemoteAddr();
-    TBCL_Seguridad Seguridad = new TBCL_Seguridad();
+     
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
     PrintWriter out = new PrintWriter (response.getOutputStream());
-    parametros = Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
+    parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
 
     String stropcion = "";
 		stropcion= request.getParameter("opcion");

@@ -79,8 +79,10 @@ implements sqlj.runtime.NamedIterator
  public void TBPL_ActualizarDistribucion(PrintWriter out,HttpSession session,HttpServletRequest request,String nuevaCadena)
  {
   /**Instancias de clase*/
-  STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML();/**Instancia de la clase TBCL_GenerarBaseHTML*/
-  TBCL_Validacion      i_valusu = new TBCL_Validacion ();/**Instancia de la clase TBCL_Validacion*/
+  //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;/**Instancia de la clase TBCL_GenerarBaseHTML*/
+  /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()/**Instancia de la clase TBCL_Validacion*/
 
   //TBCL_FuncionesAs400  i_fondos = new TBCL_FuncionesAs400();/**Instancia de la clase TBCL_FuncionesAs400*/
 
@@ -90,7 +92,7 @@ implements sqlj.runtime.NamedIterator
   {
    /**Leer de archivo connection.properties url,usuario y paswword a la base de datos.*/
    String[] v_valusu = new String[3];
-   v_valusu          =i_valusu.TBFL_ValidarUsuario();
+   v_valusu          =TBCL_Validacion.TBFL_ValidarUsuario();
    /**Realizar conexion a la base de datos*/
    DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
    Connection t_tax =DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
@@ -151,7 +153,7 @@ implements sqlj.runtime.NamedIterator
 
 
     /**Selecciona fecha efectiva,valor del retiro y retiro prorrata segun el consecutivo del retiro*/
-    /*@lineinfo:generated-code*//*@lineinfo:111^5*/
+    /*@lineinfo:generated-code*//*@lineinfo:113^5*/
 
 //  ************************************************************
 //  #sql { SELECT TO_CHAR(RET_FECHA_EFECTIVA,'YYYYMMDD')
@@ -204,7 +206,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:128^12*/
+/*@lineinfo:user-code*//*@lineinfo:130^12*/
 
     /** Si no hubo error al consultar*/
     if(!v_fechaefec.equals("null"))
@@ -217,7 +219,7 @@ implements sqlj.runtime.NamedIterator
      if(!v_retirototal.equalsIgnoreCase("S"))
      {
       /** Consultar los parametros de conexion para el AS400*/
-      /*@lineinfo:generated-code*//*@lineinfo:141^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:143^7*/
 
 //  ************************************************************
 //  #sql v_resmulti = { values(TB_FREFERENCIAS_MULTI(:v_sistema,:v_usumfund,:v_passmfund, :v_libreria)) };
@@ -258,7 +260,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:141^128*/
+/*@lineinfo:user-code*//*@lineinfo:143^128*/
       /**Llamar función para consultar saldos en AS400*/
       //v_fondos = i_fondos.TBPL_SaldosPorContrato(v_contra,v_fechaefec,"E",v_sistema,v_usumfund,v_passmfund,v_libreria);
       /*
@@ -289,7 +291,7 @@ implements sqlj.runtime.NamedIterator
        if(!v_fondos.substring(0,5).equals("Error"))//error saldos
        {
         /**Consultar numero de fondos*/
-        /*@lineinfo:generated-code*//*@lineinfo:172^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:174^9*/
 
 //  ************************************************************
 //  #sql { SELECT count(*)
@@ -325,7 +327,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:176^15*/
+/*@lineinfo:user-code*//*@lineinfo:178^15*/
         v_dim = (v_dim - 1) * 2;
         /**Declarar string segun el numero de fondos*/
 
@@ -350,10 +352,10 @@ implements sqlj.runtime.NamedIterator
           }//end if1
          }//end for
          //se dibuja pagina de respuesta
-         v_pintar  =    i_pagina.TBFL_CABEZA("Modificar Solicitud de Retiro","Modificar Distribución de Fondos","TBPKT_MODULO_RETIROS.TBPKT_MODIFICAR_SOLICITUD.TBS_ActualizarDistribucion","",true,"","");
+         v_pintar  =    STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Solicitud de Retiro","Modificar Distribución de Fondos","TBPKT_MODULO_RETIROS.TBPKT_MODIFICAR_SOLICITUD.TBS_ActualizarDistribucion","",true,"","");
          out.println(""+v_pintar+"");
          String v_contrato_unif = "";
-         /*@lineinfo:generated-code*//*@lineinfo:204^10*/
+         /*@lineinfo:generated-code*//*@lineinfo:206^10*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -384,7 +386,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:204^83*/
+/*@lineinfo:user-code*//*@lineinfo:206^83*/
          out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
          out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nombre+"  <b> Apellidos </b>"+v_apellidos+" </CENTER></font>");
          out.println("<br>");
@@ -411,7 +413,7 @@ implements sqlj.runtime.NamedIterator
           v_fonsaldo =v_fonsal[y];
           if(v_fonsaldo != null)
           {
-           /*@lineinfo:generated-code*//*@lineinfo:231^12*/
+           /*@lineinfo:generated-code*//*@lineinfo:233^12*/
 
 //  ************************************************************
 //  #sql v_res = { SELECT ref_codigo
@@ -444,7 +446,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:239^27*/
+/*@lineinfo:user-code*//*@lineinfo:241^27*/
            //minetras encuentre datos
            while(v_res.next())
            {
@@ -476,7 +478,7 @@ implements sqlj.runtime.NamedIterator
             out.println("<center><FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=2><center>El fondo "+v_fonsaldo+" no esta parametrizado en el sistema.</center></font></center>");
             out.println("<BR>");
             out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-            v_piefon = i_pagina.TBFL_PIE;
+            v_piefon = STBCL_GenerarBaseHTML.TBFL_PIE;
             out.println("<br>");
             out.println("<br>");
             out.println(""+v_piefon+"");
@@ -488,18 +490,18 @@ implements sqlj.runtime.NamedIterator
          out.println("<input name= v_maximo type=HIDDEN value='"+v_nom+"' size = '9'>");
          out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
          out.println("<center><input type=submit value='Aceptar'  ><input type=button value='Regresar' onclick=' history.go(-1)'><input type=button value='Cancelar' onclick=' history.go(-2)'></center>");
-         v_pie = i_pagina.TBFL_PIE;
+         v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
          out.println(""+v_pie+"");
          out.println("<br>");
          out.close();
         }
         else
         {//error al consultar saldos
-         v_pintar =   i_pagina.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error al Modificar Distribución de Fondos","","<center>Consulta de saldo para el  contrato  "+v_contra+" en el AS400 no devuelve datos.</center>",false);
+         v_pintar =   STBCL_GenerarBaseHTML.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error al Modificar Distribución de Fondos","","<center>Consulta de saldo para el  contrato  "+v_contra+" en el AS400 no devuelve datos.</center>",false);
          out.println(""+v_pintar+"");
          out.println("<BR>");
          out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-         v_pie = i_pagina.TBFL_PIE;
+         v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
          out.println("<br>");
          out.println("<br>");
          out.println(""+v_pie+"");
@@ -508,11 +510,11 @@ implements sqlj.runtime.NamedIterator
        }
        else
        {//error al consultar saldos
-        v_pintar=    i_pagina.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error al Modificar Distribución de Fondos","","<center>Consulta de saldo del contrato. Mensaje de error:"+v_fondos+"</center>",false);
+        v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error al Modificar Distribución de Fondos","","<center>Consulta de saldo del contrato. Mensaje de error:"+v_fondos+"</center>",false);
         out.println(""+v_pintar+"");
         out.println("<BR>");
         out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-        v_pie = i_pagina.TBFL_PIE;
+        v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
         out.println("<br>");
         out.println("<br>");
         out.println(""+v_pie+"");
@@ -521,11 +523,11 @@ implements sqlj.runtime.NamedIterator
       }
       else
       {//error al consultar saldos
-       v_pintar=    i_pagina.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error al Modificar Distribución de Fondos","","<center>Consulta de saldo para el  contrato  "+v_contra+" en el AS400 no devuelve datos.</center>",false);
+       v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error al Modificar Distribución de Fondos","","<center>Consulta de saldo para el  contrato  "+v_contra+" en el AS400 no devuelve datos.</center>",false);
        out.println(""+v_pintar+"");
        out.println("<BR>");
        out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-       v_pie = i_pagina.TBFL_PIE;
+       v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
        out.println("<br>");
        out.println("<br>");
        out.println(""+v_pie+"");
@@ -534,11 +536,11 @@ implements sqlj.runtime.NamedIterator
      }
      else
      {//si el retiro es total no se permite hacer distribucion de fondos
-      v_pintar=    i_pagina.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error al Modificar Distribución de Fondos","","<center>No existe distribución de fondos para la solicitud de retiro.</center>",false);
+      v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error al Modificar Distribución de Fondos","","<center>No existe distribución de fondos para la solicitud de retiro.</center>",false);
       out.println(""+v_pintar+"");
       out.println("<BR>");
       out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-      v_pie= i_pagina.TBFL_PIE;
+      v_pie= STBCL_GenerarBaseHTML.TBFL_PIE;
       out.println("<br>");
       out.println("<br>");
       out.println(""+v_pie+"");
@@ -547,11 +549,11 @@ implements sqlj.runtime.NamedIterator
     }
     else
     {//si se da un error al consultar información del retiro
-     v_pintar=    i_pagina.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error al Modificar Distribución de Fondos","","<center>Error en el proceso de modificación de distribución de fondos</center>",false);
+     v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error al Modificar Distribución de Fondos","","<center>Error en el proceso de modificación de distribución de fondos</center>",false);
      out.println(""+v_pintar+"");
      out.println("<BR>");
      out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-     v_pie= i_pagina.TBFL_PIE;
+     v_pie= STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println("<br>");
      out.println(""+v_pie+"");
@@ -560,9 +562,9 @@ implements sqlj.runtime.NamedIterator
    }
    else
    {//si la session a terminado
-    v_pintar =    i_pagina.TBFL_CABEZA("Modificar Solicitud de Retiro","Error al Modificar Distribución de Fondos","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
+    v_pintar =    STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Solicitud de Retiro","Error al Modificar Distribución de Fondos","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
     out.println(""+v_pintar+"");
-    v_pie = i_pagina.TBFL_PIE;
+    v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'></center>");
     out.println(""+v_pie+"");
@@ -601,11 +603,11 @@ implements sqlj.runtime.NamedIterator
                      {
                        v_menex = "Mensaje de error: "+ex;
                      }
-   String v_pintara=    i_pagina.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error en Modificar Solicitud de Retiro","","<center>"+v_menex+"<center>",false);
+   String v_pintara=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error en Modificar Solicitud de Retiro","","<center>"+v_menex+"<center>",false);
    out.println(""+v_pintara+"");
    out.println("<BR>");
    out.println("<center><input type=button value='Aceptar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-   String v_piea = i_pagina.TBFL_PIE;
+   String v_piea = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println("<br>");
    out.println("<br>");
    out.println(""+v_piea+"");

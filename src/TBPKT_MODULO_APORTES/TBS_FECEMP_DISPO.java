@@ -33,7 +33,8 @@ public class TBS_FECEMP_DISPO extends HttpServlet
        String POLICY_FILE_LOCATION = rutaFisica+"antisamy-tinymce-1.4.4.xml"; // Path to policy file
        AntiSamy as = new AntiSamy(); // INT20131108
       PrintWriter out = new PrintWriter (response.getOutputStream());
-      STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();
+      /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase STBCL_GenerarBaseHTML, no es necesaria la instancia nueva*/ 
+ //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;
        Connection conn    =   null;
       try
       {
@@ -49,8 +50,11 @@ public class TBS_FECEMP_DISPO extends HttpServlet
          String  cadena = request.getParameter("cadena");
          String   nuevaCadena = cadena;
          String ip_tax = request.getRemoteAddr();
-         TBCL_Seguridad Seguridad = new TBCL_Seguridad();
-         parametros = Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
+          
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
+         parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
          String v_pintar = "";
          conn   =   DataSourceWrapper.getInstance().getConnection();
          
@@ -81,7 +85,7 @@ public class TBS_FECEMP_DISPO extends HttpServlet
          if(vencontro)
          {
             /**Dibbujar pagina de respuesta*/
-            v_pintar=    i_pagina.TBFL_CABEZA("Actualizar Disponibilidad Aporte por Empresa","Actualizar Disponibilidad Aporte por Empresa","TBPKT_MODULO_APORTES.TBS_DIPONIBILIDAD_EMPRESA","",true,"moduloparametro.js","return checkrequired(this)");
+            v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Actualizar Disponibilidad Aporte por Empresa","Actualizar Disponibilidad Aporte por Empresa","TBPKT_MODULO_APORTES.TBS_DIPONIBILIDAD_EMPRESA","",true,"moduloparametro.js","return checkrequired(this)");
             out.println(""+v_pintar+"");
             out.println("<br>");
             out.println("<pre>");
@@ -95,18 +99,18 @@ public class TBS_FECEMP_DISPO extends HttpServlet
             out.println("<input type='text' name='obligatorio_porcentaje_x'  MAXLENGTH=6 SIZE=6 onchange='if (esNumero(this)==1) return false;checkDecimals(this,this.value,2),esMayor(this)'></p>");
             out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
             out.println("<center><input type=submit value='Aceptar'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-            String v_pie = i_pagina.TBFL_PIE;
+            String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
             out.println(""+v_pie+"");
             out.println("<br>");
             out.close();
          }
          else
          {
-            out.println(i_pagina.TBFL_CABEZA("Actualizar Disponibilidad Aporte por Empresa","Actualizar Disponibilidad Aportes por Empresa",
+            out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Actualizar Disponibilidad Aporte por Empresa","Actualizar Disponibilidad Aportes por Empresa",
             "","No se encontraron empresas con esa condición de busqueda.",false));
             out.println("<BR><BR>");
             out.println("<center><input type='button' value='Aceptar'Onclick=history.go(-2);><input type='button' value='Regresar' Onclick=history.go(-1);></center>");
-            out.println(i_pagina.TBFL_PIE);
+            out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
             out.close();
 
          }
@@ -120,28 +124,28 @@ public class TBS_FECEMP_DISPO extends HttpServlet
          String error = ex.toString();
          if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
          {
-           v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
+           v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
          }
          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
               {
-                 v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
+                 v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
               }
               else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
                    {
-                     v_pintar = i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
+                     v_pintar = STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
                    }
                    else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
                         {
-                           v_pintar =  i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
+                           v_pintar =  STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
                         }
                         else
                         {
-                           v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Mensaje de Error :"+ex+".</center>",false);
+                           v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Mensaje de Error :"+ex+".</center>",false);
                         }
          out.println(""+v_pintar+"");
          out.println("<BR>");
          out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-         String v_pie = i_pagina.TBFL_PIE;
+         String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
          out.println("<br>");
          out.println(""+v_pie+"");
          out.close();

@@ -1576,9 +1576,11 @@ return strProp;
   //////////////////Abrir conexión con la Base de Datos//////////////////////
   public static boolean TBPBD_ConexionBD(){
     try{
-       TBCL_Validacion  i_valusu = new     TBCL_Validacion ();
+       /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
        String[] v_valusu = new String[3];
-       v_valusu=i_valusu.TBFL_ValidarUsuario();
+       v_valusu=TBCL_Validacion.TBFL_ValidarUsuario();
 
        DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
        DefaultContext.setDefaultContext(new DefaultContext(v_valusu[0],v_valusu[1],v_valusu[2],false));
@@ -1614,7 +1616,7 @@ return strProp;
         boolean exist=false;
         double valor=0;
         CONCARGOAJU cargoAju;
-        /*@lineinfo:generated-code*//*@lineinfo:674^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:676^9*/
 
 //  ************************************************************
 //  #sql cargoAju = { SELECT CAA_VALOR
@@ -1648,7 +1650,7 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:680^50*/
+/*@lineinfo:user-code*//*@lineinfo:682^50*/
         if(cargoAju.next()){
           valor=cargoAju.CAA_VALOR();
           valor+=cargos[colAj];
@@ -1657,7 +1659,7 @@ return strProp;
           exist=false;
         cargoAju.close();
         if(exist){//si existe el cargo  a actualizar
-          /*@lineinfo:generated-code*//*@lineinfo:689^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:691^11*/
 
 //  ************************************************************
 //  #sql { UPDATE TBCARGOS_AJUSTES
@@ -1690,7 +1692,7 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:695^43*/
+/*@lineinfo:user-code*//*@lineinfo:697^43*/
        }
       }catch(Exception ex){
        String v_menex = "";
@@ -1741,7 +1743,7 @@ return strProp;
     try{
       double v_cap=0,v_rend=0,v_conting=0,v_unid=0;
       CONAPORAJUS AporAjus;
-      /*@lineinfo:generated-code*//*@lineinfo:746^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:748^7*/
 
 //  ************************************************************
 //  #sql AporAjus = { SELECT APA_CAPITAL,            APA_RENDIMIENTOS,
@@ -1776,7 +1778,7 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:753^48*/
+/*@lineinfo:user-code*//*@lineinfo:755^48*/
       if(AporAjus.next()){//si existe guarda valores anteriores y suma con lo que venga
         v_cap=capital+AporAjus.APA_CAPITAL();
         v_rend=rendimientos+AporAjus.APA_RENDIMIENTOS();
@@ -1786,7 +1788,7 @@ return strProp;
       }
       AporAjus.close();
       if(v_exist){//si existe actualiza valores
-       /*@lineinfo:generated-code*//*@lineinfo:763^8*/
+       /*@lineinfo:generated-code*//*@lineinfo:765^8*/
 
 //  ************************************************************
 //  #sql { UPDATE TBAPORTES_AJUSTES
@@ -1825,10 +1827,10 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:772^43*/
+/*@lineinfo:user-code*//*@lineinfo:774^43*/
                   
       }else{//si no existe inserta
-        /*@lineinfo:generated-code*//*@lineinfo:775^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:777^9*/
 
 //  ************************************************************
 //  #sql { INSERT INTO TBAPORTES_AJUSTES
@@ -1865,7 +1867,7 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:782^90*/
+/*@lineinfo:user-code*//*@lineinfo:784^90*/
       }
      }catch(Exception ex)
      {
@@ -1910,7 +1912,7 @@ return strProp;
     try{
       double sal_cap = 0.0, sal_conting = 0.0, sal_nUnid = 0.0;
       ITAPORTE aporte;
-      /*@lineinfo:generated-code*//*@lineinfo:827^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:829^7*/
 
 //  ************************************************************
 //  #sql aporte = { SELECT APO_SALDO_CAPITAL
@@ -1942,7 +1944,7 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:833^52*/
+/*@lineinfo:user-code*//*@lineinfo:835^52*/
        //sacar saldos anteriores para sumar con los valores que venga
        if(aporte.next()){
         sal_cap=aporte.APO_SALDO_CAPITAL()+capital;
@@ -1954,7 +1956,7 @@ return strProp;
        //actualizar saldos
        aporte.close();
        if (sal_conting < 0) sal_conting = 0;
-       /*@lineinfo:generated-code*//*@lineinfo:845^8*/
+       /*@lineinfo:generated-code*//*@lineinfo:847^8*/
 
 //  ************************************************************
 //  #sql { UPDATE TBAPORTES
@@ -1987,7 +1989,7 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:851^46*/
+/*@lineinfo:user-code*//*@lineinfo:853^46*/
     }catch(Exception ex)
     {
        String v_menex = "";
@@ -2035,7 +2037,7 @@ return strProp;
       java.sql.Date  v_fecha   = new  java.sql.Date(4);
       //consultar fecha de proceso
 
-      /*@lineinfo:generated-code*//*@lineinfo:899^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:901^7*/
 
 //  ************************************************************
 //  #sql v_interface = { select  INL_PASO
@@ -2061,7 +2063,7 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:903^31*/
+/*@lineinfo:user-code*//*@lineinfo:905^31*/
 
       if(v_interface.next())
       {
@@ -2071,7 +2073,7 @@ return strProp;
 
       if(v_paso)
       {
-        /*@lineinfo:generated-code*//*@lineinfo:913^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:915^9*/
 
 //  ************************************************************
 //  #sql v_fecha = { values(TB_FFECHA_SIGUIENTE(1)) };
@@ -2099,11 +2101,11 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:913^55*/
+/*@lineinfo:user-code*//*@lineinfo:915^55*/
       }
       else
       {
-        /*@lineinfo:generated-code*//*@lineinfo:917^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:919^9*/
 
 //  ************************************************************
 //  #sql { SELECT  TRUNC(SYSDATE)   FROM DUAL  };
@@ -2135,13 +2137,13 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:917^64*/
+/*@lineinfo:user-code*//*@lineinfo:919^64*/
       }
 
        double val_ajuste = 0;
        if(accion.equals("SAC002"))
        {
-          /*@lineinfo:generated-code*//*@lineinfo:923^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:925^11*/
 
 //  ************************************************************
 //  #sql ajuste = { SELECT NVL(SUM(CAA_VALOR),0) VALORDB
@@ -2173,11 +2175,11 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:928^56*/
+/*@lineinfo:user-code*//*@lineinfo:930^56*/
           if(ajuste.next())
             val_ajuste = ajuste.VALORDB();
 
-         /*@lineinfo:generated-code*//*@lineinfo:932^10*/
+         /*@lineinfo:generated-code*//*@lineinfo:934^10*/
 
 //  ************************************************************
 //  #sql { UPDATE
@@ -2217,12 +2219,12 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:942^46*/
+/*@lineinfo:user-code*//*@lineinfo:944^46*/
 
        }
        else
        {
-         /*@lineinfo:generated-code*//*@lineinfo:947^10*/
+         /*@lineinfo:generated-code*//*@lineinfo:949^10*/
 
 //  ************************************************************
 //  #sql { UPDATE
@@ -2260,7 +2262,7 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:956^46*/
+/*@lineinfo:user-code*//*@lineinfo:958^46*/
 
        }
       strUpdate="YES";
@@ -2305,7 +2307,7 @@ return strProp;
     String cadena[]=new String[2];
     try{
       CONTRATONOMBAPEL nombApel;
-      /*@lineinfo:generated-code*//*@lineinfo:1001^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:1003^7*/
 
 //  ************************************************************
 //  #sql nombApel = { SELECT CON_NOMBRES,    CON_APELLIDOS,CON_FECHA_CANCELACION
@@ -2333,7 +2335,7 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1004^52*/
+/*@lineinfo:user-code*//*@lineinfo:1006^52*/
       if(nombApel.next()){
          strNombApel=nombApel.CON_NOMBRES()+" "+nombApel.CON_APELLIDOS();
          if(nombApel.CON_FECHA_CANCELACION()==null)
@@ -2397,7 +2399,7 @@ return strProp;
       CONAJUSTES ajusNoDec;
       if(!consecAjusOnly1.equals("")){
       int consecAjusOnly=Integer.parseInt(consecAjusOnly1);
-         /*@lineinfo:generated-code*//*@lineinfo:1068^10*/
+         /*@lineinfo:generated-code*//*@lineinfo:1070^10*/
 
 //  ************************************************************
 //  #sql ajusNoDec = { SELECT AJU_CONSECUTIVO,AJU_LINEA,AJU_FECHA_PROCESO,AJU_VALOR,AJU_RAZON_AJUSTE,AJU_USUARIO,AJU_RETIRO_ORIGINAL, AJU_RETIRO_ACTUAL,AJU_VALOR_UNIDAD FROM TBAJUSTES WHERE AJU_CON_PRO_CODIGO=:cod_producto AND AJU_CON_NUMERO=:num_contrato AND AJU_CONSECUTIVO=:consecAjusOnly AND AJU_REF_ACCION IS NULL AND AJU_FECHA_ACCION IS NULL };
@@ -2423,7 +2425,7 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1068^350*/
+/*@lineinfo:user-code*//*@lineinfo:1070^350*/
         while(ajusNoDec.next()){
           v_cons=Integer.toString(ajusNoDec.AJU_CONSECUTIVO());
           v_lin=Integer.toString(ajusNoDec.AJU_LINEA());
@@ -2453,7 +2455,7 @@ return strProp;
         }//while
         ajusNoDec.close();
       }else{
-        /*@lineinfo:generated-code*//*@lineinfo:1098^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:1100^9*/
 
 //  ************************************************************
 //  #sql ajusNoDec = { SELECT AJU_CONSECUTIVO,     AJU_LINEA,        AJU_FECHA_PROCESO,
@@ -2486,7 +2488,7 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1106^48*/
+/*@lineinfo:user-code*//*@lineinfo:1108^48*/
         while(ajusNoDec.next()){
           v_cons=Integer.toString(ajusNoDec.AJU_CONSECUTIVO());
           v_lin=Integer.toString(ajusNoDec.AJU_LINEA());
@@ -2560,7 +2562,7 @@ return strProp;
     String msgErr = "";
     int codErr=0;
     try{
-        /*@lineinfo:generated-code*//*@lineinfo:1180^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:1182^9*/
 
 //  ************************************************************
 //  #sql { call TBPBD_SaldoBrutoAporte(:cod_producto,:num_contrato,:consecApo,:valUnidad, 'S',:cap,:rend,:codErr,:msgErr) };
@@ -2601,7 +2603,7 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1180^145*/
+/*@lineinfo:user-code*//*@lineinfo:1182^145*/
         salApor[0] = cap;
         salApor[1] = rend;
       }catch(Exception e){
@@ -2620,7 +2622,7 @@ return strProp;
    {
     I_DECISIONAJUSTE  DECISIONAJUSTE;
     try{
-        /*@lineinfo:generated-code*//*@lineinfo:1199^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:1201^9*/
 
 //  ************************************************************
 //  #sql DECISIONAJUSTE = { SELECT DECODE(AJU_REF_ACCION,NULL,'1','0') DECISION
@@ -2652,7 +2654,7 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1204^69*/
+/*@lineinfo:user-code*//*@lineinfo:1206^69*/
         if(DECISIONAJUSTE.next())
         {
           if(DECISIONAJUSTE.DECISION().equals("1"))
@@ -2676,7 +2678,7 @@ return strProp;
   /////////////////////Realizar todos los cambios con la Base de Datos////////////////////////
   public static boolean TBPBD_Commit(){
     try{
-      /*@lineinfo:generated-code*//*@lineinfo:1228^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:1230^7*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -2687,7 +2689,7 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1228^19*/
+/*@lineinfo:user-code*//*@lineinfo:1230^19*/
       return true;
     }catch(Exception e){
       return false;
@@ -2696,7 +2698,7 @@ return strProp;
 /////////////////////No Realizar cambios con la Base de Datos////////////////////////~
   public static boolean TBPBD_RollBack(){
     try{
-      /*@lineinfo:generated-code*//*@lineinfo:1237^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:1239^7*/
 
 //  ************************************************************
 //  #sql { ROLLBACK };
@@ -2707,7 +2709,7 @@ return strProp;
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1237^21*/
+/*@lineinfo:user-code*//*@lineinfo:1239^21*/
       return true;
     }catch(Exception e){
       return false;

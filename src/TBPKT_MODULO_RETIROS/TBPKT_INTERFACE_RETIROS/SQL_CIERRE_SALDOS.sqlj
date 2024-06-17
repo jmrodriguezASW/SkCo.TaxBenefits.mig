@@ -43,7 +43,9 @@ public class SQL_CIERRE_SALDOS extends Object {
    Double            v_saldo_unidad_max_fec;
    Double            v_cuenta_conting_max_fec;
    String[]          v_valusu;
-   TBCL_Validacion   i_valusu = new TBCL_Validacion();
+   /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
    Date              v_fecha_d;
    int               sw = 0;
    int               v_sw = 1;
@@ -58,7 +60,7 @@ public class SQL_CIERRE_SALDOS extends Object {
    try{
      //Conexion con la base de datos
      v_valusu = new String[3];
-     v_valusu = i_valusu.TBFL_ValidarUsuario();
+     v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
      DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
      DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));
      //Validar si es fin de mes para realizar el proceso de cierre
@@ -118,8 +120,8 @@ public class SQL_CIERRE_SALDOS extends Object {
                //Llamado a funcion que devuelve el saldo de contrato
                //OJO EL SALDO DEL CONTRATO DEVULVE -1 SI HAY ERROR
                try {
-                 TBCL_AS400 ias400 = new TBCL_AS400();
-                 v_saldo_contrato  = ias400.TBF_SALDO_CONTRATO_P(v_contrato, v_fecha, as400, v_libreria);
+                 //TBCL_AS400 ias400 = new TBCL_AS400();
+                 v_saldo_contrato  = TBCL_AS400.TBF_SALDO_CONTRATO_P(v_contrato, v_fecha, as400, v_libreria);
                  if (v_saldo_contrato == -1){
                    v_cod_err = 0; // para que siga con el siguiente contrato.
                    v_men_err = "Error en la funcion del AS400";

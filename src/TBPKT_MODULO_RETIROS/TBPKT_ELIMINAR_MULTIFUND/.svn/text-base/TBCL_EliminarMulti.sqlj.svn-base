@@ -24,7 +24,7 @@ public class TBCL_EliminarMulti extends Object
  public void TBPL_Eliminar(PrintWriter out,HttpSession session,HttpServletRequest request,String nuevaCadena )
  {
   /**Instancias de clase*/
-  STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();/**Instancia de la clase TBCL_GenerarBaseHTML*/
+  //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;/**Instancia de la clase TBCL_GenerarBaseHTML*/
   TBCL_Validacion       i_valusu = new TBCL_Validacion ();/**Instancia de la clase TBCL_Validacion*/
   //TBCL_ConexionSqlj    i_conexion = new TBCL_ConexionSqlj();
   try
@@ -112,9 +112,9 @@ public class TBCL_EliminarMulti extends Object
       else
       {
        /**Si no esta parametrizada la hora de cierre para la unidad de proceso*/
-       v_pintar=    i_pagina.TBFL_CABEZA("Eliminar Solicitud de Retiro No Procesada","Eliminar Solicitud de Retiro No Procesada","","<center>No esta parametrizada la hora de cierre para el tipo de usuario "+v_tusu+"</center>",false);
+       v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Eliminar Solicitud de Retiro No Procesada","Eliminar Solicitud de Retiro No Procesada","","<center>No esta parametrizada la hora de cierre para el tipo de usuario "+v_tusu+"</center>",false);
        out.println(""+v_pintar+"");
-       v_pie = i_pagina.TBFL_PIE;
+       v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
        out.println("<br>");
        out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
        out.println(""+v_pie+"");
@@ -124,9 +124,9 @@ public class TBCL_EliminarMulti extends Object
      }
     else
     {/**Código de unidad de proceso invalido*/
-     v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro" ,"","<center>La Unidad de Proceso "+v_tuni+" es desconocido por el sistema.</center>",false);
+     v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro" ,"","<center>La Unidad de Proceso "+v_tuni+" es desconocido por el sistema.</center>",false);
      out.println(""+v_pintar+"");
-     v_pie = i_pagina.TBFL_PIE;
+     v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println("<br>");
      out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
@@ -136,9 +136,9 @@ public class TBCL_EliminarMulti extends Object
    }
    else
    {/**Código tipo de usuario invalido*/
-     v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El tipo de usuariop "+v_tusu+" es desconocido por el sistema.</center>",false);
+     v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El tipo de usuariop "+v_tusu+" es desconocido por el sistema.</center>",false);
      out.println(""+v_pintar+"");
-     v_pie = i_pagina.TBFL_PIE;
+     v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
      out.println(""+v_pie+"");
@@ -170,7 +170,7 @@ public class TBCL_EliminarMulti extends Object
                     };
 
     /**Página de respuesta*/
-    v_pintar=    i_pagina.TBFL_CABEZA("Eliminar Solicitud de Retiro No Procesada","Eliminar Solicitud de Retiro No Procesada","TBPKT_MODULO_RETIROS.TBPKT_ELIMINAR_MULTIFUND.TBS_EliminarNoProcesado","",true,"","");
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Eliminar Solicitud de Retiro No Procesada","Eliminar Solicitud de Retiro No Procesada","TBPKT_MODULO_RETIROS.TBPKT_ELIMINAR_MULTIFUND.TBS_EliminarNoProcesado","",true,"","");
                                                                                                                                
     out.println(""+v_pintar+"");
 
@@ -240,7 +240,7 @@ public class TBCL_EliminarMulti extends Object
      out.println("</table></center>");
      out.println("<br>");
      out.println("<center><input type=button value='Cancelar' onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-     v_pie = i_pagina.TBFL_PIE;
+     v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println(""+v_pie+"");
      out.close();
@@ -249,16 +249,16 @@ public class TBCL_EliminarMulti extends Object
     out.println("<PRE>");
     out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
     out.println("<center><input type=submit value='Aceptar'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-    v_pie = i_pagina.TBFL_PIE;
+    v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println(""+v_pie+"");
     out.close();
    }
    else
    {/**Se termina session*/
-    v_pintar=    i_pagina.TBFL_CABEZA(" Eliminar Solicitud de Retiro No Procesada","Error al Eliminar Solicitud de Retiro No Procesada","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA(" Eliminar Solicitud de Retiro No Procesada","Error al Eliminar Solicitud de Retiro No Procesada","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
     out.println(""+v_pintar+"");
-    v_pie = i_pagina.TBFL_PIE;
+    v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'></center>");
     out.println(""+v_pie+"");
@@ -296,11 +296,11 @@ public class TBCL_EliminarMulti extends Object
                      {
                        v_menex = "Mensaje de error: "+ex;
                      }
-   String v_pintar=    i_pagina.TBFL_CABEZA (" Eliminar Solicitud de Retiro No Procesada","Error al Eliminar Solicitud de Retiro No Procesada","","<center>"+v_menex+"</center>",false);
+   String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA (" Eliminar Solicitud de Retiro No Procesada","Error al Eliminar Solicitud de Retiro No Procesada","","<center>"+v_menex+"</center>",false);
    out.println(""+v_pintar+"");
    out.println("<BR>");
    out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-   String v_pie = i_pagina.TBFL_PIE;
+   String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println("<br>");
    out.println("<br>");
    out.println(""+v_pie+"");

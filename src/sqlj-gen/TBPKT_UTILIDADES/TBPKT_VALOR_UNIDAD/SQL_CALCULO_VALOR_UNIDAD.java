@@ -115,12 +115,12 @@ public class SQL_CALCULO_VALOR_UNIDAD extends Object {
       else{
         //Llamado a un metodo que devuelve el saldo de contrato
         try{
-          TBCL_AS400 ias400 = new TBCL_AS400();
+          //TBCL_AS400 ias400 = new TBCL_AS400();
 
           System.out.println("caso 1017 sin P v_contrato "+v_contrato);
           System.out.println("caso 1017 sin P v_fecha_contrato "+v_fecha_contrato);
 
-          v_saldo_contrato = ias400.TBF_SALDO_CONTRATO(v_contrato, v_fecha_contrato);
+          v_saldo_contrato = TBCL_AS400.TBF_SALDO_CONTRATO(v_contrato, v_fecha_contrato);
 
           /*
           Modificacion:
@@ -470,10 +470,10 @@ public class SQL_CALCULO_VALOR_UNIDAD extends Object {
       else{
         //Llamado a un metodo que devuelve el saldo de contrato
         try{
-          TBCL_AS400 ias400 = new TBCL_AS400();
+          //TBCL_AS400 ias400 = new TBCL_AS400();
           System.out.println("caso 1017 con P v_contrato "+v_contrato);
           System.out.println("caso 1017 con P v_fecha_contrato "+v_fecha_contrato);
-          v_saldo_contrato = ias400.TBF_SALDO_CONTRATO_P(v_contrato, v_fecha_contrato, as400, v_libreria);
+          v_saldo_contrato = TBCL_AS400.TBF_SALDO_CONTRATO_P(v_contrato, v_fecha_contrato, as400, v_libreria);
           System.out.println("caso 1017 con P v_saldo_contrato "+v_saldo_contrato);
           if (v_saldo_contrato == -1.0)
              v_cod_err = -1;

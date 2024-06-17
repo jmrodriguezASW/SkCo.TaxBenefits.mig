@@ -23,7 +23,8 @@ private PrintWriter out;
 private TBCL_Consulta v_Consulta;
 private String v_nuevaCadena ="";
 HttpSession session  = null;
-SQL_VALOR_UNIDAD_CC i_unidad =  new SQL_VALOR_UNIDAD_CC();/**Instancia de la clase TBCL_GenerarBaseHTML*/
+/*[SO_396] Se realiza modificación de llamado por ser método estático TBF_CALCULO_VALOR_UNIDAD de la clase SQL_VALOR_UNIDAD_CC, no es necesaria la instancia nueva*/
+//SQL_VALOR_UNIDAD_CC i_unidad =  new SQL_VALOR_UNIDAD_CC();/**Instancia de la clase TBCL_GenerarBaseHTML*/
 double[] v_valuni2     = new double[3];/**Valor unidad*/
 
   /**
@@ -51,8 +52,13 @@ double[] v_valuni2     = new double[3];/**Valor unidad*/
        String  cadena = request.getParameter("cadena");
        v_nuevaCadena = cadena;
        String ip_tax = request.getRemoteAddr();
-       TBCL_Seguridad Seguridad = new TBCL_Seguridad();
-       parametros = Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
+       /*[SO_396] Se realiza modificación de llamado por ser método estático TBCL_Seguridad.TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/
+       // 
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
+       //parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
+       parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
        }
     catch(Exception ex){System.out.println("");}
 
@@ -276,7 +282,9 @@ double[] v_valuni2     = new double[3];/**Valor unidad*/
 
         if( (java.lang.String)session.getAttribute("s_consultaas") == null)
         {
-           v_valuni2 =i_unidad.TBF_CALCULO_VALOR_UNIDAD(TBFL_FechaMenosUno(),TBFL_FechaMenosUno(), v_Nocontrato, v_codigo, false,0);
+            /*[SO_396] Se realiza modificación de llamado por ser método estático TBF_CALCULO_VALOR_UNIDAD de la clase SQL_VALOR_UNIDAD_CC, no es necesaria la instancia nueva*/
+            //v_valuni2 =i_unidad.TBF_CALCULO_VALOR_UNIDAD(TBFL_FechaMenosUno(),TBFL_FechaMenosUno(), v_Nocontrato, v_codigo, false,0);
+            v_valuni2 =SQL_VALOR_UNIDAD_CC.TBF_CALCULO_VALOR_UNIDAD(TBFL_FechaMenosUno(),TBFL_FechaMenosUno(), v_Nocontrato, v_codigo, false,0);
 
            if (v_valuni2[2] == 0.0)
            {

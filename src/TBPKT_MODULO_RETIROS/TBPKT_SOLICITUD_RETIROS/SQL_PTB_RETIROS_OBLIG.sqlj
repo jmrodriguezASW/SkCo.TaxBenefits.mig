@@ -35,14 +35,16 @@ public class SQL_PTB_RETIROS_OBLIG extends Object{
     i_aportes v_aportes;     
     
     public String[] INSERT_RETPERSSON_OBLIG (String v_codproducto, String v_Nocontrato, double vretconsec, double aporte_actual){                
-        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
         String[] resul = new String[2];
         resul[0] = "0"; 
         resul[1] = "0";        
         try {            
             //Conexion con la base de datos
             v_valusu = new String[3];
-            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));
             #sql {call tbpbd_insretperson_oblig(:vretconsec
@@ -76,7 +78,9 @@ public class SQL_PTB_RETIROS_OBLIG extends Object{
                                            String v_nombrester, String v_apellidoster, String v_usuario, String v_orden, String v_concepto, Double v_saldoAVA, Double v_saldoAVE,
                                            Double v_disponible_neto, Double v_cc, Double v_ret_rend, Double v_prov_comi_rend, Double v_prov_comi_cap, int commit){                        
     
-        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
         String v_ret_consec = "0";
         String[] resul = new String[3];
         resul[0] = "0"; 
@@ -86,7 +90,7 @@ public class SQL_PTB_RETIROS_OBLIG extends Object{
         try {                 
             //Conexion con la base de datos
             v_valusu = new String[3];
-            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false)); 
             
@@ -146,7 +150,9 @@ public class SQL_PTB_RETIROS_OBLIG extends Object{
      
      public String[] UPDATE_RETPERSSON_OBLIG (String v_codproducto, String v_contrato, double v_ret_consec, int parametro){
            
-        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
         String[] resul = new String[3];
         resul[0] = "0"; 
         resul[1] = "0";    
@@ -155,7 +161,7 @@ public class SQL_PTB_RETIROS_OBLIG extends Object{
         try {            
             //Conexion con la base de datos
             v_valusu = new String[3];
-            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));            
             #sql {call TBPBD_UPDRETIRO_PERS_OBLIG(:v_ret_consec
@@ -187,7 +193,9 @@ public class SQL_PTB_RETIROS_OBLIG extends Object{
      
     public String[] ELIMINAR_RETIRO_OBLIG (String producto, String contrato, String conret, String usuario){                
         
-        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
         String[] resul = new String[2];
         resul[0] = "0"; 
         resul[1] = "0";   
@@ -195,7 +203,7 @@ public class SQL_PTB_RETIROS_OBLIG extends Object{
         try {                                
             //Conexion con la base de datos
             v_valusu = new String[3];
-            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));                        
             
@@ -232,14 +240,16 @@ public class SQL_PTB_RETIROS_OBLIG extends Object{
     
     public double[] CONSULTA_REND_TRAS_OBLIG (String producto, String contrato, int padre_consecutivo){                
         
-        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
         double[] resul = new double[3000];                
         int i = 0;                                
         
         try {                                
             //Conexion con la base de datos
             v_valusu = new String[3];
-            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));                                                                
             

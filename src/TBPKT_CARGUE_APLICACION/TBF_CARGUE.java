@@ -100,7 +100,11 @@ public class TBF_CARGUE extends JFrame
    String v_fecar = "";
    TBF_RES_CARGUE f = new TBF_RES_CARGUE();
    TBF_MENSAJE m = new TBF_MENSAJE();
-   TBCL_Validacion  i_valusu = new TBCL_Validacion();
+   
+ 
+ //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
+
+
    TBCL_Fecha        i_fecha  =  new    TBCL_Fecha();
    int v_contador   = 0;
    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a", Locale.getDefault());

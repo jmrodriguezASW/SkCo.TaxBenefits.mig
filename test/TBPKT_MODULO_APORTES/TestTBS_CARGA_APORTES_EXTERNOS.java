@@ -19,9 +19,9 @@ public class TestTBS_CARGA_APORTES_EXTERNOS
   public void TBPL_carga_archivoTest(String archivo,Connection c){
 
       try{
-      
-        TBS_CARGA_APORTES_EXTERNOS tras = new TBS_CARGA_APORTES_EXTERNOS();
-        tras.TBPL_carga_archivoNoWeb(archivo, c);
+          /*[SO_396] Se realiza modificación de llamado por ser método estático TBPL_carga_archivoNoWeb de la clase TBS_CARGA_APORTES_EXTERNOS, no es necesaria la instancia nueva*/
+        //TBS_CARGA_APORTES_EXTERNOS tras = new TBS_CARGA_APORTES_EXTERNOS();
+        TBS_CARGA_APORTES_EXTERNOS.TBPL_carga_archivoNoWeb(archivo, c);
 
       }catch (Exception e){
          System.out.println("Error TBPL_carga_archivoTest: "+e);
@@ -36,9 +36,13 @@ public class TestTBS_CARGA_APORTES_EXTERNOS
       /*Conexion con la base de datos*/
       //logger.info
       try {
-       TBCL_Validacion  i_valusu  = new TBCL_Validacion ();
+       
+ 
+ //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
+
+
        String[] v_valusu          = new String[3];
-       v_valusu                   = i_valusu.TBFL_ValidarUsuario();
+       v_valusu                   = TBCL_Validacion.TBFL_ValidarUsuario();
       String  archivo = "000232149.txt";
       Class.forName("oracle.jdbc.driver.OracleDriver");
       Connection v_conexion_taxb = DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);

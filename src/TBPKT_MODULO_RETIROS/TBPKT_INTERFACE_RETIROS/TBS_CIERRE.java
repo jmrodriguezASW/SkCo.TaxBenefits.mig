@@ -18,7 +18,10 @@ public class TBS_CIERRE extends HttpServlet{
     //***********************************************
     PrintWriter    out          = new PrintWriter (response.getOutputStream());
     String         parametros[] = new String [6];
-    TBCL_Seguridad FB           = new TBCL_Seguridad();
+     
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad FB           = new TBCL_Seguridad();
     SQL_CIERRE     icierre      = new SQL_CIERRE();
     String         encriptada;
     String         ip_tax;
@@ -30,7 +33,7 @@ public class TBS_CIERRE extends HttpServlet{
       encriptada = request.getParameter("cadena");
       ip_tax = request.getRemoteAddr();
       sid = request.getRequestedSessionId();
-      parametros = FB.TBFL_Seguridad(encriptada, out, ip_tax);
+      parametros = TBCL_Seguridad.TBFL_Seguridad(encriptada, out, ip_tax);
       response.setContentType("text/html");
     }
     catch(Exception ex){

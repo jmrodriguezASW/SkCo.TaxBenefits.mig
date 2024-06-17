@@ -79,7 +79,9 @@ implements sqlj.runtime.NamedIterator
    Double            v_saldo_unidad_max_fec;
    Double            v_cuenta_conting_max_fec;
    String[]          v_valusu;
-   TBCL_Validacion   i_valusu = new TBCL_Validacion();
+   /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
    Date              v_fecha_d;
    int               sw = 0;
    int               v_sw = 1;
@@ -94,14 +96,14 @@ implements sqlj.runtime.NamedIterator
    try{
      //Conexion con la base de datos
      v_valusu = new String[3];
-     v_valusu = i_valusu.TBFL_ValidarUsuario();
+     v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
      DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
      DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));
      //Validar si es fin de mes para realizar el proceso de cierre
      //Si no es fin de mes realizar el proceso solo si para el mes anterior no se
      //realizo el cierre de saldos
      System.out.println("Fecha en  cierre saldo "+v_fecha);
-     /*@lineinfo:generated-code*//*@lineinfo:68^6*/
+     /*@lineinfo:generated-code*//*@lineinfo:70^6*/
 
 //  ************************************************************
 //  #sql v_cierre = { values ( TBFBD_VALIDAR_CIERRE_SALDO (:v_fecha, :v_cod_err,:v_men_err)) };
@@ -139,13 +141,13 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:68^112*/
+/*@lineinfo:user-code*//*@lineinfo:70^112*/
      System.out.println("Paso validar cierre saldo "+v_cierre+" Fecha nueva"+v_fecha+" v_cod_err"+v_cod_err);
      if (v_cod_err == 0){
        if (v_cierre.charAt(0) == 'S'){
          //Conexion al AS400
          //Buscar elementos de conexion al As400 en referncias
-         /*@lineinfo:generated-code*//*@lineinfo:74^10*/
+         /*@lineinfo:generated-code*//*@lineinfo:76^10*/
 
 //  ************************************************************
 //  #sql v_sw = { values(TB_FREFERENCIAS_MULTI(:v_sistema,
@@ -189,7 +191,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:77^73*/
+/*@lineinfo:user-code*//*@lineinfo:79^73*/
          if (v_sw == 0){
            //Conectarse al AS400
            AS400 as400 = new AS400(""+v_sistema+"");
@@ -211,7 +213,7 @@ implements sqlj.runtime.NamedIterator
              //Si existen los saldos pero la cuenta contigente es distinta de Null significa
              //que un cierre mensual anterior proceso este producto-contrato y no se
              //debe procesar. Calcular saldo_contrato = AS400, saldo_unidades y valor_unidad
-             /*@lineinfo:generated-code*//*@lineinfo:99^14*/
+             /*@lineinfo:generated-code*//*@lineinfo:101^14*/
 
 //  ************************************************************
 //  #sql vreg_contrato = { SELECT con_pro_codigo, con_numero
@@ -245,7 +247,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:108^41*/
+/*@lineinfo:user-code*//*@lineinfo:110^41*/
              while (vreg_contrato.next() ){
                //Seguir proceso de cierre aunque ocurra un error al calcular los
                //saldos para cualquier contrato. Si ocurre un error insertar en el LOG
@@ -258,8 +260,8 @@ implements sqlj.runtime.NamedIterator
                //Llamado a funcion que devuelve el saldo de contrato
                //OJO EL SALDO DEL CONTRATO DEVULVE -1 SI HAY ERROR
                try {
-                 TBCL_AS400 ias400 = new TBCL_AS400();
-                 v_saldo_contrato  = ias400.TBF_SALDO_CONTRATO_P(v_contrato, v_fecha, as400, v_libreria);
+                 //TBCL_AS400 ias400 = new TBCL_AS400();
+                 v_saldo_contrato  = TBCL_AS400.TBF_SALDO_CONTRATO_P(v_contrato, v_fecha, as400, v_libreria);
                  if (v_saldo_contrato == -1){
                    v_cod_err = 0; // para que siga con el siguiente contrato.
                    v_men_err = "Error en la funcion del AS400";
@@ -273,7 +275,7 @@ implements sqlj.runtime.NamedIterator
                    //Seleccionar los saldos de unidades y cuenta contingente de los saldos
                    //mas recientes en TBSALDOS o del aporte vigente mas antiguo en caso
                    //de no existir saldos anteriores en TBSALDOS
-                   /*@lineinfo:generated-code*//*@lineinfo:136^20*/
+                   /*@lineinfo:generated-code*//*@lineinfo:138^20*/
 
 //  ************************************************************
 //  #sql { call TBPBD_ULTIMOS_SALDOS(:v_fecha,
@@ -322,11 +324,11 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:143^69*/
+/*@lineinfo:user-code*//*@lineinfo:145^69*/
                    if (v_cod_err == 0){
                      v_saldo_unidades = 0;
                      //Calcular el saldo_unidades y el saldo de cuenta contingente
-                     /*@lineinfo:generated-code*//*@lineinfo:147^22*/
+                     /*@lineinfo:generated-code*//*@lineinfo:149^22*/
 
 //  ************************************************************
 //  #sql { call TBPBD_SALUNI_SALCTACONT(:v_fecha,
@@ -378,13 +380,13 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:156^74*/
+/*@lineinfo:user-code*//*@lineinfo:158^74*/
                      if (v_cod_err == 0 ){
                        if ((v_saldo_unidades > 0) && (v_saldo_cuenta_conting >= 0)) {
                          //calculo el valor de la unidad
                          v_valor_unidad     = v_saldo_contrato / v_saldo_unidades;
                          //Calcular el saldo disponible del contrato
-                         /*@lineinfo:generated-code*//*@lineinfo:162^26*/
+                         /*@lineinfo:generated-code*//*@lineinfo:164^26*/
 
 //  ************************************************************
 //  #sql { call TBPBD_CONTRATO_DISPONIBLE(:v_fecha,
@@ -431,10 +433,10 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:169^80*/
+/*@lineinfo:user-code*//*@lineinfo:171^80*/
                          if (v_cod_err == 0 ){
                            //Llama al procedimiento que inserta en la tabla TBSALDOS
-                           /*@lineinfo:generated-code*//*@lineinfo:172^28*/
+                           /*@lineinfo:generated-code*//*@lineinfo:174^28*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBSALDOS(:v_producto,
@@ -484,10 +486,10 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:181^75*/
+/*@lineinfo:user-code*//*@lineinfo:183^75*/
                            //Si este saldo existe en la tabla TBSALDOS se actualiza la tabla
                            if (v_cod_err == -0001){
-                             /*@lineinfo:generated-code*//*@lineinfo:184^30*/
+                             /*@lineinfo:generated-code*//*@lineinfo:186^30*/
 
 //  ************************************************************
 //  #sql { call TBPBD_UPDATE_SALDOS(to_date(:v_fecha,'RRRR-MM-DD'),
@@ -537,12 +539,12 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:193^78*/
+/*@lineinfo:user-code*//*@lineinfo:195^78*/
                              if (v_cod_err != 0 ){
                                sw = 1;
                                v_log_mensaje = v_men_err;
                                v_log_datos   = "Fecha: "+v_fecha+" Contrato: "+v_contrato;
-                               /*@lineinfo:generated-code*//*@lineinfo:198^32*/
+                               /*@lineinfo:generated-code*//*@lineinfo:200^32*/
 
 //  ************************************************************
 //  #sql { ROLLBACK  };
@@ -553,10 +555,10 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:198^48*///De la actualizacion
+/*@lineinfo:user-code*//*@lineinfo:200^48*///De la actualizacion
                              }//Hubo error al actualizar en TBSALDOS
                              else{
-                               /*@lineinfo:generated-code*//*@lineinfo:201^32*/
+                               /*@lineinfo:generated-code*//*@lineinfo:203^32*/
 
 //  ************************************************************
 //  #sql { COMMIT  };
@@ -567,7 +569,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:201^46*///De la actualizacion
+/*@lineinfo:user-code*//*@lineinfo:203^46*///De la actualizacion
                              }//No hubo error al actualizar
                            }//Existia saldos en TBSALDOS actualizar
                            else{
@@ -577,7 +579,7 @@ implements sqlj.runtime.NamedIterator
                                v_log_datos   = "Fecha: "+v_fecha+" Contrato: "+v_contrato;
                                System.out.println("Error al insertar en tbsaldos "+v_men_err);
                                System.out.println("Contrato "+v_contrato);
-                               /*@lineinfo:generated-code*//*@lineinfo:211^32*/
+                               /*@lineinfo:generated-code*//*@lineinfo:213^32*/
 
 //  ************************************************************
 //  #sql { ROLLBACK  };
@@ -588,10 +590,10 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:211^48*///De la insercion
+/*@lineinfo:user-code*//*@lineinfo:213^48*///De la insercion
                              }//Hubo error al insertar en TBSALDOS
                              else{
-                               /*@lineinfo:generated-code*//*@lineinfo:214^32*/
+                               /*@lineinfo:generated-code*//*@lineinfo:216^32*/
 
 //  ************************************************************
 //  #sql { COMMIT  };
@@ -602,7 +604,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:214^46*///De la insercion
+/*@lineinfo:user-code*//*@lineinfo:216^46*///De la insercion
                              }//No hubo error al insertar
                            }//No existian saldos en TBSALDOS insertó o error
                          }//No hubo error al calcular el saldo disponible de contrato
@@ -657,7 +659,7 @@ implements sqlj.runtime.NamedIterator
                }//Hubo error al calcular el saldo de contrato en el AS400
                if (sw == 1){
                  //Procedimiento que inserta en la tabla de Log
-                 /*@lineinfo:generated-code*//*@lineinfo:269^18*/
+                 /*@lineinfo:generated-code*//*@lineinfo:271^18*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBINTERFACE_LOGS('EG', to_date(:v_fecha,'RRRR-MM-DD'), 'CM', :v_log_mensaje,
@@ -685,8 +687,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:270^86*/
-                 /*@lineinfo:generated-code*//*@lineinfo:271^18*/
+/*@lineinfo:user-code*//*@lineinfo:272^86*/
+                 /*@lineinfo:generated-code*//*@lineinfo:273^18*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -697,7 +699,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:271^30*/
+/*@lineinfo:user-code*//*@lineinfo:273^30*/
                }//Insertar en el log
              }//While
              //Desconectarse del AS400

@@ -23,7 +23,7 @@ public class TBCL_RetiroOperativo_Oblig extends HttpServlet{
 
     public void TBPL_SolicitudOperativo_Oblig(PrintWriter out,HttpSession session,HttpServletRequest request,String nuevaCadena) {
         
-        STBCL_GenerarBaseHTML  i_pagina = new STBCL_GenerarBaseHTML();/**Instancia de la clase TBCL_GenerarBaseHTML*/
+        //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;/**Instancia de la clase TBCL_GenerarBaseHTML*/
         String v_pintar        = "";/**Variable  dibujar inicio pagina*/
         String v_pie           = "";/**Variable  dibujar final pagina*/
         String v_retiro        = "";/**Variable tipo retiro*/
@@ -258,16 +258,16 @@ public class TBCL_RetiroOperativo_Oblig extends HttpServlet{
 
 /*@lineinfo:user-code*//*@lineinfo:139^66*/        
         
-         TBCL_FuncionesAs400_Oblig Saldo_Contrato = new TBCL_FuncionesAs400_Oblig();
-         resultsaldo = Saldo_Contrato.TBFL_Saldo_Contrato_OBLIG(v_pro,"E", vfecha_act, vtipoid, vnumid, v_libreria_oblig, v_sistema_oblig, v_usuario_oblig, v_password_oblig);           
+         //TBCL_FuncionesAs400_Oblig Saldo_Contrato = new TBCL_FuncionesAs400_Oblig();
+         resultsaldo = TBCL_FuncionesAs400_Oblig.TBFL_Saldo_Contrato_OBLIG(v_pro,"E", vfecha_act, vtipoid, vnumid, v_libreria_oblig, v_sistema_oblig, v_usuario_oblig, v_password_oblig);           
          
          if(resultsaldo.substring(0,4).equals("ERROR"))
          {
-            String v_pintar4=    i_pagina.TBFL_CABEZA ("Calcular Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error al procesar solicitud de Retiro. No se pudo obtener el saldo del contrato.</center>",false);
+            String v_pintar4=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Calcular Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error al procesar solicitud de Retiro. No se pudo obtener el saldo del contrato.</center>",false);
             out.println(""+v_pintar4+"");
             out.println("<BR>");
             
-            v_pie = i_pagina.TBFL_PIE;
+            v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
             out.println("<br>");
             out.println(""+v_pie+"");
             out.close();
@@ -287,7 +287,7 @@ public class TBCL_RetiroOperativo_Oblig extends HttpServlet{
              session.setAttribute("v_saldoAVE", v_saldoAVE);
              
              //Obtenemos de AS400 si hay credito pendiente del afiliado
-             String resultCredito = Saldo_Contrato.TBFL_Saldo_Credito( v_pro, vtipoid, vnumid, v_libreria_oblig, v_sistema_oblig, v_usuario_oblig, v_password_oblig);
+             String resultCredito = TBCL_FuncionesAs400_Oblig.TBFL_Saldo_Credito( v_pro, vtipoid, vnumid, v_libreria_oblig, v_sistema_oblig, v_usuario_oblig, v_password_oblig);
             
              if(!resultCredito.substring(0,3).toUpperCase().equals("ERR")) 
                 Credito = Double.parseDouble(resultCredito);
@@ -402,11 +402,11 @@ public class TBCL_RetiroOperativo_Oblig extends HttpServlet{
         if( v_disponibleTOblig > 0 && v_saldoTOblig>0)
          {
                  /**Dibujar página de respuesta*/                
-                 v_pintar=    i_pagina.TBFL_CABEZA("Detalle del Retiro","Detalle del Retiro","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_ConfirmarRetiro","","modulo_retiros_oblig.js","");                 
+                 v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Detalle del Retiro","Detalle del Retiro","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_ConfirmarRetiro","","modulo_retiros_oblig.js","");                 
                  out.println(""+v_pintar+"");                                
          }
         else{
-                v_pintar=    i_pagina.TBFL_CABEZA ("Detalle del Retiro","Detalle del Retiro","","<center>El Contrato no Cuenta con Saldo Disponible.</center>",false);
+                v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Detalle del Retiro","Detalle del Retiro","","<center>El Contrato no Cuenta con Saldo Disponible.</center>",false);
                 out.println(""+v_pintar+"");
                 out.println("<BR>");
                 out.println("<center>");
@@ -416,7 +416,7 @@ public class TBCL_RetiroOperativo_Oblig extends HttpServlet{
                                      "<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>" + 
                                      "<input type=submit name = 'Cancelar' value='Cancelar'>"+
                                      "</FORM> </center>");                
-                v_pie = i_pagina.TBFL_PIE;
+                v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                 out.println("<br>");
                 out.println(""+v_pie+"");
                 out.close();                
@@ -492,7 +492,7 @@ public class TBCL_RetiroOperativo_Oblig extends HttpServlet{
               String s_prov_credito = String.valueOf(v_format.format(SaldosFinales[20]));*/
               String s_credito = String.valueOf(v_format.format(Credito));
              
-             v_pintar = i_pagina.TBFL_DISPONIBLE_OBLIG(s_saldoAVA, s_saldoAVE, 
+             v_pintar = STBCL_GenerarBaseHTML.TBFL_DISPONIBLE_OBLIG(s_saldoAVA, s_saldoAVE, 
                                                        SaldosFinales[2], SaldosFinales[3], 
                                                        SaldosFinales[4], SaldosFinales[5], 
                                                        SaldosFinales[6], SaldosFinales[7], 
@@ -844,7 +844,7 @@ public class TBCL_RetiroOperativo_Oblig extends HttpServlet{
          out.println("<tr><td valign=TOP><input type=submit name = 'Aceptar' value='Aceptar'  ></td><td valign=TOP><input type=button name = 'Regresar' value='Regresar' onclick=' history.go(-1)'></td></form>");                                
          out.println("</tr>");
          out.println("</table></center>");         
-         v_pie = i_pagina.TBFL_PIE;
+         v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
          out.println(""+v_pie+"");
          out.println("<br>");         
          out.close();
@@ -856,23 +856,23 @@ public class TBCL_RetiroOperativo_Oblig extends HttpServlet{
         String error = ex.toString();
         if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
         {
-        v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Solicitud de Retiro","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
+        v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Solicitud de Retiro","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
         }
         else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
             {
-             v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
+             v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
             }
                else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
                     {
-                     v_pintar = i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
+                     v_pintar = STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
                     }
                     else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
                          {
-                           v_pintar =  i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
+                           v_pintar =  STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
                          }
                       else
                       {
-                       v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Mensaje de Error :"+ex+".</center>",false);
+                       v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Mensaje de Error :"+ex+".</center>",false);
                       }
         out.println(""+v_pintar+"");
         out.println("<BR>");
@@ -883,7 +883,7 @@ public class TBCL_RetiroOperativo_Oblig extends HttpServlet{
                          "<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>" + 
                          "<input type=submit name = 'Cancelar' value='Cancelar'>"+
                          "</FORM> </center>");        
-        v_pie = i_pagina.TBFL_PIE;
+        v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
         out.println("<br>");
         out.println("<br>");
         out.println(""+v_pie+"");

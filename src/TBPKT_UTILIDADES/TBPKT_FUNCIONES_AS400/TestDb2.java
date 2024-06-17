@@ -37,10 +37,10 @@ public class TestDb2 extends Object {
             connection.close();
           } catch (SQLException e1) {
               e1.printStackTrace();
-              return e1.toString();
+              rta = e1.toString();
           }
         }
-        return rta;
       }
+        return rta;
     }
 }

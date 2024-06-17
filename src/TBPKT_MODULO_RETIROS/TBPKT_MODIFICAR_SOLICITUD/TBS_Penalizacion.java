@@ -12,7 +12,8 @@ public class TBS_Penalizacion extends HttpServlet
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
  {
   PrintWriter out = new PrintWriter (response.getOutputStream());
-  STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();
+  /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase STBCL_GenerarBaseHTML, no es necesaria la instancia nueva*/ 
+ //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;
   try
   {
    //se toma session
@@ -32,8 +33,11 @@ public class TBS_Penalizacion extends HttpServlet
    String  cadena = request.getParameter("cadena");
    String   nuevaCadena = cadena;
    String ip_tax = request.getRemoteAddr();
-   TBCL_Seguridad Seguridad = new TBCL_Seguridad();
-   parametros = Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
+    
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
+   parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
    v_contrato = parametros[0];
    v_producto = parametros[1];
    v_usuario  = parametros[2];
@@ -72,9 +76,9 @@ public class TBS_Penalizacion extends HttpServlet
               }
               else
               {
-               String v_pintarout=    i_pagina.TBFL_CABEZA("Modificar Solicitud de Retiro","Error al Modificar Solicitud de Retiro","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
+               String v_pintarout=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Solicitud de Retiro","Error al Modificar Solicitud de Retiro","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
                out.println(""+v_pintarout+"");
-               String v_pieout = i_pagina.TBFL_PIE;
+               String v_pieout = STBCL_GenerarBaseHTML.TBFL_PIE;
                out.println("<br>");
                out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'></center>");
                out.println(""+v_pieout+"");
@@ -110,11 +114,11 @@ public class TBS_Penalizacion extends HttpServlet
                      {
                        v_menex = "Mensaje de error: "+ex;
                      }
-   String v_pintar=    i_pagina.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error al Modificar Solicitud de Retiro","","<center>"+v_menex+"</center>",false);
+   String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error al Modificar Solicitud de Retiro","","<center>"+v_menex+"</center>",false);
    out.println(""+v_pintar+"");
    out.println("<BR>");
    out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-   String v_pie = i_pagina.TBFL_PIE;
+   String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println("<br>");
    out.println(""+v_pie+"");
    out.close();

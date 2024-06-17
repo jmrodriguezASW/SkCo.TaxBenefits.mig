@@ -18,10 +18,14 @@ public class TBCL_ConexionSqlj extends Object {
  {
   try
   {
-   TBCL_Validacion      i_valusu = new TBCL_Validacion ();/**Instancia de la clase TBCL_Validacion*/
+   
+ 
+ //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
+
+/**Instancia de la clase TBCL_Validacion*/
    /**Leer de archivo connection.properties url,usuario y paswword a la base de datos.*/
    String[] v_valusu = new String[3];
-   v_valusu          =i_valusu.TBFL_ValidarUsuario();
+   v_valusu          =TBCL_Validacion.TBFL_ValidarUsuario();
    /**Realizar conexion a la base de datos*/
    DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
    DefaultContext ctx = new DefaultContext(v_valusu[0],v_valusu[1],v_valusu[2],false);

@@ -19,9 +19,9 @@ public class TestTBFBD_JDBC
   public void TBFBD_nextConsecAjusTest(){
 
       try{
-      
-        TBFBD_JDBC tbjdbc = new TBFBD_JDBC();
-        String Resultado  = tbjdbc.TBFBD_nextConsecAjus();
+          /*[SO_396] Se realiza modificación de llamado por ser método estático TBFBD_nextConsecAjus de la clase TBFBD_JDBC, no es necesaria la instancia nueva*/
+        //TBFBD_JDBC tbjdbc = new TBFBD_JDBC();
+        String Resultado  = TBFBD_JDBC.TBFBD_nextConsecAjus();
         System.out.println(Resultado);
 
       }catch (Exception e){
@@ -34,9 +34,9 @@ public class TestTBFBD_JDBC
   public void TBFBD_nextConsecAjusTestConex(){
 
       try{
-      
+          /*[SO_396] Se realiza modificación de llamado por ser método estático TBFBD_nextConsecAjusConex de la clase TBFBD_JDBC, no es necesaria la instancia nueva*/
         TBFBD_JDBC tbjdbc = new TBFBD_JDBC();
-        String Resultado  = tbjdbc.TBFBD_nextConsecAjusConex(con);
+        String Resultado  = TBFBD_JDBC.TBFBD_nextConsecAjusConex(con);
         System.out.println(Resultado);
 
       }catch (Exception e){
@@ -52,9 +52,10 @@ public class TestTBFBD_JDBC
       /*Conexion con la base de datos*/
       
       try {
-      TBCL_Validacion valuesUser = new TBCL_Validacion();
+          /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/
+      //TBCL_Validacion valuesUser = new TBCL_Validacion();
       String[] valuesUs = new String[3];
-      valuesUs = valuesUser.TBFL_ValidarUsuario();
+      valuesUs = TBCL_Validacion.TBFL_ValidarUsuario();
       DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
       con = DriverManager.getConnection(valuesUs[0],valuesUs[1],valuesUs[2]);
       

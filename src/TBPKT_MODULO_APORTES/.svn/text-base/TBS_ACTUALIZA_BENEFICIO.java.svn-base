@@ -77,7 +77,7 @@ public class TBS_ACTUALIZA_BENEFICIO extends HttpServlet implements SingleThread
      v_producto = "x";
      v_contrato = "x";
    }
-  STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII();
+  //STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII;
   //------------------------------------------------------------------pagina numero 1
  //si los parametros son validos, dibujo hojabase y devuelvo parametros x y x
  if(parametros_requeridos.TBPL_Parametros_Requeridos(v_producto,v_contrato))
@@ -197,12 +197,12 @@ else if((nombre_producto.equals("x"))&&(numero_contrato.equals("x")))
            if(matUnidad[2]==-3.0) msj = "ERROR menos 3";
            if(matUnidad[2]==-4.0) msj = "ERROR menos 4";
            if(matUnidad[2]==-5.0) msj = "ERROR menos 5";
-           STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML();
-           salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZA EXENTOS",
+           //STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML;
+           salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZA EXENTOS",
                                           " ","SE PRODUJO UN ERROR EN EL CALCULO DEL VALOR DE LA UNIDAD, "+msj,false));
            salida.println("<BR><BR>");
            salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-           salida.println(plantilla1.TBFL_PIE);
+           salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
            salida.close();
        }
 //--
@@ -279,12 +279,12 @@ else if((nombre_producto.equals("y"))&&(numero_contrato.equals("y")))
      t_cst8i_1.execute();
         t_cst8i_1.close();
     }
-   STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML();
-   salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZA EXENTOS",
+   //STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML;
+   salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZA EXENTOS",
                                                 "","ACTUALIZACION DE BENEFICIO DE APORTES REALIZADA",false));
    salida.println("<BR><BR>");
    salida.println("<center><input type='button' value='Aceptar' Onclick = 'history.go(-2);'></center>");
-   salida.println(plantilla1.TBFL_PIE);
+   salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
    salida.flush();
    v_conexion_taxb.commit();
    return;
@@ -292,13 +292,13 @@ else if((nombre_producto.equals("y"))&&(numero_contrato.equals("y")))
  }
  catch(Exception ex)
    {
-    STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+    //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
     String msj = "SE PRODUJO UN ERROR INESPERADO, "+ex.toString() +" INTENTE DE NUEVO.";
-    salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE EXENCION DE APORTES",
+    salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE EXENCION DE APORTES",
                                          "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_BENEFICIO","<CENTER>"+msj+"</CEBTER>",false));
     salida.println("<BR><BR>");
     salida.println("<center><input type='button' value='Aceptar' Onclick=history.go("+v_historia+");></center>");
-    salida.println(plantilla.TBFL_PIE);
+    salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
     salida.flush();
     return;
    }

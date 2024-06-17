@@ -1058,9 +1058,11 @@ public static boolean TBPBD_ConexionBD()
 {
 try
   {
-   TBCL_Validacion  i_valusu  = new TBCL_Validacion();
+   /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
    String[] v_valusu          = new String[3];
-   v_valusu                   = i_valusu.TBFL_ValidarUsuario();
+   v_valusu                   = TBCL_Validacion.TBFL_ValidarUsuario();
    DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
    DefaultContext.setDefaultContext(new DefaultContext(v_valusu[0],v_valusu[1],v_valusu[2],false));
    return true;
@@ -1077,7 +1079,7 @@ public static String TBPBD_FechaHoy()
  try
  {
   FECHAACTUAL fecAct1;
-  /*@lineinfo:generated-code*//*@lineinfo:76^3*/
+  /*@lineinfo:generated-code*//*@lineinfo:78^3*/
 
 //  ************************************************************
 //  #sql fecAct1 = { SELECT SYSDATE AS FECACTUAL FROM DUAL };
@@ -1099,7 +1101,7 @@ public static String TBPBD_FechaHoy()
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:76^54*/
+/*@lineinfo:user-code*//*@lineinfo:78^54*/
   if(fecAct1.next())
   {
     v_fechaHoy=fecAct1.FECACTUAL().toString();
@@ -1231,7 +1233,7 @@ public static String TBPBD_FechaHoy()
         String v_passmfund = new String();
 
 
-        /*@lineinfo:generated-code*//*@lineinfo:208^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:210^9*/
 
 //  ************************************************************
 //  #sql { call TBPBD_Parametros_FuncionesAS(:v_libreria,
@@ -1262,11 +1264,11 @@ public static String TBPBD_FechaHoy()
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:212^49*/
+/*@lineinfo:user-code*//*@lineinfo:214^49*/
         
         String v_retorno_programa = new String("");
         
-        /*@lineinfo:generated-code*//*@lineinfo:216^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:218^9*/
 
 //  ************************************************************
 //  #sql v_retorno_programa = { values (TBCL_FuncionesAs400.TBPL_ProgramaContrato(:num_contrato,
@@ -1305,16 +1307,18 @@ public static String TBPBD_FechaHoy()
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:221^85*/
+/*@lineinfo:user-code*//*@lineinfo:223^85*/
         
         String v_programa = v_retorno_programa.substring(0,v_retorno_programa.indexOf(";",0));
         /*FIN Modificación hecha por APC para manejar el nuevo reglamento 2006-06-22*/          
   
   
   
-     TBCL_Validacion  i_valusu  = new TBCL_Validacion();
+     /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
      String[] v_valusu          = new String[3];
-     v_valusu                   = i_valusu.TBFL_ValidarUsuario();
+     v_valusu                   = TBCL_Validacion.TBFL_ValidarUsuario();
      DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
      DefaultContext.setDefaultContext(new DefaultContext(v_valusu[0],v_valusu[1],v_valusu[2],false));
      String indicador_ng = new String("N");
@@ -1322,7 +1326,7 @@ public static String TBPBD_FechaHoy()
        * MOS Se quita temporalmente :v_programa
        * Se vuelve a poner
        */
-          /*@lineinfo:generated-code*//*@lineinfo:238^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:242^11*/
 
 //  ************************************************************
 //  #sql { call TBPBD_RETIRO(:cod_producto
@@ -1428,7 +1432,7 @@ public static String TBPBD_FechaHoy()
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:274^30*/
+/*@lineinfo:user-code*//*@lineinfo:278^30*/
 
       try
       {if(valneto!=null)valores[0]=valneto.toString();}
@@ -1483,7 +1487,7 @@ public static String TBPBD_FechaActual()
   java.sql.Date fec = new java.sql.Date(4);
   try
   {
-    /*@lineinfo:generated-code*//*@lineinfo:329^5*/
+    /*@lineinfo:generated-code*//*@lineinfo:333^5*/
 
 //  ************************************************************
 //  #sql fec = { VALUES(TB_FFECHA_SIGUIENTE(-1)) };
@@ -1511,7 +1515,7 @@ public static String TBPBD_FechaActual()
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:329^48*/
+/*@lineinfo:user-code*//*@lineinfo:333^48*/
     v_fecha  = fec.toString();
   }
   catch(Exception ex)
@@ -1567,7 +1571,7 @@ public static String TBPBD_Aplicar(String cod_producto,
  try
   {
    val_difNetos *= (-1);
-   /*@lineinfo:generated-code*//*@lineinfo:385^4*/
+   /*@lineinfo:generated-code*//*@lineinfo:389^4*/
 
 //  ************************************************************
 //  #sql { INSERT INTO
@@ -1635,7 +1639,7 @@ public static String TBPBD_Aplicar(String cod_producto,
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:417^32*/
+/*@lineinfo:user-code*//*@lineinfo:421^32*/
       strInsert=TBPBD_CargoAjuste(cod_producto,num_contrato,consecRet,consecRetP,consecAjus,linea);
  }
  catch(Exception ex)
@@ -1696,7 +1700,7 @@ public static String TBPBD_CargoAjuste(String cod_producto,
         v_cargo  = "STC"+v_ii;
         v_valor  = 0.0;
         v_valorP = 0.0;
-        /*@lineinfo:generated-code*//*@lineinfo:478^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:482^9*/
 
 //  ************************************************************
 //  #sql cargoret = { SELECT CAE_VALOR
@@ -1728,13 +1732,13 @@ public static String TBPBD_CargoAjuste(String cod_producto,
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:483^67*/
+/*@lineinfo:user-code*//*@lineinfo:487^67*/
         while(cargoret.next())
         {
           v_valor+=cargoret.CAE_VALOR();
         }
         cargoret.close();
-        /*@lineinfo:generated-code*//*@lineinfo:489^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:493^9*/
 
 //  ************************************************************
 //  #sql cargoretP = { SELECT CAE_VALOR
@@ -1766,7 +1770,7 @@ public static String TBPBD_CargoAjuste(String cod_producto,
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:494^69*/
+/*@lineinfo:user-code*//*@lineinfo:498^69*/
         while(cargoretP.next())
         {
           v_valorP+=cargoretP.CAE_VALOR();
@@ -1774,7 +1778,7 @@ public static String TBPBD_CargoAjuste(String cod_producto,
         cargoretP.close();
         //proceso de insertar en cargo_ajustes
         double v_valorDif=v_valor-v_valorP;
-        /*@lineinfo:generated-code*//*@lineinfo:502^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:506^9*/
 
 //  ************************************************************
 //  #sql { INSERT INTO TBCARGOS_AJUSTES
@@ -1816,7 +1820,7 @@ public static String TBPBD_CargoAjuste(String cod_producto,
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:517^35*/
+/*@lineinfo:user-code*//*@lineinfo:521^35*/
      }
       strInsert="YES";
     }
@@ -1859,7 +1863,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
     try
     {
       CONPRODUCTO1 prodEsq;
-      /*@lineinfo:generated-code*//*@lineinfo:560^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:564^7*/
 
 //  ************************************************************
 //  #sql prodEsq = { SELECT
@@ -1892,7 +1896,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:569^46*/
+/*@lineinfo:user-code*//*@lineinfo:573^46*/
       if(prodEsq.next())
       {
         esqCambio="smo='"+prodEsq.PRO_METODO_ORDEN()+"' ";
@@ -1942,7 +1946,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
                                               String accion){
     String strUpdate=new String("NO");
     try{
-      /*@lineinfo:generated-code*//*@lineinfo:619^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:623^7*/
 
 //  ************************************************************
 //  #sql { UPDATE
@@ -1979,7 +1983,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:628^46*/
+/*@lineinfo:user-code*//*@lineinfo:632^46*/
       strUpdate="YES";
     }catch(Exception ex){
       String v_menex = "";
@@ -2023,7 +2027,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
                                            int devValApor){
     String strUpdate=new String("NO");
     try{
-      /*@lineinfo:generated-code*//*@lineinfo:672^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:676^7*/
 
 //  ************************************************************
 //  #sql strUpdate = { VALUES(TBFBD_REVERSAR_RETIROS(:cod_producto,:num_contrato,:estado,:ret_consec,:val_unidad,:v_update,:devValApor)) };
@@ -2059,7 +2063,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:672^136*/
+/*@lineinfo:user-code*//*@lineinfo:676^136*/
       //#sql {COMMIT;};
       if(strUpdate.equalsIgnoreCase("NO"))
         strUpdate = " No se encontraron Aportes Retiros asociados a su elección. ";
@@ -2106,7 +2110,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
                                              String v_usuario){
     String strInsert="NO";
     try{
-      /*@lineinfo:generated-code*//*@lineinfo:719^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:723^7*/
 
 //  ************************************************************
 //  #sql { INSERT INTO TBTRANSACCION_LOGS
@@ -2140,7 +2144,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:726^31*/
+/*@lineinfo:user-code*//*@lineinfo:730^31*/
       strInsert="YES";
     }catch(Exception ex)
     {
@@ -2177,7 +2181,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 /////////////////////Realizar todos los cambios con la Base de Datos////////////////////////
   public static boolean TBPBD_Commit(){
     try{
-      /*@lineinfo:generated-code*//*@lineinfo:763^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:767^7*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -2188,7 +2192,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:763^19*/
+/*@lineinfo:user-code*//*@lineinfo:767^19*/
       return true;
     }catch(Exception e){
       return false;
@@ -2197,7 +2201,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 /////////////////////No Realizar cambios con la Base de Datos////////////////////////
   public static boolean TBPBD_RollBack(){
     try{
-      /*@lineinfo:generated-code*//*@lineinfo:772^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:776^7*/
 
 //  ************************************************************
 //  #sql { ROLLBACK };
@@ -2208,7 +2212,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:772^21*/
+/*@lineinfo:user-code*//*@lineinfo:776^21*/
       return true;
     }catch(Exception e){
       return false;
@@ -2224,7 +2228,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
     try
     {
       CONTRATONOMBAPEL nombApel;
-      /*@lineinfo:generated-code*//*@lineinfo:788^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:792^7*/
 
 //  ************************************************************
 //  #sql nombApel = { SELECT
@@ -2255,7 +2259,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:794^58*/
+/*@lineinfo:user-code*//*@lineinfo:798^58*/
       if(nombApel.next())
        {
          strNombApel = nombApel.CON_NOMBRES()+" "+nombApel.CON_APELLIDOS();
@@ -2320,7 +2324,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
           v_ii=new String("0"+v_ii);
 
         String key=new String(v_prf+v_ii);
-        /*@lineinfo:generated-code*//*@lineinfo:859^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:863^9*/
 
 //  ************************************************************
 //  #sql tbref = { SELECT REF_DESCRIPCION,     REF_VALOR
@@ -2346,7 +2350,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:861^42*/
+/*@lineinfo:user-code*//*@lineinfo:865^42*/
         if(tbref.next()){
           v_desc+=v_prf.toLowerCase()+v_ii+"='"+tbref.REF_DESCRIPCION().toLowerCase()+"' ";
           v_val+=v_prf.toLowerCase()+v_ii+"='"+tbref.REF_VALOR()+"' ";
@@ -2399,7 +2403,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
     int ii=1;
     try{
       TBFINDRETREV findRetRev;
-      /*@lineinfo:generated-code*//*@lineinfo:914^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:918^7*/
 
 //  ************************************************************
 //  #sql findRetRev = { SELECT
@@ -2442,7 +2446,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:932^24*/
+/*@lineinfo:user-code*//*@lineinfo:936^24*/
       while(findRetRev.next())
       {
         String v_const      = Integer.toString(findRetRev.RET_CONSECUTIVO());
@@ -2516,7 +2520,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
     int ii=1;
     try{
       TBFINDRETANU findRet;
-      /*@lineinfo:generated-code*//*@lineinfo:1006^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:1010^7*/
 
 //  ************************************************************
 //  #sql findRet = { SELECT RET_CONSECUTIVO,       RET_VALOR_UNIDAD,         RET_FECHA_EFECTIVA,       RET_FECHA_PROCESO,
@@ -2554,7 +2558,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1016^48*/
+/*@lineinfo:user-code*//*@lineinfo:1020^48*/
       while(findRet.next())
       {
         String v_const        = Integer.toString(findRet.RET_CONSECUTIVO());
@@ -2624,7 +2628,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
         //si los dos son en blanco
         if(v_contDesde.trim().equals("") && v_contHasta.trim().equals(""))
         {
-           /*@lineinfo:generated-code*//*@lineinfo:1086^12*/
+           /*@lineinfo:generated-code*//*@lineinfo:1090^12*/
 
 //  ************************************************************
 //  #sql ajustes = { SELECT  AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
@@ -2660,7 +2664,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1096^69*/
+/*@lineinfo:user-code*//*@lineinfo:1100^69*/
            ii=1;
            while(ajustes.next())
            {
@@ -2680,7 +2684,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
         }//si hasta esta vacio solo un contrato
         else if(v_contHasta.trim().equals(""))
             {
-               /*@lineinfo:generated-code*//*@lineinfo:1116^16*/
+               /*@lineinfo:generated-code*//*@lineinfo:1120^16*/
 
 //  ************************************************************
 //  #sql ajustes = { SELECT  AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
@@ -2718,7 +2722,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1127^69*/
+/*@lineinfo:user-code*//*@lineinfo:1131^69*/
                ii=1;
                while(ajustes.next())
                {
@@ -2738,7 +2742,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
             }
             else//desde hasta
             {
-               /*@lineinfo:generated-code*//*@lineinfo:1147^16*/
+               /*@lineinfo:generated-code*//*@lineinfo:1151^16*/
 
 //  ************************************************************
 //  #sql ajustes = { SELECT  AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
@@ -2778,7 +2782,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1159^69*/
+/*@lineinfo:user-code*//*@lineinfo:1163^69*/
                ii=1;
                while(ajustes.next())
                {
@@ -2803,7 +2807,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
         if(v_contDesde.trim().equals("") && v_contHasta.trim().equals(""))
         {
-           /*@lineinfo:generated-code*//*@lineinfo:1184^12*/
+           /*@lineinfo:generated-code*//*@lineinfo:1188^12*/
 
 //  ************************************************************
 //  #sql ajustes = { SELECT AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
@@ -2838,7 +2842,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1194^70*/
+/*@lineinfo:user-code*//*@lineinfo:1198^70*/
 
            ii=1;
            while(ajustes.next()){
@@ -2858,7 +2862,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
         }
         else  if(v_contHasta.trim().equals(""))
               {
-                 /*@lineinfo:generated-code*//*@lineinfo:1214^18*/
+                 /*@lineinfo:generated-code*//*@lineinfo:1218^18*/
 
 //  ************************************************************
 //  #sql ajustes = { SELECT AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
@@ -2895,7 +2899,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1225^77*/
+/*@lineinfo:user-code*//*@lineinfo:1229^77*/
 
                  ii=1;
                  while(ajustes.next()){
@@ -2915,7 +2919,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
               }
               else
               {
-                /*@lineinfo:generated-code*//*@lineinfo:1245^17*/
+                /*@lineinfo:generated-code*//*@lineinfo:1249^17*/
 
 //  ************************************************************
 //  #sql ajustes = { SELECT AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
@@ -2954,7 +2958,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1257^77*/
+/*@lineinfo:user-code*//*@lineinfo:1261^77*/
 
                   ii=1;
                   while(ajustes.next()){
@@ -2982,7 +2986,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
         if(v_contDesde.trim().equals("") && v_contHasta.trim().equals(""))
         {
-           /*@lineinfo:generated-code*//*@lineinfo:1285^12*/
+           /*@lineinfo:generated-code*//*@lineinfo:1289^12*/
 
 //  ************************************************************
 //  #sql ajustes = { SELECT AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
@@ -3020,7 +3024,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1296^70*/
+/*@lineinfo:user-code*//*@lineinfo:1300^70*/
            ii=1;
            while(ajustes.next()){
             v_ii=Integer.toString(ii++);
@@ -3039,7 +3043,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
         }
         else if(v_contHasta.trim().equals(""))
              {
-                /*@lineinfo:generated-code*//*@lineinfo:1315^17*/
+                /*@lineinfo:generated-code*//*@lineinfo:1319^17*/
 
 //  ************************************************************
 //  #sql ajustes = { SELECT AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
@@ -3079,7 +3083,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1327^76*/
+/*@lineinfo:user-code*//*@lineinfo:1331^76*/
                 ii=1;
                 while(ajustes.next()){
                   v_ii=Integer.toString(ii++);
@@ -3098,7 +3102,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
              }
              else
              {
-                /*@lineinfo:generated-code*//*@lineinfo:1346^17*/
+                /*@lineinfo:generated-code*//*@lineinfo:1350^17*/
 
 //  ************************************************************
 //  #sql ajustes = { SELECT AJU_CONSECUTIVO   ,AJU_CON_PRO_CODIGO,
@@ -3140,7 +3144,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1359^76*/
+/*@lineinfo:user-code*//*@lineinfo:1363^76*/
                 ii=1;
                 while(ajustes.next()){
                   v_ii=Integer.toString(ii++);
@@ -3198,7 +3202,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
     String v_cadena=new String("");
     try{
       CONRETIROS bcoRet;
-      /*@lineinfo:generated-code*//*@lineinfo:1417^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:1421^7*/
 
 //  ************************************************************
 //  #sql bcoRet = { SELECT
@@ -3232,7 +3236,7 @@ public static String TBPBD_SelMetCambio(String cod_producto)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1425^51*/
+/*@lineinfo:user-code*//*@lineinfo:1429^51*/
       if(bcoRet.next()){
         v_cadena="("+bcoRet.RET_BANCO()+")"+bcoRet.RET_CUENTA();
       }
@@ -3276,7 +3280,7 @@ public static String TBPBD_FECHA_VALUNI(String v_fecha_choose)
 {
  try
  {
-     /*@lineinfo:generated-code*//*@lineinfo:1469^6*/
+     /*@lineinfo:generated-code*//*@lineinfo:1473^6*/
 
 //  ************************************************************
 //  #sql { SELECT TO_CHAR(TO_DATE(:v_fecha_choose,'RRRR-MM-DD') - 1,'RRRRMMDD')  FROM DUAL  };
@@ -3310,7 +3314,7 @@ public static String TBPBD_FECHA_VALUNI(String v_fecha_choose)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1469^115*/
+/*@lineinfo:user-code*//*@lineinfo:1473^115*/
     return  v_fecha_choose;
 
  }
@@ -3366,7 +3370,7 @@ public static String TBPBD_FECHA_VALUNI(String v_fecha_choose)
       CONAJUSTES ajusNoDec;
       if(!consecAjusOnly1.equals("")){
       int consecAjusOnly=Integer.parseInt(consecAjusOnly1);
-         /*@lineinfo:generated-code*//*@lineinfo:1525^10*/
+         /*@lineinfo:generated-code*//*@lineinfo:1529^10*/
 
 //  ************************************************************
 //  #sql ajusNoDec = { SELECT AJU_CONSECUTIVO,AJU_LINEA,AJU_FECHA_PROCESO,AJU_VALOR,AJU_RAZON_AJUSTE,AJU_USUARIO,AJU_RETIRO_ORIGINAL, AJU_RETIRO_ACTUAL,AJU_VALOR_UNIDAD FROM TBAJUSTES WHERE AJU_CON_PRO_CODIGO=:cod_producto AND AJU_CON_NUMERO=:num_contrato AND AJU_CONSECUTIVO=:consecAjusOnly AND AJU_REF_ACCION IS NULL AND AJU_FECHA_ACCION IS NULL };
@@ -3392,7 +3396,7 @@ public static String TBPBD_FECHA_VALUNI(String v_fecha_choose)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1525^350*/
+/*@lineinfo:user-code*//*@lineinfo:1529^350*/
         while(ajusNoDec.next()){
           v_cons=Integer.toString(ajusNoDec.AJU_CONSECUTIVO());
           v_lin=Integer.toString(ajusNoDec.AJU_LINEA());
@@ -3422,7 +3426,7 @@ public static String TBPBD_FECHA_VALUNI(String v_fecha_choose)
         }//while
         ajusNoDec.close();
       }else{
-        /*@lineinfo:generated-code*//*@lineinfo:1555^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:1559^9*/
 
 //  ************************************************************
 //  #sql ajusNoDec = { SELECT AJU_CONSECUTIVO,     AJU_LINEA,        AJU_FECHA_PROCESO,
@@ -3455,7 +3459,7 @@ public static String TBPBD_FECHA_VALUNI(String v_fecha_choose)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1563^48*/
+/*@lineinfo:user-code*//*@lineinfo:1567^48*/
         while(ajusNoDec.next()){
           v_cons=Integer.toString(ajusNoDec.AJU_CONSECUTIVO());
           v_lin=Integer.toString(ajusNoDec.AJU_LINEA());
@@ -3530,7 +3534,7 @@ public static String TBPL_BuscarUnidad(String v_unidad)
  String v_coduni = "";
  try
  {
- /*@lineinfo:generated-code*//*@lineinfo:1638^2*/
+ /*@lineinfo:generated-code*//*@lineinfo:1642^2*/
 
 //  ************************************************************
 //  #sql v_coduni = { values(TBFBD_REFERENCIAS(:v_unidad,'UUP')) };
@@ -3560,7 +3564,7 @@ public static String TBPL_BuscarUnidad(String v_unidad)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1638^60*/
+/*@lineinfo:user-code*//*@lineinfo:1642^60*/
  return v_coduni;
  }
  catch(Exception  ex)
@@ -3576,7 +3580,7 @@ public static String TBPL_BuscarTipoUsuario(String v_tipousu)
  String v_codusu = "";
  try
  {
-  /*@lineinfo:generated-code*//*@lineinfo:1654^3*/
+  /*@lineinfo:generated-code*//*@lineinfo:1658^3*/
 
 //  ************************************************************
 //  #sql v_codusu = { values(TBFBD_REFERENCIAS(:v_tipousu,'UTU')) };
@@ -3606,7 +3610,7 @@ public static String TBPL_BuscarTipoUsuario(String v_tipousu)
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1654^62*/
+/*@lineinfo:user-code*//*@lineinfo:1658^62*/
  return v_codusu;
  }
  catch(Exception  ex)

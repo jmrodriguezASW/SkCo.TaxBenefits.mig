@@ -9,6 +9,7 @@
    <appletDeployment>false</appletDeployment>
    <appletFiles>
       <autoInclude>true</autoInclude>
+      <autoInclude>true</autoInclude>
       <deploySourceAs>0</deploySourceAs>
       <files>
          <Item path="META-INF/Copy of web.xml" id="0"/>

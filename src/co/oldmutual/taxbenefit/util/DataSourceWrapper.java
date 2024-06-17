@@ -92,9 +92,13 @@ public class DataSourceWrapper {
         if(initResource == null)/*Si no se ha creado un mapa de configuracion es que no estoy en un entorno valido y creo una conecxion normal*/ {
             try {/*Esto en un futuro se debe poder cambiar*/
                 Class.forName("oracle.jdbc.driver.OracleDriver");
-                TBCL_Validacion  i_valusu   = new TBCL_Validacion();
+                
+ 
+ //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
+
+
                 String[] v_valusu            = new String[3];
-                v_valusu                     = i_valusu.TBFL_ValidarUsuario();
+                v_valusu                     = TBCL_Validacion.TBFL_ValidarUsuario();
                 Connection  ret             =   DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
                 ret.setAutoCommit(false);
                 return ret;

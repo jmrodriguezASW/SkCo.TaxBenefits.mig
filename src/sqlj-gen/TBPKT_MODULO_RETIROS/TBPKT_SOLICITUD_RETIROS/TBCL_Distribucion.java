@@ -149,8 +149,10 @@ implements sqlj.runtime.NamedIterator
  public void TBPL_DistribucionFondos (HttpSession session,HttpServletRequest request,PrintWriter out,String nuevaCadena )
  {//2
    /**Instancias de clase*/
-  STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();/**Instancia de la clase TBCL_GenerarBaseHTML*/
-  TBCL_Validacion  i_valusu      = new TBCL_Validacion ();/**Instancia de la clase TBCL_Validacion */
+  //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;/**Instancia de la clase TBCL_GenerarBaseHTML*/
+  /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()/**Instancia de la clase TBCL_Validacion */
   TBCL_ConsultaClienteLista i_consultaC = new TBCL_ConsultaClienteLista();/**Instancia de la clase TBCL_ConsultaClienteLista */
 
 /*
@@ -170,7 +172,7 @@ procedimiento de la base de datos
   {//3
    /**Leer de archivo connection.properties url,usuario y paswword a la base de datos.*/
    String[] v_valusu = new String[3];
-   v_valusu=i_valusu.TBFL_ValidarUsuario();
+   v_valusu=TBCL_Validacion.TBFL_ValidarUsuario();
    /**Realizar conexion a la base de datos*/
    DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
    Connection t_tax =DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
@@ -404,7 +406,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 //        out.println("Codigo del fondo ["+y+"] es = "+v_codigoas+"<br>");
         if(v_codigoas != null)
         {//9
-         /*@lineinfo:generated-code*//*@lineinfo:324^10*/
+         /*@lineinfo:generated-code*//*@lineinfo:326^10*/
 
 //  ************************************************************
 //  #sql v_res2 = { SELECT ref_codigo
@@ -437,7 +439,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:332^26*/
+/*@lineinfo:user-code*//*@lineinfo:334^26*/
 
          while(v_res2.next())
          {//10
@@ -459,7 +461,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
           
           /**Consultar valores retirados en otras solicitudes de retiro para restar, y presentar@
           *el saldo del fondo diponible real*/
-          /*@lineinfo:generated-code*//*@lineinfo:354^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:356^11*/
 
 //  ************************************************************
 //  #sql { SELECT NVL(SUM(DIF_VALOR),0)
@@ -504,7 +506,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:363^15*/
+/*@lineinfo:user-code*//*@lineinfo:365^15*/
           /**Si se encuentran valores para esa misma fecha se va restando del saldo del fondo*/
           if(v_sumval != 0)
           {//11
@@ -538,11 +540,11 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
          /**Si no se encuentra parametrización de fondos*/
          if(v_validarfondo == false)
          {//12
-          v_pinfon=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El fondo "+v_codigoas+" no esta parametrizado en el sistema.</center>",false);
+          v_pinfon=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Solicitud de Retiro","Error Solicitud de Retiro","","<center>El fondo "+v_codigoas+" no esta parametrizado en el sistema.</center>",false);
           out.println(""+v_pinfon+"");
           out.println("<BR>");
           out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-3)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-          v_piefon = i_pagina.TBFL_PIE;
+          v_piefon = STBCL_GenerarBaseHTML.TBFL_PIE;
           out.println("<br>");
           out.println("<br>");
           out.println(""+v_piefon+"");
@@ -679,7 +681,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
            if(!v_conti.trim().equals("") && !v_proti.substring(0,1).equals(" "))
            {
             /**Validar contrato destino, que pertenesca al mismo dueño del contrato al que se realiza el retiro*/
-            /*@lineinfo:generated-code*//*@lineinfo:538^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:540^13*/
 
 //  ************************************************************
 //  #sql v_resp = { SELECT  con_numero
@@ -710,7 +712,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:544^29*/
+/*@lineinfo:user-code*//*@lineinfo:546^29*/
             while(v_resp.next())
             {
              v_encontro2 = true;
@@ -727,7 +729,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
             String v_retorno_programa = new String("");
             String hubo_insercion = " ";
             
-            /*@lineinfo:generated-code*//*@lineinfo:561^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:563^13*/
 
 //  ************************************************************
 //  #sql v_retorno_programa = { values (TBCL_FuncionesAs400.TBPL_ProgramaContrato(:v_contratotraslado,
@@ -766,7 +768,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:566^89*/
+/*@lineinfo:user-code*//*@lineinfo:568^89*/
             
             String v_programa = v_retorno_programa.substring(0,v_retorno_programa.indexOf(";",0));
             
@@ -994,7 +996,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
          /**Aumentar el cobro de 4x1000 s es un retiro parcial para tercero*/
          if (v_esTercero.equals("S") && v_tipov.equals("STV002"))
          {
-           /*@lineinfo:generated-code*//*@lineinfo:794^12*/
+           /*@lineinfo:generated-code*//*@lineinfo:796^12*/
 
 //  ************************************************************
 //  #sql { SELECT NVL(REF_VALOR,0)
@@ -1030,7 +1032,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:798^15*/
+/*@lineinfo:user-code*//*@lineinfo:800^15*/
            if (v_cargomil>0) {
              Double v_valor_neto = new Double(v_valor);
              v_valor_neto2 = v_valor;
@@ -1077,13 +1079,13 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
          /**Si la distribución de fondos es a prorrata*/
          if(v_distribucion.equals("0"))
          {
-          v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Distribución de Fondos","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_Esquema","",true,"modulo_retiros.js","");
+          v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Distribución de Fondos","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_Esquema","",true,"modulo_retiros.js","");
           out.println(""+v_pintar+"");
           out.println(""+v_mensLista+"");
 
           /*Cambio para manejo de referencia unica 2009/03/30 MOS */
           String v_contrato_unif = "";
-          /*@lineinfo:generated-code*//*@lineinfo:851^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:853^11*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -1114,7 +1116,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:851^84*/
+/*@lineinfo:user-code*//*@lineinfo:853^84*/
           out.println("<center><FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
           out.println("<center><FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nom+"  <b> Apellidos </b>"+v_ape+" </CENTER></font>");
 
@@ -1152,7 +1154,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
           }
           out.println("<center><table width='100%' border='1' cellspacing='0' cellpadding='0'>");
           //consular si el contrato tiene defaul
-           /*@lineinfo:generated-code*//*@lineinfo:889^12*/
+           /*@lineinfo:generated-code*//*@lineinfo:891^12*/
 
 //  ************************************************************
 //  #sql { SELECT nvl(CON_REF_METODO_ORDEN,'X')
@@ -1202,7 +1204,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:905^30*/
+/*@lineinfo:user-code*//*@lineinfo:907^30*/
            if(v_metodo_1.equals("X") && v_metodo_2.equals("X") && v_metodo_3.equals("X") &&
               v_metodo_4.equals("X") && v_natcon_1.equals("X") && v_resnat_1.equals("X"))
                  vtienedefault = false;
@@ -1237,20 +1239,20 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
           out.println("<br>");
           out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
           out.println("<center><input type=submit value='Aceptar'><input type=button value='Regresar' onclick=' history.go(-1)'><input type=button value='Cancelar' onclick=' history.go(-3)'></center>");
-          v_pie = i_pagina.TBFL_PIE;
+          v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
           out.println("<br>");
           out.println(""+v_pie+"");
           out.close();
          }
          else if(v_distribucion.equals("1"))/**Si distribucion de fondos es por valor*/
               {
-               v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Distribución de Fondos","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_Esquema","",true,"modulo_retiros.js","");
+               v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Distribución de Fondos","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_Esquema","",true,"modulo_retiros.js","");
                out.println(""+v_pintar+"");
                out.println(""+v_mensLista+"");
                
                /*Cambio para manejo de referencia unica 2009/03/30 MOS */
                String v_contrato_unif = "";
-               /*@lineinfo:generated-code*//*@lineinfo:953^16*/
+               /*@lineinfo:generated-code*//*@lineinfo:955^16*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -1281,7 +1283,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:953^89*/
+/*@lineinfo:user-code*//*@lineinfo:955^89*/
                out.println("<center><FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
                out.println("<center><FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nom+"  <b> Apellidos </b>"+v_ape+" </CENTER></font>");
                out.println("<br>");
@@ -1334,19 +1336,19 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
                      out.println("<center><input type=submit value='Aceptar' onclick='if(maximo("+v_valor+",v_codigo.totalesDesde)==1)return false;' ><input type=button value='Regresar' onclick=' history.go(-1)'><input type=button value='Cancelar' onclick=' history.go(-3)'></center>");
                }
                
-               v_pie = i_pagina.TBFL_PIE;
+               v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                out.println("<br>");
                out.println(""+v_pie+"");
                out.close();
               }
               else if(v_distribucion.equals("2"))//si 3es por porcentaje
                    {
-                    v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiros","Distribución de Fondos","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_Esquema","",true,"modulo_retiros.js","");
+                    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiros","Distribución de Fondos","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_Esquema","",true,"modulo_retiros.js","");
                     out.println(""+v_pintar+"");
                     out.println(""+v_mensLista+"");
                     /*Cambio para manejo de referencia unica 2009/03/30 MOS */
                     String v_contrato_unif = "";
-                    /*@lineinfo:generated-code*//*@lineinfo:1018^21*/
+                    /*@lineinfo:generated-code*//*@lineinfo:1020^21*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -1377,7 +1379,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1018^94*/
+/*@lineinfo:user-code*//*@lineinfo:1020^94*/
                     out.println("<center><FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
                     out.println("<center><FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nom+"  <b> Apellidos </b>"+v_ape+" </CENTER></font>");
                     out.println("<br>");
@@ -1417,7 +1419,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
                     out.println("<br>");
                     out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
                     out.println("<center><input type=submit value='Aceptar' onclick='if(maximo2(v_codigo.totalesDesde)==1)return false;'><input type=button value='Regresar' onclick=' history.go(-1)'><input type=button value='Cancelar' onclick=' history.go(-3)'></center>");
-                    v_pie = i_pagina.TBFL_PIE;
+                    v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                     out.println("<br>");
                     out.println(""+v_pie+"");
                     out.close();
@@ -1425,11 +1427,11 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
         }
         else
         {/**Si el producto y contrato destino no exiten*/
-         v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Distribución de Fondos","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_Esquema","",true,"modulo_retiros.js","");
+         v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Distribución de Fondos","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_Esquema","",true,"modulo_retiros.js","");
          out.println(""+v_pintar+"");
          /*Cambio para manejo de referencia unica 2009/03/30 MOS */
          String v_contrato_unif = "";
-         /*@lineinfo:generated-code*//*@lineinfo:1070^10*/
+         /*@lineinfo:generated-code*//*@lineinfo:1072^10*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -1460,7 +1462,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1070^83*/
+/*@lineinfo:user-code*//*@lineinfo:1072^83*/
          out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
          out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nom+"  <b> Apellidos </b>"+v_ape+" </CENTER></font>");
          out.println("<br>");
@@ -1491,7 +1493,7 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
           }
          out.println("<br>");
          out.println("<center><input type='Button' value='Cancelar' onclick=' history.go(-3)'> <input type='Button' value='Regresar' onclick='history.go(-1)'></center>");
-         v_pie = i_pagina.TBFL_PIE;
+         v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
          out.println("<br>");
          out.println(""+v_pie+"");
          out.close();
@@ -1499,11 +1501,11 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
        }
        else/**Si el tipo de retiro no cumple con la parametrización de los días*/
        {
-        v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Distribución de Fondos","","",true,"","");
+        v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Distribución de Fondos","","",true,"","");
         out.println(""+v_pintar+"");
         /*Cambio para manejo de referencia unica 2009/03/30 MOS */
         String v_contrato_unif = "";
-        /*@lineinfo:generated-code*//*@lineinfo:1113^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:1115^9*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -1534,14 +1536,14 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:1113^82*/
+/*@lineinfo:user-code*//*@lineinfo:1115^82*/
         out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
         out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nom+"  <b> Apellidos </b>"+v_ape+" </CENTER></font>");
         out.println("<br>");
         out.println("<center><font face='Verdana, Arial, Helvetica, sans-serif' size='2' color='#000000'><b>No es posible realizar la solicitud de retiro, los días del contrato deben ser "+v_mendias+" a "+v_diascon+". </b></font></center>");
         out.println("<br>");
         out.println("<center><input type='Button' value='Cancelar' onclick=' history.go(-3)'> <input type='Button' value='Regresar' onclick='history.go(-1)'></center>");
-        v_pie = i_pagina.TBFL_PIE;
+        v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
         out.println("<br>");
         out.println(""+v_pie+"");
         out.close();
@@ -1549,11 +1551,11 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
       }
       else
       {//error saldo
-       v_pintar=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Error Distribución de Fondos","","<center>Consulta de saldo para el  contrato  "+v_contra+" en el AS400 no devuelve datos.</center>",false);
+       v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Solicitud de Retiro","Error Distribución de Fondos","","<center>Consulta de saldo para el  contrato  "+v_contra+" en el AS400 no devuelve datos.</center>",false);
        out.println(""+v_pintar+"");
        out.println("<BR>");
        out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-3)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-       v_pie = i_pagina.TBFL_PIE;
+       v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
        out.println("<br>");
        out.println("<br>");
        out.println(""+v_pie+"");
@@ -1562,11 +1564,11 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
      }
      else
      {//error saldo
-      v_pintar=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Error Distribución de Fondos","","<center>Consulta de saldo del contrato. Mensaje de error:"+v_fondos+"</center>",false);
+      v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Solicitud de Retiro","Error Distribución de Fondos","","<center>Consulta de saldo del contrato. Mensaje de error:"+v_fondos+"</center>",false);
       out.println(""+v_pintar+"");
       out.println("<BR>");
       out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-3)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-      v_pie = i_pagina.TBFL_PIE;
+      v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
       out.println("<br>");
       out.println("<br>");
       out.println(""+v_pie+"");
@@ -1576,11 +1578,11 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
    }
     else
     {//error saldo
-     v_pintar=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Error Distribución de Fondos","","<center>Consulta de saldo para el  contrato  "+v_contra+" en el AS400 no devuelve datos.</center>",false);
+     v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Solicitud de Retiro","Error Distribución de Fondos","","<center>Consulta de saldo para el  contrato  "+v_contra+" en el AS400 no devuelve datos.</center>",false);
      out.println(""+v_pintar+"");
      out.println("<BR>");
      out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-3)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-     v_pie = i_pagina.TBFL_PIE;
+     v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println("<br>");
      out.println(""+v_pie+"");
@@ -1589,9 +1591,9 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
    }
    else
    {
-    v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Distribución de Fondos","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Distribución de Fondos","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
     out.println(""+v_pintar+"");
-    v_pie = i_pagina.TBFL_PIE;
+    v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-3)'></center>");
     out.println(""+v_pie+"");
@@ -1609,28 +1611,28 @@ Se añade el procedimiento de invocacion a un procedimiento del AS400
    String error = ex.toString();
    if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
    {
-    v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Distribución de Fondos","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Distribución de Fondos","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
    }
    else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
         {
-         v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Distribución de Fondos","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
+         v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Distribución de Fondos","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
         }
            else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
                 {
-                 v_pintar =i_pagina.TBFL_CABEZA("Solicitud de Retiro","Distribución de Fondos","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
+                 v_pintar =STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Distribución de Fondos","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
                 }
                 else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
                      {
-                       v_pintar =  i_pagina.TBFL_CABEZA("Solicitud de Retiro","Distribución de Fondos","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
+                       v_pintar =  STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Distribución de Fondos","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
                      }
                   else
                   {
-                   v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Distribución de Fondos","","<center>Mensaje de Error :"+ex+".</center>",false);
+                   v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Distribución de Fondos","","<center>Mensaje de Error :"+ex+".</center>",false);
                   }
    out.println(""+v_pintar+"");
    out.println("<br>");
    out.println("<center><input type=button value='Cancelar' onclick=' history.go(-3)'></center>");
-   String v_pie = i_pagina.TBFL_PIE;
+   String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println(""+v_pie+"");
    out.close();
   }

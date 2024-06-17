@@ -28,7 +28,7 @@ public class TBS_DIPONIBILIDAD_EMPRESA extends HttpServlet
        String POLICY_FILE_LOCATION = rutaFisica+"antisamy-tinymce-1.4.4.xml"; // Path to policy file
        AntiSamy as = new AntiSamy(); // INT20131108
       PrintWriter salida = new PrintWriter (response.getOutputStream());
-      STBCL_GenerarBaseHTMLII i_pagina = new STBCL_GenerarBaseHTMLII();
+      //STBCL_GenerarBaseHTMLII i_pagina = new STBCL_GenerarBaseHTMLII();
       TBS_ACTUALIZA_DISPONIBILIDAD  iapo = new  TBS_ACTUALIZA_DISPONIBILIDAD();
        Connection conn    =   null;
       try
@@ -45,8 +45,11 @@ public class TBS_DIPONIBILIDAD_EMPRESA extends HttpServlet
          String  cadena = request.getParameter("cadena");
          String   nuevaCadena = cadena;
          String ip_tax = request.getRemoteAddr();
-         TBCL_Seguridad Seguridad = new TBCL_Seguridad();
-         parametros = Seguridad.TBFL_Seguridad(cadena, salida, ip_tax);
+          
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
+         parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, salida, ip_tax);
          conn =   DataSourceWrapper.getInstance().getConnection();
          String v_empresa = request.getParameter("obligatoriov_empresa");
           try
@@ -115,11 +118,11 @@ public class TBS_DIPONIBILIDAD_EMPRESA extends HttpServlet
            if(!msj.trim().equals("LA ACTUALIZACION FUE EXITOSA"))
            {
               conn.rollback();
-             salida.println(i_pagina.TBFL_CABEZA("Actualizar disponibilidad aporte por empresa","Actualizar disponibilidad aportes por empresa",
+             salida.println(STBCL_GenerarBaseHTMLII.TBFL_CABEZA("Actualizar disponibilidad aporte por empresa","Actualizar disponibilidad aportes por empresa",
              "",msj,false));
              salida.println("<BR><BR>");
              salida.println("<center><input type='button' value='Aceptar'Onclick=history.go(-3);><input type='button' value='Regresar' Onclick=history.go(-2);></center>");
-             salida.println(i_pagina.TBFL_PIE);
+             salida.println(STBCL_GenerarBaseHTMLII.TBFL_PIE);
              salida.flush();
              return;
            }
@@ -129,11 +132,11 @@ public class TBS_DIPONIBILIDAD_EMPRESA extends HttpServlet
          t_rs8i_2.close();
          t_st.close();
          conn.commit();
-         salida.println(i_pagina.TBFL_CABEZA("Actualizar disponibilidad aporte por empresa","Actualizar disponibilidad aportes por empresa",
+         salida.println(STBCL_GenerarBaseHTMLII.TBFL_CABEZA("Actualizar disponibilidad aporte por empresa","Actualizar disponibilidad aportes por empresa",
          "",msj,false));
          salida.println("<BR><BR>");
          salida.println("<center><input type='button' value='Aceptar'Onclick=history.go(-3);><input type='button' value='Regresar' Onclick=history.go(-2);></center>");
-         salida.println(i_pagina.TBFL_PIE);
+         salida.println(STBCL_GenerarBaseHTMLII.TBFL_PIE);
          salida.flush();
          return;
 
@@ -145,28 +148,28 @@ public class TBS_DIPONIBILIDAD_EMPRESA extends HttpServlet
          String error = ex.toString();
          if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
          {
-           v_pintar=    i_pagina.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
+           v_pintar=    STBCL_GenerarBaseHTMLII.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
          }
          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
               {
-                 v_pintar=    i_pagina.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
+                 v_pintar=    STBCL_GenerarBaseHTMLII.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
               }
               else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
                    {
-                     v_pintar = i_pagina.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
+                     v_pintar = STBCL_GenerarBaseHTMLII.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
                    }
                    else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
                         {
-                           v_pintar =  i_pagina.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
+                           v_pintar =  STBCL_GenerarBaseHTMLII.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
                         }
                         else
                         {
-                           v_pintar=    i_pagina.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>Mensaje de Error :"+ex+".</center>",false);
+                           v_pintar=    STBCL_GenerarBaseHTMLII.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>Mensaje de Error :"+ex+".</center>",false);
                         }
          salida.println(""+v_pintar+"");
          salida.println("<BR>");
          salida.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-         String v_pie = i_pagina.TBFL_PIE;
+         String v_pie = STBCL_GenerarBaseHTMLII.TBFL_PIE;
          salida.println("<br>");
          salida.println(""+v_pie+"");
          salida.close();      

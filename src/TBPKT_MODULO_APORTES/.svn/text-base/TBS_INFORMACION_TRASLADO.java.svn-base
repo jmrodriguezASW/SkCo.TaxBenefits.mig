@@ -673,13 +673,13 @@ public class TBS_INFORMACION_TRASLADO extends HttpServlet implements SingleThrea
     }
     catch(Exception ex)
     {
-      STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+      //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
       String msj = "SE PRODUJO UN ERROR INESPERADO, "+ex.toString() +" INTENTE DE NUEVO.";
-      salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS INTERNOS",
+      salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS INTERNOS",
                                          "TBPKT_MODULO_APORTES.TBS_INFORMACION_TRASLADO","<CENTER>"+msj+"</CEBTER>",false));
       salida.println("<BR><BR>");
       salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-      salida.println(plantilla.TBFL_PIE);
+      salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
       salida.flush();
       return;
     }

@@ -154,8 +154,10 @@ implements sqlj.runtime.NamedIterator
      String                 v_estado_p9 = "";
      String                 v_estado_p1 = "";
      java.sql.Date          v_max_fecha = null;
-     STBCL_GenerarBaseHTML  i_pagina    = new STBCL_GenerarBaseHTML();
-     TBCL_Validacion        i_valusu    = new TBCL_Validacion();
+     //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;
+     /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
      String[]               v_valusu;
      vinter_tbcierre        v_tbcierres;
      vinter_unidades        v_unidades;
@@ -164,16 +166,16 @@ implements sqlj.runtime.NamedIterator
      {
        //Conexion con la base de datos Oracle
        v_valusu = new String[3];
-       v_valusu = i_valusu.TBFL_ValidarUsuario();
+       v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
        DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
        DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));
        // Imprime el encabezado de la pagina de entrada a Cierres de Unidades
-       v_pagina = i_pagina.TBFL_CABEZA("Cierre de solicitudes de retiro", "Cierre de solicitudes de retiro","TBPKT_MODULO_RETIROS.TBPKT_INTERFACE_RETIROS.TBS_TIPO_CIERRE","",true,"modulo_retiros.js","return validar_fecha2(this)");
+       v_pagina = STBCL_GenerarBaseHTML.TBFL_CABEZA("Cierre de solicitudes de retiro", "Cierre de solicitudes de retiro","TBPKT_MODULO_RETIROS.TBPKT_INTERFACE_RETIROS.TBS_TIPO_CIERRE","",true,"modulo_retiros.js","return validar_fecha2(this)");
        out.print(""+v_pagina+"");
        //**********************************************************************************
        //Seleciona de TBCIERRES los ultimos cierres realizados por cada unidad
        //**********************************************************************************
-       /*@lineinfo:generated-code*//*@lineinfo:61^8*/
+       /*@lineinfo:generated-code*//*@lineinfo:63^8*/
 
 //  ************************************************************
 //  #sql v_tbcierres = { SELECT tc.cie_fecha, tc.cie_ref_unidad_proceso, tc.cie_tipo
@@ -205,7 +207,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:71^79*/
+/*@lineinfo:user-code*//*@lineinfo:73^79*/
       //**********************************************************************************
       // Imprime la tabla con los ultimos cierres realizado por cada unidad
       //**********************************************************************************
@@ -225,7 +227,7 @@ implements sqlj.runtime.NamedIterator
       //**********************************************************************************
       // Consulta de unidades y productos
       //**********************************************************************************
-       /*@lineinfo:generated-code*//*@lineinfo:91^8*/
+       /*@lineinfo:generated-code*//*@lineinfo:93^8*/
 
 //  ************************************************************
 //  #sql v_unidades = { SELECT ref_descripcion, ref_codigo
@@ -252,8 +254,8 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:96^57*/
-       /*@lineinfo:generated-code*//*@lineinfo:97^8*/
+/*@lineinfo:user-code*//*@lineinfo:98^57*/
+       /*@lineinfo:generated-code*//*@lineinfo:99^8*/
 
 //  ************************************************************
 //  #sql v_productos = { SELECT pro_descripcion, pro_codigo
@@ -276,7 +278,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:98^46*/
+/*@lineinfo:user-code*//*@lineinfo:100^46*/
       //**********************************************************************************
       // Imprime la tabla con las Unidades de proceso a cerrar
       //**********************************************************************************
@@ -309,7 +311,7 @@ implements sqlj.runtime.NamedIterator
        // Consulta fecha de cierre valida, LLama procedimiento que retorna la fecha de
        // Cierre o nulo si ocurre un error al consultar en la Base de Datos.
        //**********************************************************************************
-       /*@lineinfo:generated-code*//*@lineinfo:131^8*/
+       /*@lineinfo:generated-code*//*@lineinfo:133^8*/
 
 //  ************************************************************
 //  #sql { call TBPBD_FECHA_CIERRE_VALIDA(:v_fecha) };
@@ -339,7 +341,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:131^60*/
+/*@lineinfo:user-code*//*@lineinfo:133^60*/
        //**********************************************************************************
        // Imprime la Fecha de cierre válida
        //**********************************************************************************
@@ -361,7 +363,7 @@ implements sqlj.runtime.NamedIterator
        out.println("<pre>");
 //       out.println("<center> <input type='submit' value='Aceptar' ><input type='button' value='Cancelar' ONCLICK=history.go(-1);></center>");
        out.println("<center> <input type='submit' value='Aceptar' name='aceptar'><input type='button' value='Cancelar' ONCLICK='history.go(-1)' name='cancelar' ></center>");
-       v_pie = i_pagina.TBFL_PIE;
+       v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
        out.print(""+v_pie+"");
     }
     catch(Exception ex){

@@ -27,9 +27,13 @@ String informacion_empresa[] = new String[5];
 try
 {
 //conexion para ejecucion de parametros de funciones
- TBCL_Validacion  i_valusu   = new TBCL_Validacion();
+ 
+ 
+ //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
+
+
  String[] v_valusu            = new String[3];
- v_valusu                     = i_valusu.TBFL_ValidarUsuario();
+ v_valusu                     = TBCL_Validacion.TBFL_ValidarUsuario();
  Class.forName("oracle.jdbc.driver.OracleDriver");
  Connection v_conexion_taxb   = DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
  CallableStatement t_cst8i_1 = v_conexion_taxb.prepareCall("{ call TBPBD_Parametros_FuncionesAS(?,?,?,?) }");
@@ -90,9 +94,13 @@ public static String TBFL_Saldos_por_Contrato(String numero_contrato,String fech
    try
    {
      //conexion para ejecucion de parametros de funciones
-     TBCL_Validacion  i_valusu   = new TBCL_Validacion();
+     
+ 
+ //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
+
+
      String[] v_valusu            = new String[3];
-     v_valusu                     = i_valusu.TBFL_ValidarUsuario();
+     v_valusu                     = TBCL_Validacion.TBFL_ValidarUsuario();
      Class.forName("oracle.jdbc.driver.OracleDriver");
      Connection v_conexion_taxb   = DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
      String ruta      = new String();

@@ -39,8 +39,8 @@ public class TBS_Modificar_Retiros extends HttpServlet
 {
   //DEFINICIONES INICIALES
   TBCL_LoadPage i_LP;
-  STBCL_GenerarBaseHTML codHtm;
-  STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+  //STBCL_GenerarBaseHTML codHtm;
+  //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
   boolean pintar_decision= false;
   String msje_final      = new String("");
   String fecharetiro     = new String("");
@@ -93,14 +93,17 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
  {
     //INICIO seguridad
     out                 = new PrintWriter (response.getOutputStream());
-    TBCL_Seguridad Seguridad    = new TBCL_Seguridad();
+     
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
     String v_contrato   = "", v_producto = "",
     v_usuario           = "", v_unidad   = "";
     String v_tipousu    = "", v_idworker = "";
     String parametros[] = new String[8];
     cadena              = request.getParameter("cadena");
     String ip_tax       = request.getRemoteAddr();
-    parametros          = Seguridad.TBFL_Seguridad(cadena,out,ip_tax);
+    parametros          = TBCL_Seguridad.TBFL_Seguridad(cadena,out,ip_tax);
     v_contrato          = parametros[0];
     v_producto          = parametros[1];
     v_usuario           = parametros[2];
@@ -119,7 +122,7 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
     sess.setMaxInactiveInterval(3600);
     valores             = new String("");
     v_error             = new String("");
-    k_cabeza            = codHtm.TBFL_CABEZA("Modificar Retiros","Modificar Retiros","TBPKT_AJUSTES.TBS_Modificar_Retiros",
+    k_cabeza            = STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Retiros","Modificar Retiros","TBPKT_AJUSTES.TBS_Modificar_Retiros",
                                              " ",true,"moduloparametro.js","return checkrequired(this)");
     //SEGUIMIENTO DEL PROCESO DE MODIFICACION DE RETIROS
     if(request.getParameter("cons")!=null)
@@ -139,9 +142,13 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
     else
     {
       //PROCESO PARA LA SEGUNDA PETICION SOBRE EL SERVLET
-      TBCL_Validacion   i_valusu = new TBCL_Validacion();
+      
+ 
+ //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
+
+
       String[] v_valusu          = new String[3];
-      v_valusu                   = i_valusu.TBFL_ValidarUsuario();
+      v_valusu                   = TBCL_Validacion.TBFL_ValidarUsuario();
       Class.forName("oracle.jdbc.driver.OracleDriver");
       Connection v_conexion_taxb = DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
       v_conexion_taxb.setAutoCommit(false);
@@ -187,20 +194,20 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
                   Dibujo_Error(out); //para Reversar
                else
                {
-                out.println(plantilla.TBFL_CABEZA("Modificar Retiros","Modificar Retiros"," ","<CENTER>Su Transacción Ya ha sido Realizada</CENTER>",false));
+                out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Retiros","Modificar Retiros"," ","<CENTER>Su Transacción Ya ha sido Realizada</CENTER>",false));
                 out.println("<BR><BR>");
                 out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-2);></center>");
-                out.println(plantilla.TBFL_PIE);
+                out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                 out.close();
                }
              }//if(!TBPBD_AnularModificar(v_conexion_taxb)&&sess.getAttribute("refresh")==null)
           }//if(TBPL_validar())
          else
           {
-            out.println(plantilla.TBFL_CABEZA("Modificar Retiros","Modificar Retiros"," ","<left>"+msje_final+"</left>",false));
+            out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Retiros","Modificar Retiros"," ","<left>"+msje_final+"</left>",false));
             out.println("<BR><BR>");
             out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-            out.println(plantilla.TBFL_PIE);
+            out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
             out.close();
           }//if(!TBPL_validar())
        }//if(TBPL_getParams_Sess2())
@@ -240,7 +247,7 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
                      {
                        v_menex = "Mensaje de error: "+ex;
                      }
-    i_LP.TBPL_PrintMsgErr(out,"Se produjo un error inesperado durante el proceso, Intente de Nuevo, "+ v_menex,true,k_cabeza,codHtm.TBFL_PIE);
+    i_LP.TBPL_PrintMsgErr(out,"Se produjo un error inesperado durante el proceso, Intente de Nuevo, "+ v_menex,true,k_cabeza,STBCL_GenerarBaseHTML.TBFL_PIE);
   }
 }
 
@@ -258,7 +265,7 @@ private void Dibujo_Error(PrintWriter salida)
 {
 try
  {
-   salida.println(plantilla.TBFL_CABEZA("Modificar Retiros","Modificar Retiros"," ","<left>"+msje_final+"</left>",false));
+   salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Retiros","Modificar Retiros"," ","<left>"+msje_final+"</left>",false));
    salida.println("<BR><BR>");
    if(pintar_decision)
     {
@@ -283,7 +290,7 @@ try
     }
    else
      salida.println("<center><input type='button' value='Regresar' Onclick=history.go(-1);></center>");
-   salida.println(plantilla.TBFL_PIE);
+   salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
    salida.close();
  }
 catch(Exception ex){}
@@ -301,9 +308,13 @@ private void TBPL_BuildPage1(String msgErr1,String num)
   {
   try
   {
-    TBCL_Validacion   i_valusu = new TBCL_Validacion();
+    
+ 
+ //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
+
+
     String[] v_valusu          = new String[3];
-    v_valusu                   = i_valusu.TBFL_ValidarUsuario();
+    v_valusu                   = TBCL_Validacion.TBFL_ValidarUsuario();
     Class.forName("oracle.jdbc.driver.OracleDriver");
     Connection v_conexion_tb   = DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
     v_conexion_tb.setAutoCommit(false);
@@ -314,7 +325,7 @@ private void TBPL_BuildPage1(String msgErr1,String num)
       out.println("<font face='Verdana' size='1' align='left' color='000000'>"+msgErr1+"</FONT>");
       out.println("<BR><BR>");
       out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-      out.println(codHtm.TBFL_PIE);
+      out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
       out.close();
      }
     if(sess.getAttribute("VALRETSEL")!=null && num.equals("2"))
@@ -405,14 +416,14 @@ private void TBPL_BuildPage1(String msgErr1,String num)
       out.println("<tr><td align='center' width='17%'><input type='submit' value='Aceptar'></td>");
       out.println("<td align='center' width='17%'><input type='button' value='Regresar' ONCLICK=history.go(-1);></td>");
       out.println("</tr></table></center>");
-      out.println(codHtm.TBFL_PIE);
+      out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
       out.close();
       v_conexion_tb.close();
    }
    catch(Exception ex)
      {
       TBCL_LoadPage i_LP = new TBCL_LoadPage();
-      i_LP.TBPL_PrintMsgErr(out,"Se producjo un error inesperado durante el proceso, Intente de Nuevo, Error: "+ex,true,k_cabeza,codHtm.TBFL_PIE);
+      i_LP.TBPL_PrintMsgErr(out,"Se producjo un error inesperado durante el proceso, Intente de Nuevo, Error: "+ex,true,k_cabeza,STBCL_GenerarBaseHTML.TBFL_PIE);
      }
   }
 ///////////////////buscar la información del consecutivo del retiro escogido//////////////////

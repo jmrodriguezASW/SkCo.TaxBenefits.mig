@@ -26,7 +26,7 @@ public class TBS_DecisionRetiro extends HttpServlet {
   /**
    * Initialize global variables
    */
-  STBCL_GenerarBaseHTML codHtm;
+  //STBCL_GenerarBaseHTML codHtm;
   TBCL_FndCmp i_fnd=new TBCL_FndCmp();
   TBCL_LoadPage i_LP;
   SQL_DAJUSTE i_sqlj;
@@ -64,9 +64,12 @@ public class TBS_DecisionRetiro extends HttpServlet {
     String  cadena = request.getParameter("cadena");
     nuevaCadena = cadena;
     String ip_tax = request.getRemoteAddr();
-    TBCL_Seguridad Seguridad = new TBCL_Seguridad();
+     
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
     out = new PrintWriter (response.getOutputStream());
-    parametros = Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
+    parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
     contrato = parametros[0];
     producto = parametros[1];
     usuario  = parametros[2];
@@ -92,12 +95,12 @@ public class TBS_DecisionRetiro extends HttpServlet {
       num_contrato = contrato;
     }
 
-    k_TBFL_CABEZA = codHtm.TBFL_CABEZA("Decisión Respecto a los Ajustes","Decisión Respecto a los Ajustes","TBPKT_AJUSTES.TBPKT_DECISION_CLIENTE.TBS_DecisionRetiro","",true);
+    k_TBFL_CABEZA = STBCL_GenerarBaseHTML.TBFL_CABEZA("Decisión Respecto a los Ajustes","Decisión Respecto a los Ajustes","TBPKT_AJUSTES.TBPKT_DECISION_CLIENTE.TBS_DecisionRetiro","",true);
     //tomar parametros de entrada
     TBPL_takeParameter1();
     if(!cod_producto.equals("") && !num_contrato.equals(""))
     {
-      if(i_sqlj.TBPBD_ConexionBD())
+      if(SQL_DAJUSTE.TBPBD_ConexionBD())
       {//conexión con la BD
 
         if(sess.getAttribute("NOMBAPEL")==null)
@@ -118,20 +121,20 @@ public class TBS_DecisionRetiro extends HttpServlet {
           else
             v_msg1 = "La decision sobre los Ajustes se realizó con éxito";
 
-          i_LP.TBPL_pageOk(out,v_msg1,k_TBFL_CABEZA,codHtm.TBFL_PIE,cod_producto,num_contrato,v_nombApel,"");
+          i_LP.TBPL_pageOk(out,v_msg1,k_TBFL_CABEZA,STBCL_GenerarBaseHTML.TBFL_PIE,cod_producto,num_contrato,v_nombApel,"");
         }else{
           if(v_err.equals(""))
             TBPL_BuildPage1();//construir página de salida
           else
-            i_LP.TBPL_PrintMsgErr(out,"Error en el proceso de decisión del cliente por razon de "+v_err+" / "+v_Ajustados,true,k_TBFL_CABEZA,codHtm.TBFL_PIE);
+            i_LP.TBPL_PrintMsgErr(out,"Error en el proceso de decisión del cliente por razon de "+v_err+" / "+v_Ajustados,true,k_TBFL_CABEZA,STBCL_GenerarBaseHTML.TBFL_PIE);
         }
-        i_sqlj.TBPBD_CerrarConexionBD();
+        SQL_DAJUSTE.TBPBD_CerrarConexionBD();
 
       }else//error conexion BD
-         i_LP.TBPL_PrintMsgErr(out,"Error en la conexion con la Base de Datos",true,k_TBFL_CABEZA,codHtm.TBFL_PIE);
+         i_LP.TBPL_PrintMsgErr(out,"Error en la conexion con la Base de Datos",true,k_TBFL_CABEZA,STBCL_GenerarBaseHTML.TBFL_PIE);
 
     }
-    i_sqlj.TBPBD_CerrarConexionBD();
+    SQL_DAJUSTE.TBPBD_CerrarConexionBD();
     out.close();
   }
 
@@ -197,14 +200,14 @@ public class TBS_DecisionRetiro extends HttpServlet {
     out.println("<td width='17%' align='center'><input type='button' value='Regresar' ONCLICK=history.go(-1);></td>");
     out.println("</tr></table></center>");
 
-    out.println(codHtm.TBFL_PIE);
+    out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
     out.close();
   }
 /////procedimiento que va a la base de datos para traer de la tabla ajustes//////////////
         /////todos aquellos que no tengan accion para ser visualizados////////
   private boolean TBPBD_findDec(){
     String valores[]=new String[2];
-    valores=i_sqlj.TBPBD_SelAllRetDec(num_contrato,cod_producto,consecAjusOnly);
+    valores=SQL_DAJUSTE.TBPBD_SelAllRetDec(num_contrato,cod_producto,consecAjusOnly);
     if(valores[0].equals("<>") || valores[0].indexOf("Exception")!=-1){
       i_LP.TBPL_scriptMsgErr(out,"No existen retiros a ajustar "+valores[0]);
       return false;
@@ -271,10 +274,10 @@ public class TBS_DecisionRetiro extends HttpServlet {
            {
              if(!i_fnd.TBPL_getCmp(valores,"val"+consecAjus+v_linea2).equals(""))
              {
-               v_resultado =i_sqlj.TBPL_Verdecision(cod_producto,num_contrato,Integer.parseInt(consecAjus),Integer.parseInt(v_linea2));
+               v_resultado =SQL_DAJUSTE.TBPL_Verdecision(cod_producto,num_contrato,Integer.parseInt(consecAjus),Integer.parseInt(v_linea2));
                if(v_resultado)
                {
-                i_LP.TBPL_PrintMsgErr(out,"El se ha tomado la decision para el ajuste "+Integer.parseInt(consecAjus),true,k_TBFL_CABEZA,codHtm.TBFL_PIE);
+                i_LP.TBPL_PrintMsgErr(out,"El se ha tomado la decision para el ajuste "+Integer.parseInt(consecAjus),true,k_TBFL_CABEZA,STBCL_GenerarBaseHTML.TBFL_PIE);
                 break;
                }
              }
@@ -299,7 +302,7 @@ public class TBS_DecisionRetiro extends HttpServlet {
                 Integer.parseInt(consecAjus)+","+
                 linea+","+
                 Float.parseFloat(i_fnd.TBPL_getCmp(valores,"und"+consecAjus+linea)));
-                v_rta = i_sqlj.TBPBD_AjustarContrato(cod_producto,num_contrato,
+                v_rta = SQL_DAJUSTE.TBPBD_AjustarContrato(cod_producto,num_contrato,
                 Integer.parseInt(i_fnd.TBPL_getCmp(valores,"orig"+consecAjus+linea)),
                 Integer.parseInt(i_fnd.TBPL_getCmp(valores,"act"+consecAjus+linea)),
                 Integer.parseInt(consecAjus),
@@ -310,13 +313,13 @@ public class TBS_DecisionRetiro extends HttpServlet {
               }
               if(v_rta.indexOf("Exception")!=-1){//cuando existe Excepciones
                 save = false;
-                i_LP.TBPL_PrintMsgErr(out,"No actualiza Ajuste "+consecAjus+" por "+v_rta,true,k_TBFL_CABEZA,codHtm.TBFL_PIE);
+                i_LP.TBPL_PrintMsgErr(out,"No actualiza Ajuste "+consecAjus+" por "+v_rta,true,k_TBFL_CABEZA,STBCL_GenerarBaseHTML.TBFL_PIE);
                 out.write("<br>Le puso false en el exception");                
                 break;
               }else save = true;
             out.write("<BR><BR>ANTES DEL IF LA RESPUESTA ES " + v_rta + ", Y EL EQUALSIGNORECASE =" +!v_rta.equalsIgnoreCase("YES") );
              if(!(v_rta.trim()).equalsIgnoreCase("YES")){//cuando al ajuste no alcaza saldos
-                i_LP.TBPL_PrintMsgErr(out,"No actualiza Ajuste "+consecAjus+" por "+v_rta,true,k_TBFL_CABEZA,codHtm.TBFL_PIE);
+                i_LP.TBPL_PrintMsgErr(out,"No actualiza Ajuste "+consecAjus+" por "+v_rta,true,k_TBFL_CABEZA,STBCL_GenerarBaseHTML.TBFL_PIE);
                 out.write("<br>Le puso False en el if del equals al save");
                 save = false;
                 break;                         //deja de recorrer los otros
@@ -338,7 +341,7 @@ public class TBS_DecisionRetiro extends HttpServlet {
             //actualizar la decisión del cliente en la tabla de ajustes
             v_rta = TBPL_ActualAccion(cod_producto,num_contrato,valores,consecAjus,Integer.parseInt(i_fnd.TBPL_getCmp(valores,"max"+consecAjus)),accion);
             if(!v_rta.equals("YES")){
-              i_LP.TBPL_PrintMsgErr(out,"No actualizó accion del ajuste por "+v_rta,true,k_TBFL_CABEZA,codHtm.TBFL_PIE);
+              i_LP.TBPL_PrintMsgErr(out,"No actualizó accion del ajuste por "+v_rta,true,k_TBFL_CABEZA,STBCL_GenerarBaseHTML.TBFL_PIE);
               break;
             }
             else
@@ -353,7 +356,7 @@ public class TBS_DecisionRetiro extends HttpServlet {
     }//while
 
     if(save){
-      if(i_sqlj.TBPBD_Commit())
+      if(SQL_DAJUSTE.TBPBD_Commit())
       {//realizar cambios
         //if(sess.getAttribute("VALRETDEC")!=null)
         sess.removeAttribute("CONSECU");
@@ -364,7 +367,7 @@ public class TBS_DecisionRetiro extends HttpServlet {
       else
         return false;
     }else{
-      i_sqlj.TBPBD_RollBack();
+      SQL_DAJUSTE.TBPBD_RollBack();
       return false;
      }
   }
@@ -375,7 +378,7 @@ public class TBS_DecisionRetiro extends HttpServlet {
     String v_linea=Integer.toString(linea);
     while(linea<=maxLin){
       if(!i_fnd.TBPL_getCmp(valores,"val"+consecAjus+v_linea).equals("")){
-        v_rta=i_sqlj.TBPBD_ActAccionAjustes(cod_producto,num_contrato,Integer.parseInt(consecAjus),linea,accion);
+        v_rta=SQL_DAJUSTE.TBPBD_ActAccionAjustes(cod_producto,num_contrato,Integer.parseInt(consecAjus),linea,accion);
       }
       linea++;
       v_linea=Integer.toString(linea);
@@ -393,7 +396,7 @@ public class TBS_DecisionRetiro extends HttpServlet {
 ///////////////////////////Traer  nombres y apellidos////////////////////////////////
   private void TBPBD_ContrNomApel(){
     String valCadena[]=new String[2];
-    valCadena=i_sqlj.TBPBD_ContratoNomApel(cod_producto,num_contrato);
+    valCadena=SQL_DAJUSTE.TBPBD_ContratoNomApel(cod_producto,num_contrato);
     v_nombApel=valCadena[0];
     sess.setAttribute("NOMBAPEL",v_nombApel);
   }

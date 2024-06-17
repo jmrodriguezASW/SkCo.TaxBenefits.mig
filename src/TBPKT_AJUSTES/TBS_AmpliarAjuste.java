@@ -12,7 +12,7 @@ import TBPKT_UTILIDADES.TBPKT_PLANTILLA.*;
 */
 
 public class TBS_AmpliarAjuste extends HttpServlet{
-  STBCL_GenerarBaseHTML codHtm;
+  //STBCL_GenerarBaseHTML codHtm;
   TBCL_FndCmp i_fnd=new TBCL_FndCmp();
   TBCL_LoadPage i_LP;
   String cod_producto=new String("");
@@ -41,7 +41,7 @@ public class TBS_AmpliarAjuste extends HttpServlet{
     sess=request.getSession(true);
     sess.setMaxInactiveInterval(3600);
 
-    k_cabeza=codHtm.TBFL_CABEZA("Detalle del Ajuste","Detalle del Ajuste","TBPKT_AJUSTES.TBS_AmpliarAjuste","",true);
+    k_cabeza=STBCL_GenerarBaseHTML.TBFL_CABEZA("Detalle del Ajuste","Detalle del Ajuste","TBPKT_AJUSTES.TBS_AmpliarAjuste","",true);
     if(takeParameter()){//toma la información del ajuste a mostrar
       buildPage();//armar página de salida al usuario
     }
@@ -60,7 +60,7 @@ public class TBS_AmpliarAjuste extends HttpServlet{
     out.println("<tr><td align='center'><input type='button' value='Regresar' ONCLICK=history.go(-1);></td></tr>");
     out.println("</table></center>");
 
-    out.println(codHtm.TBFL_PIE);
+    out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
     out.close();
 
   }
@@ -77,7 +77,7 @@ public class TBS_AmpliarAjuste extends HttpServlet{
        v_detalle=(String)sess.getAttribute("VALRETDEC");
        return true;
     }else{
-       i_LP.TBPL_PrintMsgErr(out,"Problemas con las variables de session y parámetros de entrada",true,k_cabeza,codHtm.TBFL_PIE);
+       i_LP.TBPL_PrintMsgErr(out,"Problemas con las variables de session y parámetros de entrada",true,k_cabeza,STBCL_GenerarBaseHTML.TBFL_PIE);
        return false;
     }
   }

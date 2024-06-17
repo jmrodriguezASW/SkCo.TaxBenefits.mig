@@ -80,12 +80,14 @@ implements sqlj.runtime.NamedIterator
     
 public void TBPL_EliminarSol_Oblig(PrintWriter out,HttpSession session,HttpServletRequest request,String nuevaCadena )
  {
-  STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();/**Instancia de la clase TBCL_GenerarBaseHTML*/
-  TBCL_Validacion        i_valusu = new TBCL_Validacion();/**Instancia de la clase TBCL_GenerarBaseHTML*/  
+  //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;/**Instancia de la clase TBCL_GenerarBaseHTML*/
+  /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()/**Instancia de la clase TBCL_GenerarBaseHTML*/  
   try
   {
    String[] v_valusu = new String[3];
-   v_valusu=i_valusu.TBFL_ValidarUsuario();
+   v_valusu=TBCL_Validacion.TBFL_ValidarUsuario();
    DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
    DefaultContext ctx7 = new DefaultContext(v_valusu[0],v_valusu[1],v_valusu[2],false);
    DefaultContext.setDefaultContext(ctx7);   
@@ -110,7 +112,7 @@ public void TBPL_EliminarSol_Oblig(PrintWriter out,HttpSession session,HttpServl
     v_pro        = (java.lang.String)session.getAttribute("s_producto");//producto 
     
     //Obtener direccion servidor TAX  
-    /*@lineinfo:generated-code*//*@lineinfo:54^5*/
+    /*@lineinfo:generated-code*//*@lineinfo:56^5*/
 
 //  ************************************************************
 //  #sql { select ref_descripcion  from tbreferencias WHERE REF_CODIGO='DSR001' };
@@ -142,11 +144,11 @@ public void TBPL_EliminarSol_Oblig(PrintWriter out,HttpSession session,HttpServl
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:54^96*/  
+/*@lineinfo:user-code*//*@lineinfo:56^96*/  
     session.removeAttribute("s_ruta_serv");
     session.setAttribute("s_ruta_serv",(java.lang.Object)s_ruta_serv); 
     
-    /*@lineinfo:generated-code*//*@lineinfo:58^5*/
+    /*@lineinfo:generated-code*//*@lineinfo:60^5*/
 
 //  ************************************************************
 //  #sql v_retiro = { SELECT  ret_fecha_efectiva, 
@@ -181,10 +183,10 @@ public void TBPL_EliminarSol_Oblig(PrintWriter out,HttpSession session,HttpServl
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:68^23*/
+/*@lineinfo:user-code*//*@lineinfo:70^23*/
 
     /**Dibujar página de respuesta*/
-    v_pintar=    i_pagina.TBFL_CABEZA("Modificar Solicitud de Retiro","Modificar Solicitud de Retiro","TBPKT_MODULO_RETIROS.TBPKT_MODIFICAR_SOLICITUD.TBS_FinalizarEliminar_Oblig","",true,"","");
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Solicitud de Retiro","Modificar Solicitud de Retiro","TBPKT_MODULO_RETIROS.TBPKT_MODIFICAR_SOLICITUD.TBS_FinalizarEliminar_Oblig","",true,"","");
     out.println(""+v_pintar+"");
     while(v_retiro.next())
     {
@@ -197,7 +199,7 @@ public void TBPL_EliminarSol_Oblig(PrintWriter out,HttpSession session,HttpServl
           session.removeAttribute("s_apellidos");
           session.setAttribute("s_apellidos",(java.lang.Object)v_apellidos);      
           String v_contrato_unif = "";
-          /*@lineinfo:generated-code*//*@lineinfo:84^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:86^11*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -228,7 +230,7 @@ public void TBPL_EliminarSol_Oblig(PrintWriter out,HttpSession session,HttpServl
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:84^84*/
+/*@lineinfo:user-code*//*@lineinfo:86^84*/
           out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
           out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nombre+"  <b> Apellidos </b>"+v_apellidos+" </CENTER></font>");
           out.println("<br>");
@@ -270,7 +272,7 @@ public void TBPL_EliminarSol_Oblig(PrintWriter out,HttpSession session,HttpServl
      out.println("</table></center>");
      out.println("<br>");
      out.println("<center><input type=button value='Aceptar' onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-     v_pie = i_pagina.TBFL_PIE;
+     v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println(""+v_pie+"");
      out.close();
@@ -281,16 +283,16 @@ public void TBPL_EliminarSol_Oblig(PrintWriter out,HttpSession session,HttpServl
     out.println("<PRE>");
     out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>");
     out.println("<center><input type=submit value='Aceptar'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-    v_pie = i_pagina.TBFL_PIE;
+    v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println(""+v_pie+"");
     out.close();
    }
    else
    {/**Termino session*/
-    v_pintar=    i_pagina.TBFL_CABEZA("Modificar Solicitud de Retiro","Error al Modificar  Solicitud de Retiro","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Modificar Solicitud de Retiro","Error al Modificar  Solicitud de Retiro","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
     out.println(""+v_pintar+"");
-    v_pie = i_pagina.TBFL_PIE;
+    v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println("<center><input type=button value='Aceptar'  onclick=' history.go(-2)'></center>");
     out.println(""+v_pie+"");
@@ -328,11 +330,11 @@ public void TBPL_EliminarSol_Oblig(PrintWriter out,HttpSession session,HttpServl
                      {
                        v_menex = "Mensaje de error: "+ex;
                      }
-   String v_pintar=    i_pagina.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error al Modificar Solicitud de Retiro","","<center>"+v_menex+"</center>",false);
+   String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Modificar Solicitud de Retiro","Error al Modificar Solicitud de Retiro","","<center>"+v_menex+"</center>",false);
    out.println(""+v_pintar+"");
    out.println("<BR>");
    out.println("<center><input type=button value='Aceptar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-   String v_pie = i_pagina.TBFL_PIE;
+   String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println("<br>");
    out.println("<br>");
    out.println(""+v_pie+"");

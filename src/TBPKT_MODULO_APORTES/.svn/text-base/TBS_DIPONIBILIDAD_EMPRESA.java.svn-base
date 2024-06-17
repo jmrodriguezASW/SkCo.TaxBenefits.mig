@@ -115,11 +115,11 @@ public class TBS_DIPONIBILIDAD_EMPRESA extends HttpServlet implements SingleThre
            if(!msj.trim().equals("LA ACTUALIZACION FUE EXITOSA"))
            {
               conn.rollback();
-             salida.println(i_pagina.TBFL_CABEZA("Actualizar disponibilidad aporte por empresa","Actualizar disponibilidad aportes por empresa",
+             salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Actualizar disponibilidad aporte por empresa","Actualizar disponibilidad aportes por empresa",
              "",msj,false));
              salida.println("<BR><BR>");
              salida.println("<center><input type='button' value='Aceptar'Onclick=history.go(-3);><input type='button' value='Regresar' Onclick=history.go(-2);></center>");
-             salida.println(i_pagina.TBFL_PIE);
+             salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
              salida.flush();
              return;
            }
@@ -129,11 +129,11 @@ public class TBS_DIPONIBILIDAD_EMPRESA extends HttpServlet implements SingleThre
          t_rs8i_2.close();
          t_st.close();
          conn.commit();
-         salida.println(i_pagina.TBFL_CABEZA("Actualizar disponibilidad aporte por empresa","Actualizar disponibilidad aportes por empresa",
+         salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Actualizar disponibilidad aporte por empresa","Actualizar disponibilidad aportes por empresa",
          "",msj,false));
          salida.println("<BR><BR>");
          salida.println("<center><input type='button' value='Aceptar'Onclick=history.go(-3);><input type='button' value='Regresar' Onclick=history.go(-2);></center>");
-         salida.println(i_pagina.TBFL_PIE);
+         salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
          salida.flush();
          return;
 
@@ -145,28 +145,28 @@ public class TBS_DIPONIBILIDAD_EMPRESA extends HttpServlet implements SingleThre
          String error = ex.toString();
          if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
          {
-           v_pintar=    i_pagina.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
+           v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
          }
          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
               {
-                 v_pintar=    i_pagina.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
+                 v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
               }
               else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
                    {
-                     v_pintar = i_pagina.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
+                     v_pintar = STBCL_GenerarBaseHTML.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
                    }
                    else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
                         {
-                           v_pintar =  i_pagina.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
+                           v_pintar =  STBCL_GenerarBaseHTML.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
                         }
                         else
                         {
-                           v_pintar=    i_pagina.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>Mensaje de Error :"+ex+".</center>",false);
+                           v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Actualizar disponibilidad aportes por empresa","Error Actualizar disponibilidad aportes por empresa","","<center>Mensaje de Error :"+ex+".</center>",false);
                         }
          salida.println(""+v_pintar+"");
          salida.println("<BR>");
          salida.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-         String v_pie = i_pagina.TBFL_PIE;
+         String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
          salida.println("<br>");
          salida.println(""+v_pie+"");
          salida.close();      

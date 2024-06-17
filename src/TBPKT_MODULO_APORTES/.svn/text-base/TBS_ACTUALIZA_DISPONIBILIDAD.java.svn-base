@@ -32,7 +32,7 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
        //rutaFisica  =  "c:\\Taxbenefits\\Taxbenefits\\public_html\\WEB-INF\\";
        String POLICY_FILE_LOCATION = rutaFisica+"antisamy-tinymce-1.4.4.xml"; // Path to policy file
        AntiSamy as = new AntiSamy(); // INT20131108      
-      STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII();
+      //STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII;
       PrintWriter salida                = new PrintWriter (respuesta.getOutputStream());
       //seguridad
       HttpSession session               = peticion.getSession(true);
@@ -268,7 +268,7 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
                              //jag se adiciona para que dibuje entradas de fecha y porcentaje para aportes de empresa
                              //dibujo para todos loa aportes
                              //dibujo pagina que pide disponibilidad,fecha y porcentaje
-                             salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                             salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                             "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD",
                                             " ",true,"moduloparametro.js","return checkrequired(this)"));
                              //consecucuion de datos de cabecera para el contrato, el producto y el consecutivo
@@ -287,7 +287,7 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
                              salida.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena +"'>");
                              salida.println("<center><input type='submit' value='Aceptar' >"+
                                             "<input type='button' value='Cancelar' Onclick=history.go(-2);></center>");
-                             salida.println(plantilla.TBFL_PIE);
+                             salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                              salida.close();
                           }
                           else
@@ -385,7 +385,7 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
                                  //dibujo pagina que pide disponibilidad,fecha y porcentaje
                                  String v_fecha1       = peticion.getParameter("v_fecha1");
                                  String v_fecha2       = peticion.getParameter("v_fecha2");
-                                 salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                 salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                 "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD",
                                                 " ",true,"moduloparametro.js","return checkrequired(this)"));
                                 //consecucuion de datos de cabecera para el contrato, el producto y el consecutivo
@@ -408,7 +408,7 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
                                 salida.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena +"'>");
                                 salida.println("<center><input type='submit' value='Aceptar' >"+
                                                "<input type='button' value='Cancelar' Onclick=history.go(-2);></center>");
-                                salida.println(plantilla.TBFL_PIE);
+                                salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                 salida.close();
                                 return;
 
@@ -491,7 +491,7 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
                                    try
                                    {
                                       v_historia = -4;
-                                      STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML();
+                                      //STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML;
                                       String tipo_opcion       = peticion.getParameter("tipo_opcion");
                                       if(tipo_opcion != null)
                                          System.out.println(" ");
@@ -540,11 +540,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
                                             if(!msj.trim().equals("LA ACTUALIZACION FUE EXITOSA"))
                                             {
                                                v_conexion_taxb.rollback();
-                                               salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                               salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD",msj,false));
                                                salida.println("<BR><BR>");
                                                salida.println("<center><input type='button' value='Aceptar'Onclick=history.go(-3);><input type='button' value='Regresar' Onclick=history.go(-2);></center>");
-                                               salida.println(plantilla1.TBFL_PIE);
+                                               salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                                salida.flush();
                                                return;
                                             }
@@ -553,11 +553,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
                                          t_rs8i_2.close();
                                          t_st8i_2.close();
                                          v_conexion_taxb.commit();
-                                         salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                         salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                          "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD",msj,false));
                                          salida.println("<BR><BR>");
                                          salida.println("<center><input type='button' value='Aceptar'Onclick=history.go(-3);><input type='button' value='Regresar' Onclick=history.go(-2);></center>");
-                                         salida.println(plantilla1.TBFL_PIE);
+                                         salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                          salida.flush();
                                          return;
                                       }
@@ -596,11 +596,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
                                                 if(!msj.trim().equals("LA ACTUALIZACION FUE EXITOSA"))
                                                 {
                                                    v_conexion_taxb.rollback();
-                                                   salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                                   salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                    "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD",msj,false));
                                                    salida.println("<BR><BR>");
                                                    salida.println("<center><input type='button' value='Aceptar'Onclick=history.go(-3);><input type='button' value='Regresar' Onclick=history.go(-2);></center>");
-                                                   salida.println(plantilla1.TBFL_PIE);
+                                                   salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                                    salida.flush();
                                                    return;
                                                 }
@@ -611,11 +611,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
                                               t_st8i_3.close();
                                               v_conexion_taxb.commit();
 
-                                              salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                              salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                               "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD",msj,false));
                                               salida.println("<BR><BR>");
                                               salida.println("<center><input type='button' value='Aceptar'Onclick=history.go(-3);><input type='button' value='Regresar' Onclick=history.go(-2);></center>");
-                                              salida.println(plantilla1.TBFL_PIE);
+                                              salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                               salida.flush();
                                               return;
                                            }
@@ -782,11 +782,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
 
                                                     if(!estado.equals("BIEN"))
                                                     {
-                                                        salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                                        salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                                        " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, "+estado,false));
                                                         salida.println("<BR><BR>");
                                                         salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                                                        salida.println(plantilla1.TBFL_PIE);
+                                                        salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                                         salida.close();
                                                     }
                                                     msj = "LA ACTUALIZACION FUE EXITOSA";
@@ -812,11 +812,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
 
                                                        if(!estado.equals("BIEN"))
                                                        {
-                                                           salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                                           salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                                           " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, "+estado,false));
                                                            salida.println("<BR><BR>");
                                                            salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                                                           salida.println(plantilla1.TBFL_PIE);
+                                                           salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                                            salida.close();
                                                        }
                                                        msj = "LA ACTUALIZACION FUE EXITOSA";
@@ -840,11 +840,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
 
                                                             if(!estado.equals("BIEN"))
                                                             {
-                                                               salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                                               salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                                               " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, "+estado,false));
                                                                salida.println("<BR><BR>");
                                                                salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                                                               salida.println(plantilla1.TBFL_PIE);
+                                                               salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                                                salida.close();
                                                             }
                                                             msj = "LA ACTUALIZACION FUE EXITOSA";
@@ -863,11 +863,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
                                                   msj = "ERROR EN LA ACTUALIZACION, LA FECHA INGRESADA ES MENOR A LA FECHA EFECTIVA DEL APORTE";
 
                                                }//si fecha no Correcta
-                                               salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                               salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                                "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD",msj,false));
                                                salida.println("<BR><BR>");
                                                salida.println(botones);
-                                               salida.println(plantilla1.TBFL_PIE);
+                                               salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                                salida.flush();
                                                return;
                                             }
@@ -875,11 +875,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
                                    catch(Exception ex)
                                    {
                                        String msj = "SE PRODUJO UN ERROR INESPERADO, "+ex.toString() +" INTENTE DE NUEVO.";
-                                       salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                       salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                       "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD","<CENTER>"+msj+"</CEBTER>",false));
                                        salida.println("<BR><BR>");
                                        salida.println("<center><input type='button' value='Aceptar' Onclick=window.location='/taxbenefit/actualizar_aportes.html';></center>");
-                                       salida.println(plantilla.TBFL_PIE);
+                                       salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                        salida.flush();
                                    }//catch
                                 }//is Z Y Z
@@ -887,11 +887,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
        catch(Exception ex)
        {
           String msj = "SE PRODUJO UN ERROR INESPERADO, "+ex.toString() +" INTENTE DE NUEVO.";
-          salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+          salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                "","<CENTER>"+msj+"</CEBTER>",false));
           salida.println("<BR><BR>");
           salida.println("<center><input type='button' value='Aceptar' Onclick=history.go("+v_historia+");></center>");
-          salida.println(plantilla.TBFL_PIE);
+          salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
           salida.flush();
       }
        finally{
@@ -911,7 +911,7 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
                                       String  select8i_2 , String  select8i_3,
                                       Connection v_conexion_taxb,PrintWriter salida)
    {
-       STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII();
+       //STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII;
       boolean fecha_xcorrecta = false;
       boolean hoy_estabien = false;
       double  capital          = 0;
@@ -1032,11 +1032,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
               t_cst8i_9.close();
               if(!estado.equals("BIEN"))
               {
-                 salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                 salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, "+estado,false));
                 salida.println("<BR><BR>");
                 salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                 salida.println(plantilla1.TBFL_PIE);
+                 salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                 salida.close();
               }
               msj = "LA ACTUALIZACION FUE EXITOSA";
@@ -1062,11 +1062,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
                {
                  v_conexion_taxb.rollback();
                  v_conexion_taxb.close();
-                 salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                 salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                 " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, "+estado,false));
                  salida.println("<BR><BR>");
                  salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                 salida.println(plantilla.TBFL_PIE);
+                 salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                  salida.close();
                }
                msj = "LA ACTUALIZACION FUE EXITOSA";
@@ -1088,11 +1088,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
                     t_cst8i_9.close();
                     if(!estado.equals("BIEN"))
                     {
-                       salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                       salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                        " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, "+estado,false));
                        salida.println("<BR><BR>");
                        salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                       salida.println(plantilla.TBFL_PIE);
+                       salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                        salida.close();
                     }
                     msj = "LA ACTUALIZACION FUE EXITOSA";
@@ -1122,11 +1122,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet implements SingleT
           {}
 
           msj = "SE PRODUJO UN ERROR INESPERADO, "+ex.toString() +" INTENTE DE NUEVO.";
-          salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+          salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                          "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD","<CENTER>"+msj+"</CEBTER>",false));
           salida.println("<BR><BR>");
           salida.println("<center><input type='button' value='Aceptar' Onclick=window.location='/taxbenefit/actualizar_aportes.html';></center>");
-          salida.println(plantilla.TBFL_PIE);
+          salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
           salida.flush();
        }//catch
 

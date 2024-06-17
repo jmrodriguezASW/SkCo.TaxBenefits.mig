@@ -52,9 +52,12 @@ public class TBS_ACTUALIZA_BENEFICIO extends HttpServlet
   String  cadena2          = peticion.getParameter("cadena");
   String  nuevaCadena      = cadena2;
   String ip_tax            = peticion.getRemoteAddr();
-  TBCL_Seguridad Seguridad = new TBCL_Seguridad();
+   
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
   //valido la veracidad del producto y contrato enviados por pipeline
-  parametros = Seguridad.TBFL_Seguridad(cadena2, salida, ip_tax);
+  parametros = TBCL_Seguridad.TBFL_Seguridad(cadena2, salida, ip_tax);
   v_contrato = parametros[0];
   v_producto = parametros[1];
   v_usuario  = parametros[2];
@@ -63,11 +66,12 @@ public class TBS_ACTUALIZA_BENEFICIO extends HttpServlet
   v_idworker = parametros[5];
   
     v_conexion_taxb =   DataSourceWrapper.getInstance().getConnection();
-  TBCL_HTML   hoja_base                 = new TBCL_HTML();
+  /*[SO_396] Se realiza modificación de llamado por ser método estático ****** de la clase TBCL_HTML, no es necesaria la instancia nueva*/
+  /*TBCL_HTML   hoja_base                 = new TBCL_HTML();
   TBCL_HTML   hoja_error                = new TBCL_HTML();
   TBCL_HTML   parametros_requeridos     = new TBCL_HTML();
   TBCL_HTML   nombres                   = new TBCL_HTML();
-  TBCL_HTML   publica                   = new TBCL_HTML();
+  TBCL_HTML   publica                   = new TBCL_HTML();*/
   //valido la veracidad del producto y contrato enviados por pipeline
   String  nombre_producto               = peticion.getParameter("nom_producto");
   String  numero_contrato               = peticion.getParameter("num_contrato");
@@ -77,41 +81,41 @@ public class TBS_ACTUALIZA_BENEFICIO extends HttpServlet
      v_producto = "x";
      v_contrato = "x";
    }
-  STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII();
+  //STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII;
   //------------------------------------------------------------------pagina numero 1
  //si los parametros son validos, dibujo hojabase y devuelvo parametros x y x
- if(parametros_requeridos.TBPL_Parametros_Requeridos(v_producto,v_contrato))
+ if(TBCL_HTML.TBPL_Parametros_Requeridos(v_producto,v_contrato))
   {
   v_historia = -1;
- hoja_base.TBPL_Hoja_Base("ACTUALIZA EXENTOS",v_producto,v_contrato,salida,1,
+ TBCL_HTML.TBPL_Hoja_Base("ACTUALIZA EXENTOS",v_producto,v_contrato,salida,1,
                           "TBS_ACTUALIZA_BENEFICIO",v_conexion_taxb,v_usuario,
-                          nombres.TBPL_Nombres(v_producto,v_contrato),nuevaCadena);
+                          TBCL_HTML.TBPL_Nombres(v_producto,v_contrato),nuevaCadena);
 return;
   }
-  else if ((!parametros_requeridos.TBPL_Parametros_Requeridos(nombre_producto,numero_contrato))&&
+  else if ((!TBCL_HTML.TBPL_Parametros_Requeridos(nombre_producto,numero_contrato))&&
          ( nombre_producto == null)&&
          ( numero_contrato == null))
        {
-         STBCL_GenerarBaseHTML plantilla2 = new STBCL_GenerarBaseHTML();
+         //STBCL_GenerarBaseHTML plantilla2 = new STBCL_GenerarBaseHTML();
          String msj = "EL CONTRATO "+v_contrato+" NO EXISTE EN EL SISTEMA.";
-         salida.println(plantilla2.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE EXENCION DE APORTES",
+         salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE EXENCION DE APORTES",
                                          "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_BENEFICIO","<font face='Verdana, Arial, Helvetica, sans-serif' color='#324395'><b><CENTER>"+msj+"</CEBTER></font></b>",false));
          salida.println("<BR><BR>");
          salida.println("<center><input type='button' value='Aceptar' Onclick='history.go(-1);' ></center>");
-         salida.println(plantilla2.TBFL_PIE);
+         salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
          salida.flush();
        return;
         }
   //------------------------------------------------------------------pagina numero 2
  //si los parametros son invalidos y diferentes de x hay error
 else if
- ((!parametros_requeridos.TBPL_Parametros_Requeridos(nombre_producto,numero_contrato))&&
+ ((!TBCL_HTML.TBPL_Parametros_Requeridos(nombre_producto,numero_contrato))&&
  (!nombre_producto.equals("x"))&&
  (!numero_contrato.equals("x"))&&
  (!nombre_producto.equals("y"))&&
  (!numero_contrato.equals("y"))){
  v_historia = -2;
- hoja_error.TBPL_Hoja_Error(nombre_producto,numero_contrato,salida,0,"TBS_ACTUALIZA_BENEFICIO","ACTUALIZA EXENTOS");
+ TBCL_HTML.TBPL_Hoja_Error(nombre_producto,numero_contrato,salida,0,"TBS_ACTUALIZA_BENEFICIO","ACTUALIZA EXENTOS");
   return;
                                 }
 //valido valor de productos para generar pagina3
@@ -169,8 +173,9 @@ else if((nombre_producto.equals("x"))&&(numero_contrato.equals("x")))
         t_rs8i_2.close();
         t_st8i_2.close();
          //calculo el valor de la unidad
-         SQL_VALOR_UNIDAD_CC i_valUnid = new SQL_VALOR_UNIDAD_CC();
-         matUnidad                          = i_valUnid.TBF_CALCULO_VALOR_UNIDAD(v_fecha_valuni,v_fecha_valuni,f_contrato,f_producto,false,0);
+         /*[SO_396] Se realiza modificación de llamado por ser método estático TBF_CALCULO_VALOR_UNIDAD de la clase SQL_VALOR_UNIDAD_CC, no es necesaria la instancia nueva*/
+         //SQL_VALOR_UNIDAD_CC i_valUnid = new SQL_VALOR_UNIDAD_CC();
+         matUnidad                          = SQL_VALOR_UNIDAD_CC.TBF_CALCULO_VALOR_UNIDAD(v_fecha_valuni,v_fecha_valuni,f_contrato,f_producto,false,0);
          v_valorUnidad                      = matUnidad[0];
          if(matUnidad[2]!=0.0)
            {
@@ -180,12 +185,12 @@ else if((nombre_producto.equals("x"))&&(numero_contrato.equals("x")))
            if(matUnidad[2]==-3.0) msj = "ERROR menos 3";
            if(matUnidad[2]==-4.0) msj = "ERROR menos 4";
            if(matUnidad[2]==-5.0) msj = "ERROR menos 5";
-           STBCL_GenerarBaseHTML plantilla2 = new STBCL_GenerarBaseHTML();
-           salida.println(plantilla2.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZA EXENTOS",
+           //STBCL_GenerarBaseHTML plantilla2 = new STBCL_GenerarBaseHTML();
+           salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZA EXENTOS",
                                           " ","SE PRODUJO UN ERROR EN EL CALCULO DEL VALOR DE LA UNIDAD, "+msj,false));
            salida.println("<BR><BR>");
            salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-           salida.println(plantilla2.TBFL_PIE);
+           salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
            salida.close();
          }
        }//try
@@ -197,12 +202,13 @@ else if((nombre_producto.equals("x"))&&(numero_contrato.equals("x")))
            if(matUnidad[2]==-3.0) msj = "ERROR menos 3";
            if(matUnidad[2]==-4.0) msj = "ERROR menos 4";
            if(matUnidad[2]==-5.0) msj = "ERROR menos 5";
-           STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML();
-           salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZA EXENTOS",
+           /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase STBCL_GenerarBaseHTML, no es necesaria la instancia nueva*/  
+ //STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML;
+           salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZA EXENTOS",
                                           " ","SE PRODUJO UN ERROR EN EL CALCULO DEL VALOR DE LA UNIDAD, "+msj,false));
            salida.println("<BR><BR>");
            salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-           salida.println(plantilla1.TBFL_PIE);
+           salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
            salida.close();
        }
 //--
@@ -231,7 +237,7 @@ else if((nombre_producto.equals("x"))&&(numero_contrato.equals("x")))
       t_rs8i.close();
       t_st8i.close();
       
-   publica.TBPL_Publica_E(indice,v_fechas,v_saldoc,v_rtos,v_saldocc,v_conses,f_user,f_producto,f_contrato,salida,nuevaCadena);
+   TBCL_HTML.TBPL_Publica_E(indice,v_fechas,v_saldoc,v_rtos,v_saldocc,v_conses,f_user,f_producto,f_contrato,salida,nuevaCadena);
    return;
   }
 //------------------------------------------------------------------------------------------------------------------------
@@ -279,12 +285,13 @@ else if((nombre_producto.equals("y"))&&(numero_contrato.equals("y")))
      t_cst8i_1.execute();
         t_cst8i_1.close();
     }
-   STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML();
-   salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZA EXENTOS",
+   /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase STBCL_GenerarBaseHTML, no es necesaria la instancia nueva*/  
+ //STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML;
+   salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZA EXENTOS",
                                                 "","ACTUALIZACION DE BENEFICIO DE APORTES REALIZADA",false));
    salida.println("<BR><BR>");
    salida.println("<center><input type='button' value='Aceptar' Onclick = 'history.go(-2);'></center>");
-   salida.println(plantilla1.TBFL_PIE);
+   salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
    salida.flush();
    v_conexion_taxb.commit();
    return;
@@ -292,13 +299,13 @@ else if((nombre_producto.equals("y"))&&(numero_contrato.equals("y")))
  }
  catch(Exception ex)
    {
-    STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+    //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
     String msj = "SE PRODUJO UN ERROR INESPERADO, "+ex.toString() +" INTENTE DE NUEVO.";
-    salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE EXENCION DE APORTES",
+    salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE EXENCION DE APORTES",
                                          "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_BENEFICIO","<CENTER>"+msj+"</CEBTER>",false));
     salida.println("<BR><BR>");
     salida.println("<center><input type='button' value='Aceptar' Onclick=history.go("+v_historia+");></center>");
-    salida.println(plantilla.TBFL_PIE);
+    salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
     salida.flush();
     return;
    }

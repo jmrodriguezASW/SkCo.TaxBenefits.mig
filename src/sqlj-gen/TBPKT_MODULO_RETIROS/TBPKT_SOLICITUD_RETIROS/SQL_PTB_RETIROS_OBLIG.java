@@ -65,17 +65,19 @@ implements sqlj.runtime.NamedIterator
     i_aportes v_aportes;     
     
     public String[] INSERT_RETPERSSON_OBLIG (String v_codproducto, String v_Nocontrato, double vretconsec, double aporte_actual){                
-        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
         String[] resul = new String[2];
         resul[0] = "0"; 
         resul[1] = "0";        
         try {            
             //Conexion con la base de datos
             v_valusu = new String[3];
-            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));
-            /*@lineinfo:generated-code*//*@lineinfo:48^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:50^13*/
 
 //  ************************************************************
 //  #sql { call tbpbd_insretperson_oblig(:vretconsec
@@ -117,10 +119,10 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:53^56*/            
+/*@lineinfo:user-code*//*@lineinfo:55^56*/            
         if(v_cod_err == 0) 
         {            
-            /*@lineinfo:generated-code*//*@lineinfo:56^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:58^13*/
 
 //  ************************************************************
 //  #sql { Commit };
@@ -131,12 +133,12 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:56^25*/
+/*@lineinfo:user-code*//*@lineinfo:58^25*/
             return resul;
         }
         else
         {
-            /*@lineinfo:generated-code*//*@lineinfo:61^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:63^13*/
 
 //  ************************************************************
 //  #sql { Rollback };
@@ -147,7 +149,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:61^27*/
+/*@lineinfo:user-code*//*@lineinfo:63^27*/
             resul[0] = ""+v_cod_err; 
             resul[1] = v_men_err;
             return resul;
@@ -165,7 +167,9 @@ implements sqlj.runtime.NamedIterator
                                            String v_nombrester, String v_apellidoster, String v_usuario, String v_orden, String v_concepto, Double v_saldoAVA, Double v_saldoAVE,
                                            Double v_disponible_neto, Double v_cc, Double v_ret_rend, Double v_prov_comi_rend, Double v_prov_comi_cap, int commit){                        
     
-        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
         String v_ret_consec = "0";
         String[] resul = new String[3];
         resul[0] = "0"; 
@@ -175,11 +179,11 @@ implements sqlj.runtime.NamedIterator
         try {                 
             //Conexion con la base de datos
             v_valusu = new String[3];
-            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false)); 
             
-            /*@lineinfo:generated-code*//*@lineinfo:93^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:97^13*/
 
 //  ************************************************************
 //  #sql { call TBPBD_GENERAR_RETIRO_OBLIG(:v_codproducto
@@ -271,11 +275,11 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:122^56*/            
+/*@lineinfo:user-code*//*@lineinfo:126^56*/            
         if(v_cod_err == 0) 
         {
             if (commit==0)            
-                /*@lineinfo:generated-code*//*@lineinfo:126^17*/
+                /*@lineinfo:generated-code*//*@lineinfo:130^17*/
 
 //  ************************************************************
 //  #sql { Commit };
@@ -286,13 +290,13 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:126^29*/
+/*@lineinfo:user-code*//*@lineinfo:130^29*/
             resul[2] = v_ret_consec; 
             return resul;
         }
         else
         {            
-            /*@lineinfo:generated-code*//*@lineinfo:132^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:136^13*/
 
 //  ************************************************************
 //  #sql { Rollback };
@@ -303,7 +307,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:132^27*/
+/*@lineinfo:user-code*//*@lineinfo:136^27*/
             resul[0] = ""+v_cod_err; 
             resul[1] = v_men_err;
             resul[2] = "0";
@@ -320,7 +324,9 @@ implements sqlj.runtime.NamedIterator
      
      public String[] UPDATE_RETPERSSON_OBLIG (String v_codproducto, String v_contrato, double v_ret_consec, int parametro){
            
-        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
         String[] resul = new String[3];
         resul[0] = "0"; 
         resul[1] = "0";    
@@ -329,10 +335,10 @@ implements sqlj.runtime.NamedIterator
         try {            
             //Conexion con la base de datos
             v_valusu = new String[3];
-            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));            
-            /*@lineinfo:generated-code*//*@lineinfo:161^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:167^13*/
 
 //  ************************************************************
 //  #sql { call TBPBD_UPDRETIRO_PERS_OBLIG(:v_ret_consec
@@ -374,10 +380,10 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:166^56*/            
+/*@lineinfo:user-code*//*@lineinfo:172^56*/            
         if(v_cod_err == 0) 
         {
-            /*@lineinfo:generated-code*//*@lineinfo:169^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:175^13*/
 
 //  ************************************************************
 //  #sql { Commit };
@@ -388,7 +394,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:169^25*/
+/*@lineinfo:user-code*//*@lineinfo:175^25*/
             return resul;
         }
         else
@@ -409,7 +415,9 @@ implements sqlj.runtime.NamedIterator
      
     public String[] ELIMINAR_RETIRO_OBLIG (String producto, String contrato, String conret, String usuario){                
         
-        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
         String[] resul = new String[2];
         resul[0] = "0"; 
         resul[1] = "0";   
@@ -417,11 +425,11 @@ implements sqlj.runtime.NamedIterator
         try {                                
             //Conexion con la base de datos
             v_valusu = new String[3];
-            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));                        
             
-            /*@lineinfo:generated-code*//*@lineinfo:202^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:210^13*/
 
 //  ************************************************************
 //  #sql { call tbpbd_reversar_retiro_oblig(:producto
@@ -468,7 +476,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:212^41*/ 
+/*@lineinfo:user-code*//*@lineinfo:220^41*/ 
                                                                 
         if(v_cod_err == 0) 
         {                    
@@ -491,18 +499,20 @@ implements sqlj.runtime.NamedIterator
     
     public double[] CONSULTA_REND_TRAS_OBLIG (String producto, String contrato, int padre_consecutivo){                
         
-        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
         double[] resul = new double[3000];                
         int i = 0;                                
         
         try {                                
             //Conexion con la base de datos
             v_valusu = new String[3];
-            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));                                                                
             
-           /*@lineinfo:generated-code*//*@lineinfo:246^12*/
+           /*@lineinfo:generated-code*//*@lineinfo:256^12*/
 
 //  ************************************************************
 //  #sql v_aportes = { select apo_rendimientos
@@ -533,7 +543,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:251^57*/                                       
+/*@lineinfo:user-code*//*@lineinfo:261^57*/                                       
           
           while (v_aportes.next())
           {

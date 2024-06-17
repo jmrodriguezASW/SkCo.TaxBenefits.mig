@@ -36,9 +36,13 @@ public class TestTBS_CARGA_APORTES_EXTERNOS1
       /*Conexion con la base de datos*/
       //logger.info
       try {
-       TBCL_Validacion  i_valusu  = new TBCL_Validacion ();
+       
+ 
+ //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
+
+
        String[] v_valusu          = new String[3];
-       v_valusu                   = i_valusu.TBFL_ValidarUsuario();
+       v_valusu                   = TBCL_Validacion.TBFL_ValidarUsuario();
       String v_contrato="B"; 
       String v_producto="B"; 
       String v_usuario="TEST";

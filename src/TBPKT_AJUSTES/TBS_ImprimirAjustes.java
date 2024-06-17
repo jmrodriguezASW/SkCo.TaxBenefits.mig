@@ -44,8 +44,11 @@ public void doGet(HttpServletRequest request, HttpServletResponse response) thro
     //INICIO seguridad
     String parametros[]         = new String[8];
     String ip_tax               = request.getRemoteAddr();
-    TBCL_Seguridad Seguridad    = new TBCL_Seguridad();
-    parametros                  = Seguridad.TBFL_Seguridad(cadena,out,ip_tax);
+     
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
+    parametros                  = TBCL_Seguridad.TBFL_Seguridad(cadena,out,ip_tax);
      //FIN seguridad
     //construcción de la página de salida
     buildPage();
@@ -55,9 +58,9 @@ public void doGet(HttpServletRequest request, HttpServletResponse response) thro
 private void buildPage()
 {
     String v_fechaHoy = new String("");
-    if(i_sqlj.TBPBD_ConexionBD())
+    if(SQL_AJUSTE.TBPBD_ConexionBD())
     {
-      v_fechaHoy = i_sqlj.TBPBD_FechaActual();
+      v_fechaHoy = SQL_AJUSTE.TBPBD_FechaActual();
     }
     out.println("<html><head><title>Reporte de Ajustes</title></head><body>");
     //out.println("<FORM METHOD=Post NAME=codigo ACTION=/Servlets/TBPKT_AJUSTES.TBS_ReporteAjustes>");

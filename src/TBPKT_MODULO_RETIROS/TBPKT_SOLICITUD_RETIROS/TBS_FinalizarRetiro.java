@@ -30,7 +30,8 @@ public class TBS_FinalizarRetiro extends HttpServlet{
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         PrintWriter out = new PrintWriter (response.getOutputStream());        
-        STBCL_GenerarBaseHTML i_pagina  = new  STBCL_GenerarBaseHTML ();        
+        /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase STBCL_GenerarBaseHTML, no es necesaria la instancia nueva*/ 
+ //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;        
         
         try{
             
@@ -49,8 +50,11 @@ public class TBS_FinalizarRetiro extends HttpServlet{
             String  cadena = request.getParameter("cadena");
             nuevaCadena = cadena;
             String ip_tax = request.getRemoteAddr();
-            TBCL_Seguridad Seguridad = new TBCL_Seguridad();
-            parametros = Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
+             
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
+            parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
             v_contrato = parametros[0];
             v_producto = parametros[1];
             v_usuario  = parametros[2];
@@ -209,7 +213,7 @@ public class TBS_FinalizarRetiro extends HttpServlet{
 
                         if(!resul[0].equals("0")) {
                             bandera = 0;
-                            String v_pintar4=    i_pagina.TBFL_CABEZA ("Calcular Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error al procesar solicitud de Retiro. "+resul[1]+" .</center>",false);
+                            String v_pintar4=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Calcular Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error al procesar solicitud de Retiro. "+resul[1]+" .</center>",false);
                             out.println(""+v_pintar4+"");
                             out.println("<BR>");
                             out.println("<center><table border='0' cellspacing='0' cellpadding='0'>");
@@ -220,7 +224,7 @@ public class TBS_FinalizarRetiro extends HttpServlet{
                                         "<input type=submit name = 'Cancelar' value='Cancelar'>"+
                                         "</FORM></TD></TR>");
                             out.println("</table></center>");                                                    
-                            String v_pie = i_pagina.TBFL_PIE;
+                            String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                             out.println("<br>");
                             out.println(""+v_pie+"");
                             out.close();
@@ -236,7 +240,7 @@ public class TBS_FinalizarRetiro extends HttpServlet{
                         
                         if(!resul[0].equals("0")) {
                             bandera = 0;
-                            String v_pintar4=    i_pagina.TBFL_CABEZA ("Calcular Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error al procesar solicitud de Retiro. "+resul[1]+" .</center>",false);
+                            String v_pintar4=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Calcular Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error al procesar solicitud de Retiro. "+resul[1]+" .</center>",false);
                             out.println(""+v_pintar4+"");
                             out.println("<BR>");
                             out.println("<center><table border='0' cellspacing='0' cellpadding='0'>");
@@ -247,7 +251,7 @@ public class TBS_FinalizarRetiro extends HttpServlet{
                                         "<input type=submit name = 'Cancelar' value='Cancelar'>"+
                                         "</FORM></TD></TR>");
                             out.println("</table></center>");                            
-                            String v_pie = i_pagina.TBFL_PIE;
+                            String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                             out.println("<br>");
                             out.println(""+v_pie+"");
                             out.close();
@@ -257,7 +261,7 @@ public class TBS_FinalizarRetiro extends HttpServlet{
                             resul = objSQL_PTB_RETIROS_OBLIG.UPDATE_RETPERSSON_OBLIG(v_pro, ""+Integer.parseInt(v_contra),conseretiro,1);  
                             if(!resul[0].equals("0")) {
                                 bandera = 0;
-                                String v_pintar4=    i_pagina.TBFL_CABEZA ("Calcular Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error al procesar solicitud de Retiro. "+resul[1]+" .</center>",false);
+                                String v_pintar4=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Calcular Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error al procesar solicitud de Retiro. "+resul[1]+" .</center>",false);
                                 out.println(""+v_pintar4+"");
                                 out.println("<BR>");
                                 out.println("<center><table border='0' cellspacing='0' cellpadding='0'>");
@@ -268,13 +272,13 @@ public class TBS_FinalizarRetiro extends HttpServlet{
                                             "<input type=submit name = 'Cancelar' value='Cancelar'>"+
                                             "</FORM></TD></TR>");
                                 out.println("</table></center>");                                
-                                String v_pie = i_pagina.TBFL_PIE;
+                                String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                                 out.println("<br>");
                                 out.println(""+v_pie+"");
                                 out.close();
                             }
                             else {
-                                String v_pintar=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Solicitud de Retiro","","<center>Solicitud de Retiro "+Long.toString(Math.round(Double.parseDouble(resul[2])))+" realizada con exito.</center>",false);
+                                String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Solicitud de Retiro","Solicitud de Retiro","","<center>Solicitud de Retiro "+Long.toString(Math.round(Double.parseDouble(resul[2])))+" realizada con exito.</center>",false);
                                 out.println(""+v_pintar+"");
                                 out.println("<BR><BR>");
                                 out.println("<center>");
@@ -284,7 +288,7 @@ public class TBS_FinalizarRetiro extends HttpServlet{
                                                     "<input type=submit name = 'Aceptar' value='Aceptar'>"+
                                                     "</FORM>");
                                 out.println("</center>");
-                                String v_pie = i_pagina.TBFL_PIE;
+                                String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                                 out.println("<br>");
                                 out.println(""+v_pie+"");
                                 out.close();
@@ -300,7 +304,7 @@ public class TBS_FinalizarRetiro extends HttpServlet{
                                                                               v_saldoAVA, 0.0, v_disponible_neto, v_cc, v_ret_rend, v_prov_comi_rend, v_prov_comi_cap,0); 
                         if(!resul[0].equals("0")) {
                             bandera = 0;
-                            String v_pintar4=    i_pagina.TBFL_CABEZA ("Calcular Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error al procesar solicitud de Retiro. "+resul[1]+" .</center>",false);
+                            String v_pintar4=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Calcular Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error al procesar solicitud de Retiro. "+resul[1]+" .</center>",false);
                             out.println(""+v_pintar4+"");
                             out.println("<BR>");
                             out.println("<center><table border='0' cellspacing='0' cellpadding='0'>");
@@ -311,7 +315,7 @@ public class TBS_FinalizarRetiro extends HttpServlet{
                                         "<input type=submit name = 'Cancelar' value='Cancelar'>"+
                                         "</FORM></TD></TR>");
                             out.println("</table></center>");                        
-                            String v_pie = i_pagina.TBFL_PIE;
+                            String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                             out.println("<br>");
                             out.println(""+v_pie+"");
                             out.close();
@@ -324,7 +328,7 @@ public class TBS_FinalizarRetiro extends HttpServlet{
                                                                               0.0, v_saldoAVE, v_disponible_neto_AVE, v_cc_AVE, v_ret_rend_AVE, v_prov_comi_rend_AVE, v_prov_comi_cap_AVE,0); 
                             if(!resul[0].equals("0")) {
                                 bandera = 0;
-                                String v_pintar4=    i_pagina.TBFL_CABEZA ("Calcular Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error al procesar solicitud de Retiro. "+resul[1]+" .</center>",false);
+                                String v_pintar4=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Calcular Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error al procesar solicitud de Retiro. "+resul[1]+" .</center>",false);
                                 out.println(""+v_pintar4+"");
                                 out.println("<BR>");
                                 out.println("<center><table border='0' cellspacing='0' cellpadding='0'>");
@@ -335,13 +339,13 @@ public class TBS_FinalizarRetiro extends HttpServlet{
                                             "<input type=submit name = 'Cancelar' value='Cancelar'>"+
                                             "</FORM></TD></TR>");
                                 out.println("</table></center>");                        
-                                String v_pie = i_pagina.TBFL_PIE;
+                                String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                                 out.println("<br>");
                                 out.println(""+v_pie+"");
                                 out.close();
                             }                        
                             else {
-                                String v_pintar=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Solicitud de Retiro","","<center>Solicitud de Retiro AVA: "+Math.round(soliAVA)+" y AVE: "+Math.round(Double.parseDouble(resul[2]))+" realizada con exito.</center>",false);
+                                String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Solicitud de Retiro","Solicitud de Retiro","","<center>Solicitud de Retiro AVA: "+Math.round(soliAVA)+" y AVE: "+Math.round(Double.parseDouble(resul[2]))+" realizada con exito.</center>",false);
                                 out.println(""+v_pintar+"");
                                 out.println("<BR><BR>");
                                 out.println("<center>");
@@ -351,7 +355,7 @@ public class TBS_FinalizarRetiro extends HttpServlet{
                                                     "<input type=submit name = 'Aceptar' value='Aceptar'>"+
                                                     "</FORM>");
                                 out.println("</center>");
-                                String v_pie = i_pagina.TBFL_PIE;
+                                String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                                 out.println("<br>");
                                 out.println(""+v_pie+"");
                                 out.close();
@@ -367,7 +371,7 @@ public class TBS_FinalizarRetiro extends HttpServlet{
                     }
                     if(!resul[0].equals("0")) {
                         bandera = 0;
-                        String v_pintar4=    i_pagina.TBFL_CABEZA ("Calcular Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error al procesar solicitud de Retiro. "+resul[1]+" .</center>",false);
+                        String v_pintar4=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Calcular Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error al procesar solicitud de Retiro. "+resul[1]+" .</center>",false);
                         out.println(""+v_pintar4+"");
                         out.println("<BR>");
                         out.println("<center><table border='0' cellspacing='0' cellpadding='0'>");
@@ -378,13 +382,13 @@ public class TBS_FinalizarRetiro extends HttpServlet{
                                     "<input type=submit name = 'Cancelar' value='Cancelar'>"+
                                     "</FORM></TD></TR>");
                         out.println("</table></center>");                        
-                        String v_pie = i_pagina.TBFL_PIE;
+                        String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                         out.println("<br>");
                         out.println(""+v_pie+"");
                         out.close();
                     }
                     else {
-                        String v_pintar=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Solicitud de Retiro","","<center>Solicitud de Retiro "+Math.round(Double.parseDouble(resul[2]))+" realizada con exito.</center>",false);
+                        String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Solicitud de Retiro","Solicitud de Retiro","","<center>Solicitud de Retiro "+Math.round(Double.parseDouble(resul[2]))+" realizada con exito.</center>",false);
                         out.println(""+v_pintar+"");
                         out.println("<BR><BR>");
                         out.println("<center>");
@@ -394,7 +398,7 @@ public class TBS_FinalizarRetiro extends HttpServlet{
                                             "<input type=submit name = 'Aceptar' value='Aceptar'>"+
                                             "</FORM>");
                         out.println("</center>");
-                        String v_pie = i_pagina.TBFL_PIE;
+                        String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
                         out.println("<br>");
                         out.println(""+v_pie+"");
                         out.close();
@@ -404,7 +408,7 @@ public class TBS_FinalizarRetiro extends HttpServlet{
             
         }catch (Exception e) {
             e.printStackTrace();
-            String v_pintar4=    i_pagina.TBFL_CABEZA ("Calcular Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error al procesar solicitud de Retiro.</center>",false);
+            String v_pintar4=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Calcular Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error al procesar solicitud de Retiro.</center>",false);
             out.println(""+v_pintar4+"");
             out.println("<BR>");
             out.println("<center><table border='0' cellspacing='0' cellpadding='0'>");
@@ -415,7 +419,7 @@ public class TBS_FinalizarRetiro extends HttpServlet{
                         "<input type=submit name = 'Cancelar' value='Cancelar'>"+
                         "</FORM></TD></TR>");
             out.println("</table></center>");                             
-            String v_pie = i_pagina.TBFL_PIE;
+            String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
             out.println("<br>");
             out.println(""+v_pie+"");
             out.close(); 

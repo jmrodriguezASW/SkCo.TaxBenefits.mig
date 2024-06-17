@@ -48,9 +48,12 @@ public class TBCS_Principal_Informacion_Traslados extends HttpServlet {
     String  cadena = request.getParameter("cadena");
     nuevaCadena = cadena;
     String ip_tax = request.getRemoteAddr();
-    TBCL_Seguridad Seguridad = new TBCL_Seguridad();
+     
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
     PrintWriter out = new PrintWriter (response.getOutputStream());
-    parametros = Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
+    parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
 
       out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Informaci&oacute;n de Traslados","Generaci&oacute;n de Informaci&oacute;n de Traslados", "TBPKT_INFORMATIVO.TBPKT_INFORMACION_TRASLADOS.TBCS_Informacion_Traslados", "", true, "moduloInformativo.js", "return validaGIT(this);"));
       out.println("<TABLE BGCOLOR=\"WHITE\" BORDER=0 CELLPADDING=2 CELLSPACING=0 COLS=2 RULES=\"ALL\" WIDTH=100%>");

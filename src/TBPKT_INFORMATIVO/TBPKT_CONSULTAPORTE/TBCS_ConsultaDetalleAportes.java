@@ -53,8 +53,11 @@ private String v_nuevaCadena ="";
        session.removeAttribute("s_consultaas");
        v_nuevaCadena = cadena;
        ip_tax = request.getRemoteAddr();
-       TBCL_Seguridad Seguridad = new TBCL_Seguridad();
-       parametros = Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
+        
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
+       parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
        }
     catch(Exception ex){System.out.println("");}
     v_Consulta = new TBCL_Consulta();
@@ -133,10 +136,10 @@ private String v_nuevaCadena ="";
         else {
             
             objModelo_TB_Referencias = objSQL_TB_FREFERENCIAS_FPOB.GET_TB_FREFERENCIAS_FPOB(v_codproducto);                       
-            
-            TBCL_FuncionesAs400_Oblig Saldo_Contrato = new TBCL_FuncionesAs400_Oblig();
+            /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Saldo_Contrato_OBLIG de la clase TBCL_FuncionesAs400_Oblig, no es necesaria la instancia nueva*/
+            //TBCL_FuncionesAs400_Oblig Saldo_Contrato = new TBCL_FuncionesAs400_Oblig();
 
-            String resultsaldo = Saldo_Contrato.TBFL_Saldo_Contrato_OBLIG(v_codproducto,"E",v_Consulta.TBFL_Consulta("SELECT TO_CHAR(SYSDATE, 'YYYYMMDD') FROM DUAL").elementAt(0).toString(),
+            String resultsaldo = TBCL_FuncionesAs400_Oblig.TBFL_Saldo_Contrato_OBLIG(v_codproducto,"E",v_Consulta.TBFL_Consulta("SELECT TO_CHAR(SYSDATE, 'YYYYMMDD') FROM DUAL").elementAt(0).toString(),
                                                                     v_resultadoConsulta.elementAt(0).toString(),
                                                                     v_resultadoConsulta.elementAt(1).toString(),                                                                    
                                                                     objModelo_TB_Referencias.getLibreria(),

@@ -41,8 +41,10 @@ public String TBCL_ParamEntr(HttpServletRequest request,HttpSession sess,PrintWr
     String parametros[]         = new String[8];
     String cadena               = request.getParameter("cadena");
     String ip_tax               = request.getRemoteAddr();
-    TBCL_Seguridad Seguridad    = new TBCL_Seguridad();
-    parametros                  = Seguridad.TBFL_Seguridad(cadena,salida,ip_tax);
+     
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
+    parametros                  = TBCL_Seguridad.TBFL_Seguridad(cadena,salida,ip_tax);
     v_contrato                  = parametros[0];
     v_producto                  = parametros[1];
     v_usuario                   = parametros[2];
@@ -50,10 +52,10 @@ public String TBCL_ParamEntr(HttpServletRequest request,HttpSession sess,PrintWr
     v_tipousu                   = parametros[4];
     v_idworker                  = parametros[5];
     SQL_AJUSTE  i_unidad = new SQL_AJUSTE();
-    boolean v_conectado = i_unidad.TBPBD_ConexionBD();
+    boolean v_conectado = SQL_AJUSTE.TBPBD_ConexionBD();
     if(v_conectado){
-      String v_codigounidad  =i_unidad.TBPL_BuscarUnidad(v_unidad);
-      String v_codigotipousuario =i_unidad.TBPL_BuscarTipoUsuario(v_tipousu);
+      String v_codigounidad  =SQL_AJUSTE.TBPL_BuscarUnidad(v_unidad);
+      String v_codigotipousuario =SQL_AJUSTE.TBPL_BuscarTipoUsuario(v_tipousu);
 
     sess.removeAttribute("s_codigounidad");
     sess.setAttribute("s_codigounidad",v_codigounidad);

@@ -52,14 +52,16 @@ implements sqlj.runtime.NamedIterator
  public void TBPL_EliminarTax(PrintWriter out,HttpSession session,HttpServletRequest request)
  {
   /**Instancias de clase*/
-  STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();/**Instancia de la clase TBCL_GenerarBaseHTML*/
+  //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;/**Instancia de la clase TBCL_GenerarBaseHTML*/
   //TBCL_ConexionSqlj    i_conexion = new TBCL_ConexionSqlj();/**Instancia de la clase TBCL_ConexionSqlj*/
-  TBCL_Validacion  i_valusu = new     TBCL_Validacion ();
+  /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
 
   try
   {
    String[] v_valusu = new String[3];
-   v_valusu=i_valusu.TBFL_ValidarUsuario();
+   v_valusu=TBCL_Validacion.TBFL_ValidarUsuario();
    DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
    DefaultContext ctx5 = new DefaultContext(v_valusu[0],v_valusu[1],v_valusu[2],false);
    DefaultContext.setDefaultContext(ctx5);
@@ -94,7 +96,7 @@ implements sqlj.runtime.NamedIterator
     v_consecutivo2 = new Integer(v_consecutivo).intValue();/**Consecutivo numerico*/
 
     /**Consultar valor de unidad del retiro*/
-    /*@lineinfo:generated-code*//*@lineinfo:67^5*/
+    /*@lineinfo:generated-code*//*@lineinfo:69^5*/
 
 //  ************************************************************
 //  #sql v_valor = { SELECT RET_VALOR_UNIDAD
@@ -126,7 +128,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:73^21*/
+/*@lineinfo:user-code*//*@lineinfo:75^21*/
 
     /**Mientras se encuentren datos*/
     while (v_valor.next())
@@ -139,7 +141,7 @@ implements sqlj.runtime.NamedIterator
     if (v_encontro)
     {//1
      /**Llamar función que reversa, elimina relacion aportexretiro y actualiza estado*/
-     /*@lineinfo:generated-code*//*@lineinfo:86^6*/
+     /*@lineinfo:generated-code*//*@lineinfo:88^6*/
 
 //  ************************************************************
 //  #sql indicador = { values (TB_FACTUALIZAR_ESTADO(:v_pro, :v_contra,:v_consecutivo2,:v_valuni,'SER002' ,'Se elimino la Solicitud de Retiro antes de ser enviada a Multifund',:v_usuario,:v_mensaje)) };
@@ -175,11 +177,11 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:86^205*/
+/*@lineinfo:user-code*//*@lineinfo:88^205*/
      /**Si no hubo error*/
      if (indicador == 0)
      {//1
-      /*@lineinfo:generated-code*//*@lineinfo:90^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:92^7*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -190,11 +192,11 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:90^19*/
+/*@lineinfo:user-code*//*@lineinfo:92^19*/
       /**Dibujar página de respuesta*/
-      v_pintar=    i_pagina.TBFL_CABEZA("Eliminar Solicitud de Retiro","Eliminar Solicitud de Retiro","","<center>"+v_mensaje+"</center>",false);
+      v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Eliminar Solicitud de Retiro","Eliminar Solicitud de Retiro","","<center>"+v_mensaje+"</center>",false);
       out.println(""+v_pintar+"");
-      v_pie = i_pagina.TBFL_PIE;
+      v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
       out.println("<br>");
       out.println("<center><input type=button value='Aceptar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
       out.println(""+v_pie+"");
@@ -202,7 +204,7 @@ implements sqlj.runtime.NamedIterator
      }
      else
      {/**Si hubo error*/
-      /*@lineinfo:generated-code*//*@lineinfo:102^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:104^7*/
 
 //  ************************************************************
 //  #sql { ROLLBACK };
@@ -213,10 +215,10 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:102^21*/
-      v_pintar=    i_pagina.TBFL_CABEZA("Eliminar Solicitud de Retiro","Error al Eliminar Solicitud de Retiro","","<center>"+v_mensaje+"</center>",false);
+/*@lineinfo:user-code*//*@lineinfo:104^21*/
+      v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Eliminar Solicitud de Retiro","Error al Eliminar Solicitud de Retiro","","<center>"+v_mensaje+"</center>",false);
       out.println(""+v_pintar+"");
-      v_pie = i_pagina.TBFL_PIE;
+      v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
       out.println("<br>");
       out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
       out.println(""+v_pie+"");
@@ -225,7 +227,7 @@ implements sqlj.runtime.NamedIterator
     }
     else
     {/**No se encontraron datos para el número del retiro*/
-     /*@lineinfo:generated-code*//*@lineinfo:114^6*/
+     /*@lineinfo:generated-code*//*@lineinfo:116^6*/
 
 //  ************************************************************
 //  #sql { ROLLBACK };
@@ -236,10 +238,10 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:114^20*/
-     v_pintar=    i_pagina.TBFL_CABEZA("Eliminar Solicitud de Retiro","Error al Eliminar Solicitud de Retiro","","<center>Solicitud de Retiro número "+v_consecutivo+" no se encontro en el sistema.</center>",false);
+/*@lineinfo:user-code*//*@lineinfo:116^20*/
+     v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Eliminar Solicitud de Retiro","Error al Eliminar Solicitud de Retiro","","<center>Solicitud de Retiro número "+v_consecutivo+" no se encontro en el sistema.</center>",false);
      out.println(""+v_pintar+"");
-     v_pie = i_pagina.TBFL_PIE;
+     v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
      out.println(""+v_pie+"");
@@ -248,9 +250,9 @@ implements sqlj.runtime.NamedIterator
    }
    else
    {/**Se termino session*/
-    v_pintar=    i_pagina.TBFL_CABEZA("Eliminar Solicitud de Retiro","Error al Eliminar Solicitud de Retiro","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Eliminar Solicitud de Retiro","Error al Eliminar Solicitud de Retiro","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
     out.println(""+v_pintar+"");
-    v_pie = i_pagina.TBFL_PIE;
+    v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'></center>");
     out.println(""+v_pie+"");
@@ -289,11 +291,11 @@ implements sqlj.runtime.NamedIterator
                      {
                        v_menex = "Mensaje de error: "+ex;
                      }
-   String v_pintar=    i_pagina.TBFL_CABEZA ("Eliminar Solicitud de Retiro","Error al Eliminar Solicitud de retiro","","<center>"+v_menex+"</center>",false);
+   String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Eliminar Solicitud de Retiro","Error al Eliminar Solicitud de retiro","","<center>"+v_menex+"</center>",false);
    out.println(""+v_pintar+"");
    out.println("<BR>");
    out.println("<center><input type=button value='Aceptar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-   String v_pie = i_pagina.TBFL_PIE;
+   String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println("<br>");
    out.println("<br>");
    out.println(""+v_pie+"");

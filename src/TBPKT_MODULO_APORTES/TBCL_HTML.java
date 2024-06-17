@@ -39,7 +39,7 @@ public static void TBPL_Hoja_Base(String titulo,String producto,String contrato
                             ,String nuevaCadena)
  {
 
-  STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+  //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
   String url = "Onclick=history.go(-1);";
   String fechas[] = new String [500];
   fechas          = TBPL_Fechas_por_Contrato(producto,contrato,c);
@@ -49,19 +49,19 @@ public static void TBPL_Hoja_Base(String titulo,String producto,String contrato
    //estado de valor
    if(valor==0)
    {//hoja base para actualizacion de disponibilidad
-    respuesta.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+    respuesta.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                        "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD","",true));
    }
    else if(valor==1)
         {//hoja base para actualizacion de beneficio
-          respuesta.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZA EXENTOS",
+          respuesta.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZA EXENTOS",
                                                 "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_BENEFICIO","",true));
           respuesta.println("<center><input type='hidden' name='usuario' value='"+usuario+"'></center>");
 
         }
         else if(valor==3)
             {//hola base para actualizacion de certificacion de aportes
-             respuesta.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
+             respuesta.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
                                                   "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_CCONTINGENTE","",true));
              respuesta.println("<center><input type='hidden' name='usuario' value='"+usuario+"'></center>");
             }
@@ -119,7 +119,7 @@ public static void TBPL_Hoja_Base(String titulo,String producto,String contrato
    respuesta.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena +"'>");
    respuesta.println("<center><input type='submit' value='Aceptar'>"+
                   "<input type='button' value='Cancelar' "+url+"></center>");
-   respuesta.println(plantilla.TBFL_PIE);
+   respuesta.println(STBCL_GenerarBaseHTML.TBFL_PIE);
    respuesta.close();
 
  }
@@ -138,9 +138,13 @@ public static String TBPL_Nombres(String producto,String contrato)
  String nombres             = "¡ -nombres y apellidos errados- !";
  try
  {
-  TBCL_Validacion  i_valusu  = new     TBCL_Validacion ();
+  
+ 
+ //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
+
+
   String[] v_valusu          = new String[3];
-  v_valusu                   = i_valusu.TBFL_ValidarUsuario();
+  v_valusu                   = TBCL_Validacion.TBFL_ValidarUsuario();
   Class.forName("oracle.jdbc.driver.OracleDriver");
   Connection v_conexion_taxb  = DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
   String select8i_1 = "SELECT CON_NOMBRES,CON_APELLIDOS "+
@@ -187,8 +191,8 @@ public static void TBPL_Hoja_Error(String producto,String contrato,PrintWriter r
 //este procedimiento sirve para generar la hoja de respuesta para cuando ocurra un en error a traves del proceso
 {
 
-  STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
-  respuesta.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES",titulo,
+  //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
+  respuesta.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES",titulo,
                                                 "PKT_ACTUALIZA_APORTES."+clase,"",true));
   respuesta.println("<p><font face='Verdana, Arial, Helvetica, sans-serif' color='#324395'><b><font size='1'></font></b><font size='1' color='#000000'>  SE HA PRODUCIDO UN ERROR A LA HORA DE PROCESAR LA INFORMACION</font></font></p>");
   respuesta.println("<p><font face='Verdana, Arial, Helvetica, sans-serif' color='#324395'><b><font size='1'></font></b><font size='1' color='#000000'>  LOS DATOS ENVIADOS SON: </font></font></p>");
@@ -197,7 +201,7 @@ public static void TBPL_Hoja_Error(String producto,String contrato,PrintWriter r
   respuesta.println("<p><font face='Verdana, Arial, Helvetica, sans-serif' color='#324395'><b><font size='1'></font></b><font size='1' color='#000000'>  POR FAVOR VERIFIQUE LA INFORMACION E INTENTE MAS TARDE</font></font></p>");
   respuesta.println("<br><br>");
   respuesta.println("<center><input type='button' value='Aceptar' Onclick=history.go(-2); ></center>");
-  respuesta.println(plantilla.TBFL_PIE);
+  respuesta.println(STBCL_GenerarBaseHTML.TBFL_PIE);
   respuesta.flush();
 }
 //-----------------------------------------------------------------------------
@@ -212,13 +216,13 @@ public static void TBPL_Publica_E(int total_aportes,String[] fechas,double[] sal
                              double[] consecutivos,String usuario,String producto,String contrato,PrintWriter respuesta,String nuevaCadena)
 
 {
-STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII();
+//STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII;
 /*String url = "Onclick=history.go('http://afscotb1.skandia.com.co/taxbenefit/actualizar_aportes.html');"+
              "history.go('http://afscotb1.skandia.com.co/taxbenefit/ACTUALIZAR_APORTES.HTML');"+
              "history.go('http://AFSCOTB1.SKANDIA.COM.CO/TAXBENEFIT/ACTUALIZAR_APORTES.HTML');";*/
 if(total_aportes>0)
  {
-  respuesta.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZA EXENTOS",
+  respuesta.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZA EXENTOS",
                                                 "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_BENEFICIO","",
                                                 true,"moduloparametro.js","return checkrequired(this)"));
   DecimalFormat formato = new DecimalFormat("###,###,###,###,###,###.##");
@@ -260,7 +264,7 @@ if(total_aportes>0)
   respuesta.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena +"'>");
   respuesta.println("<center><input type='submit' value='Aceptar'>"+
   "<input type='button' value='Cancelar' Onclick=history.go(-1);></center>");
-  respuesta.println(plantilla.TBFL_PIE);
+  respuesta.println(STBCL_GenerarBaseHTML.TBFL_PIE);
   respuesta.flush();
  }//fin aporte>0
 else if(total_aportes==0)
@@ -268,14 +272,14 @@ else if(total_aportes==0)
   String msj  = "No hay elementos selccionados para su transaccion por las siguientes razones: ";
   String msj1 = "* Rango de fechas inválido.";
   String msj2 = "* Los aportes seleccionados estan exentos";
-  respuesta.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZACION DE APORTES EXENTOS","",msj,false));
+  respuesta.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZACION DE APORTES EXENTOS","",msj,false));
   respuesta.println("<br>");
   respuesta.println("<FONT color=black face=verdana size=1>"+msj1+"</font>");
   respuesta.println("<br>");
   respuesta.println("<FONT color=black face=verdana size=1>"+msj2+"</font>");
   respuesta.println("<br><br>");
   respuesta.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1); ></center>");
-  respuesta.println(plantilla.TBFL_PIE);
+  respuesta.println(STBCL_GenerarBaseHTML.TBFL_PIE);
   respuesta.flush();
  }
 }
@@ -295,9 +299,13 @@ public static boolean TBPL_Parametros_Requeridos(String producto,String contrato
 try
 {
 
- TBCL_Validacion  i_valusu  = new     TBCL_Validacion ();
+ 
+ 
+ //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
+
+
   String[] v_valusu          = new String[3];
-  v_valusu                   = i_valusu.TBFL_ValidarUsuario();
+  v_valusu                   = TBCL_Validacion.TBFL_ValidarUsuario();
  Class.forName("oracle.jdbc.driver.OracleDriver");
  Connection v_conexion_taxb  = DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
 
@@ -351,7 +359,7 @@ public static void TBPL_Datos_Ccontingente(String producto,String contrato,Strin
                                            ,PrintWriter respuesta,int[] consecutivos,String[] f_e,
                                             String[] apo_beneficio,String nuevaCadena)
 {
-STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII();
+//STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII;
 /*String url = "Onclick=history.go('http://afscotb1.skandia.com.co/taxbenefit/actualizar_aportes.html');"+
              "history.go('http://afscotb1.skandia.com.co/taxbenefit/ACTUALIZAR_APORTES.HTML');"+
              "history.go('http://AFSCOTB1.SKANDIA.COM.CO/TAXBENEFIT/ACTUALIZAR_APORTES.HTML');";*/
@@ -361,7 +369,7 @@ String url = "Onclick=history.go('http://taxbenefit.skandia.com.co:81/taxbenefit
 DecimalFormat formato = new DecimalFormat("###,###,###,###,###,###.##");
 String radio      = " ";
 boolean hay_datos = false;
-respuesta.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
+respuesta.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
                                               "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_CCONTINGENTE"," ",true));
 respuesta.println("<TABLE bgColor=white border=2 borderColor=silver cellPadding=2 cellSpacing=0 cols=7 rules=all width='100%'>"+
 "<TR class=\"td11\" borderColor=silver>"+
@@ -409,7 +417,7 @@ respuesta.println("<TABLE bgColor=white border=2 borderColor=silver cellPadding=
   respuesta.println("<font face='Verdana, Arial, Helvetica, sans-serif' color='#324395'><b><font size='1'></font></b><font size='1' color='#000000'>NO HAY DATOS PARA TU SOLICITUD</font></font>");
   respuesta.println("<center><input type='button' value='Aceptar'  Onclick=history.go(-2); ></center>");
       }
-  respuesta.println(plantilla.TBFL_PIE);
+  respuesta.println(STBCL_GenerarBaseHTML.TBFL_PIE);
   respuesta.close();
 
 }
@@ -426,12 +434,12 @@ respuesta.println("<TABLE bgColor=white border=2 borderColor=silver cellPadding=
 */
 public static void TBPL_Aporte_Invalido(PrintWriter respuesta,String msj)
 {
- STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
- respuesta.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS INTERNOS DE APORTES",
+ //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
+ respuesta.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS INTERNOS DE APORTES",
                                                 "",msj,false));
  respuesta.println("<br><br>");
  respuesta.println("<center><input type='button' value='Aceptar'   Onclick=history.go(-1); ></center>");
- respuesta.println(plantilla.TBFL_PIE);
+ respuesta.println(STBCL_GenerarBaseHTML.TBFL_PIE);
  respuesta.flush();
 }
 //-----------------------------------------------------------------------------
@@ -460,11 +468,11 @@ public static void TBPL_Aporte_Elegido(String producto,String contrato,String us
                                   ,String consecutivo,String apo_beneficio,String tiene_retiros
                                   ,String nuevaCadena)
 {
-STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII();
+//STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII;
 String opcional = " ";
 if(certificado.equals("S"))opcional = "N";
 else opcional = "S";
-salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
+salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
                                               "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_CCONTINGENTE",
                                               " ",true,"moduloparametro.js","return checkrequired(this)"));
 if(tiene_retiros.equals("v"))
@@ -502,7 +510,7 @@ salida.println("<input type='hidden' name='num_contrato' value='z'>");
 salida.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena +"'>");
 salida.println("<center><input type='submit' value='Aceptar'>"+
                "<input type='button' value='Cancelar' Onclick=history.go(-1);></center>");
-salida.println(plantilla.TBFL_PIE);
+salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
 salida.flush();
 }
 //-----------------------------------------------------------------------------
@@ -583,12 +591,12 @@ public static void TBPL_Encabezados_Disponibles(String[] v_Condicion,String[] v_
                                            String[] ref_codigos,String[] ref_descripciones,int[] ref_valores,
                                            String nuevaCadena,String v_fecha1,String v_fecha2)
 {
-STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII();
+//STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII;
 if(total_aportes>0)
 {
   DecimalFormat formato = new DecimalFormat("###,###,###,###,###,###.##");
   boolean hay_eleccion  = false;
-  respuesta.println(plantilla.TBFL_CABEZA("ADMINISTRADORA DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+  respuesta.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADORA DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                 "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD","",true));
   respuesta.println("<BR></BR>");
   respuesta.println("<TABLE bgColor=white border=2 borderColor=silver cellPadding=2 cellSpacing=0 cols=7 rules=all width='100%'>"+
@@ -641,16 +649,16 @@ if(total_aportes>0)
   respuesta.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena +"'>");
   respuesta.println("<center><input type='submit' value='Aceptar'>"+
   "<input type='button' value='Cancelar' Onclick=history.go(-2);></center>");
-  respuesta.println(plantilla.TBFL_PIE);
+  respuesta.println(STBCL_GenerarBaseHTML.TBFL_PIE);
   respuesta.flush();
 }//fin aportes>0
 else if(total_aportes==0)
 {
  String msj = "NO HAY ELEMENTOS SELECCIONADOS PARA SU TRANSACCION";
- respuesta.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS INTERNOS DE APORTES","",msj,false));
+ respuesta.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS INTERNOS DE APORTES","",msj,false));
  respuesta.println("<br><br>");
  respuesta.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
- respuesta.println(plantilla.TBFL_PIE);
+ respuesta.println(STBCL_GenerarBaseHTML.TBFL_PIE);
  respuesta.flush();
 }//fin aportes==0
 }
@@ -689,11 +697,11 @@ public static void TBPL_Fechas_Aportes(int total_fechas,String[] fechas,String[]
                                   String g_id,String fecha,String capital,String cc,String rtos,String porcentaje,String ref_descripcion,
                                   String ref_codigo,String ref_valor,String nuevaCadena)
 {
-STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII();
+//STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII;
 try{
   String porc_pregrabado   = "value='0' ";
   String fecha_pregrabada  = " ";
-  respuesta.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+  respuesta.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                 "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD",
                                                 " ",true,"moduloparametro.js","return checkrequired(this)"));
   DecimalFormat formato = new DecimalFormat("###,###,###,###,###,###.##");
@@ -806,7 +814,7 @@ try{
   respuesta.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena +"'>");
   respuesta.println("<center><input type='submit' value='Aceptar' >"+
                     "<input type='button' value='Cancelar' Onclick=history.go(-2);></center>");
-  respuesta.println(plantilla.TBFL_PIE);
+  respuesta.println(STBCL_GenerarBaseHTML.TBFL_PIE);
   respuesta.close();
   }
   catch(Exception ex){ }
@@ -831,11 +839,11 @@ public static void TBPL_Publica_AFP(String[] nombre_afp,String[] nit_afp,int tot
                                String contrato,String usuario,PrintWriter salida,String[] codigo_afp,
                                String nuevaCadena)
 {
-STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+//STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
 String radio = " ";
 if(total_afp>0)
 {
-salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS DE APORTES",
+salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS DE APORTES",
                                                 "TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS1","",true));
 salida.println("<center><table border='0' align='center' width='80%'>");
 String v_contrato_unif = "";
@@ -871,16 +879,16 @@ salida.println("<BR>");
 salida.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena +"'>");
 salida.println("<center><input type='submit' value='Aceptar'>"+
                "<input type='button' value='Cancelar' Onclick=history.go(-1);></center>");
-salida.println(plantilla.TBFL_PIE);
+salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
 salida.flush();
 }
 else
 {
 String msj = "NO HAY ELEMENTOS SELECCIONADOS PARA SU TRANSACCION";
-salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS DE APORTES","",msj,false));
+salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS DE APORTES","",msj,false));
 salida.println("<br><br>");
 salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1); ></center>");
-salida.println(plantilla.TBFL_PIE);
+salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
 salida.flush();
 }
 }
@@ -897,15 +905,15 @@ public static void TBPL_Publica_Aportes(String producto,String contrato,String[]
                                    ,String usuario,String[] nomb_afp,int[] consecutivos
                                    ,String nombres,String codigo_afp,String nit_afp, String nuevaCadena)
 {
-STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII();
+//STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII;
 String radio = " ";
 if(total_aportes>0)
 {
   DecimalFormat formato = new DecimalFormat("###,###,###,###,###,###.##");
 //Modificado por APC para deshabilitar botones en traslados
-  /*  salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS DE APORTES",
+  /*  salida.println(STBCL_GenerarBaseHTMLII.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS DE APORTES",
                                                 "TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS1","",true));*/
-  salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS DE APORTES",
+  salida.println(STBCL_GenerarBaseHTMLII.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS DE APORTES",
                                                 "TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS1","",true,"validation.js","disableButtons(this)"));
   salida.println("<br>");
   salida.println("<center><table border='0' align='center' width='80%'>");
@@ -955,17 +963,18 @@ if(total_aportes>0)
    salida.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena +"'>");
    salida.println("<center><input type='submit' value='Aceptar'>"+
    "<input type='button' value='Cancelar' Onclick=history.go(-1);></center>");
-   salida.println(plantilla.TBFL_PIE);
+   salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
    salida.flush();
 }
 else
 {
-  STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML();
+  /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase STBCL_GenerarBaseHTML, no es necesaria la instancia nueva*/  
+ //STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML;
   String msj = "NO HAY ELEMENTOS SELECCIONADOS PARA SU TRANSACCION";
-  salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS DE APORTES","",msj,false));
+  salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS DE APORTES","",msj,false));
   salida.println("<br><br>");
   salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1); ></center>");
-  salida.println(plantilla1.TBFL_PIE);
+  salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
   salida.flush();
 }
 }
@@ -1051,8 +1060,8 @@ public static boolean TBPL_Compara_Totales(double ch,double rtosh,double cp,doub
 public static void TBPL_Papa_Hijos(double[] apr_capital,double[] c_ch,double[] apr_rto,double capital_papa,double c_cpapa,
                                    double rtos_papa,int total_hijos,PrintWriter respuesta,String msj,String msj_cc,String titulo)
 {
-STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
-respuesta.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES",titulo,"",msj+msj_cc,false));
+//STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
+respuesta.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES",titulo,"",msj+msj_cc,false));
 respuesta.println("<TABLE bgColor=white border=2 borderColor=silver cellPadding=2 cellSpacing=0 cols=3 rules=all width='100%'>"+
                "<TR class=\"td11\" borderColor=silver>"+
                "<TH width='33%'><FONT color=white face=verdana size=1>Capital</font></TH>"+
@@ -1073,7 +1082,7 @@ String msje = "<FONT color='#324395' face=verdana size=1><strong>Nota: El primer
 respuesta.println(msje);
 respuesta.println("<br><br>");
 respuesta.println("<center><input type='button' value='Aceptar' Onclick=history.go(-2);></center>");
-respuesta.println(plantilla.TBFL_PIE);
+respuesta.println(STBCL_GenerarBaseHTML.TBFL_PIE);
 respuesta.flush();
 }
 //-----------------------------------------------------------------------------
@@ -1086,14 +1095,14 @@ respuesta.flush();
 */
 public static void TBPL_Usuario_Invalido(PrintWriter salida,String contrato,long n_i)
 {
-STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
-salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOSXXXXXXXXXXX",
+//STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
+salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOSXXXXXXXXXXX",
                                                 "TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS","",true));
 salida.println("<BR><BR>");
 salida.println("<p><B><FONT color=black face=verdana size=1>DURANTE LA CARGA DE TRASLADOS SE ENCONTRO QUE EL CONTRATO NUMERO "+
                contrato+" NO ESTA VINCULADO AL USUARIO IDENTIFICADO CON EL NUMERO "+n_i+" POR CONSIGUIENTE LA CARGA NO ES VALIDA</font></B></p>");
 salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1); ></center>");
-salida.println(plantilla.TBFL_PIE);
+salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
 salida.close();
 }
 //-----------------------------------------------------------------------------
@@ -1124,15 +1133,15 @@ public static void TBPL_Datos_Informacion_Traslado(String nombre_producto,String
                                                   String usuario,String[] nomb_afp,int[] consecutivos,String nombres,
                                                   String nuevaCadena)
 {
-STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII();
+//STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII;
 if(total_aportes>0)
 {
   DecimalFormat formato = new DecimalFormat("###,###,###,###,###,###.##");
   boolean hay_datos     = false;
 //Modificado por APC para deshabilitar botones en traslados
-/* respuesta.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS INTERNOS DE APORTES",
+/* respuesta.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS INTERNOS DE APORTES",
                                       "TBPKT_MODULO_APORTES.TBS_INFORMACION_TRASLADO","",true));*/
- respuesta.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS INTERNOS DE APORTES",
+ respuesta.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS INTERNOS DE APORTES",
                                       "TBPKT_MODULO_APORTES.TBS_INFORMACION_TRASLADO","",true,"validation.js","disableButtons(this)"));
 
   respuesta.println("<center><table border='0' align='center' width='80%'>");
@@ -1185,17 +1194,18 @@ if(total_aportes>0)
   respuesta.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena +"'>");
   respuesta.println("<center><input type='submit' value='Aceptar'>"+
                     "<input type='button' value='Cancelar' Onclick=history.go(-1);></center>");
-  respuesta.println(plantilla.TBFL_PIE);
+  respuesta.println(STBCL_GenerarBaseHTML.TBFL_PIE);
   respuesta.flush();
 }//fin aportes>0
 else if(total_aportes==0)
 {
- STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML();
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase STBCL_GenerarBaseHTML, no es necesaria la instancia nueva*/  
+ //STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML;
  String msj = "NO HAY ELEMENTOS SELECCIONADOS PARA SU TRANSACCION";
- respuesta.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS INTERNOS DE APORTES","",msj,false));
+ respuesta.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS INTERNOS DE APORTES","",msj,false));
  respuesta.println("<br><br>");
  respuesta.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
- respuesta.println(plantilla1.TBFL_PIE);
+ respuesta.println(STBCL_GenerarBaseHTML.TBFL_PIE);
  respuesta.flush();
 }//fin aportes==0
 

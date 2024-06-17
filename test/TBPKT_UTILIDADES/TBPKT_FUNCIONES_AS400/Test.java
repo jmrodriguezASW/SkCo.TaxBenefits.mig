@@ -36,9 +36,10 @@ public class Test
       //Date dtFinalDate;
       //Date [] dtInitialDateList ;
       int [] iPeriodList;
-      TBCL_Validacion valuesUser = new TBCL_Validacion();
+      /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/
+      //TBCL_Validacion valuesUser = new TBCL_Validacion();
       String[] valuesUs = new String[3];
-      valuesUs = valuesUser.TBFL_ValidarUsuario();
+      valuesUs = TBCL_Validacion.TBFL_ValidarUsuario();
       DriverManager.registerDriver(new OracleDriver());
       con = DriverManager.getConnection(valuesUs[0],valuesUs[1],valuesUs[2]);
       String sistema="";

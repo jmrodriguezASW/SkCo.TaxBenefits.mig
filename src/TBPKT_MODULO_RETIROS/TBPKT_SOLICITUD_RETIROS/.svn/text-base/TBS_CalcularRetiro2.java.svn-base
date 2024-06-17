@@ -27,7 +27,7 @@ public class TBS_CalcularRetiro2 extends HttpServlet implements SingleThreadMode
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
  {
   PrintWriter out = new PrintWriter (response.getOutputStream());
-  STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();
+  //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;
   Connection t_tax    =   null;
   
   try
@@ -374,11 +374,11 @@ AS 400
        {
         session.removeValue("s_valuni");
         t_tax.commit();
-        String v_pintar=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Solicitud de Retiro","","<center>Solicitud de Retiro "+v_conret+" realizada con exito.</center>",false);
+        String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Solicitud de Retiro","Solicitud de Retiro","","<center>Solicitud de Retiro "+v_conret+" realizada con exito.</center>",false);
         out.println(""+v_pintar+"");
         out.println("<BR><BR>");
         out.println("<center><input type=button value='Aceptar'  onclick=' history.go(-4)'></center>");
-        String v_pie = i_pagina.TBFL_PIE;
+        String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
         out.println("<br>");
         out.println(""+v_pie+"");
         out.close();
@@ -387,11 +387,11 @@ AS 400
        {
 
          t_tax.rollback();
-         String v_pintar=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","Error en el proceso TBPBD_RETIRO: "+v_mensajeret,false);
+         String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","Error en el proceso TBPBD_RETIRO: "+v_mensajeret,false);
          out.println(""+v_pintar+"");
          out.println("<BR>");
          out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-7)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-         String v_pie = i_pagina.TBFL_PIE;
+         String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
          out.println("<br>");
          out.println(""+v_pie+"");
          out.close();
@@ -401,11 +401,11 @@ AS 400
       else
       {
        t_tax.rollback();
-       String v_pintar=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","Error en el proceso TB_FINSERTAR_RETTOTAL:: "+v_mensaje ,false);
+       String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","Error en el proceso TB_FINSERTAR_RETTOTAL:: "+v_mensaje ,false);
        out.println(""+v_pintar+"");
        out.println("<BR>");
        out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-4)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-       String v_pie = i_pagina.TBFL_PIE;
+       String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
        out.println("<br>");
        out.println(""+v_pie+"");
        out.close();
@@ -415,9 +415,9 @@ AS 400
      {
       if(v_bloqueo.equals("Y"))
       {
-       String v_pintar2=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>El contrato "+v_contra+" tiene bloqueo de egresos, no es posible realizar la solicitud de retiro.</center>",false);
+       String v_pintar2=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>El contrato "+v_contra+" tiene bloqueo de egresos, no es posible realizar la solicitud de retiro.</center>",false);
        out.println(""+v_pintar2+"");
-       String v_pie2 = i_pagina.TBFL_PIE;
+       String v_pie2 = STBCL_GenerarBaseHTML.TBFL_PIE;
        out.println("<br>");
        out.println("<br>");
        out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-4)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
@@ -426,9 +426,9 @@ AS 400
       }
       else
       {
-       String v_pintar2=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>No se establecio comunicación con el AS/400.</center>",false);
+       String v_pintar2=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>No se establecio comunicación con el AS/400.</center>",false);
        out.println(""+v_pintar2+"");
-       String v_pie2 = i_pagina.TBFL_PIE;
+       String v_pie2 = STBCL_GenerarBaseHTML.TBFL_PIE;
        out.println("<br>");
        out.println("<br>");
        out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-4)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
@@ -439,9 +439,9 @@ AS 400
     }
     else
     {
-     String v_pintarout=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
+     String v_pintarout=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
      out.println(""+v_pintarout+"");
-     String v_pieout = i_pagina.TBFL_PIE;
+     String v_pieout = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-4)'></center>");
      out.println(""+v_pieout+"");
@@ -451,9 +451,9 @@ AS 400
    else
    {
     t_tax.rollback();
-    String v_pintarout=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro.","","<center>Su solicitud de retiro ya ha sido enviada.</center>",false);
+    String v_pintarout=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro.","","<center>Su solicitud de retiro ya ha sido enviada.</center>",false);
     out.println(""+v_pintarout+"");
-    String v_pieout = i_pagina.TBFL_PIE;
+    String v_pieout = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-7)'></center>");
     out.println(""+v_pieout+"");
@@ -466,28 +466,28 @@ AS 400
    String error = ex.toString();
    if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
    {
-    v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
    }
    else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
         {
-         v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
+         v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
         }
            else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
                 {
-                 v_pintar = i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
+                 v_pintar = STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
                 }
                 else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
                      {
-                       v_pintar =  i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
+                       v_pintar =  STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
                      }
                   else
                   {
-                   v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Mensaje de Error :"+ex+".</center>",false);
+                   v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error al Calcular Solicitud de Retiro","","<center>Mensaje de Error :"+ex+".</center>",false);
                   }
    out.println(""+v_pintar+"");
    out.println("<BR>");
    out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-4)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-   String v_pie = i_pagina.TBFL_PIE;
+   String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println("<br>");
    out.println(""+v_pie+"");
    out.close();

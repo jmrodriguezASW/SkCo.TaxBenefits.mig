@@ -46,7 +46,7 @@ public class TBS_Aplicar_Reversados extends HttpServlet implements SingleThreadM
   SQL_AJUSTE i_sqlj;
   STBCL_GenerarBaseHTMLII codHtm;
   String msj_retiros_reversados_no_aplicados = new String("");
-  STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+  //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
   boolean pintar_decision         = false;
   String msj_retiros_fallidos     = new String("");
   String msj_ajustes_realizados   = new String("");
@@ -133,7 +133,7 @@ public void init(ServletConfig config) throws ServletException
              {
                if(msj_ajustes_realizados.substring(0,1).equals(" "))
                  msj_ajustes_realizados = "TRANSACCION REALIZADA ";
-               out.println(plantilla.TBFL_CABEZA("Aplicar Reversados","Aplicar Reversados"," ",msj_ajustes_realizados+msj_consecutivo_ajustes+msj_retiros_fallidos+msj_retiros_reversados_no_aplicados,false));
+               out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Aplicar Reversados","Aplicar Reversados"," ",msj_ajustes_realizados+msj_consecutivo_ajustes+msj_retiros_fallidos+msj_retiros_reversados_no_aplicados,false));
                out.println("<BR><BR>");
 
                   if(pintar_decision)
@@ -158,15 +158,15 @@ public void init(ServletConfig config) throws ServletException
                     }
                else
                  out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-3);></center>");
-               out.println(plantilla.TBFL_PIE);
+               out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                out.close();
              }//IF TBPL_takeParameter2
             else
              {
-               out.println(plantilla.TBFL_CABEZA("Aplicar Reversados","Aplicar Reversados"," ","<CENTER><P>"+msje_final+"</P></CENTER>",false));
+               out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Aplicar Reversados","Aplicar Reversados"," ","<CENTER><P>"+msje_final+"</P></CENTER>",false));
                out.println("<BR><BR>");
                out.println("<center><input type='button' value='Regresar' Onclick=history.go(-1);></center>");
-               out.println(plantilla.TBFL_PIE);
+               out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                out.close();
              }//SINO TBPL_takeParameter2
         }//SI RAZON DIFERENTE DE NULL

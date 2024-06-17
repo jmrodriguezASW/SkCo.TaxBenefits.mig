@@ -13,7 +13,7 @@ public class TBS_EliminarMulti extends HttpServlet implements SingleThreadModel 
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
  {
   PrintWriter out = new PrintWriter (response.getOutputStream());
-  STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();
+  //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;
   try
   {
    HttpSession session = request.getSession(true);
@@ -121,11 +121,11 @@ String v_menex = "";
                      {
                        v_menex = "Mensaje de error: "+ex;
                      }
-    String v_pintar=    i_pagina.TBFL_CABEZA ("Eliminar Solicitud de Retiro No Procesada","Eliminar Solicitud de Retiro No Procesada","","<center>"+v_menex+"</center>",false);
+    String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Eliminar Solicitud de Retiro No Procesada","Eliminar Solicitud de Retiro No Procesada","","<center>"+v_menex+"</center>",false);
     out.println(""+v_pintar+"");
     out.println("<BR>");
     out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-    String v_pie = i_pagina.TBFL_PIE;
+    String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println(""+v_pie+"");
     out.close();

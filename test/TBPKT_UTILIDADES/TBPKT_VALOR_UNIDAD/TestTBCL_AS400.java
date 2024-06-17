@@ -41,7 +41,7 @@ public class TestTBCL_AS400
         v_usuario, String v_pass,String v_libreria){
 
       try{
-        int temp =  ias400.TBF_PASO6_S(v_fecha_control,v_sistema, v_usuario, v_pass,v_libreria);
+        int temp =  TBCL_AS400.TBF_PASO6_S(v_fecha_control,v_sistema, v_usuario, v_pass,v_libreria);
   
         System.out.print("Salida:"+temp);
       }catch (Exception e){
@@ -56,9 +56,10 @@ public class TestTBCL_AS400
       /*Conexion con la base de datos*/
       //logger.info
       try {
-      TBCL_Validacion valuesUser = new TBCL_Validacion();
+      /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/
+      //TBCL_Validacion valuesUser = new TBCL_Validacion();
       String[] valuesUs = new String[3];
-      valuesUs = valuesUser.TBFL_ValidarUsuario();
+      valuesUs = TBCL_Validacion.TBFL_ValidarUsuario();
       DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
       con = DriverManager.getConnection(valuesUs[0],valuesUs[1],valuesUs[2]);
       String sistema="";

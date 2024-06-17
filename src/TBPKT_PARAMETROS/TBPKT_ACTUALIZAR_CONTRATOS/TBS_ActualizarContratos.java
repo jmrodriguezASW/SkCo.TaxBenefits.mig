@@ -31,9 +31,17 @@ public class TBS_ActualizarContratos extends HttpServlet
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
  {
    /**Instancias de clase*/
-  STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();/**Instancia de la clase STBCL_GenerarBaseHTML*/
-  TBCL_Seguridad Seguridad = new TBCL_Seguridad();/**Instancia de la clase TBC_Seguridad*/
-  TBCL_Validacion  i_valusu = new     TBCL_Validacion ();/**Instancia de la clase TBCL_Validaciond*/
+  /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase STBCL_GenerarBaseHTML, no es necesaria la instancia nueva*/ 
+ //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;/**Instancia de la clase STBCL_GenerarBaseHTML*/
+   
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;/**Instancia de la clase TBC_Seguridad*/
+  
+ 
+ //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
+
+/**Instancia de la clase TBCL_Validaciond*/
   /**Variable tipo PrintWriter*/
   PrintWriter out = new PrintWriter (response.getOutputStream());/**Instancia de la clase STBCL_GenerarBaseHTML*/
   Connection t_tax =    null;
@@ -65,7 +73,7 @@ public class TBS_ActualizarContratos extends HttpServlet
    String   nuevaCadena = cadena;
    String ip_tax = request.getRemoteAddr();
    /**Validar seguridad*/
-   parametros = Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
+   parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
    v_contrato = parametros[0];
    v_producto = parametros[1];
    v_usuario  = parametros[2];
@@ -84,7 +92,7 @@ public class TBS_ActualizarContratos extends HttpServlet
    boolean v_encontro3 = true;
    /**Se averigua por el usuario de taxbenefits en el archivo conection.properties*/
    String[] v_valusu = new String[3];
-   v_valusu=i_valusu.TBFL_ValidarUsuario();
+   v_valusu=TBCL_Validacion.TBFL_ValidarUsuario();
 
    /**Conectar Base de datos*/
    Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -108,13 +116,13 @@ public class TBS_ActualizarContratos extends HttpServlet
    {
     t_st.close();
     /**Si la tabla de control no tiene datos*/
-    String v_pintar=    i_pagina.TBFL_CABEZA("Error al actualizar contratos","Error al actualizar contratos","","<center>No se encuentra disponible la información para la actualización de contratos.</center>",false);
+    String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Error al actualizar contratos","Error al actualizar contratos","","<center>No se encuentra disponible la información para la actualización de contratos.</center>",false);
     out.println(""+v_pintar+"");
     out.println("<br>");
     out.println("<br>");
     out.println("<center><input type=button value='Aceptar'  onclick='history.go(-2)' name ='aceptar'>");
     out.println("<input type=button value='Regresar' onclick='history.go(-1)' name='cancelar'></center>");
-    String v_pie = i_pagina.TBFL_PIE;
+    String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println(""+v_pie+"");
     out.close();
@@ -153,12 +161,12 @@ public class TBS_ActualizarContratos extends HttpServlet
      {
       t_st.close();
       t_tax.commit();
-      String v_pintar2=    i_pagina.TBFL_CABEZA("Error al actualizar contratos","Error al actualizar contratos","","<center>"+v_menerr+"</center>",false);
+      String v_pintar2=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Error al actualizar contratos","Error al actualizar contratos","","<center>"+v_menerr+"</center>",false);
       out.println(""+v_pintar2+"");
       out.println("<br>");
       out.println("<br>");
       out.println("<center><input type=button value='Aceptar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-      String v_pie2 = i_pagina.TBFL_PIE;
+      String v_pie2 = STBCL_GenerarBaseHTML.TBFL_PIE;
       out.println("<br>");
       out.println(""+v_pie2+"");
       out.close();
@@ -181,12 +189,12 @@ public class TBS_ActualizarContratos extends HttpServlet
       {
        t_st.close();
        t_tax.commit();
-       String v_pintar6=    i_pagina.TBFL_CABEZA("Error al actualizar contratos","Error al actualizar contratos","","<center>"+v_menerr2+"</center>",false);
+       String v_pintar6=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Error al actualizar contratos","Error al actualizar contratos","","<center>"+v_menerr2+"</center>",false);
        out.println(""+v_pintar6+"");
        out.println("<br>");
        out.println("<br>");
        out.println("<center><input type=button value='Aceptar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-       String v_pie6 = i_pagina.TBFL_PIE;
+       String v_pie6 = STBCL_GenerarBaseHTML.TBFL_PIE;
        out.println("<br>");
        out.println(""+v_pie6+"");
        out.close();
@@ -195,7 +203,7 @@ public class TBS_ActualizarContratos extends HttpServlet
       {
        if(v_indcon.equals("Y"))
        {
-        String v_pintar4=    i_pagina.TBFL_CABEZA("Actualización de Contratos","Actualización de Contratos","","",false);
+        String v_pintar4=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Actualización de Contratos","Actualización de Contratos","","",false);
         out.println(""+v_pintar4+"");
         out.println("<br>");
         ResultSet t_rs2    = t_st.executeQuery(" SELECT  INL_CONSECUTIVO,INL_MENSAJE  FROM  TBINTERFACE_LOGS WHERE INL_INTERFACE ='CONTAX' AND INL_FECHA = TO_DATE("+v_fecact+",'RRRR-MM-DD') AND INL_PASO = 2 ");
@@ -240,7 +248,7 @@ public class TBS_ActualizarContratos extends HttpServlet
         out.println("<br>");
         out.println("<center><input type=button value='Aceptar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
         out.println("<br>");
-        String v_pie4 = i_pagina.TBFL_PIE;
+        String v_pie4 = STBCL_GenerarBaseHTML.TBFL_PIE;
         out.println("<br>");
         out.println(""+v_pie4+"");
         out.close();
@@ -248,7 +256,7 @@ public class TBS_ActualizarContratos extends HttpServlet
        }
        else
        {
-        String v_pintar5=    i_pagina.TBFL_CABEZA("Actualización de Contratos","Actualización de Contratos","","",false);
+        String v_pintar5=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Actualización de Contratos","Actualización de Contratos","","",false);
         out.println(""+v_pintar5+"");
         out.println("<br>");
         ResultSet t_rs5    = t_st.executeQuery(" SELECT  INL_CONSECUTIVO,INL_MENSAJE  FROM  TBINTERFACE_LOGS WHERE   INL_INTERFACE ='CONTAX' AND INL_FECHA = TO_DATE("+v_fecact+",'RRRR-MM-DD') AND INL_PASO = 2 ");
@@ -275,7 +283,7 @@ public class TBS_ActualizarContratos extends HttpServlet
         out.println("<br>");
         out.println("<center><input type=button value='Aceptar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
         out.println("<br>");
-        String v_pie5 = i_pagina.TBFL_PIE;
+        String v_pie5 = STBCL_GenerarBaseHTML.TBFL_PIE;
         out.println("<br>");
         out.println(""+v_pie5+"");
         out.close();
@@ -289,10 +297,10 @@ public class TBS_ActualizarContratos extends HttpServlet
      t_st.close();
      t_tax.rollback();
 
-     String v_pintar=    i_pagina.TBFL_CABEZA("Error al actualizar contratos","Error al actualizar contratos","","<center>No se encuentra disponible la información para la actualización de contratos.</center>",false);
+     String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Error al actualizar contratos","Error al actualizar contratos","","<center>No se encuentra disponible la información para la actualización de contratos.</center>",false);
      out.println(""+v_pintar+"");
      out.println("<center><input type=button value='Aceptar'  onclick=' history.go(-2)'><input type=button  value='Regresar' onclick=' history.go(-1)'></center>");
-     String v_pie = i_pagina.TBFL_PIE;
+     String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println("<br>");
      out.println(""+v_pie+"");
@@ -304,10 +312,10 @@ public class TBS_ActualizarContratos extends HttpServlet
     /**Página de respuesta - la información aun no esta lista*/
     t_st.close();
     t_tax.rollback();
-    String v_pintar=    i_pagina.TBFL_CABEZA("Error al actualizar contratos","Error al actualizar contratos","","<center>La información de contratos presenta problemas.</center>",false);
+    String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Error al actualizar contratos","Error al actualizar contratos","","<center>La información de contratos presenta problemas.</center>",false);
     out.println(""+v_pintar+"");
     out.println("<center><input type=button value='Aceptar'  onclick=' history.go(-2)'><input type=button  value='Regresar' onclick=' history.go(-1)'></center>");
-    String v_pie = i_pagina.TBFL_PIE;
+    String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println("<br>");
     out.println(""+v_pie+"");
@@ -317,12 +325,12 @@ public class TBS_ActualizarContratos extends HttpServlet
   }
   catch(Exception ex)
   {/**Capturar errorr*/
-   String v_pintar=    i_pagina.TBFL_CABEZA("Error al actualizar contratos","Error al actualizar contratos",""," Mensaje de error:  '"+ex+"'", false);
+   String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Error al actualizar contratos","Error al actualizar contratos",""," Mensaje de error:  '"+ex+"'", false);
    out.println(""+v_pintar+"");
    out.println("<br>");
    out.println("<br>");
    out.println("<center><input type=button value='Aceptar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-   String v_pie = i_pagina.TBFL_PIE;
+   String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println("<br>");
    out.println(""+v_pie+"");
    out.close();

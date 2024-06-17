@@ -47,9 +47,12 @@ public class TBS_INFORMACION_TRASLADO extends HttpServlet
       String cadena2                         = peticion.getParameter("cadena");
       String nuevaCadena                     = cadena2;
       String ip_tax                          = peticion.getRemoteAddr();
-      TBCL_Seguridad Seguridad               = new TBCL_Seguridad();
+       
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
       //valido la veracidad del producto y contrato enviados por pipeline
-      parametros                             = Seguridad.TBFL_Seguridad(cadena2, salida, ip_tax);
+      parametros                             = TBCL_Seguridad.TBFL_Seguridad(cadena2, salida, ip_tax);
       v_contrato                             = parametros[0];
       v_producto                             = parametros[1];
       v_usuario                              = parametros[2];
@@ -57,16 +60,21 @@ public class TBS_INFORMACION_TRASLADO extends HttpServlet
       v_tipousu                              = parametros[4];
       v_idworker                             = parametros[5];
       Class.forName("oracle.jdbc.driver.OracleDriver");
-      TBCL_HTML   parametros_requeridos      = new TBCL_HTML();
+      /*[SO_396] Se realiza modificación de llamado por ser método estático ***** de la clase TBCL_HTML, no es necesaria la instancia nueva*/
+      /*TBCL_HTML   parametros_requeridos      = new TBCL_HTML();
       TBCL_HTML   hoja_error                 = new TBCL_HTML();
       TBCL_HTML   publica_traslado           = new TBCL_HTML();
       TBCL_HTML   compara_totales            = new TBCL_HTML();
       TBCL_HTML   informacion_final          = new TBCL_HTML();
       TBCL_HTML   error_carga                = new TBCL_HTML();
-      TBCL_HTML   nombres                    = new TBCL_HTML();
-      TBCL_Validacion i_valusu               = new TBCL_Validacion ();
+      TBCL_HTML   nombres                    = new TBCL_HTML();*/
+      
+ 
+ //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
+
+
       String[] v_valusu                      = new String[5];
-      v_valusu                               = i_valusu.TBFL_ValidarUsuario();
+      v_valusu                               = TBCL_Validacion.TBFL_ValidarUsuario();
         v_conexion_taxb =   DataSourceWrapper.getInstance().getConnection();
       String msj                             = " ";
       //valido la veracidad del producto y contrato enviados por pipeline
@@ -80,7 +88,7 @@ public class TBS_INFORMACION_TRASLADO extends HttpServlet
       }
       //------------------------------------------------------------------pagina numero 1
       //si los parametros son validos, dibujo hojabase y devuelvo parametros x y x
-      if(parametros_requeridos.TBPL_Parametros_Requeridos(v_producto,v_contrato))
+      if(TBCL_HTML.TBPL_Parametros_Requeridos(v_producto,v_contrato))
       {
         //declaro vectores que me mantendran la informacion para luego publicarla
         //con todos los datos a mostrar, los paso a un void que me los pu lique
@@ -121,35 +129,35 @@ public class TBS_INFORMACION_TRASLADO extends HttpServlet
           nomb_afp[total_aportes]     = t_rs9i.getString(6);
           total_aportes++;
         }
-        publica_traslado.TBPL_Datos_Informacion_Traslado(v_producto, v_contrato, fecha_e,
+        TBCL_HTML.TBPL_Datos_Informacion_Traslado(v_producto, v_contrato, fecha_e,
                                                          cc,c,rtos,total_aportes,salida,
                                                          v_usuario,nomb_afp,consecutivos,
-                                                         nombres.TBPL_Nombres(v_producto,v_contrato),
+                                                         TBCL_HTML.TBPL_Nombres(v_producto,v_contrato),
                                                          nuevaCadena);
         t_rs9i.close();
         t_st8i.close();
         return;
       }
-      else if ((!parametros_requeridos.TBPL_Parametros_Requeridos(nombre_producto,numero_contrato))&&
+      else if ((!TBCL_HTML.TBPL_Parametros_Requeridos(nombre_producto,numero_contrato))&&
                ( nombre_producto == null)&&
                ( numero_contrato == null))
       {
-        STBCL_GenerarBaseHTML plantilla2 = new STBCL_GenerarBaseHTML();
+        //STBCL_GenerarBaseHTML plantilla2 = new STBCL_GenerarBaseHTML();
         String msj2 = "EL CONTRATO "+v_contrato+" NO EXISTE EN EL SISTEMA.";
-       salida.println(plantilla2.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS INTERNOS",
+       salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS INTERNOS",
                                          "TBPKT_MODULO_APORTES.TBS_INFORMACION_TRASLADO","<font face='Verdana, Arial, Helvetica, sans-serif' color='#324395'><b><CENTER>"+msj2+"</CEBTER></font></b>",false));
         salida.println("<BR><BR>");
         salida.println("<center><input type='button' value='Aceptar' Onclick='history.go(-1);' ></center>");
-        salida.println(plantilla2.TBFL_PIE);
+        salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
         salida.flush();
         return;
       }
       //---------------pagina numero 2--manejo de parametros errados y enviados por pipeline
-      else if ((!parametros_requeridos.TBPL_Parametros_Requeridos(nombre_producto,numero_contrato))&&
+      else if ((!TBCL_HTML.TBPL_Parametros_Requeridos(nombre_producto,numero_contrato))&&
                (!nombre_producto.equals("x"))&&
                (!numero_contrato.equals("x")))
       {
-        hoja_error.TBPL_Hoja_Error(nombre_producto,numero_contrato,salida,0,"TBS_INFORMACION_TRASLADO",
+        TBCL_HTML.TBPL_Hoja_Error(nombre_producto,numero_contrato,salida,0,"TBS_INFORMACION_TRASLADO",
                           "INFORMACION DE TRASLADOS INTERNOS");
         return;
       }
@@ -614,7 +622,7 @@ public class TBS_INFORMACION_TRASLADO extends HttpServlet
               t_rs8i.close();
               t_pst8i.close();
                 
-              totales_invalidos = compara_totales.TBPL_Compara_Totales(capital_hijo,rtos_hijo,capital_papa,rtos_papa);
+              totales_invalidos = TBCL_HTML.TBPL_Compara_Totales(capital_hijo,rtos_hijo,capital_papa,rtos_papa);
             } // si (!estado_ret_c.equalsIgnoreCase("0"))
           } //si la carga es posible
           //preparar pag de respuesta en caso positivo o negativo
@@ -628,7 +636,7 @@ public class TBS_INFORMACION_TRASLADO extends HttpServlet
             if(!aporte_con_hijos)  msj = " CARGA IMPOSIBLE, EL RETIRO ASOCIADO AL APORTE NO AFECTA NINGUN APORTE.";
             //debo publicar pagina de error
 
-            error_carga.TBPL_Aporte_Invalido(salida,msj+ " fecha_p "+fecha_p+ "capital_papa " +capital_papa + " rtos_papa "+rtos_papa+" c_cpapa "+c_cpapa +" f_producto "+f_producto+" f_contrato "+f_contrato);
+            TBCL_HTML.TBPL_Aporte_Invalido(salida,msj+ " fecha_p "+fecha_p+ "capital_papa " +capital_papa + " rtos_papa "+rtos_papa+" c_cpapa "+c_cpapa +" f_producto "+f_producto+" f_contrato "+f_contrato);
           }
           else if(!carga_imposible||totales_invalidos||aporte_con_hijos)
           {
@@ -657,7 +665,7 @@ public class TBS_INFORMACION_TRASLADO extends HttpServlet
               v_conexion_taxb.commit();
             }
             //Llamar Procedimiento QUE MUSTRE INFORMACION DEL PAPA Y LA DE LOS HIJOS
-            informacion_final.TBPL_Papa_Hijos(apr_capital,c_ch,apr_rto,capital_papa,c_cpapa,rtos_papa,total_hijos,salida,msj," ","INFORMACION DE TRASLADOS INTERNOS DE APORTES");
+            TBCL_HTML.TBPL_Papa_Hijos(apr_capital,c_ch,apr_rto,capital_papa,c_cpapa,rtos_papa,total_hijos,salida,msj," ","INFORMACION DE TRASLADOS INTERNOS DE APORTES");
           }
         }  //si el aporte fue hallado
         //si el aporte no fue hallado en tax se produce un error
@@ -665,7 +673,7 @@ public class TBS_INFORMACION_TRASLADO extends HttpServlet
         {
           v_conexion_taxb.rollback();
           msj = "CARGA IMPOSIBLE, EL APORTE SELECCIONADO POR EL USUARIO NO ES VALIDO.";
-          error_carga.TBPL_Aporte_Invalido(salida,msj);
+          TBCL_HTML.TBPL_Aporte_Invalido(salida,msj);
         }
         //}
       } //si vamos por X y X
@@ -673,13 +681,13 @@ public class TBS_INFORMACION_TRASLADO extends HttpServlet
     }
     catch(Exception ex)
     {
-      STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+      //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
       String msj = "SE PRODUJO UN ERROR INESPERADO, "+ex.toString() +" INTENTE DE NUEVO.";
-      salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS INTERNOS",
+      salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS INTERNOS",
                                          "TBPKT_MODULO_APORTES.TBS_INFORMACION_TRASLADO","<CENTER>"+msj+"</CEBTER>",false));
       salida.println("<BR><BR>");
       salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-      salida.println(plantilla.TBFL_PIE);
+      salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
       salida.flush();
       return;
     }

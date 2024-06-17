@@ -44,9 +44,9 @@ public class TBS_Aplicar_Reversados extends HttpServlet
   //DEFINICIONES INICIALES
   TBCL_LoadPage i_LP;
   SQL_AJUSTE i_sqlj;
-  STBCL_GenerarBaseHTMLII codHtm;
+  //STBCL_GenerarBaseHTMLII codHtm;
   String msj_retiros_reversados_no_aplicados = new String("");
-  STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+  //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
   boolean pintar_decision         = false;
   String msj_retiros_fallidos     = new String("");
   String msj_ajustes_realizados   = new String("");
@@ -99,7 +99,7 @@ public void init(ServletConfig config) throws ServletException
     sess          = request.getSession(true);
     sess.setMaxInactiveInterval(3600);
     cadena        = request.getParameter("cadena");
-    k_cabeza      = codHtm.TBFL_CABEZA("Aplicar Reversados","Aplicar Reversados","TBPKT_AJUSTES.TBS_Aplicar_Reversados",
+    k_cabeza      = STBCL_GenerarBaseHTMLII.TBFL_CABEZA("Aplicar Reversados","Aplicar Reversados","TBPKT_AJUSTES.TBS_Aplicar_Reversados",
                                        " ",true,"moduloparametro.js","return checkrequired(this)");
     //tomar parámetros de entrada a la página
 
@@ -133,7 +133,7 @@ public void init(ServletConfig config) throws ServletException
              {
                if(msj_ajustes_realizados.substring(0,1).equals(" "))
                  msj_ajustes_realizados = "TRANSACCION REALIZADA ";
-               out.println(plantilla.TBFL_CABEZA("Aplicar Reversados","Aplicar Reversados"," ",msj_ajustes_realizados+msj_consecutivo_ajustes+msj_retiros_fallidos+msj_retiros_reversados_no_aplicados,false));
+               out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Aplicar Reversados","Aplicar Reversados"," ",msj_ajustes_realizados+msj_consecutivo_ajustes+msj_retiros_fallidos+msj_retiros_reversados_no_aplicados,false));
                out.println("<BR><BR>");
 
                   if(pintar_decision)
@@ -158,15 +158,15 @@ public void init(ServletConfig config) throws ServletException
                     }
                else
                  out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-3);></center>");
-               out.println(plantilla.TBFL_PIE);
+               out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                out.close();
              }//IF TBPL_takeParameter2
             else
              {
-               out.println(plantilla.TBFL_CABEZA("Aplicar Reversados","Aplicar Reversados"," ","<CENTER><P>"+msje_final+"</P></CENTER>",false));
+               out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("Aplicar Reversados","Aplicar Reversados"," ","<CENTER><P>"+msje_final+"</P></CENTER>",false));
                out.println("<BR><BR>");
                out.println("<center><input type='button' value='Regresar' Onclick=history.go(-1);></center>");
-               out.println(plantilla.TBFL_PIE);
+               out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                out.close();
              }//SINO TBPL_takeParameter2
         }//SI RAZON DIFERENTE DE NULL
@@ -202,11 +202,11 @@ public void init(ServletConfig config) throws ServletException
 */
 private boolean TBPBD_findRev()
 {
- if(i_sqlj.TBPBD_ConexionBD())
+ if(SQL_AJUSTE.TBPBD_ConexionBD())
  {
    String valores = new String("");
    //llamado al procedimiento que me trae la información de los retiros reversados
-   valores       = i_sqlj.TBPBD_SelAllRetRev(num_contrato,cod_producto,"SER007");
+   valores       = SQL_AJUSTE.TBPBD_SelAllRetRev(num_contrato,cod_producto,"SER007");
    if(valores.equals("<>") || valores.indexOf("Exception")!=-1)
     {
     /*
@@ -245,7 +245,7 @@ private boolean TBPBD_findRev()
      String v_consecMultif = new String("");
      String v_fechap       = "";
      String v_valor        = "";
-     String v_fechaAct     = i_sqlj.TBPBD_FechaActual();
+     String v_fechaAct     = SQL_AJUSTE.TBPBD_FechaActual();
      int ii                = 1 ;
      while(true)
      {
@@ -333,7 +333,7 @@ private boolean TBPBD_findRev()
      out.println("<center><input type='submit' value='Aceptar' ></center>");
     //out.println("<td  align='center'><input type='button' value='Regresar' ONCLICK=history.go(-1);></td>");
     out.println("</tr></table></center>");
-    out.println(codHtm.TBFL_PIE);
+    out.println(STBCL_GenerarBaseHTMLII.TBFL_PIE);
     out.close();
   }
 //////////////////////////////Tomar parámetros de entrada de PipeLine///////////////////////
@@ -361,7 +361,7 @@ private boolean TBPBD_findRev()
       usuario      = i_fnd.TBPL_getCmp(v_keys,"usuario");
     }
     else
-      i_LP.TBPL_ErrParamEntr(out,k_cabeza,codHtm.TBFL_PIE);
+      i_LP.TBPL_ErrParamEntr(out,k_cabeza,STBCL_GenerarBaseHTMLII.TBFL_PIE);
  }
 /////////////////////Tomar parámetros de las decisiones por cada retiro reversado///////
 /**
@@ -598,7 +598,7 @@ try
           try
             {
               //calcular valor unidad
-              TBS_Modificar_Retiros    f_as      = new TBS_Modificar_Retiros();
+              //TBS_Modificar_Retiros    f_as      = new TBS_Modificar_Retiros();
 
 /* Modificacion:
    Se elimina la linea que instancia a SQL_CALCULO_VALOR_UNIDAD ya que se va
@@ -617,8 +617,8 @@ try
        {
        CallableStatement cs = v_conexion_taxb.prepareCall("{? = call SQL_CALCULO_VALOR_UNIDAD.TBF_CALCULO_VALOR_UNIDAD_N(?,?,?,?,?,?,0)}");
        cs.registerOutParameter(1,Types.DOUBLE);
-       cs.setString(2,f_as.Fecha_as400(v_hoy));
-       cs.setString(3,f_as.Fecha_as400(v_hoy));
+       cs.setString(2,TBS_Modificar_Retiros.Fecha_as400(v_hoy));
+       cs.setString(3,TBS_Modificar_Retiros.Fecha_as400(v_hoy));
        cs.setString(4,num_contrato);
        cs.setString(5,cod_producto);
        cs.setString(6,"false");
@@ -961,8 +961,9 @@ return true;
 */
   private void TBPBD_ContrNomApel()
    {
-    TBCL_HTML nombres = new TBCL_HTML();
-    v_nombApel = nombres.TBPL_Nombres(cod_producto,num_contrato);
+    /*[SO_396] Se realiza modificación de llamado por ser método estático TBPL_Nombres de la clase TBCL_HTML, no es necesaria la instancia nueva*/
+    //TBCL_HTML nombres = new TBCL_HTML();
+    v_nombApel = TBCL_HTML.TBPL_Nombres(cod_producto,num_contrato);
     sess.removeAttribute("NOMBAPEL");
     sess.setAttribute("NOMBAPEL",v_nombApel);
    }

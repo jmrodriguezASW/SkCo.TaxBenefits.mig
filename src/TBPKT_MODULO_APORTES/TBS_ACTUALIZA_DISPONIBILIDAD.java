@@ -32,7 +32,7 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
        //rutaFisica  =  "c:\\Taxbenefits\\Taxbenefits\\public_html\\WEB-INF\\";
        String POLICY_FILE_LOCATION = rutaFisica+"antisamy-tinymce-1.4.4.xml"; // Path to policy file
        AntiSamy as = new AntiSamy(); // INT20131108      
-      STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII();
+      //STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII;
       PrintWriter salida                = new PrintWriter (respuesta.getOutputStream());
       //seguridad
       HttpSession session               = peticion.getSession(true);
@@ -47,9 +47,12 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
       String cadena2          = peticion.getParameter("cadena");
       String nuevaCadena      = cadena2;
       String ip_tax           = peticion.getRemoteAddr();
-      TBCL_Seguridad Seguridad = new TBCL_Seguridad();
+       
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
       //valido la veracidad del producto y contrato enviados por pipeline
-      parametros              = Seguridad.TBFL_Seguridad(cadena2, salida, ip_tax);
+      parametros              = TBCL_Seguridad.TBFL_Seguridad(cadena2, salida, ip_tax);
       v_contrato              = parametros[0];
       v_producto              = parametros[1];
       v_usuario               = parametros[2];
@@ -159,12 +162,12 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
 
 
 
-         TBCL_HTML   hoja_base                 = new TBCL_HTML();
+         /*TBCL_HTML   hoja_base                 = new TBCL_HTML();
          TBCL_HTML   hoja_error                = new TBCL_HTML();
          TBCL_HTML   parametros_requeridos     = new TBCL_HTML();
          TBCL_HTML   pagina3                   = new TBCL_HTML();
          TBCL_HTML   fechas_aportes            = new TBCL_HTML();
-         TBCL_HTML   nombres                   = new TBCL_HTML();
+         TBCL_HTML   nombres                   = new TBCL_HTML();*/
          String v_condicion[]                  = new String[MAX];
          double v_Consecutivos[]               = new double[MAX];
          String v_Fecha[]                      = new String[MAX];        //vector de fechas efectivas
@@ -192,29 +195,29 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
 
         //------------------------------------------------------------------pagina numero 1
         //si los parametros son validos, dibujo hojabase y devuelvo parametros x y x
-        if(parametros_requeridos.TBPL_Parametros_Requeridos(v_producto,v_contrato))
+        if(TBCL_HTML.TBPL_Parametros_Requeridos(v_producto,v_contrato))
         {
           v_historia = -1;
-          hoja_base.TBPL_Hoja_Base("ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",v_producto,v_contrato,salida,0,
-                                  "TBS_ACTUALIZA_DISPONIBILIDAD",v_conexion_taxb,"",nombres.TBPL_Nombres(v_producto,v_contrato),nuevaCadena);
+          TBCL_HTML.TBPL_Hoja_Base("ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",v_producto,v_contrato,salida,0,
+                                  "TBS_ACTUALIZA_DISPONIBILIDAD",v_conexion_taxb,"",TBCL_HTML.TBPL_Nombres(v_producto,v_contrato),nuevaCadena);
           return;
         }
-        else if ((!parametros_requeridos.TBPL_Parametros_Requeridos(nombre_producto,numero_contrato))&&
+        else if ((!TBCL_HTML.TBPL_Parametros_Requeridos(nombre_producto,numero_contrato))&&
                  ( nombre_producto == null)&&
                  ( numero_contrato == null))
              {
-                 STBCL_GenerarBaseHTML plantilla2 = new STBCL_GenerarBaseHTML();
+                 //STBCL_GenerarBaseHTML plantilla2 = new STBCL_GenerarBaseHTML();
                  String msj = "EL CONTRATO "+v_contrato+" NO EXISTE EN EL SISTEMA.";
-                 salida.println(plantilla2.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                 salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                            "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD","<font face='Verdana, Arial, Helvetica, sans-serif' color='#324395'><b><CENTER>"+msj+"</CEBTER></font></b>",false));
                  salida.println("<BR><BR>");
                  salida.println("<center><input type='button' value='Aceptar' Onclick='history.go(-1);' ></center>");
-                 salida.println(plantilla2.TBFL_PIE);
+                 salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                  salida.flush();
                  return;
              }
             //------------------------------------------------------------------pagina numero 2
-            else if  ((!parametros_requeridos.TBPL_Parametros_Requeridos(nombre_producto,numero_contrato))&&
+            else if  ((!TBCL_HTML.TBPL_Parametros_Requeridos(nombre_producto,numero_contrato))&&
                       (!nombre_producto.equals("x"))&&
                       (!numero_contrato.equals("x"))&&
                       (!nombre_producto.equals("y"))&&
@@ -223,7 +226,7 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
                       (!numero_contrato.equals("z")))
                  {
                     v_historia = -2;
-                    hoja_error.TBPL_Hoja_Error(nombre_producto,numero_contrato,salida,0,"TBS_ACTUALIZA_DISPONIBILIDAD",
+                    TBCL_HTML.TBPL_Hoja_Error(nombre_producto,numero_contrato,salida,0,"TBS_ACTUALIZA_DISPONIBILIDAD",
                                               "ACTUALIZADOR DE DISPONIBILIDAD DE APORTES");
                     return;
                  }
@@ -268,7 +271,7 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
                              //jag se adiciona para que dibuje entradas de fecha y porcentaje para aportes de empresa
                              //dibujo para todos loa aportes
                              //dibujo pagina que pide disponibilidad,fecha y porcentaje
-                             salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                             salida.println(STBCL_GenerarBaseHTMLII.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                             "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD",
                                             " ",true,"moduloparametro.js","return checkrequired(this)"));
                              //consecucuion de datos de cabecera para el contrato, el producto y el consecutivo
@@ -287,7 +290,7 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
                              salida.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena +"'>");
                              salida.println("<center><input type='submit' value='Aceptar' >"+
                                             "<input type='button' value='Cancelar' Onclick=history.go(-2);></center>");
-                             salida.println(plantilla.TBFL_PIE);
+                             salida.println(STBCL_GenerarBaseHTMLII.TBFL_PIE);
                              salida.close();
                           }
                           else
@@ -360,7 +363,7 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
                                 total_aportes++;
                              }//While
                              //llama pagina de respuesta numero tres y proceso la resouesta 4
-                             pagina3.TBPL_Encabezados_Disponibles(v_condicion,v_Fecha,v_Porcentaje,v_Capital,v_Cuenta_C,v_Rtos,
+                             TBCL_HTML.TBPL_Encabezados_Disponibles(v_condicion,v_Fecha,v_Porcentaje,v_Capital,v_Cuenta_C,v_Rtos,
                                                                   "ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",f_producto,f_contrato,salida,
                                                                   total_aportes,v_Consecutivos,grupo_id,v_codigo,v_descripcion,v_valor,nuevaCadena,fecha_1,fecha_2);
                               
@@ -385,7 +388,7 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
                                  //dibujo pagina que pide disponibilidad,fecha y porcentaje
                                  String v_fecha1       = peticion.getParameter("v_fecha1");
                                  String v_fecha2       = peticion.getParameter("v_fecha2");
-                                 salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                 salida.println(STBCL_GenerarBaseHTMLII.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                 "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD",
                                                 " ",true,"moduloparametro.js","return checkrequired(this)"));
                                 //consecucuion de datos de cabecera para el contrato, el producto y el consecutivo
@@ -408,7 +411,7 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
                                 salida.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena +"'>");
                                 salida.println("<center><input type='submit' value='Aceptar' >"+
                                                "<input type='button' value='Cancelar' Onclick=history.go(-2);></center>");
-                                salida.println(plantilla.TBFL_PIE);
+                                salida.println(STBCL_GenerarBaseHTMLII.TBFL_PIE);
                                 salida.close();
                                 return;
 
@@ -479,7 +482,7 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
                                  }
                                  t_rs8i.close();
                                  t_st8i.close();
-                                 fechas_aportes.TBPL_Fechas_Aportes(total_dispo,fechas_dispo,p_dispo,valores_dispo,salida,"ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                 TBCL_HTML.TBPL_Fechas_Aportes(total_dispo,fechas_dispo,p_dispo,valores_dispo,salida,"ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                                     f_producto,f_contrato,v_conexion_taxb,consecutivo,condi,g_id,fecha_e,capital,cc,rtos,porc,ref_descripcion,
                                                                     ref_codigo,ref_valor,nuevaCadena);
                                  return;
@@ -491,7 +494,8 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
                                    try
                                    {
                                       v_historia = -4;
-                                      STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML();
+                                      /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase STBCL_GenerarBaseHTML, no es necesaria la instancia nueva*/  
+ //STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML;
                                       String tipo_opcion       = peticion.getParameter("tipo_opcion");
                                       if(tipo_opcion != null)
                                          System.out.println(" ");
@@ -540,11 +544,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
                                             if(!msj.trim().equals("LA ACTUALIZACION FUE EXITOSA"))
                                             {
                                                v_conexion_taxb.rollback();
-                                               salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                               salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD",msj,false));
                                                salida.println("<BR><BR>");
                                                salida.println("<center><input type='button' value='Aceptar'Onclick=history.go(-3);><input type='button' value='Regresar' Onclick=history.go(-2);></center>");
-                                               salida.println(plantilla1.TBFL_PIE);
+                                               salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                                salida.flush();
                                                return;
                                             }
@@ -553,11 +557,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
                                          t_rs8i_2.close();
                                          t_st8i_2.close();
                                          v_conexion_taxb.commit();
-                                         salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                         salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                          "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD",msj,false));
                                          salida.println("<BR><BR>");
                                          salida.println("<center><input type='button' value='Aceptar'Onclick=history.go(-3);><input type='button' value='Regresar' Onclick=history.go(-2);></center>");
-                                         salida.println(plantilla1.TBFL_PIE);
+                                         salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                          salida.flush();
                                          return;
                                       }
@@ -596,11 +600,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
                                                 if(!msj.trim().equals("LA ACTUALIZACION FUE EXITOSA"))
                                                 {
                                                    v_conexion_taxb.rollback();
-                                                   salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                                   salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                    "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD",msj,false));
                                                    salida.println("<BR><BR>");
                                                    salida.println("<center><input type='button' value='Aceptar'Onclick=history.go(-3);><input type='button' value='Regresar' Onclick=history.go(-2);></center>");
-                                                   salida.println(plantilla1.TBFL_PIE);
+                                                   salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                                    salida.flush();
                                                    return;
                                                 }
@@ -611,11 +615,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
                                               t_st8i_3.close();
                                               v_conexion_taxb.commit();
 
-                                              salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                              salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                               "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD",msj,false));
                                               salida.println("<BR><BR>");
                                               salida.println("<center><input type='button' value='Aceptar'Onclick=history.go(-3);><input type='button' value='Regresar' Onclick=history.go(-2);></center>");
-                                              salida.println(plantilla1.TBFL_PIE);
+                                              salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                               salida.flush();
                                               return;
                                            }
@@ -782,11 +786,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
 
                                                     if(!estado.equals("BIEN"))
                                                     {
-                                                        salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                                        salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                                        " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, "+estado,false));
                                                         salida.println("<BR><BR>");
                                                         salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                                                        salida.println(plantilla1.TBFL_PIE);
+                                                        salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                                         salida.close();
                                                     }
                                                     msj = "LA ACTUALIZACION FUE EXITOSA";
@@ -812,11 +816,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
 
                                                        if(!estado.equals("BIEN"))
                                                        {
-                                                           salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                                           salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                                           " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, "+estado,false));
                                                            salida.println("<BR><BR>");
                                                            salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                                                           salida.println(plantilla1.TBFL_PIE);
+                                                           salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                                            salida.close();
                                                        }
                                                        msj = "LA ACTUALIZACION FUE EXITOSA";
@@ -840,11 +844,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
 
                                                             if(!estado.equals("BIEN"))
                                                             {
-                                                               salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                                               salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                                               " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, "+estado,false));
                                                                salida.println("<BR><BR>");
                                                                salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                                                               salida.println(plantilla1.TBFL_PIE);
+                                                               salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                                                salida.close();
                                                             }
                                                             msj = "LA ACTUALIZACION FUE EXITOSA";
@@ -863,11 +867,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
                                                   msj = "ERROR EN LA ACTUALIZACION, LA FECHA INGRESADA ES MENOR A LA FECHA EFECTIVA DEL APORTE";
 
                                                }//si fecha no Correcta
-                                               salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                               salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                                "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD",msj,false));
                                                salida.println("<BR><BR>");
                                                salida.println(botones);
-                                               salida.println(plantilla1.TBFL_PIE);
+                                               salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                                salida.flush();
                                                return;
                                             }
@@ -875,11 +879,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
                                    catch(Exception ex)
                                    {
                                        String msj = "SE PRODUJO UN ERROR INESPERADO, "+ex.toString() +" INTENTE DE NUEVO.";
-                                       salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                                       salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                       "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD","<CENTER>"+msj+"</CEBTER>",false));
                                        salida.println("<BR><BR>");
                                        salida.println("<center><input type='button' value='Aceptar' Onclick=window.location='/taxbenefit/actualizar_aportes.html';></center>");
-                                       salida.println(plantilla.TBFL_PIE);
+                                       salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                                        salida.flush();
                                    }//catch
                                 }//is Z Y Z
@@ -887,11 +891,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
        catch(Exception ex)
        {
           String msj = "SE PRODUJO UN ERROR INESPERADO, "+ex.toString() +" INTENTE DE NUEVO.";
-          salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+          salida.println(STBCL_GenerarBaseHTMLII.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                "","<CENTER>"+msj+"</CEBTER>",false));
           salida.println("<BR><BR>");
           salida.println("<center><input type='button' value='Aceptar' Onclick=history.go("+v_historia+");></center>");
-          salida.println(plantilla.TBFL_PIE);
+          salida.println(STBCL_GenerarBaseHTMLII.TBFL_PIE);
           salida.flush();
       }
        finally{
@@ -911,7 +915,7 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
                                       String  select8i_2 , String  select8i_3,
                                       Connection v_conexion_taxb,PrintWriter salida)
    {
-       STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII();
+       //STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII;
       boolean fecha_xcorrecta = false;
       boolean hoy_estabien = false;
       double  capital          = 0;
@@ -1032,11 +1036,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
               t_cst8i_9.close();
               if(!estado.equals("BIEN"))
               {
-                 salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                 salida.println(STBCL_GenerarBaseHTMLII.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, "+estado,false));
                 salida.println("<BR><BR>");
                 salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                 salida.println(plantilla1.TBFL_PIE);
+                 salida.println(STBCL_GenerarBaseHTMLII.TBFL_PIE);
                 salida.close();
               }
               msj = "LA ACTUALIZACION FUE EXITOSA";
@@ -1062,11 +1066,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
                {
                  v_conexion_taxb.rollback();
                  v_conexion_taxb.close();
-                 salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                 salida.println(STBCL_GenerarBaseHTMLII.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                 " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, "+estado,false));
                  salida.println("<BR><BR>");
                  salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                 salida.println(plantilla.TBFL_PIE);
+                 salida.println(STBCL_GenerarBaseHTMLII.TBFL_PIE);
                  salida.close();
                }
                msj = "LA ACTUALIZACION FUE EXITOSA";
@@ -1088,11 +1092,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
                     t_cst8i_9.close();
                     if(!estado.equals("BIEN"))
                     {
-                       salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                       salida.println(STBCL_GenerarBaseHTMLII.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                        " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, "+estado,false));
                        salida.println("<BR><BR>");
                        salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                       salida.println(plantilla.TBFL_PIE);
+                       salida.println(STBCL_GenerarBaseHTMLII.TBFL_PIE);
                        salida.close();
                     }
                     msj = "LA ACTUALIZACION FUE EXITOSA";
@@ -1122,11 +1126,11 @@ public class TBS_ACTUALIZA_DISPONIBILIDAD extends HttpServlet
           {}
 
           msj = "SE PRODUJO UN ERROR INESPERADO, "+ex.toString() +" INTENTE DE NUEVO.";
-          salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+          salida.println(STBCL_GenerarBaseHTMLII.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                          "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_DISPONIBILIDAD","<CENTER>"+msj+"</CEBTER>",false));
           salida.println("<BR><BR>");
           salida.println("<center><input type='button' value='Aceptar' Onclick=window.location='/taxbenefit/actualizar_aportes.html';></center>");
-          salida.println(plantilla.TBFL_PIE);
+          salida.println(STBCL_GenerarBaseHTMLII.TBFL_PIE);
           salida.flush();
        }//catch
 

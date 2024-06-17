@@ -31,12 +31,14 @@ public class SQL_VALOR_UNIDAD_CC extends Object {
     String            v_fecha;
     String[]          v_valusu;
     double            v_salida[] = new double[3];
-    TBCL_Validacion   i_valusu   = new TBCL_Validacion();
+    /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
 
     try{
       //Conexion con la base de datos
       v_valusu = new String[3];
-      v_valusu = i_valusu.TBFL_ValidarUsuario();
+      v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
       DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
       Connection t_tax =DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
       DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));
@@ -44,7 +46,7 @@ public class SQL_VALOR_UNIDAD_CC extends Object {
       /* Borrar los saldos mayores a la fecha de contrato enviada existentes en
          TBSALDOS para evitar los caLculos erroneos originados por los BACK DATE */
 
-      /*@lineinfo:generated-code*//*@lineinfo:47^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:49^7*/
 
 //  ************************************************************
 //  #sql { call TBPBD_DEL_TBSALDOS(:v_fecha_contrato,:v_contrato,:v_producto, :v_cod_err, :v_men_err) };
@@ -80,7 +82,7 @@ public class SQL_VALOR_UNIDAD_CC extends Object {
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:47^115*/
+/*@lineinfo:user-code*//*@lineinfo:49^115*/
       if (v_cod_err != 0)
       {
         v_salida[0] = 0;
@@ -131,7 +133,7 @@ public class SQL_VALOR_UNIDAD_CC extends Object {
             //ultimos saldos existentes en TBSALDOS
             //Seleccionar los saldos de unidades y cuenta contingente a la maxima
             //fecha en TBSALDOS
-            /*@lineinfo:generated-code*//*@lineinfo:98^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:100^13*/
 
 //  ************************************************************
 //  #sql { call TBPBD_ULTIMOS_SALDOS(:v_fecha_contrato,             :v_contrato,
@@ -176,11 +178,11 @@ public class SQL_VALOR_UNIDAD_CC extends Object {
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:101^93*/
+/*@lineinfo:user-code*//*@lineinfo:103^93*/
             //Si hubo error al calcular los ultimos saldos no seguir proceso
             //y retornar el codigo de error sino seguir con el calculo de unidades a la fecha deseada
             if (v_cod_err == 0){
-              /*@lineinfo:generated-code*//*@lineinfo:105^15*/
+              /*@lineinfo:generated-code*//*@lineinfo:107^15*/
 
 //  ************************************************************
 //  #sql v_saldo_unidades = { values (TBFBD_CALC_SALDO_UNIDAD_P(:v_fecha_unidad,
@@ -226,7 +228,7 @@ public class SQL_VALOR_UNIDAD_CC extends Object {
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:111^92*/
+/*@lineinfo:user-code*//*@lineinfo:113^92*/
               //Si no hubo error al calcular el saldo de unidades seguir proceso
               //Sino retornar el codigo de error
               if (v_cod_err == 0){
@@ -239,7 +241,7 @@ public class SQL_VALOR_UNIDAD_CC extends Object {
                   //Si v_update = true llamar al proc de insercion a TBSALDOS
                   if (v_update){
                     //Llama al procedimiento que inserta en la tabla TBSALDOS
-                    /*@lineinfo:generated-code*//*@lineinfo:124^21*/
+                    /*@lineinfo:generated-code*//*@lineinfo:126^21*/
 
 //  ************************************************************
 //  #sql { call TBPBD_INS_TBSALDOS(:v_producto,       :v_contrato,
@@ -282,10 +284,10 @@ public class SQL_VALOR_UNIDAD_CC extends Object {
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:128^87*/
+/*@lineinfo:user-code*//*@lineinfo:130^87*/
                     //Si este saldo existe en la tabla TBSALDOS se actualiza la tabla
                     if (v_cod_err == -0001){
-                      /*@lineinfo:generated-code*//*@lineinfo:131^23*/
+                      /*@lineinfo:generated-code*//*@lineinfo:133^23*/
 
 //  ************************************************************
 //  #sql { UPDATE  tbsaldos
@@ -320,7 +322,7 @@ public class SQL_VALOR_UNIDAD_CC extends Object {
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:139^96*/
+/*@lineinfo:user-code*//*@lineinfo:141^96*/
                       v_cod_err = 0;
                     }// fin si error de constraint
                   }// fin si quiere actualizar
@@ -361,7 +363,7 @@ public class SQL_VALOR_UNIDAD_CC extends Object {
         }//Hubo error al calcular saldo del contrato en el AS400
       }//No error al borrar los saldos existentes en tbsaldos
       if (v_cod_err == 0){
-        /*@lineinfo:generated-code*//*@lineinfo:180^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:182^9*/
 
 //  ************************************************************
 //  #sql { COMMIT };
@@ -372,10 +374,10 @@ public class SQL_VALOR_UNIDAD_CC extends Object {
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:180^21*/
+/*@lineinfo:user-code*//*@lineinfo:182^21*/
       }
       else{
-        /*@lineinfo:generated-code*//*@lineinfo:183^9*/
+        /*@lineinfo:generated-code*//*@lineinfo:185^9*/
 
 //  ************************************************************
 //  #sql { ROLLBACK };
@@ -386,7 +388,7 @@ public class SQL_VALOR_UNIDAD_CC extends Object {
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:183^23*/
+/*@lineinfo:user-code*//*@lineinfo:185^23*/
       }
 
     }catch(Exception e){

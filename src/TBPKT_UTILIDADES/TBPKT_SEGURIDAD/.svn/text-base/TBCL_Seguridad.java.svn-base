@@ -32,7 +32,7 @@ public class TBCL_Seguridad extends Object {
    */
 	public static String[] TBFL_Seguridad(String encriptada,PrintWriter salida,String ip_tax){
 		String v_parametros[] =  new String[8];
-		STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII();
+		//STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII;
                 
 		String ip_pipeline          = " ";
 		String url = "Onclick=history.go(-1);";
@@ -81,14 +81,14 @@ public class TBCL_Seguridad extends Object {
 			  v_parametros[0] = "contrato";          v_parametros[1] = "producto";
 			  v_parametros[2] = "usuario";           v_parametros[3] = "unidad_o";
 			  v_parametros[4] = "tipo_usuario";      v_parametros[5] = "idworker";
-			  salida.println(plantilla.TBFL_CABEZA("MODULO DE SEGURIDAD","PAGINA DE RESPUESTA","","",false));
+			  salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("MODULO DE SEGURIDAD","PAGINA DE RESPUESTA","","",false));
 	      salida.println("<b> Cadena: "+ cadena_traducida+"</b>");
 			  salida.println("<CENTER><b><FONT color=blue face=verdana size=1>ACCESO DENEGADO</font></b></CENTER>");
 			  salida.println("<br><br>");
 			  salida.println("<CENTER><b><FONT color=blue face=verdana size=1>IP PIPELINE:  "+ip_pipeline+"</font></b></CENTER>");
 			  salida.println("<CENTER><b><FONT color=blue face=verdana size=1>IP TAX:  "+ip_tax+"</font></b></CENTER>");
 			  salida.println("<center><input type='button' value='Aceptar' "+url+" ></center>");
-			  salida.println(plantilla.TBFL_PIE);
+			  salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
 			  salida.close();
 			  return v_parametros;
 			 }*/
@@ -103,12 +103,12 @@ public class TBCL_Seguridad extends Object {
 			v_parametros[2] = "usuario";           v_parametros[3] = "unidad_o";
 			v_parametros[4] = "tipo_usuario";      v_parametros[5] = "idworker";
 	    v_parametros[6] = "fallo";
-			salida.println(plantilla.TBFL_CABEZA("MODULO DE SEGURIDAD","PAGINA DE RESPUESTA","","",false));
+			salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("MODULO DE SEGURIDAD","PAGINA DE RESPUESTA","","",false));
 	    salida.println("<b> Excepcion: "+ ex +"</b>");
                         salida.println("<span class=\"error\">EXCEPCION: "+ex+"</span>");
 			salida.println("<br><br>");
 			salida.println("<center><input type='button' value='Aceptar' "+url+" ></center>");
-			salida.println(plantilla.TBFL_PIE);
+			salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
 			salida.close();
 			return v_parametros;}
 		    finally{
@@ -124,11 +124,11 @@ public class TBCL_Seguridad extends Object {
 			v_parametros[2] = "usuario";           v_parametros[3] = "unidad_o";
 			v_parametros[4] = "tipo_usuario";      v_parametros[5] = "idworker";
 	    v_parametros[6] = "fallo";
-			salida.println(plantilla.TBFL_CABEZA("MODULO DE SEGURIDAD","PAGINA DE RESPUESTA","","",false));
+			salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("MODULO DE SEGURIDAD","PAGINA DE RESPUESTA","","",false));
         salida.println("<span class=\"error\">Error en el proceso que llama la función de seguridad (Verifique que se este enviando la cadena encriptada)</span>");
 			salida.println("<br><br>");
 			salida.println("<center><input type='button' value='Aceptar' "+url+" ></center>");
-			salida.println(plantilla.TBFL_PIE);
+			salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
 			salida.close();
 			return v_parametros;
     }

@@ -156,7 +156,7 @@
   
   <target name="compile" description="Compile Java source files" depends="init,clean,sqlj-translate">
     <javac destdir="${output.dir}" classpathref="classpath" debug="${javac.debug}" nowarn="${javac.nowarn}"
-           deprecation="${javac.deprecation}" encoding="Cp1252" source="1.5" target="1.5" includeantruntime="false">
+           deprecation="${javac.deprecation}" encoding="Cp1252" source="1.7" target="1.7" includeantruntime="false">
       <src path="${sources.dir}"/>
     </javac>
   </target>

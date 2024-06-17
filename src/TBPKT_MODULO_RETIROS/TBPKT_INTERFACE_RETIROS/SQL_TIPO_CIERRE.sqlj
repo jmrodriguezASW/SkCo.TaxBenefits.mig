@@ -39,7 +39,9 @@ public class SQL_TIPO_CIERRE extends Object {//clase
     String          v_val_cierre   = "N";
     String          v_cod_unidad   = " ";
     String[]        v_valusu;
-    TBCL_Validacion i_valusu       = new TBCL_Validacion();
+    /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
     vinter_fecha    v_fecha_cierre = null;
     Integer         v_fecha        = null;
     String          v_mensajeLog     = "";
@@ -48,7 +50,7 @@ public class SQL_TIPO_CIERRE extends Object {//clase
       //Conexion a la base de datos
       //************************************************************
       v_valusu = new String[3];
-      v_valusu = i_valusu.TBFL_ValidarUsuario();
+      v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
      DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
       DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));
       String v_varsession = (java.lang.String)session.getAttribute("s_cierre");

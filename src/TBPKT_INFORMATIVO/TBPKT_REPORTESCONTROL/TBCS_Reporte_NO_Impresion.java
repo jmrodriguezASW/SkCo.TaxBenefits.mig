@@ -49,8 +49,11 @@ private TBCL_Consulta v_Consulta;
      }
      v_nuevaCadena = cadena;
      String ip_tax = request.getRemoteAddr();
-     TBCL_Seguridad Seguridad = new TBCL_Seguridad();
-     parametros = Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
+      
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
+     parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
     }
     catch(Exception ex)
     {

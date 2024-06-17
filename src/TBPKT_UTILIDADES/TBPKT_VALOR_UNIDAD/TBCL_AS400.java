@@ -18,18 +18,19 @@ public class TBCL_AS400 extends Object {
 
   //Metodo que calcula el saldo del contrato del AS400
   public static double TBF_SALDO_CONTRATO(String v_contrato, String v_fecha){
-    TBCL_FUNCIONES_AS400_APORTES Saldos_por_Contrato = new TBCL_FUNCIONES_AS400_APORTES();
-    TBCL_FUNCIONES_AS400_APORTES saldo_entero        = new TBCL_FUNCIONES_AS400_APORTES();
+    /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Saldos_por_Contrato de la clase TBCL_FUNCIONES_AS400_APORTES, no es necesaria la instancia nueva*/
+    //TBCL_FUNCIONES_AS400_APORTES Saldos_por_Contrato = new TBCL_FUNCIONES_AS400_APORTES();
+    //TBCL_FUNCIONES_AS400_APORTES saldo_entero        = new TBCL_FUNCIONES_AS400_APORTES();
     String cadenaT;
     long saldo_as400 = 0;
     try{
       //Llamado a la funcion del As400
-      cadenaT = Saldos_por_Contrato.TBFL_Saldos_por_Contrato(v_contrato, v_fecha, "E");
+      cadenaT = TBCL_FUNCIONES_AS400_APORTES.TBFL_Saldos_por_Contrato(v_contrato, v_fecha, "E");
       //Si ocurre un error al retornar el saldo del contrato en el AS400
       //retornar -1
       if (cadenaT != "ERROR"){
         //Se captura el valor retornado por la funcion del As400
-        saldo_as400 = saldo_entero.TBFL_Saldo_Entero(cadenaT);
+        saldo_as400 = TBCL_FUNCIONES_AS400_APORTES.TBFL_Saldo_Entero(cadenaT);
 
       }
       else{
@@ -54,18 +55,19 @@ public class TBCL_AS400 extends Object {
 
   //Metodo que calcula el saldo del contrato del AS400 sin conexion
   public static double TBF_SALDO_CONTRATO_P(String v_contrato, String v_fecha, AS400 as400, String v_libreria){
-    TBCL_FUNCIONES_AS400_APORTES Saldos_por_Contrato = new TBCL_FUNCIONES_AS400_APORTES();
-    TBCL_FUNCIONES_AS400_APORTES saldo_entero        = new TBCL_FUNCIONES_AS400_APORTES();
+    /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Saldos_por_Contrato de la clase TBCL_FUNCIONES_AS400_APORTES, no es necesaria la instancia nueva*/
+    //TBCL_FUNCIONES_AS400_APORTES Saldos_por_Contrato = new TBCL_FUNCIONES_AS400_APORTES();
+    //TBCL_FUNCIONES_AS400_APORTES saldo_entero        = new TBCL_FUNCIONES_AS400_APORTES();
     String cadenaT;
     long saldo_as400 = 0;
     try{
       //Llamado a la funcion del As400
-      cadenaT = Saldos_por_Contrato.TBFL_Saldos_por_Contrato(v_contrato, v_fecha, "E", as400, v_libreria);
+      cadenaT = TBCL_FUNCIONES_AS400_APORTES.TBFL_Saldos_por_Contrato(v_contrato, v_fecha, "E", as400, v_libreria);
       //Si ocurre un error al retornar el saldo del contrato en el AS400
       //retornar -1
       if (cadenaT != "ERROR"){
         //Se captura el valor retornado por la funcion del As400
-        saldo_as400 = saldo_entero.TBFL_Saldo_Entero(cadenaT);
+        saldo_as400 = TBCL_FUNCIONES_AS400_APORTES.TBFL_Saldo_Entero(cadenaT);
 
       }
       else{

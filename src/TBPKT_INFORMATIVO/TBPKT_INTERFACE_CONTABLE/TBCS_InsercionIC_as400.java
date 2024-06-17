@@ -13,8 +13,12 @@ public class TBCS_InsercionIC_as400 extends HttpServlet{
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
  {
   /**Instancias de clase*/
-  STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();/**Instancia de la clase STBCL_GenerarBaseHTML*/
-  TBCL_Seguridad Seguridad = new TBCL_Seguridad();/**Instancia de la clase TBC_Seguridad*/
+  /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase STBCL_GenerarBaseHTML, no es necesaria la instancia nueva*/ 
+ //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;/**Instancia de la clase STBCL_GenerarBaseHTML*/
+   
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;/**Instancia de la clase TBC_Seguridad*/
   /**Variable tipo PrintWriter*/
   PrintWriter out = new PrintWriter (response.getOutputStream());/**Instancia de la clase STBCL_GenerarBaseHTML*/
   try
@@ -40,7 +44,7 @@ public class TBCS_InsercionIC_as400 extends HttpServlet{
    String nuevaCadena = cadena;
    String ip_tax = request.getRemoteAddr();
    /**Validar seguridad*/
-   parametros = Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
+   parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
    v_contrato = parametros[0];
    v_producto = parametros[1];
    v_usuario  = parametros[2];
@@ -48,7 +52,7 @@ public class TBCS_InsercionIC_as400 extends HttpServlet{
    v_tipousu  = parametros[4];
    v_idworker = parametros[5];
    /**dibujar página de respuesta*/
-   String v_pintar=    i_pagina.TBFL_CABEZA("Inserción De Interface Contable En El AS/400","Inserción De Interface Contable En El AS/400","TBPKT_INFORMATIVO.TBPKT_INTERFACE_CONTABLE.TBCS_Interface_Contable","",true,"moduloInformativo.js","return validaIC2(this)");
+   String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Inserción De Interface Contable En El AS/400","Inserción De Interface Contable En El AS/400","TBPKT_INFORMATIVO.TBPKT_INTERFACE_CONTABLE.TBCS_Interface_Contable","",true,"moduloInformativo.js","return validaIC2(this)");
    out.println(""+v_pintar+"");
    out.println("<font face='Verdana, Arial, Helvetica, sans-serif' size='1'><font color='#000000'>");
    out.println("<TABLE bgColor=white border=0 borderColor=silver cellPadding=2 cellSpacing=0 cols=2 rules=all width='100%'>");
@@ -63,7 +67,7 @@ public class TBCS_InsercionIC_as400 extends HttpServlet{
    out.println("<TR><TD colspan=2><CENTER><INPUT TYPE=submit VALUE='Aceptar'><INPUT TYPE=BUTTON VALUE=Regresar onClick=history.go(-1);></CENTER></TD></TR>");
    out.println("</TABLE>");
    out.println("</td>");
-   String v_piemin2 = i_pagina.TBFL_PIE;
+   String v_piemin2 = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println("<br>");
    out.println("<br>");
    out.println(""+v_piemin2+"");
@@ -71,11 +75,11 @@ public class TBCS_InsercionIC_as400 extends HttpServlet{
  }/**Manejo de errores*/
  catch(Exception e)
  {
-  String v_pintar=    i_pagina.TBFL_CABEZA ("Inserción De Interface Contable En El AS/400","Error Inserción De Interface Contable En El AS/400","","<center>Mensaje de error: "+e+"</center>",false);
+  String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Inserción De Interface Contable En El AS/400","Error Inserción De Interface Contable En El AS/400","","<center>Mensaje de error: "+e+"</center>",false);
   out.println(""+v_pintar+"");
   out.println("<BR>");
   out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-1)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-  String v_pie = i_pagina.TBFL_PIE;
+  String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
   out.println("<br>");
   out.println(""+v_pie+"");
   out.close();

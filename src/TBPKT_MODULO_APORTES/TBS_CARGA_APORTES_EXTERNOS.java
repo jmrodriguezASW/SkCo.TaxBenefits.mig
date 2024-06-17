@@ -43,9 +43,12 @@ try
  String  cadena2      = peticion.getParameter("cadena");
  String   nuevaCadena = cadena2;
  String ip_tax        = peticion.getRemoteAddr();
- TBCL_Seguridad Seguridad = new TBCL_Seguridad();
+  
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
  //valido la veracidad del producto y contrato enviados por pipeline
- parametros = Seguridad.TBFL_Seguridad(cadena2, salida, ip_tax);
+ parametros = TBCL_Seguridad.TBFL_Seguridad(cadena2, salida, ip_tax);
  v_contrato = parametros[0];
  v_producto = parametros[1];
  v_usuario  = parametros[2];
@@ -92,13 +95,13 @@ try
 }
 catch(Exception ex)
   {
-   STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+   //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
    String msj = "SE PRODUJO UN ERROR INESPERADO, "+ex.toString() +" INTENTE DE NUEVO.";
-   salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+   salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                          "TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS","<CENTER>"+msj+"</CEBTER>",false));
    salida.println("<BR><BR>");
    salida.println("<center><input type='button' value='Aceptar' Onclick=window.location='/Servlets/TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS';></center>");
-   salida.println(plantilla.TBFL_PIE);
+   salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
    salida.flush();
    return;
   }
@@ -113,8 +116,8 @@ catch(Exception ex)
 //--------------------ANEXOS-------------------------------------------------------------------------
 public static void TBPL_pagina_1(PrintWriter salida,String nuevaCadena)
 {
-STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
-salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+//STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
+salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                       "TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS",
                                                 " ",true,"moduloparametro.js","return checkrequired(this)"));
 salida.println("<BR><BR>");
@@ -126,13 +129,13 @@ salida.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena +"
 salida.println("<center><input type='submit' value='Aceptar'>"+
                "<input type='button' value='Cancelar' Onclick=history.go(-1);></center>");
 salida.println("<input type='hidden' name='pagina' value='2'>");
-salida.println(plantilla.TBFL_PIE);
+salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
 salida.close();
 }
 //----------------------------------------------------------------------------------------------------
 public static boolean TBPL_existe_afp(String archivo,Connection c,PrintWriter salida)
 {
-STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+//STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
 try
 {
  CallableStatement t_cst8i_0 = c.prepareCall("{ call TBPBD_Ruta_File(?) }");
@@ -162,36 +165,36 @@ try
    else if(existe.equals("F"))
      return false;
    else
-   salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+   salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                                " ","SE PRODUJO UN ERROR EN LA BASE DATOS, POR FAVOR INTENTE DE NUEVO"
                                                ,false));
    salida.println("<BR><BR>");
    salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-   salida.println(plantilla.TBFL_PIE);
+   salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
    salida.close();
    return false;
 
   }
  else
   {
-   salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+   salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                                " ","SE PRODUJO UN ERROR EN LA BASE DATOS, RUTA DE ARCHIVO INEXISTENTE, POR FAVOR INTENTE DE NUEVO"
                                                ,false));
    salida.println("<BR><BR>");
    salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-   salida.println(plantilla.TBFL_PIE);
+   salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
    salida.close();
    return false;
   }
  }//try
 catch(FileNotFoundException fe)
 {
- salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+ salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                              " ","NOMBRE DE ARCHIVO INEXISTENTE EN EL SERVIDOR, VERIFIQUE LA UBICACION Y EL NOMBRE DEL ARCHIVO,"+
                                               "EL NOMBRE ES DE LA FORMA NOMBREARCHIVO.TXT",false));
  salida.println("<BR><BR>");
  salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
- salida.println(plantilla.TBFL_PIE);
+ salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
  salida.close();
  /*
 Aqui
@@ -207,8 +210,8 @@ return false;
 //----------------------------------------------------------------------------------------------------
 public static void TBPL_realizar_pregunta(PrintWriter salida,String archivo,String nuevaCadena)
 {
-  STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
-  salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+  //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
+  salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                                 "TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS",
                                                 " ",true));
   salida.println("<BR><BR>");
@@ -219,7 +222,7 @@ public static void TBPL_realizar_pregunta(PrintWriter salida,String archivo,Stri
                "<input type='button' value='Cancelar' Onclick=history.go(-1);></center>");
   salida.println("<input type='hidden' name='pagina' value='3'>");
   salida.println("<input type='hidden' name='archivo' value='"+archivo+"'>");
-  salida.println(plantilla.TBFL_PIE);
+  salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
   salida.close();
 }
 
@@ -227,7 +230,7 @@ public static void TBPL_carga_archivoNoWeb(String archivo,Connection c)
 {
 String url = "Onclick=window.location='/Servlets/TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS';";
 
-STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+//STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
 try
 {
  CallableStatement t_cst8i_0 = c.prepareCall("{ call TBPBD_Ruta_File(?) }");
@@ -505,7 +508,7 @@ public static void TBPL_carga_archivo(String archivo,PrintWriter salida,Connecti
 {
 String url = "Onclick=window.location='/Servlets/TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS';";
 
-STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+//STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
 try
 {
  CallableStatement t_cst8i_0 = c.prepareCall("{ call TBPBD_Ruta_File(?) }");
@@ -515,12 +518,12 @@ try
  t_cst8i_0.close();
  if(ruta.equals("ERROR"))
   {
-    salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+    salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                                " ","SE PRODUJO UN ERROR EN LA BASE DATOS, RUTA DE ARCHIVO INEXISTENTE, POR FAVOR INTENTE DE NUEVO"
                                                ,false));
    salida.println("<BR><BR>");
    salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-   salida.println(plantilla.TBFL_PIE);
+   salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
    salida.close();
    c.close();
   }
@@ -763,24 +766,24 @@ try
              {
                c.rollback();
                c.close();
-               salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+               salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                                " ","SE PRODUJO UN ERROR EN LA BASE DATOS, INSERCCION NO REALIZADA, INTENTE DE NUEVO"
                                                ,false));
                salida.println("<BR><BR>");
                salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1)></center>");
-               salida.println(plantilla.TBFL_PIE);
+               salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                salida.close();
              }
            }while(str1.length()>=75);
          }//for
         c.commit();
         c.close();
-       salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+       salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                              " ","CARGA TEMPORAL REALIZADA SATISFACTORIAMENTE"
                                              ,false));
        salida.println("<BR><BR>");
        salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-2)></center>");
-       salida.println(plantilla.TBFL_PIE);
+       salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
        salida.close();
        }//fin si hay debo hacer inserccion
       else if(total_afiliado!=kh_a||total_empleador!=kh_e)
@@ -790,24 +793,24 @@ try
           msj="LOS TOTALES DE AFILIADOS ENVIADOS EN EL REGISTRO DOS NO CONCUERDA CON EL TOTAL CALCULADO EN LOS REGISTROS TRES";
         else if(total_empleador!=kh_e)
           msj="LOS TOTALES DE EMPLEADOR ENVIADOS EN EL REGISTRO DOS NO CONCUERDA CON EL TOTAL CALCULADO EN LOS REGISTROS TRES";
-        salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+        salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                              " ","INFORMACION ERRADA,"+msj
                                              ,false));
         salida.println("<BR><BR>");
         salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1)></center>");
-        salida.println(plantilla.TBFL_PIE);
+        salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
         salida.close();
         c.close();
       }//fin si hay error en los totales tres-dos
     }//fin si montos iguales
    else
     {
-     salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+     salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                                " ","INFORMACION ERRADA,LOS TOTALES ENVIADOS EN EL REGISTRO UNO NO CONCUERDAN CON LOS TOTALES CALCULADOS EN LOS REGISTROS DOS "
                                                ,false));
      salida.println("<BR><BR>");
      salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1)></center>");
-     salida.println(plantilla.TBFL_PIE);
+     salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
      salida.close();
      c.close();
     }//fin si hay error en los totales dos-uno
@@ -815,24 +818,24 @@ try
 catch(FileNotFoundException fe)
 {
 
- salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+ salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                              " ","NOMBRE DE ARCHIVO INEXISTENTE EN EL SERVIDOR, VERIFIQUE LA UBICACION Y EL NOMBRE DEL ARCHIVO,"+
                                               "EL NOMBRE ES DE LA FORMA NOMBREARCHIVO.TXT",false));
  salida.println("<BR><BR>");
  salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1)></center>");
- salida.println(plantilla.TBFL_PIE);
+ salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
  salida.close();
 }
 catch(Exception ex)
 {
 
-salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                                " ","SE HA PRODUCIDO UN ERROR EN LA CARGA DEL PLANO, POR FAVOR INTENTE DE NUEVO"
                                                ,false));
 salida.println("<BR><BR>");
 salida.println("<span class=\"error\">La estructura del archivo plano no es la correcta, porfavor revisar el archivo</span>");
 salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-salida.println(plantilla.TBFL_PIE);
+salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
 salida.close();
 }
 }

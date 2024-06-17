@@ -154,11 +154,13 @@ implements sqlj.runtime.NamedIterator
        double v_prov_comi_total_AVE = 0;
        String monto_retiro = "";
        
-       TBCL_Validacion       i_valusu = new TBCL_Validacion();
+       /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
        
        DecimalFormat v_format = new  DecimalFormat("¤###,###,###,###,###,###.##");            
                    
-       STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();/**Instancia de la clase TBCL_GenerarBaseHTML*/
+       //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;/**Instancia de la clase TBCL_GenerarBaseHTML*/
        
        SimpleDateFormat FechaPantalla = new SimpleDateFormat("yyyy-MM-dd");
        SimpleDateFormat Fecha400 = new SimpleDateFormat("yyyyMMdd");            
@@ -166,7 +168,7 @@ implements sqlj.runtime.NamedIterator
        try
        {
            String[] v_valusu = new String[3];
-           v_valusu=i_valusu.TBFL_ValidarUsuario();
+           v_valusu=TBCL_Validacion.TBFL_ValidarUsuario();
            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
            Connection t_tax =DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
            DefaultContext ctx11 = new DefaultContext(v_valusu[0],v_valusu[1],v_valusu[2],false);
@@ -221,7 +223,7 @@ implements sqlj.runtime.NamedIterator
    v_aportes = new TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBCL_SeleccionAportes.i_aportes(new sqlj.runtime.ref.OraRTResultSet(sJT_stTem.getCursor(1)));
   } finally {sJT_ecTe.oracleCloseQuery(); }           
 
-      v_pintar = i_pagina.TBFL_CABEZA("Detalle del Retiro","Detalle del Retiro", "TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_ConfirmarRetiro", "", true,"","");      
+      v_pintar = STBCL_GenerarBaseHTML.TBFL_CABEZA("Detalle del Retiro","Detalle del Retiro", "TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_ConfirmarRetiro", "", true,"","");      
       out.println(""+v_pintar+"");
       out.println("<BR>");                         
       out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contra+" </center></font>");
@@ -402,7 +404,7 @@ implements sqlj.runtime.NamedIterator
                      "<input type=submit name = 'Cancelar' value='Cancelar'>"+
                      "</FORM></TD></TR>");
          out.println("</table></center>"); 
-         String v_pie = i_pagina.TBFL_PIE;
+         String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
          out.println("<br>");
          out.println(""+v_pie+"");
          out.println("<br>");
@@ -412,23 +414,23 @@ implements sqlj.runtime.NamedIterator
          String error = ex.toString();
          if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
          {
-          v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Esquema de Retiro","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
+          v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Esquema de Retiro","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
          }
          else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
               {
-               v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Esquema de Retiro","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
+               v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Esquema de Retiro","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
               }
                  else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
                       {
-                       v_pintar = i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Esquema de Retiro","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
+                       v_pintar = STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Esquema de Retiro","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
                       }
                       else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
                            {
-                             v_pintar = i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Esquema de Retiro","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
+                             v_pintar = STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Esquema de Retiro","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
                            }
                         else
                         {
-                         v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Mensaje de Error :"+ex+".</center>",false);
+                         v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Solicitud de Retiro","","<center>Mensaje de Error :"+ex+".</center>",false);
                         }
          out.println(""+v_pintar+"");
          out.println("<BR>");
@@ -439,7 +441,7 @@ implements sqlj.runtime.NamedIterator
                              "<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena+"'>" + 
                              "<input type=submit name = 'Cancelar' value='Cancelar'>"+
                              "</FORM> </center>");         
-         String v_pie = i_pagina.TBFL_PIE;
+         String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
          out.println("<br>");
          out.println(""+v_pie+"");
          out.close();

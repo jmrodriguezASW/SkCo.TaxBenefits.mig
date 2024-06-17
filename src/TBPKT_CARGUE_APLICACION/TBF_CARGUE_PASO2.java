@@ -41,7 +41,11 @@ public class TBF_CARGUE_PASO2 extends JFrame {
  TBF_INFORMACION_CONTRATOS men = new TBF_INFORMACION_CONTRATOS();
  TBF_INFORMACION_APORET i_aporet = new TBF_INFORMACION_APORET();
  TBF_MENSAJE i_mensaje = new TBF_MENSAJE();
- TBCL_Validacion  i_valusu = new TBCL_Validacion();
+ 
+ 
+ //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
+
+
  TBC_CALCULAR_UNIRETIRADAS i_numuni = new TBC_CALCULAR_UNIRETIRADAS();
  TBCL_Fecha i_fecha = new TBCL_Fecha();
  //Constructor

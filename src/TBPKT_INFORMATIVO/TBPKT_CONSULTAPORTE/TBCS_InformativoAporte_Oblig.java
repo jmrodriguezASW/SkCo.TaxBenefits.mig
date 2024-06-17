@@ -48,9 +48,14 @@ public class TBCS_InformativoAporte_Oblig extends HttpServlet{
          String parametros[] = new String[8];
          String  cadena = request.getParameter("cadena");
          v_nuevaCadena = cadena;
-         String ip_tax = request.getRemoteAddr();
-         TBCL_Seguridad Seguridad = new TBCL_Seguridad();
-         parametros = Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
+         String ip_tax = request.getRemoteAddr();          
+         /*[SO_396] Se realiza modificación de llamado por ser método estático TBCL_Seguridad.TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/
+         // 
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
+         //parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
+         parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
          }
       catch(Exception ex){System.out.println("");}
 
@@ -160,7 +165,8 @@ public class TBCS_InformativoAporte_Oblig extends HttpServlet{
             SQL_TB_FREFERENCIAS_FPOB objSQL_TB_FREFERENCIAS_FPOB = new SQL_TB_FREFERENCIAS_FPOB();
             objModelo_TB_Referencias = objSQL_TB_FREFERENCIAS_FPOB.GET_TB_FREFERENCIAS_FPOB(v_codigo);                       
             
-            TBCL_FuncionesAs400_Oblig Saldo_Contrato = new TBCL_FuncionesAs400_Oblig();
+            /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Saldo_Contrato_OBLIG de la clase TBCL_FuncionesAs400_Oblig, no es necesaria la instancia nueva*/
+            /*TBCL_FuncionesAs400_Oblig Saldo_Contrato = new TBCL_FuncionesAs400_Oblig();
 
             String resultsaldo = Saldo_Contrato.TBFL_Saldo_Contrato_OBLIG(v_codigo,"P",v_Consulta.TBFL_Consulta("SELECT TO_CHAR(SYSDATE, 'YYYYMMDD') FROM DUAL").elementAt(0).toString(),
                                                                     v_resultadoidentificacion.elementAt(0).toString(),
@@ -168,7 +174,15 @@ public class TBCS_InformativoAporte_Oblig extends HttpServlet{
                                                                     objModelo_TB_Referencias.getLibreria(),
                                                                     objModelo_TB_Referencias.getSistema(), 
                                                                     objModelo_TB_Referencias.getUsuario(),
-                                                                    objModelo_TB_Referencias.getPassword());                        
+                                                                    objModelo_TB_Referencias.getPassword());      
+            */            
+            String resultsaldo = TBCL_FuncionesAs400_Oblig.TBFL_Saldo_Contrato_OBLIG(v_codigo,"P",v_Consulta.TBFL_Consulta("SELECT TO_CHAR(SYSDATE, 'YYYYMMDD') FROM DUAL").elementAt(0).toString(),
+                                                                    v_resultadoidentificacion.elementAt(0).toString(),
+                                                                    v_resultadoidentificacion.elementAt(1).toString(),                                                                    
+                                                                    objModelo_TB_Referencias.getLibreria(),
+                                                                    objModelo_TB_Referencias.getSistema(), 
+                                                                    objModelo_TB_Referencias.getUsuario(),
+                                                                    objModelo_TB_Referencias.getPassword());
             
             if(!resultsaldo.substring(0,5).toUpperCase().equals("ERROR")) {                            
                 SaldoContrato_AVA = Double.parseDouble( resultsaldo.split(";")[0]);  

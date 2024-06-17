@@ -330,13 +330,13 @@ public class TBF_Retencion_Fuente extends JFrame {
 				rtfFile = new TBCL_RTF(path + "Header.dat");
 
         //Archivo de salida
-				rtfFile.TBPL_Open(path + archivoSalida + conArchivo+".rtf");
+				TBCL_RTF.TBPL_Open(path + archivoSalida + conArchivo+".rtf");
 
 				// Item 1  Encabezado de cada página
-        rtfFile.TBPL_AddItem(nit+"\\par\\par", path + "HPage1.dat");
-	      rtfFile.TBPL_AddValue("");
-		    rtfFile.TBPL_AddItem(pageHeader+"\\par\\par", path + "HPage2.dat");
-	      rtfFile.TBPL_AddValue("");
+        TBCL_RTF.TBPL_AddItem(nit+"\\par\\par", path + "HPage1.dat");
+	      TBCL_RTF.TBPL_AddValue("");
+		    TBCL_RTF.TBPL_AddItem(pageHeader+"\\par\\par", path + "HPage2.dat");
+	      TBCL_RTF.TBPL_AddValue("");
 
         // Items del documento
 		   	while(itQuery.hasNext()){
@@ -347,33 +347,33 @@ public class TBF_Retencion_Fuente extends JFrame {
           // Si la posicion es mayor que 90 va en el pie
 		       if (resultQuery[1].compareTo("90") < 0){
 		         if (resultQuery[2].substring(0,1).equals("*")){
-		           rtfFile.TBPL_AddItem(resultQuery[2].substring(1), path + "Item1.dat");
-		 		      rtfFile.TBPL_AddValue("-");
+		           TBCL_RTF.TBPL_AddItem(resultQuery[2].substring(1), path + "Item1.dat");
+		 		      TBCL_RTF.TBPL_AddValue("-");
 		         }
 		         else
 		         {
-		           rtfFile.TBPL_AddItem(resultQuery[2], path + "Item2.dat");
-		  	      rtfFile.TBPL_AddValue("-");
+		           TBCL_RTF.TBPL_AddItem(resultQuery[2], path + "Item2.dat");
+		  	      TBCL_RTF.TBPL_AddValue("-");
 		         }
 		       }
 				}
           //  Pie de pagina
-		     rtfFile.TBPL_AddItem("\\par "+pageFooter+"\\par\\par", path + "Item1.dat");
-		     rtfFile.TBPL_AddValue("");
-		     footItems = rtfFile.length();
+		     TBCL_RTF.TBPL_AddItem("\\par "+pageFooter+"\\par\\par", path + "Item1.dat");
+		     TBCL_RTF.TBPL_AddValue("");
+		     footItems = TBCL_RTF.length();
 		     itQuery = listQuery.iterator();
 
          // Valores para cada Item
 		     while(itQuery.hasNext()){
 		     	resultQuery = (String[]) itQuery.next();
 		       if (resultQuery[1].compareTo("90") >= 0){
-		         rtfFile.TBPL_AddItem(resultQuery[2], path + "Item3.dat");
-		 		    rtfFile.TBPL_AddValue("-");
+		         TBCL_RTF.TBPL_AddItem(resultQuery[2], path + "Item3.dat");
+		 		    TBCL_RTF.TBPL_AddValue("-");
 		       }
 				}
 		     // Ultimo valor Item
-		    rtfFile.TBPL_AddItem("", path + "FPage1.dat");
-		    rtfFile.TBPL_AddValue("");
+		    TBCL_RTF.TBPL_AddItem("", path + "FPage1.dat");
+		    TBCL_RTF.TBPL_AddValue("");
 
 				try{
 
@@ -425,7 +425,7 @@ public class TBF_Retencion_Fuente extends JFrame {
 									item = TBFL_Pos(items2, resultItems[3]);
 									valor = resultItems[1];
 									if (resultItems[3].compareTo("90") < 0){
-										if (item < rtfFile.length()){
+										if (item < TBCL_RTF.length()){
 											if(resultItems[2].equals("STD004")){
 												valor = currencyNumberFormat.format(Double.parseDouble(valor));
 											}else if(resultItems[2].equals("STD001")){
@@ -434,36 +434,36 @@ public class TBF_Retencion_Fuente extends JFrame {
                           valor = valor.trim();
 													valor = formatoID.format(Long.parseLong(valor));
 									 	  	}
-													rtfFile.TBPL_SetValue(item+3, valor);
+													TBCL_RTF.TBPL_SetValue(item+3, valor);
 									     	}
 									    }
 									 else
 									 {
-											rtfFile.TBPL_SetValue(item+4, valor);
+											TBCL_RTF.TBPL_SetValue(item+4, valor);
 									 }
 								}
 
                 // Si ha escrito 2000 contratos en el archivo lo cierra y abre otro
 								if (conContrato == 2000)
 	            	{
-		            	rtfFile.TBPL_PrintPage();
-				          rtfFile.TBPL_Close();
+		            	TBCL_RTF.TBPL_PrintPage();
+				          TBCL_RTF.TBPL_Close();
 		              conArchivo++;
                   jLabel4.setText("Escribiendo archivo" + archivoSalida + conArchivo+".rtf");
-		              rtfFile.TBPL_SetFile(path + archivoSalida + conArchivo+".rtf");
-		              rtfFile.TBPL_Open();
+		              TBCL_RTF.TBPL_SetFile(path + archivoSalida + conArchivo+".rtf");
+		              TBCL_RTF.TBPL_Open();
 		              conContrato = 1;
 			        	}
 	            	else{
 
                   // Imprime los valores de la pagina y prepara la sigiuiente pagina
-			       	    rtfFile.TBPL_PrintPage();
-			       	    rtfFile.TBPL_ClearValues();
+			       	    TBCL_RTF.TBPL_PrintPage();
+			       	    TBCL_RTF.TBPL_ClearValues();
 			       	    conContrato++;
 	            	}
               }
 			     }//end while
-		      rtfFile.TBPL_Close();
+		      TBCL_RTF.TBPL_Close();
 				  result = true;
 				}
 				catch(SQLException sqle) {

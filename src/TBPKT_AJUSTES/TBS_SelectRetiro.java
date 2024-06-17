@@ -1,4 +1,7 @@
 package TBPKT_AJUSTES;
+
+import TBPKT_AJUSTES.TBPKT_DECISION_CLIENTE.SQL_DAJUSTE;
+
 import TBPKT_UTILIDADES.TBPKT_CONEXIONBASEDATOS.*;
 import TBPKT_UTILIDADES.TBPKT_PLANTILLA.*;
 import java.text.DecimalFormat;
@@ -21,7 +24,7 @@ import java.io.*;
 public class TBS_SelectRetiro extends HttpServlet{
 
   boolean botonAcep  = false;
-  STBCL_GenerarBaseHTMLII codHtm;
+  //STBCL_GenerarBaseHTMLII codHtm;
   TBCL_LoadPage i_LP;
   SQL_AJUSTE i_sqlj;
   HttpServletRequest request;
@@ -57,12 +60,12 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
     sess          = request.getSession(true);
     sess.setMaxInactiveInterval(3600);
     cadena        = request.getParameter("cadena");
-    k_cabeza      = codHtm.TBFL_CABEZA("Modificar Retiros","Modificar Retiros","TBPKT_AJUSTES.TBS_SelectRetiro","",true);
+    k_cabeza      = STBCL_GenerarBaseHTMLII.TBFL_CABEZA("Modificar Retiros","Modificar Retiros","TBPKT_AJUSTES.TBS_SelectRetiro","",true);
     TBPL_CleanSession();
     TBPL_takeParameter();//tomar parámetros de entrada
     if(!cod_producto.equals("") && !num_contrato.equals(""))
     {
-      if(i_sqlj.TBPBD_ConexionBD())
+      if(SQL_AJUSTE.TBPBD_ConexionBD())
        {
          //conexión con la BD
          if(sess.getAttribute("NOMBAPEL")==null)
@@ -91,17 +94,17 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
             }
             else
             {
-              i_LP.TBPL_PrintMsgErr(out,"Lo sentimos pero el contrato no existe en el sistema.",true,k_cabeza,codHtm.TBFL_PIE);
+              i_LP.TBPL_PrintMsgErr(out,"Lo sentimos pero el contrato no existe en el sistema.",true,k_cabeza,STBCL_GenerarBaseHTMLII.TBFL_PIE);
             }
           }
          else
           {
-            i_LP.TBPL_PrintMsgErr(out,"Lo sentimos pero el contrato se encuentra cancelado",true,k_cabeza,codHtm.TBFL_PIE);
+            i_LP.TBPL_PrintMsgErr(out,"Lo sentimos pero el contrato se encuentra cancelado",true,k_cabeza,STBCL_GenerarBaseHTMLII.TBFL_PIE);
           }
        }
       else
         //error conexion BD
-        i_LP.TBPL_PrintMsgErr(out,"Error en la conexion con la Base de Datos",true,k_cabeza,codHtm.TBFL_PIE);
+        i_LP.TBPL_PrintMsgErr(out,"Error en la conexion con la Base de Datos",true,k_cabeza,STBCL_GenerarBaseHTMLII.TBFL_PIE);
     }
     i_sqlj.TBPBD_CerrarConexionBD();
 }
@@ -190,7 +193,7 @@ private void TBPL_BuildPage()
      else
       {
 
-         i_LP.TBPL_PrintMsgErr(out,"<font face='Verdana' size='2' color='#000000'><center><strong>NO EXISTEN RETIROS VIGENTES PARA EL CONTRATO ELEGIDO.</strong></center></font>",false,k_cabeza,codHtm.TBFL_PIE);
+         i_LP.TBPL_PrintMsgErr(out,"<font face='Verdana' size='2' color='#000000'><center><strong>NO EXISTEN RETIROS VIGENTES PARA EL CONTRATO ELEGIDO.</strong></center></font>",false,k_cabeza,STBCL_GenerarBaseHTMLII.TBFL_PIE);
         return;
       }
     
@@ -226,7 +229,7 @@ private void TBPL_BuildPage()
       out.println("<td width='17%' align='center'><input type='submit' value='Aceptar'></td>");
    out.println("<td align='center' width='17%'><input type='button' value='Regresar' ONCLICK=history.go(-1);></td>");
    out.println("</tr></table></center>");
-   out.println(codHtm.TBFL_PIE);
+   out.println(STBCL_GenerarBaseHTMLII.TBFL_PIE);
    out.close();
 }
 ////////////////////////////tomar parámetros de entrada de PipeLine//////////////////////////
@@ -244,13 +247,13 @@ private void TBPL_takeParameter()
       num_contrato       = i_fnd.TBPL_getCmp(v_keys,"contrato");
      }
     else
-      i_LP.TBPL_ErrParamEntr(out,k_cabeza,codHtm.TBFL_PIE);
+      i_LP.TBPL_ErrParamEntr(out,k_cabeza,STBCL_GenerarBaseHTMLII.TBFL_PIE);
 }
 /////////////////////////////////////Traer Nombres y Apellidos/////////////////////////////
 private void TBPBD_ContrNomApel()
   {
     String valCadena[]=new String[2];
-    valCadena  = i_sqlj.TBPBD_ContratoNomApel(cod_producto,num_contrato);
+    valCadena  = SQL_DAJUSTE.TBPBD_ContratoNomApel(cod_producto,num_contrato);
     v_nombApel = valCadena[0];
     if(valCadena[1].equalsIgnoreCase("SI"))
       contCancel = true;//CONTRATO CANCELADO
@@ -309,7 +312,7 @@ private void TBPBD_FindAnu()
     String fecMin1 = i_fnd.TBPL_getCmp(v_fecha,"diad")+"-"+i_fnd.TBPL_getCmp(v_fecha,"mesd")+"-"+i_fnd.TBPL_getCmp(v_fecha,"anod");
     String fecMax1 = i_fnd.TBPL_getCmp(v_fecha,"diah")+"-"+i_fnd.TBPL_getCmp(v_fecha,"mesh")+"-"+i_fnd.TBPL_getCmp(v_fecha,"anoh");
     //llamar procedimiento que retorne toda la información necesaria de los retiros vigente
-    valores        = i_sqlj.TBPBD_SelAllRetAnu(num_contrato,cod_producto,"SER006",fecMax1,fecMin1);
+    valores        = SQL_AJUSTE.TBPBD_SelAllRetAnu(num_contrato,cod_producto,"SER006",fecMax1,fecMin1);
     if(valores.equals("<>"))
     {
       i_LP.TBPL_scriptMsgErr(out,"No existen retiros vigentes desde "+fecMin1+" Hasta "+fecMax1);
@@ -373,27 +376,27 @@ private void TBPL_FindRef()
     String v_ref[] = new String[2];
     String v_sess  = new String("");
     String v_valor = new String("");
-    v_ref          = i_sqlj.TBPBD_BuildRef("STV","1");
+    v_ref          = SQL_AJUSTE.TBPBD_BuildRef("STV","1");
     v_sess         = v_ref[0];
     sess.removeAttribute("TIPO");
     sess.setAttribute("TIPO","<"+v_sess+">");
-    v_ref          = i_sqlj.TBPBD_BuildRef("SER","1");
+    v_ref          = SQL_AJUSTE.TBPBD_BuildRef("SER","1");
     v_sess         = v_ref[0];
     sess.removeAttribute("ESTADO");
     sess.setAttribute("ESTADO","<"+v_sess+">");
-    v_ref          = i_sqlj.TBPBD_BuildRef("SMB","000");
+    v_ref          = SQL_AJUSTE.TBPBD_BuildRef("SMB","000");
     v_sess         = v_ref[0];
     v_valor        = v_ref[1];
-    v_ref          = i_sqlj.TBPBD_BuildRef("SMO","000");
+    v_ref          = SQL_AJUSTE.TBPBD_BuildRef("SMO","000");
     v_sess        += v_ref[0];
     v_valor       += v_ref[1];
-    v_ref          = i_sqlj.TBPBD_BuildRef("SMP","000");
+    v_ref          = SQL_AJUSTE.TBPBD_BuildRef("SMP","000");
     v_sess        += v_ref[0];
     v_valor       += v_ref[1];
-    v_ref          = i_sqlj.TBPBD_BuildRef("SNR","000");
+    v_ref          = SQL_AJUSTE.TBPBD_BuildRef("SNR","000");
     v_sess        += v_ref[0];
     v_valor       += v_ref[1];
-    v_ref          = i_sqlj.TBPBD_BuildRef("SMC","000");
+    v_ref          = SQL_AJUSTE.TBPBD_BuildRef("SMC","000");
     v_sess        += v_ref[0];
     v_valor       += v_ref[1];
     esquema="<"+v_sess+">";

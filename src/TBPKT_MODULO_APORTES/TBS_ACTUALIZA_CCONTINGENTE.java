@@ -56,9 +56,12 @@ int v_historia  = -1;
     String cadena2              = peticion.getParameter("cadena");
     String nuevaCadena          = cadena2;
     String ip_tax               = peticion.getRemoteAddr();
-    TBCL_Seguridad Seguridad    = new TBCL_Seguridad();
+     
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
     //valido la veracidad del producto y contrato enviados por pipeline
-    parametros                  = Seguridad.TBFL_Seguridad(cadena2, salida, ip_tax);
+    parametros                  = TBCL_Seguridad.TBFL_Seguridad(cadena2, salida, ip_tax);
     v_contrato                  = parametros[0];
     v_producto                  = parametros[1];
     v_usuario                   = parametros[2];
@@ -71,17 +74,16 @@ int v_historia  = -1;
    
    boolean hay_datos            = false;
    v_conexion_taxb =   DataSourceWrapper.getInstance().getConnection();
-   
-
-   TBCL_HTML   hoja_base                 = new TBCL_HTML();
-   TBCL_HTML   hoja_error                = new TBCL_HTML();
+   /*[SO_396] Se realiza modificación de llamado por ser método estático **** de la clase TBCL_HTML, no es necesaria la instancia nueva*/
+   /*TBCL_HTML   hoja_base                 = new TBCL_HTML();
+   TBCL_HTML   hoja_error                = new TBCL_HTML();   
    TBCL_HTML   parametros_requeridos     = new TBCL_HTML();
    TBCL_HTML   datos_ccontingente        = new TBCL_HTML();
    TBCL_HTML   nombres                   = new TBCL_HTML();
    TBCL_HTML   sin_datos                 = new TBCL_HTML();
    TBCL_HTML   publica_elegido           = new TBCL_HTML();
    TBCL_HTML   date                      = new TBCL_HTML();
-   TBCL_HTML   valor_long                = new TBCL_HTML();
+   TBCL_HTML   valor_long                = new TBCL_HTML();*/
    String  nombre_producto               = peticion.getParameter("nom_producto");
 
    String  numero_contrato               = peticion.getParameter("num_contrato");
@@ -95,32 +97,32 @@ int v_historia  = -1;
    }
    //------------------------------------------------------------------pagina numero 1
     //si los parametros son validos, dibujo hojabase y devuelvo parametros x y x
-    if(parametros_requeridos.TBPL_Parametros_Requeridos(v_producto,v_contrato))
+    if(TBCL_HTML.TBPL_Parametros_Requeridos(v_producto,v_contrato))
     {
 
      v_historia  = -1;
-     hoja_base.TBPL_Hoja_Base("ACTUALIZADOR DE APORTES",v_producto,v_contrato,salida,3,
-                            "TBS_ACTUALIZA_CCONTINGENTE",v_conexion_taxb,v_usuario,nombres.TBPL_Nombres(v_producto,v_contrato),nuevaCadena);
+     TBCL_HTML.TBPL_Hoja_Base("ACTUALIZADOR DE APORTES",v_producto,v_contrato,salida,3,
+                            "TBS_ACTUALIZA_CCONTINGENTE",v_conexion_taxb,v_usuario,TBCL_HTML.TBPL_Nombres(v_producto,v_contrato),nuevaCadena);
 
      return;
     }
-    else if ((!parametros_requeridos.TBPL_Parametros_Requeridos(nombre_producto,numero_contrato))&&
+    else if ((!TBCL_HTML.TBPL_Parametros_Requeridos(nombre_producto,numero_contrato))&&
          ( nombre_producto == null)&&
          ( numero_contrato == null))
        {
-         STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+         //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
          String msj = "EL CONTRATO "+v_contrato+" NO EXISTE EN EL SISTEMA.";
-         salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
+         salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
                                        "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_CCONTINGENTE","<font face='Verdana, Arial, Helvetica, sans-serif' color='#324395'><b><CENTER>"+msj+"</CEBTER></font></b>",false));
          salida.println("<BR><BR>");
          salida.println("<center><input type='button' value='Aceptar' Onclick='history.go(-1);' ></center>");
-         salida.println(plantilla.TBFL_PIE);
+         salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
          salida.flush();
        return;
         }
 //------------------------------------------------------------------pagina numero 2
        else if
-      ((!parametros_requeridos.TBPL_Parametros_Requeridos(nombre_producto,numero_contrato))&&
+      ((!TBCL_HTML.TBPL_Parametros_Requeridos(nombre_producto,numero_contrato))&&
       (!nombre_producto.equals("x"))&&
       (!numero_contrato.equals("x"))&&
       (!numero_contrato.equals("y"))&&
@@ -129,7 +131,7 @@ int v_historia  = -1;
       (!numero_contrato.equals("z")))
       { v_historia  = -2;
 
-     hoja_error.TBPL_Hoja_Error(nombre_producto,numero_contrato,salida,0,"TBS_ACTUALIZA_CCONTINGENTE",
+     TBCL_HTML.TBPL_Hoja_Error(nombre_producto,numero_contrato,salida,0,"TBS_ACTUALIZA_CCONTINGENTE",
                           "ACTUALIZADOR DE APORTES");
 
 
@@ -282,13 +284,13 @@ int v_historia  = -1;
      {
         if(seleccionado_12 && !fecha_c.equals(null))
          {
-           STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+           //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
            String msje = "EL CONTRATO ELEGIDO SE ENCUENTRA CANCELADO.";
-           salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
+           salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
                                            "PKT_ACTUALIZA_APORTES.TBS_ACTUALIZA_CCONTINGENTE"," ",true));
            salida.println("<font face='Verdana' size='1' color='#324395'>"+msje+"</font>");
            salida.println("<center><input type='button' value='Aceptar' Onclick='history.go(-1);'></center><BR>");
-           salida.println(plantilla.TBFL_PIE);
+           salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
            salida.flush();
          }
      }//try
@@ -298,17 +300,17 @@ int v_historia  = -1;
      }//catch
      //llamada a procedimiento que tome los datos en vectores y los publique
      if(hay_datos)
-        datos_ccontingente.TBPL_Datos_Ccontingente(f_producto,f_contrato,f_usuario,certificado,cc,c,rtos,f_a,
+        TBCL_HTML.TBPL_Datos_Ccontingente(f_producto,f_contrato,f_usuario,certificado,cc,c,rtos,f_a,
                                                    total_aportes,salida,consecus,f_e,apo_beneficio,nuevaCadena);
      else if(!hay_datos)
       {
-        STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+        //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
         String msje = "NO SE ENCONTRARON APORTES PARA EL CONTRATO ELEGIDO.";
-        salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
+        salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
                                        "PKT_ACTUALIZA_APORTES.TBS_ACTUALIZA_CCONTINGENTE"," ",true));
         salida.println("<font face='Verdana' size='1' color='#324395'>"+msje+"</font>");
         salida.println("<center><input type='button' value='Aceptar' Onclick= 'history.go(-1);'></center>");
-        salida.println(plantilla.TBFL_PIE);
+        salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
         salida.flush();
       }
      return;
@@ -351,7 +353,7 @@ int v_historia  = -1;
     t_cst8i_13.execute();
     String tiene_retiros = t_cst8i_13.getString(4);
     t_cst8i_13.close();
-    publica_elegido.TBPL_Aporte_Elegido(f_producto,f_contrato,f_usuario,salida,f_a,certificado,k,cc,rtos,consecutiv,
+    TBCL_HTML.TBPL_Aporte_Elegido(f_producto,f_contrato,f_usuario,salida,f_a,certificado,k,cc,rtos,consecutiv,
                                    apo_beneficio,tiene_retiros,nuevaCadena);
    return;
    }//Y y Y
@@ -392,7 +394,7 @@ int v_historia  = -1;
     java.sql.Date frb = new java.sql.Date(1);
     String estado_reversar = "NO";
     String estado_aplicar  = "NO";
-    STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+    //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
     String msj ="<p><font face='Verdana, Arial, Helvetica, sans-serif' color='#324395'><b><font size='1'></font></b><font size='1' color='#000000'>Actualización de Aportes Realizada</font></font></p>";
     String  f_producto    = peticion.getParameter("f_producto");
     String  f_contrato    = peticion.getParameter("f_contrato");
@@ -554,9 +556,9 @@ int v_historia  = -1;
       //[SO_396] Se realiza cambio en el llamado del método para hacer control del Exception      
       //f_aDate     = date.TBPL_date(f_a);
       try {
-          f_aDate =  date.TBPL_date(f_a);
+          f_aDate =  TBCL_HTML.TBPL_date(f_a);
           //Convierto f_e String a f_AORIGINAL Date          
-          f_aODate = date.TBPL_date(f_ao);
+          f_aODate = TBCL_HTML.TBPL_date(f_ao);
       }catch (ParseException  e) {
           System.out.println("Error al convertir fecha: " + e.getMessage());
       }
@@ -960,7 +962,7 @@ catch(Exception ex){
           pintar_decision = false;
           v_conexion_taxb.rollback();
         }
-       salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
+       salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
                                        "TBPKT_AJUSTES.TBPKT_DECISION_CLIENTE.TBS_DecisionRetiro"," ",true));
        salida.println("<font face='Verdana' size='1' color='#324395'><b>"+msj+"</font></b>");
        if(pintar_decision)
@@ -973,7 +975,7 @@ catch(Exception ex){
           salida.println("<BR><BR>"+boton_salida);
        salida.println("<input type='hidden' name='nom_producto' value='ABC'>");
        salida.println("<input type='hidden' name='num_contrato' value='ABC'>");
-       salida.println(plantilla.TBFL_PIE);
+       salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
        salida.flush();
        return;
        }//si valores_krtos&&valores_cc
@@ -983,24 +985,24 @@ catch(Exception ex){
       String ms = "";
       if(!valores_krtos)ms = "LA SUMA DEL CAPITAL Y DE LOS RENDIMIENTOS ORIGINALES NO CONCUERDAN CON LA SUMA DE LOS INGRESADOS.";
       if(!valores_cc)   ms = "EL VALOR DE LA CUENTA CONTINGENTE INGRESADO SOBREPASA AL MAXIMO.";
-      salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
+      salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
                                                 "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_CCONTINGENTE"," ",true));
       salida.println("<p><font face='Verdana, Arial, Helvetica, sans-serif' color='#324395'><b><font size='1'>"+ms+"</font></b></p>");
       salida.println("<CENTER><input type='button' value='Aceptar' Onclick='history.go(-3);'>"+
       "<input type='button' value='Regresar' Onclick='history.go(-1);'></center>");
-      salida.println(plantilla.TBFL_PIE);
+      salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
       salida.flush();
      }
   }//SI F_A MENOR A SYSDATE
  else
   {
    String ms1 = "ERROR EN LA ACTUALIZACION,LA FECHA INGRESADA ES MAYOR A LA FECHA DEL DIA DE HOY";
-   salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
+   salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
                                                 "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_CCONTINGENTE"," ",true));
    salida.println("<p><font face='Verdana, Arial, Helvetica, sans-serif' color='#324395'><b><font size='1'>"+ms1+"</font></b></p>");
    salida.println("<CENTER><input type='button' value='Aceptar' Onclick='history.go(-3);'>"+
    "<input type='button' value='Regresar' Onclick='history.go(-1);'></center>");
-   salida.println(plantilla.TBFL_PIE);
+   salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
    salida.flush();
   }//SI LA FECHA ES MAYOR A SYSDATE
      return;
@@ -1009,13 +1011,13 @@ catch(Exception ex){
  }//fin try
 catch(Exception ex)
  {
-  STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+  //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
   String msj = "SE PRODUJO UN ERROR INESPERADO, "+ex.toString() +" INTENTE DE NUEVO.";
-  salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
+  salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE APORTES",
                                        "TBPKT_MODULO_APORTES.TBS_ACTUALIZA_CCONTINGENTE","<font face='Verdana, Arial, Helvetica, sans-serif' color='#324395'><b><CENTER>"+msj+"</CEBTER></font></b>",false));
   salida.println("<BR><BR>");
   salida.println("<center><input type='button' value='Aceptar' Onclick='history.go("+v_historia+");' ></center>");
-  salida.println(plantilla.TBFL_PIE);
+  salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
   salida.flush();
   return;
  }

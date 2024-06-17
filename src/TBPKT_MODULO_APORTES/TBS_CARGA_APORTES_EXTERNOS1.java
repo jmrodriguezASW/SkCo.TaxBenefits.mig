@@ -34,7 +34,7 @@ try
     int MAX = 3000;
 
   //salida.println("<BR>Inicio.<BR>");
-  STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII();
+  //STBCL_GenerarBaseHTMLII plantilla = new STBCL_GenerarBaseHTMLII;
   //seguridad
   HttpSession session = peticion.getSession(true);
   if (session == null) session = peticion.getSession(true);
@@ -54,9 +54,12 @@ try
   String[] tiene_beneficioStr = new String[1];  
   String[] estadoStr = new String[10]; 
     
-  TBCL_Seguridad Seguridad = new TBCL_Seguridad();
+   
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
   //valido la veracidad del producto y contrato enviados por pipeline
-  parametros = Seguridad.TBFL_Seguridad(cadena2, salida, ip_tax);
+  parametros = TBCL_Seguridad.TBFL_Seguridad(cadena2, salida, ip_tax);
   v_contrato = parametros[0];
   v_producto = parametros[1];
   v_usuario  = parametros[2];
@@ -65,8 +68,8 @@ try
   v_idworker = parametros[5];
   //seguridad
   v_conexion_taxb =   DataSourceWrapper.getInstance().getConnection();
-  
-  TBCL_HTML   parametros_requeridos     = new TBCL_HTML();
+  /*[SO_396] Se realiza modificación de llamado por ser método estático **** de la clase TBCL_HTML, no es necesaria la instancia nueva*/
+  /*TBCL_HTML   parametros_requeridos     = new TBCL_HTML();
   TBCL_HTML   hoja_error                = new TBCL_HTML();
   TBCL_HTML   publica_afp               = new TBCL_HTML();
   TBCL_HTML   publica_aportes           = new TBCL_HTML();
@@ -74,7 +77,7 @@ try
   TBCL_HTML   nombres                   = new TBCL_HTML();
   TBCL_HTML   compara_totales           = new TBCL_HTML();
   TBCL_HTML   informacion_final         = new TBCL_HTML();
-  TBCL_HTML   usuario_invalido          = new TBCL_HTML();
+  TBCL_HTML   usuario_invalido          = new TBCL_HTML();*/
   //valido la veracidad del producto y contrato enviados por pipeline
   String  producto    = peticion.getParameter("nom_producto");
   String  contrato    = peticion.getParameter("num_contrato");
@@ -86,7 +89,7 @@ try
     v_contrato = "X";
   }
   //------------------------------------------------------------------pagina numero 1
-  if(parametros_requeridos.TBPL_Parametros_Requeridos(v_producto,v_contrato))
+  if(TBCL_HTML.TBPL_Parametros_Requeridos(v_producto,v_contrato))
   {
     
     
@@ -114,32 +117,32 @@ try
     }
     t_rs8i.close();
     t_st8i.close();
-    publica_afp.TBPL_Publica_AFP(nombre_afp,nit_afp,total_afp,v_producto,v_contrato,v_usuario,salida,codigo_afp,nuevaCadena);
+    TBCL_HTML.TBPL_Publica_AFP(nombre_afp,nit_afp,total_afp,v_producto,v_contrato,v_usuario,salida,codigo_afp,nuevaCadena);
     return;
   }
-  else if ((!parametros_requeridos.TBPL_Parametros_Requeridos(producto,contrato))&&
+  else if ((!TBCL_HTML.TBPL_Parametros_Requeridos(producto,contrato))&&
           ( producto == null)&&
           ( contrato == null))
   {
-    STBCL_GenerarBaseHTML plantilla2 = new STBCL_GenerarBaseHTML();
+    //STBCL_GenerarBaseHTML plantilla2 = new STBCL_GenerarBaseHTML();
     String msj = "EL CONTRATO "+v_contrato+" NO EXISTE EN EL SISTEMA.";
-    salida.println(plantilla2.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+    salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                        "TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS","<font face='Verdana, Arial, Helvetica, sans-serif' color='#324395'><b><CENTER>"+msj+"</CEBTER></font></b>",false));
     salida.println("<BR><BR>");
     salida.println("<center><input type='button' value='Aceptar' Onclick='history.go(-1);' ></center>");
-    salida.println(plantilla2.TBFL_PIE);
+    salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
     salida.flush();
     return;
   }
     //------------------------------------------------------------------pagina numero 2
   else if
-       ((!parametros_requeridos.TBPL_Parametros_Requeridos(producto,contrato))&&
+       ((!TBCL_HTML.TBPL_Parametros_Requeridos(producto,contrato))&&
        (!producto.equals("A"))&&
        (!contrato.equals("A"))&&
        (!producto.equals("B"))&&
        (!contrato.equals("B")))
   {
-    hoja_error.TBPL_Hoja_Error(producto,contrato,salida,0,"TBS_CARGA_APORTES_EXTERNOS1",
+    TBCL_HTML.TBPL_Hoja_Error(producto,contrato,salida,0,"TBS_CARGA_APORTES_EXTERNOS1",
                           "INFORMACION DE TRASLADOS EXTERNOS");
     return;
   }
@@ -174,7 +177,7 @@ try
     {
       nit_afp = nit_afp.substring(0,nit_afp.length());
     }
-    if(afp_existe.TBPL_AFP(nit_afp,v_conexion_taxb))
+    if(TBCL_HTML.TBPL_AFP(nit_afp,v_conexion_taxb))
     {
       String select8i_0     = "SELECT "+
                               "TO_CHAR(APO_FECHA_EFECTIVA,'RRRR-MM-DD'), "+
@@ -214,18 +217,19 @@ try
       }
       t_rs8i.close();
       t_st8i.close();
-      publica_aportes.TBPL_Publica_Aportes(f_producto,f_contrato,fecha_e,cc,c,rtos,total_aportes,salida,usuario,nomb_afp,consecutivos
-                                          ,nombres.TBPL_Nombres(f_producto,f_contrato),codigo_afp,nit_afp,nuevaCadena);
+      TBCL_HTML.TBPL_Publica_Aportes(f_producto,f_contrato,fecha_e,cc,c,rtos,total_aportes,salida,usuario,nomb_afp,consecutivos
+                                          ,TBCL_HTML.TBPL_Nombres(f_producto,f_contrato),codigo_afp,nit_afp,nuevaCadena);
     }//si afp se encuentra cargada en TBINTERFACE_TRASLADOS
     else
     {
-      STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML();
-      salida.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+      /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase STBCL_GenerarBaseHTML, no es necesaria la instancia nueva*/  
+ //STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML;
+      salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                             "TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS1"," ",true));
       salida.println("<BR><BR>");
       salida.println("<p><B><FONT color=black face=verdana size=2> NO HAY INFORMACION CARGADA PARA LA AFP SELECCIONADA </font></B></p>");
       salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-      salida.println(plantilla1.TBFL_PIE);
+      salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
       salida.close();
     }//si la afp no se encuentra cargada en TBINTERFACE_TRASLADOS
     return;
@@ -425,12 +429,12 @@ try
 //      salida.println("<BR>Despues de valida retiros externos.<BR>");
       if(!estado.equals("BIEN"))
       {
-        STBCL_GenerarBaseHTML plantilla2 = new STBCL_GenerarBaseHTML();
-        salida.println(plantilla2.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+        //STBCL_GenerarBaseHTML plantilla2 = new STBCL_GenerarBaseHTML();
+        salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                          " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, TBPBD_Valida_Retiros_Externos("+f_producto+","+f_contrato+","+consecutivo+","+tieneretiros+","+estado+")",false));
         salida.println("<BR><BR>");
         salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-        salida.println(plantilla2.TBFL_PIE);
+        salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
         salida.close();
       }
       if(tieneretiros.equals("f")&&estado.equals("BIEN"))
@@ -562,12 +566,12 @@ try
         //              salida.println("<BR>Despues de condicion externos<BR>");
                       if(!estado.equals("BIEN"))
                       {
-                        STBCL_GenerarBaseHTML plantilla3 = new STBCL_GenerarBaseHTML();
-                        salida.println(plantilla3.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                        //STBCL_GenerarBaseHTML plantilla3 = new STBCL_GenerarBaseHTML();
+                        salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                  " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO,TBPBD_CONDICION_EXTERNOS( "+empresa+","+f_contrato+","+f_producto+","+estado+")",false));
                         salida.println("<BR><BR>");
                         salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                        salida.println(plantilla3.TBFL_PIE);
+                        salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                         salida.close();
                       }
                     }//si empresa papa no es nula
@@ -585,12 +589,12 @@ try
         //              salida.println("<BR>Despues de empresa externos<BR>");
                       if(!estado.equals("BIEN"))
                       {
-                        STBCL_GenerarBaseHTML plantilla4 = new STBCL_GenerarBaseHTML();
-                        salida.println(plantilla4.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                        //STBCL_GenerarBaseHTML plantilla4 = new STBCL_GenerarBaseHTML();
+                        salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                          " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO,TBPBD_Empresa_Externos( "+f_producto+","+f_contrato+","+empresa_x+","+estado+")",false));
                         salida.println("<BR><BR>");
                         salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                        salida.println(plantilla4.TBFL_PIE);
+                        salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                         salida.close();
                       }
                       if(!empresa_x.equals("nula"))
@@ -687,12 +691,12 @@ try
         //            salida.println("<BR>Despues de inserta aporte hijo.<BR>");
                     if(!estado.equals("BIEN"))
                     {
-                      STBCL_GenerarBaseHTML plantilla5 = new STBCL_GenerarBaseHTML();
-                      salida.println(plantilla5.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                      //STBCL_GenerarBaseHTML plantilla5 = new STBCL_GenerarBaseHTML();
+                      salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                   " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, TBPBD_Inserta_Aporte_Hijo"+estado,false));
                       salida.println("<BR><BR>");
                       salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                      salida.println(plantilla5.TBFL_PIE);
+                      salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                       salida.close();
                     }
                     //FIN INSERT DE LOS HIJOS
@@ -715,8 +719,9 @@ try
                     //calculo variables involucradas con el beneficio trin¿butario: aporte_beneficio,fecha_aporte,razon_beneficio,fecha_beneficio
                     
                     // PHTM I&T 2016-02-08 Instruccion añadida para evitar la ejecucion del metodo TBPBD_Tiene_Beneficio_Externos desde base de datos 
-                    TBCBD_STORED_PROCEDURES procedimientos_internos = new TBCBD_STORED_PROCEDURES();  
-                    procedimientos_internos.TBPBD_Tiene_Beneficio_Externos(producto, contrato, consecutivo, tiene_beneficioStr, estadoStr);                    
+                    /*[SO_396] Se realiza modificación de llamado por ser método estático TBPBD_Tiene_Beneficio_Externos de la clase TBCBD_STORED_PROCEDURES, no es necesaria la instancia nueva*/
+                    //TBCBD_STORED_PROCEDURES procedimientos_internos = new TBCBD_STORED_PROCEDURES();  
+                    TBCBD_STORED_PROCEDURES.TBPBD_Tiene_Beneficio_Externos(producto, contrato, consecutivo, tiene_beneficioStr, estadoStr);                    
                     
                     tiene_beneficio =  tiene_beneficioStr[0].toString();
                     estado = estadoStr[0].toString();
@@ -737,12 +742,12 @@ try
                     
                     if(!estado.equals("BIEN"))
                     {
-                      STBCL_GenerarBaseHTML plantilla5 = new STBCL_GenerarBaseHTML();
-                      salida.println(plantilla5.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                      //STBCL_GenerarBaseHTML plantilla5 = new STBCL_GenerarBaseHTML();
+                      salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                     " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, TBPBD_Tiene_Beneficio_Externos("+f_producto+","+f_contrato+","+consecutivo_hijo+","+tiene_beneficio+","+estado+")",false));
                       salida.println("<BR><BR>");
                       salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                      salida.println(plantilla5.TBFL_PIE);
+                      salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                       salida.close();
                     }
                     if(tiene_beneficio.equals("v"))
@@ -760,12 +765,12 @@ try
         //              salida.println("<BR>Despues de actualiza externos<BR>");
                       if(!estado.equals("BIEN"))
                       {
-                        STBCL_GenerarBaseHTML plantilla6 = new STBCL_GenerarBaseHTML();
-                        salida.println(plantilla6.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                        //STBCL_GenerarBaseHTML plantilla6 = new STBCL_GenerarBaseHTML();
+                        salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                   " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, TBPBD_Actualiza_Externos("+f_producto+","+f_contrato+","+consecutivo_hijo+","+f_c+","+estado+")",false));
                         salida.println("<BR><BR>");
                         salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                        salida.println(plantilla6.TBFL_PIE);
+                        salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                         salida.close();
                       }
                     }//si tiene beenficio
@@ -871,12 +876,12 @@ try
         //              salida.println("<BR>Despues de condicion externos<BR>");
                       if(!estado.equals("BIEN"))
                       {
-                        STBCL_GenerarBaseHTML plantilla3 = new STBCL_GenerarBaseHTML();
-                        salida.println(plantilla3.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                        //STBCL_GenerarBaseHTML plantilla3 = new STBCL_GenerarBaseHTML();
+                        salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                  " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO,TBPBD_CONDICION_EXTERNOS( "+empresa+","+f_contrato+","+f_producto+","+estado+")",false));
                         salida.println("<BR><BR>");
                         salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                        salida.println(plantilla3.TBFL_PIE);
+                        salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                         salida.close();
                       }
                     }//si empresa papa no es nula
@@ -894,12 +899,12 @@ try
         //              salida.println("<BR>Despues de empresa externos<BR>");
                       if(!estado.equals("BIEN"))
                       {
-                        STBCL_GenerarBaseHTML plantilla4 = new STBCL_GenerarBaseHTML();
-                        salida.println(plantilla4.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                        //STBCL_GenerarBaseHTML plantilla4 = new STBCL_GenerarBaseHTML();
+                        salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                          " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO,TBPBD_Empresa_Externos( "+f_producto+","+f_contrato+","+empresa_x+","+estado+")",false));
                         salida.println("<BR><BR>");
                         salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                        salida.println(plantilla4.TBFL_PIE);
+                        salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                         salida.close();
                       }
                       if(!empresa_x.equals("nula"))
@@ -1000,12 +1005,12 @@ try
                     
                     if(!estado.equals("BIEN"))
                     {
-                      STBCL_GenerarBaseHTML plantilla5 = new STBCL_GenerarBaseHTML();
-                      salida.println(plantilla5.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                      //STBCL_GenerarBaseHTML plantilla5 = new STBCL_GenerarBaseHTML();
+                      salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                   " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, TBPBD_Inserta_Aporte_Hijo"+estado,false));
                       salida.println("<BR><BR>");
                       salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                      salida.println(plantilla5.TBFL_PIE);
+                      salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                       salida.close();
                     }
                     //FIN INSERT DE LOS HIJOS
@@ -1050,12 +1055,12 @@ try
                     t_cst8i_7.close();
                     if(!estado.equals("BIEN"))
                     {
-                      STBCL_GenerarBaseHTML plantilla5 = new STBCL_GenerarBaseHTML();
-                      salida.println(plantilla5.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                      //STBCL_GenerarBaseHTML plantilla5 = new STBCL_GenerarBaseHTML();
+                      salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                     " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, TBPBD_Tiene_Beneficio_Externos("+f_producto+","+f_contrato+","+consecutivo_hijo+","+tiene_beneficio+","+estado+")",false));
                       salida.println("<BR><BR>");
                       salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                      salida.println(plantilla5.TBFL_PIE);
+                      salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                       salida.close();
                     }
                     if(tiene_beneficio.equals("v"))
@@ -1073,12 +1078,12 @@ try
         //              salida.println("<BR>Despues de actualiza externos<BR>");
                       if(!estado.equals("BIEN"))
                       {
-                        STBCL_GenerarBaseHTML plantilla6 = new STBCL_GenerarBaseHTML();
-                        salida.println(plantilla6.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                        //STBCL_GenerarBaseHTML plantilla6 = new STBCL_GenerarBaseHTML();
+                        salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                                   " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, TBPBD_Actualiza_Externos("+f_producto+","+f_contrato+","+consecutivo_hijo+","+f_c+","+estado+")",false));
                         salida.println("<BR><BR>");
                         salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                        salida.println(plantilla6.TBFL_PIE);
+                        salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
                         salida.close();
                       }
                     }//si tiene beenficio
@@ -1127,7 +1132,7 @@ try
           
           if(!datos_cargados)
           {
-            usuario_invalido.TBPL_Usuario_Invalido(salida,f_contrato,n_id);
+            TBCL_HTML.TBPL_Usuario_Invalido(salida,f_contrato,n_id);
             estado_user = "MAL";
           }
           t_rs8i.close();
@@ -1177,12 +1182,12 @@ try
         t_cst8i_4.close();
         if(!estado.equals("BIEN"))
         {
-          STBCL_GenerarBaseHTML plantilla7 = new STBCL_GenerarBaseHTML();
-          salida.println(plantilla7.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+          //STBCL_GenerarBaseHTML plantilla7 = new STBCL_GenerarBaseHTML();
+          salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                           " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, TBPBD_Actualiza_Aporte_Papa("+f_producto+","+f_contrato+","+consecutivo+","+estado+")",false));
           salida.println("<BR><BR>");
           salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-          salida.println(plantilla7.TBFL_PIE);
+          salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
           salida.close();
         }
         if(vvalccta)
@@ -1193,13 +1198,13 @@ try
         {
           v_conexion_taxb.rollback();
         }
-        informacion_final.TBPL_Papa_Hijos(c,c_c,rts,k,cc,rtos,total_hijos,salida,msj,msj_cc,"INFORMACION DE TRASLADOS EXTERNOS DE APORTES");
+        TBCL_HTML.TBPL_Papa_Hijos(c,c_c,rts,k,cc,rtos,total_hijos,salida,msj,msj_cc,"INFORMACION DE TRASLADOS EXTERNOS DE APORTES");
       }//si todo ok
       else
       {
         v_conexion_taxb.rollback();
         //LLAMAR PROCEDIMIENTO QUE MUESTRE HIJOS Y PAPA, EXPLICANDO LA CAUSA DE ERROR
-        informacion_final.TBPL_Papa_Hijos(c,c_c,rts,k,cc,rtos,total_hijos,salida,msj,msj_cc,"INFORMACION DE TRASLADOS EXTERNOS DE APORTES");
+        TBCL_HTML.TBPL_Papa_Hijos(c,c_c,rts,k,cc,rtos,total_hijos,salida,msj,msj_cc,"INFORMACION DE TRASLADOS EXTERNOS DE APORTES");
       }
       return;
     }
@@ -1208,13 +1213,13 @@ try
   }
   catch(Exception ex)
   {
-    STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+    //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
     String msj = "SE PRODUJO UN ERROR INESPERADO, "+ex.toString() + " - " + ex.getMessage() +". INTENTE DE NUEVO.";
-    salida.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+    salida.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                          "TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS","<CENTER>"+msj+"</CEBTER>",false));
     salida.println("<BR><BR>");
     salida.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-    salida.println(plantilla.TBFL_PIE);
+    salida.println(STBCL_GenerarBaseHTML.TBFL_PIE);
     salida.flush();
     return;
   }
@@ -1239,7 +1244,8 @@ try
   //valido la veracidad del producto y contrato enviados por pipeline
   //seguridad
       v_conexion_taxb =   DataSourceWrapper.getInstance().getConnection();
-  TBCL_HTML   parametros_requeridos     = new TBCL_HTML();
+  /*[SO_396] Se realiza modificación de llamado por ser método estático ****** de la clase TBCL_HTML, no es necesaria la instancia nueva*/
+  /*TBCL_HTML   parametros_requeridos     = new TBCL_HTML();
   TBCL_HTML   hoja_error                = new TBCL_HTML();
   TBCL_HTML   publica_afp               = new TBCL_HTML();
   TBCL_HTML   publica_aportes           = new TBCL_HTML();
@@ -1247,7 +1253,7 @@ try
   TBCL_HTML   nombres                   = new TBCL_HTML();
   TBCL_HTML   compara_totales           = new TBCL_HTML();
   TBCL_HTML   informacion_final         = new TBCL_HTML();
-  TBCL_HTML   usuario_invalido          = new TBCL_HTML();
+  TBCL_HTML   usuario_invalido          = new TBCL_HTML();*/
   //valido la veracidad del producto y contrato enviados por pipeline
   String  producto    = v_producto;//peticion.getParameter("nom_producto");
   String  contrato    = v_contrato;//peticion.getParameter("num_contrato");
@@ -1259,7 +1265,7 @@ try
     v_contrato = "X";
   }
   //------------------------------------------------------------------pagina numero 1
-  if(parametros_requeridos.TBPL_Parametros_Requeridos(v_producto,v_contrato))
+  if(TBCL_HTML.TBPL_Parametros_Requeridos(v_producto,v_contrato))
   {
     String codigo_afp[] = new String[500];
     String nombre_afp[] = new String[500];
@@ -1287,22 +1293,22 @@ try
     t_st8i.close();
     return;
   }
-  else if ((!parametros_requeridos.TBPL_Parametros_Requeridos(producto,contrato))&&
+  else if ((!TBCL_HTML.TBPL_Parametros_Requeridos(producto,contrato))&&
           ( producto == null)&&
           ( contrato == null))
   {
-    STBCL_GenerarBaseHTML plantilla2 = new STBCL_GenerarBaseHTML();
+    //STBCL_GenerarBaseHTML plantilla2 = new STBCL_GenerarBaseHTML();
     String msj = "EL CONTRATO "+v_contrato+" NO EXISTE EN EL SISTEMA.";
-    System.out.println(plantilla2.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+    System.out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                        "TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS","<font face='Verdana, Arial, Helvetica, sans-serif' color='#324395'><b><CENTER>"+msj+"</CEBTER></font></b>",false));
     System.out.println("<BR><BR>");
     System.out.println("<center><input type='button' value='Aceptar' Onclick='history.go(-1);' ></center>");
-    System.out.println(plantilla2.TBFL_PIE);
+    System.out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
     return;
   }
     //------------------------------------------------------------------pagina numero 2
   else if
-       ((!parametros_requeridos.TBPL_Parametros_Requeridos(producto,contrato))&&
+       ((!TBCL_HTML.TBPL_Parametros_Requeridos(producto,contrato))&&
        (!producto.equals("A"))&&
        (!contrato.equals("A"))&&
        (!producto.equals("B"))&&
@@ -1343,7 +1349,7 @@ try
     {
       nit_afp = nit_afp.substring(0,nit_afp.length());
     }
-    if(afp_existe.TBPL_AFP(nit_afp,v_conexion_taxb))
+    if(TBCL_HTML.TBPL_AFP(nit_afp,v_conexion_taxb))
     {
       String select8i_0     = "SELECT "+
                               "TO_CHAR(APO_FECHA_EFECTIVA,'RRRR-MM-DD'), "+
@@ -1389,13 +1395,14 @@ try
     }//si afp se encuentra cargada en TBINTERFACE_TRASLADOS
     else
     {
-      STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML();
-      System.out.println(plantilla1.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+      /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase STBCL_GenerarBaseHTML, no es necesaria la instancia nueva*/  
+ //STBCL_GenerarBaseHTML plantilla1 = new STBCL_GenerarBaseHTML;
+      System.out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                             "TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS1"," ",true));
       System.out.println("<BR><BR>");
       System.out.println("<p><B><FONT color=black face=verdana size=2> NO HAY INFORMACION CARGADA PARA LA AFP SELECCIONADA </font></B></p>");
       System.out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-      System.out.println(plantilla1.TBFL_PIE);
+      System.out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
       //salida.close();
     }//si la afp no se encuentra cargada en TBINTERFACE_TRASLADOS
     return;
@@ -1558,12 +1565,12 @@ try
       t_cst8i_0.close();
       if(!estado.equals("BIEN"))
       {
-        STBCL_GenerarBaseHTML plantilla2 = new STBCL_GenerarBaseHTML();
-        System.out.println(plantilla2.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+        //STBCL_GenerarBaseHTML plantilla2 = new STBCL_GenerarBaseHTML();
+        System.out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                          " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, TBPBD_Valida_Retiros_Externos("+f_producto+","+f_contrato+","+consecutivo+","+tieneretiros+","+estado+")",false));
         System.out.println("<BR><BR>");
         System.out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-        System.out.println(plantilla2.TBFL_PIE);
+        System.out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
       }
       if(tieneretiros.equals("f")&&estado.equals("BIEN"))
       {
@@ -1656,12 +1663,12 @@ try
 //              salida.println("<BR>Despues de condicion externos<BR>");
               if(!estado.equals("BIEN"))
               {
-                STBCL_GenerarBaseHTML plantilla3 = new STBCL_GenerarBaseHTML();
-                System.out.println(plantilla3.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                //STBCL_GenerarBaseHTML plantilla3 = new STBCL_GenerarBaseHTML();
+                System.out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                          " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO,TBPBD_CONDICION_EXTERNOS( "+empresa+","+f_contrato+","+f_producto+","+estado+")",false));
                 System.out.println("<BR><BR>");
                 System.out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                System.out.println(plantilla3.TBFL_PIE);
+                System.out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
               }
             }//si empresa papa no es nula
             else if(empresa.substring(0,1).equals(" "))
@@ -1678,12 +1685,12 @@ try
 //              salida.println("<BR>Despues de empresa externos<BR>");
               if(!estado.equals("BIEN"))
               {
-                STBCL_GenerarBaseHTML plantilla4 = new STBCL_GenerarBaseHTML();
-                System.out.println(plantilla4.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                //STBCL_GenerarBaseHTML plantilla4 = new STBCL_GenerarBaseHTML();
+                System.out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                  " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO,TBPBD_Empresa_Externos( "+f_producto+","+f_contrato+","+empresa_x+","+estado+")",false));
                 System.out.println("<BR><BR>");
                 System.out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                System.out.println(plantilla4.TBFL_PIE);
+                System.out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
               }
               if(!empresa_x.equals("nula"))
               {
@@ -1778,12 +1785,12 @@ try
 //            salida.println("<BR>Despues de inserta aporte hijo.<BR>");
             if(!estado.equals("BIEN"))
             {
-              STBCL_GenerarBaseHTML plantilla5 = new STBCL_GenerarBaseHTML();
-              System.out.println(plantilla5.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+              //STBCL_GenerarBaseHTML plantilla5 = new STBCL_GenerarBaseHTML();
+              System.out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                           " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, TBPBD_Inserta_Aporte_Hijo"+estado,false));
               System.out.println("<BR><BR>");
               System.out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-              System.out.println(plantilla5.TBFL_PIE);
+              System.out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
             }
             //FIN INSERT DE LOS HIJOS
             //INICIO ACTUALIZACION DE DISPONIBILIDADES DE CADA HIJO
@@ -1816,12 +1823,12 @@ try
             t_cst8i_7.close();
             if(!estado.equals("BIEN"))
             {
-              STBCL_GenerarBaseHTML plantilla5 = new STBCL_GenerarBaseHTML();
-              System.out.println(plantilla5.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+              //STBCL_GenerarBaseHTML plantilla5 = new STBCL_GenerarBaseHTML();
+              System.out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                             " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, TBPBD_Tiene_Beneficio_Externos("+f_producto+","+f_contrato+","+consecutivo_hijo+","+tiene_beneficio+","+estado+")",false));
               System.out.println("<BR><BR>");
               System.out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-              System.out.println(plantilla5.TBFL_PIE);
+              System.out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
             }
             if(tiene_beneficio.equals("v"))
             {
@@ -1838,12 +1845,12 @@ try
 //              salida.println("<BR>Despues de actualiza externos<BR>");
               if(!estado.equals("BIEN"))
               {
-                STBCL_GenerarBaseHTML plantilla6 = new STBCL_GenerarBaseHTML();
-                System.out.println(plantilla6.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+                //STBCL_GenerarBaseHTML plantilla6 = new STBCL_GenerarBaseHTML();
+                System.out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                           " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, TBPBD_Actualiza_Externos("+f_producto+","+f_contrato+","+consecutivo_hijo+","+f_c+","+estado+")",false));
                 System.out.println("<BR><BR>");
                 System.out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-                System.out.println(plantilla6.TBFL_PIE);
+                System.out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
               }
             }//si tiene beenficio
             //FIN CALCULO BENEFICIO PARA EL APO_CONSECUTIVO ACABADO DE INGRESAR, DESPUES DE CALCULARLO LO DEBO ACTUALIZAR
@@ -1858,7 +1865,7 @@ try
           t_st8i_2.close();
           //FIN ACTUALIZACION DEL CAMPO APO_INFORMACION_TRASLADO DEL PAPA("S")
           //VALIDO TOTALES DE LOS HIJOS CON LOS DEL PAPA
-          totales_validos = compara_totales.TBPL_Compara_Totales(k_total12,rto_total12,k,rtos);
+          totales_validos = TBCL_HTML.TBPL_Compara_Totales(k_total12,rto_total12,k,rtos);
           System.out.println("k_total12"+k_total12+"rto_total12"+rto_total12+"k"+k+"rtos"+rtos);
           if(!totales_validos)
           {
@@ -1903,12 +1910,12 @@ try
         t_cst8i_4.close();
         if(!estado.equals("BIEN"))
         {
-          STBCL_GenerarBaseHTML plantilla7 = new STBCL_GenerarBaseHTML();
-          System.out.println(plantilla7.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
+          //STBCL_GenerarBaseHTML plantilla7 = new STBCL_GenerarBaseHTML();
+          System.out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","ACTUALIZADOR DE DISPONIBILIDAD DE APORTES",
                                           " ","SE HA PRODUCIDO UN ERROR CON LA BASE DE DATOS, POR FAVOR INTENTELO DE NUEVO, TBPBD_Actualiza_Aporte_Papa("+f_producto+","+f_contrato+","+consecutivo+","+estado+")",false));
           System.out.println("<BR><BR>");
           System.out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-          System.out.println(plantilla7.TBFL_PIE);
+          System.out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
         }
         if(vvalccta)
         {
@@ -1933,13 +1940,13 @@ try
   }
   catch(Exception ex)
   {
-    STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML();
+    //STBCL_GenerarBaseHTML plantilla = new STBCL_GenerarBaseHTML;
     String msj = "SE PRODUJO UN ERROR INESPERADO, "+ex.toString() + " - " + ex.getMessage() +". INTENTE DE NUEVO.";
-    System.out.println(plantilla.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
+    System.out.println(STBCL_GenerarBaseHTML.TBFL_CABEZA("ADMINISTRADOR DE APORTES","INFORMACION DE TRASLADOS EXTERNOS",
                                          "TBPKT_MODULO_APORTES.TBS_CARGA_APORTES_EXTERNOS","<CENTER>"+msj+"</CEBTER>",false));
     System.out.println("<BR><BR>");
     System.out.println("<center><input type='button' value='Aceptar' Onclick=history.go(-1);></center>");
-    System.out.println(plantilla.TBFL_PIE);
+    System.out.println(STBCL_GenerarBaseHTML.TBFL_PIE);
     //salida.flush();
     return;
   }

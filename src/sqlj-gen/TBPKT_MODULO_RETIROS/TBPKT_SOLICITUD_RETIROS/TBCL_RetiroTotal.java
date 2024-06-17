@@ -110,14 +110,16 @@ implements sqlj.runtime.NamedIterator
  public void TBPL_RetTotal(HttpSession session,HttpServletRequest request,PrintWriter out,String nuevaCadena)
  {
   /**Instancias de clase*/
-  STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();/**Instancia de la clase TBCL_GenerarBaseHTML*/
-  TBCL_Validacion       i_valusu = new TBCL_Validacion ();/**Instancia de la clase TBCL_Validacion*/
+  //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;/**Instancia de la clase TBCL_GenerarBaseHTML*/
+  /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()/**Instancia de la clase TBCL_Validacion*/
   TBCL_ConsultaClienteLista i_consultaC = new TBCL_ConsultaClienteLista();/**Instancia de la clase TBCL_ConsultaClienteLista */
   //TBCL_ConexionSqlj   i_conexion = new TBCL_ConexionSqlj();/**Instancia de la clase TBCL_ConexionSqlj*/
   try
   {
    String[] v_valusu = new String[3];
-   v_valusu=i_valusu.TBFL_ValidarUsuario();
+   v_valusu=TBCL_Validacion.TBFL_ValidarUsuario();
    DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
    Connection t_tax =DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
    DefaultContext ctx13 = new DefaultContext(v_valusu[0],v_valusu[1],v_valusu[2],false);
@@ -369,7 +371,7 @@ implements sqlj.runtime.NamedIterator
         {
          if(!v_conti.trim().equals("") && !v_proti.substring(0,1).equals(" "))
          {
-          /*@lineinfo:generated-code*//*@lineinfo:301^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:303^11*/
 
 //  ************************************************************
 //  #sql v_resp = { SELECT CON_NUMERO
@@ -400,7 +402,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:307^28*/
+/*@lineinfo:user-code*//*@lineinfo:309^28*/
 
           while(v_resp.next())
           {
@@ -424,7 +426,7 @@ implements sqlj.runtime.NamedIterator
             v_efe =i_fecha.TBFL_Fecha(v_fecefe);
             //out.println("contrato destino:" + v_conti2);
             
-            /*@lineinfo:generated-code*//*@lineinfo:331^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:333^13*/
 
 //  ************************************************************
 //  #sql v_retorno_programa = { values (TBCL_FuncionesAs400.TBPL_ProgramaContrato(:v_conti2,
@@ -463,7 +465,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:336^89*/
+/*@lineinfo:user-code*//*@lineinfo:338^89*/
             
             String v_programa = v_retorno_programa.substring(0,v_retorno_programa.indexOf(";",0));
             
@@ -668,12 +670,12 @@ implements sqlj.runtime.NamedIterator
       if(v_encontro && !v_saro)
       {//1
        /**Dibujar pagina de respuesta*/
-       v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Retiro Total","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_CalcularRetiro2","",true,"modulo_retiros.js","return validar_retiro(this)");
+       v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Retiro Total","TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS.TBS_CalcularRetiro2","",true,"modulo_retiros.js","return validar_retiro(this)");
        out.println(""+v_pintar+"");
        out.println(""+v_mensLista+"");
        /*Cambio para manejo de referencia unica 2009/03/30 MOS */
        String v_contrato_unif = "";
-       /*@lineinfo:generated-code*//*@lineinfo:546^8*/
+       /*@lineinfo:generated-code*//*@lineinfo:548^8*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -704,12 +706,12 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:546^81*/
+/*@lineinfo:user-code*//*@lineinfo:548^81*/
        out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
        out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nom+"  <b> Apellidos </b>"+v_ape+" </CENTER></font>");
        out.println("<br>");
        /**Consultar aportes del contrato, deben cumplir con las condiciones para retiro total*/
-       /*@lineinfo:generated-code*//*@lineinfo:551^8*/
+       /*@lineinfo:generated-code*//*@lineinfo:553^8*/
 
 //  ************************************************************
 //  #sql v_aportes = { values (TB_FSELECCION_RETTOTAL( :v_pro
@@ -768,13 +770,13 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:561^59*/
+/*@lineinfo:user-code*//*@lineinfo:563^59*/
        /**Función sin error*/
        
 
        if(v_aportes == 0)
        {//1
-          /*@lineinfo:generated-code*//*@lineinfo:567^11*/
+          /*@lineinfo:generated-code*//*@lineinfo:569^11*/
 
 //  ************************************************************
 //  #sql { SELECT  COUNT(1)
@@ -817,7 +819,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:574^16*/
+/*@lineinfo:user-code*//*@lineinfo:576^16*/
         /**Dibujar que condiciones se estan violando  para hacer un retiro total*/
         v_sumtotal = v_certifi + v_canje2 + v_disponi + v_fecmay+v_retirovigente+v_indtras;
         if (v_sumtotal != 0)
@@ -859,7 +861,7 @@ implements sqlj.runtime.NamedIterator
         if (v_rettotal)
         {//17
          out.println("<center><input type='Button' value='Cancelar' onclick=' history.go(-3)'> <input type='Button' value='Regresar' onclick='history.go(-1)'></center>");
-         v_pie = i_pagina.TBFL_PIE;
+         v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
          out.println("<br>");
          out.println(""+v_pie+"");
          out.close();
@@ -875,7 +877,7 @@ implements sqlj.runtime.NamedIterator
          out.println("<INPUT ID=cadena NAME=cadena TYPE=hidden VALUE='"+nuevaCadena +"'>");
          out.println("<center>");
          out.println("<input type=submit value='Aceptar' name = 'aceptar'><input type='Button' value='Regresar' onclick='history.go(-1)' name = 'regresar'><input type='Button' value='Cancelar' onclick='history.go(-3)' name ='cancelar'></center>");
-         v_pie = i_pagina.TBFL_PIE;
+         v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
          out.println("<br>");
          out.println(""+v_pie+"");
          out.close();
@@ -887,7 +889,7 @@ implements sqlj.runtime.NamedIterator
         out.println("<center><font face='Verdana, Arial, Helvetica, sans-serif' size='2' color='#000000'><b>Error al consultar los aportes.</b></font></center>");
         out.println("<br>");
         out.println("<center><input type=button value='Cancelar' onclick=' history.go(-3)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-        v_pie = i_pagina.TBFL_PIE;
+        v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
         out.println("<br>");
         out.println(""+v_pie+"");
         out.close();
@@ -895,11 +897,11 @@ implements sqlj.runtime.NamedIterator
       }
       else
       {/**Si no es correcta la validación del contrato traslado*/
-       v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Retiro Total","","",true,"","");
+       v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Retiro Total","","",true,"","");
        out.println(""+v_pintar+"");
        /*Cambio para manejo de referencia unica 2009/03/30 MOS */
        String v_contrato_unif = "";
-       /*@lineinfo:generated-code*//*@lineinfo:656^8*/
+       /*@lineinfo:generated-code*//*@lineinfo:658^8*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -930,7 +932,7 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:656^81*/
+/*@lineinfo:user-code*//*@lineinfo:658^81*/
        out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
        out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nom+"  <b> Apellidos </b>"+v_ape+" </CENTER></font>");
        out.println("<br>");
@@ -966,7 +968,7 @@ implements sqlj.runtime.NamedIterator
        }
        out.println("<br>");
        out.println("<center><input type='Button' value='Cancelar' onclick=' history.go(-3)'> <input type='Button' value='Regresar' onclick='history.go(-1)'></center>");
-       v_pie = i_pagina.TBFL_PIE;
+       v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
        out.println("<br>");
        out.println(""+v_pie+"");
        out.close();
@@ -974,11 +976,11 @@ implements sqlj.runtime.NamedIterator
      }
      else
      {/**Si no se cumple con la parametrización de los dias permitidos para el concepto de retiro*/
-      v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Retiro Total","","",true,"","");
+      v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Retiro Total","","",true,"","");
       out.println(""+v_pintar+"");
       /*Cambio para manejo de referencia unica 2009/03/30 MOS */
       String v_contrato_unif = "";
-      /*@lineinfo:generated-code*//*@lineinfo:704^7*/
+      /*@lineinfo:generated-code*//*@lineinfo:706^7*/
 
 //  ************************************************************
 //  #sql v_contrato_unif = { values(TBFBD_obtener_ref_unica(:v_pro,:v_contra)) };
@@ -1009,14 +1011,14 @@ implements sqlj.runtime.NamedIterator
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:704^80*/
+/*@lineinfo:user-code*//*@lineinfo:706^80*/
       out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Producto</b> "+v_pro+"    <b>Contrato</b>"+v_contrato_unif+" </center></font>");
       out.println("<FONT color=#000000 face='Verdana, Arial, Helvetica, sans-serif' size=1><CENTER><b>Nombres</b>  "+v_nom+"  <b> Apellidos </b>"+v_ape+" </CENTER></font>");
       out.println("<br>");
       out.println("<center><font face='Verdana, Arial, Helvetica, sans-serif' size='2' color='#000000'><b>No es posible realizar la solicitud de retiro, los días del contrato deben ser "+v_mendias+" a "+v_diascon+". </b></font></center>");
       out.println("<br>");
       out.println("<center><input type='Button' value='Cancelar' onclick=' history.go(-3)'> <input type='Button' value='Regresar' onclick='history.go(-1)'></center>");
-      v_pie = i_pagina.TBFL_PIE;
+      v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
       out.println("<br>");
       out.println(""+v_pie+"");
       out.close();
@@ -1024,11 +1026,11 @@ implements sqlj.runtime.NamedIterator
     }//2
     else
     {/**Si el saldo del contrato es menor o igual a cero*/
-     v_pintar=    i_pagina.TBFL_CABEZA ("Solicitud de Retiro","Error Retiro Total","","<center>No es posible realizar la Solicitud de Retiro el saldo disponible es $"+NumberFormat.getCurrencyInstance().format(v_saldodispo2)+"</center>",false);
+     v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Solicitud de Retiro","Error Retiro Total","","<center>No es posible realizar la Solicitud de Retiro el saldo disponible es $"+NumberFormat.getCurrencyInstance().format(v_saldodispo2)+"</center>",false);
      out.println(""+v_pintar+"");
      out.println("<BR>");
      out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-3)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-     v_pie = i_pagina.TBFL_PIE;
+     v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
      out.println("<br>");
      out.println("<br>");
      out.println(""+v_pie+"");
@@ -1037,9 +1039,9 @@ implements sqlj.runtime.NamedIterator
    }
    else
    {/**Terminar session*/
-    v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Retiro Total","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Retiro Total","","<center>Error de comunicación no se tiene conexión con el servidor web,por favor intente de nuevo.</center>",false);
     out.println(""+v_pintar+"");
-    v_pie = i_pagina.TBFL_PIE;
+    v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-3)'></center>");
     out.println(""+v_pie+"");
@@ -1056,28 +1058,28 @@ implements sqlj.runtime.NamedIterator
    String error = ex.toString();
    if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))
    {
-    v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Retiro Total","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
+    v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Retiro Total","","<center>No se tiene comunicación con el servidor de datos  por favor ingrese nuevamente.</center>",false);
    }
    else if (error.trim().equals("java.sql.SQLException: Io exception: Connection reset by peer: socket write error"))
         {
-         v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Retiro Total","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
+         v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Retiro Total","","<center>Se reinicio la base de datos por favor ingrese nuevamente.</center>",false);
         }
            else if(error.trim().equalsIgnoreCase("java.sql.SQLException: Closed Connection"))
                 {
-                 v_pintar = i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Retiro Total","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
+                 v_pintar = STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Retiro Total","","<center>Error momentaneo de comunicación con el servidor de datos, por favor intente entrar de nuevo a la opción.</center>",false);
                 }
                 else if(error.trim().equalsIgnoreCase("java.sql.SQLException:IOEXCEPTION:DESCRIPTOR NOT A SOCKET:SOCKET WRITE ERROR"))
                      {
-                       v_pintar = i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Retiro Total","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
+                       v_pintar = STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Retiro Total","","<center>Error momentaneo de comunicación con el servidor Web, por favor intente entrar de nuevo a la opción.</center>",false);
                      }
                   else
                   {
-                   v_pintar=    i_pagina.TBFL_CABEZA("Solicitud de Retiro","Error Retiro Total","","<center>Mensaje de Error :"+ex+".</center>",false);
+                   v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA("Solicitud de Retiro","Error Retiro Total","","<center>Mensaje de Error :"+ex+".</center>",false);
                   }
    out.println(""+v_pintar+"");
    out.println("<BR>");
    out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-3)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-   String v_pie = i_pagina.TBFL_PIE;
+   String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
    out.println("<br>");
    out.println(""+v_pie+"");
    out.close();

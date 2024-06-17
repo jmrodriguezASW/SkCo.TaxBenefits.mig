@@ -40,7 +40,9 @@ public class SQL_PTB_DISPONIBLE_OBLIG extends Object{
     public String[] GET_DISPONIBLE_OBLIG (String v_codproducto, String v_Nocontrato, double v_saldoAVA, double v_saldoAVE, String v_fecha, String[] comisiones, double Credito){
         String[] SaldosFinales = new String[23];
         Modelo_TB_Referencias objModelo_TB_Referencias = new Modelo_TB_Referencias();
-        TBCL_Validacion i_valusu = new TBCL_Validacion();
+        /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
         double v_comision_AVA = Double.parseDouble(comisiones[0]) + Credito;
         double v_comision_AVE = Double.parseDouble(comisiones[1]);
         double prov_credito = 0;        
@@ -48,12 +50,12 @@ public class SQL_PTB_DISPONIBLE_OBLIG extends Object{
         try {            
             //Conexion con la base de datos
             v_valusu = new String[3];
-            v_valusu = i_valusu.TBFL_ValidarUsuario();
+            v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));
             v_Nocontrato = ""+Integer.parseInt(v_Nocontrato);
                         
-            /*@lineinfo:generated-code*//*@lineinfo:56^13*/
+            /*@lineinfo:generated-code*//*@lineinfo:58^13*/
 
 //  ************************************************************
 //  #sql { call TBPBD_DISPONIBLE_OBLIG(:v_codproducto
@@ -165,7 +167,7 @@ public class SQL_PTB_DISPONIBLE_OBLIG extends Object{
 
 //  ************************************************************
 
-/*@lineinfo:user-code*//*@lineinfo:80^56*/
+/*@lineinfo:user-code*//*@lineinfo:82^56*/
             
         if(v_cod_err == 0) 
         {            

@@ -13,7 +13,8 @@ public class TBS_EliminarMulti extends HttpServlet {
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
  {
   PrintWriter out = new PrintWriter (response.getOutputStream());
-  STBCL_GenerarBaseHTML i_pagina  = new STBCL_GenerarBaseHTML ();
+  /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase STBCL_GenerarBaseHTML, no es necesaria la instancia nueva*/ 
+ //STBCL_GenerarBaseHTML i_pagina = new STBCL_GenerarBaseHTML;
   try
   {
    HttpSession session = request.getSession(true);
@@ -31,8 +32,11 @@ public class TBS_EliminarMulti extends HttpServlet {
    String  cadena = request.getParameter("cadena");
    nuevaCadena = cadena;
    String ip_tax = request.getRemoteAddr();
-   TBCL_Seguridad Seguridad = new TBCL_Seguridad();
-   parametros = Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
+    
+  
+ /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_Seguridad de la clase TBCL_Seguridad, no es necesaria la instancia nueva*/ 
+ //TBCL_Seguridad Seguridad    = new TBCL_Seguridad;
+   parametros = TBCL_Seguridad.TBFL_Seguridad(cadena, out, ip_tax);
    v_contrato = parametros[0];
    v_producto = parametros[1];
    v_usuario  = parametros[2];
@@ -121,11 +125,11 @@ String v_menex = "";
                      {
                        v_menex = "Mensaje de error: "+ex;
                      }
-    String v_pintar=    i_pagina.TBFL_CABEZA ("Eliminar Solicitud de Retiro No Procesada","Eliminar Solicitud de Retiro No Procesada","","<center>"+v_menex+"</center>",false);
+    String v_pintar=    STBCL_GenerarBaseHTML.TBFL_CABEZA ("Eliminar Solicitud de Retiro No Procesada","Eliminar Solicitud de Retiro No Procesada","","<center>"+v_menex+"</center>",false);
     out.println(""+v_pintar+"");
     out.println("<BR>");
     out.println("<center><input type=button value='Cancelar'  onclick=' history.go(-2)'><input type=button value='Regresar' onclick=' history.go(-1)'></center>");
-    String v_pie = i_pagina.TBFL_PIE;
+    String v_pie = STBCL_GenerarBaseHTML.TBFL_PIE;
     out.println("<br>");
     out.println(""+v_pie+"");
     out.close();

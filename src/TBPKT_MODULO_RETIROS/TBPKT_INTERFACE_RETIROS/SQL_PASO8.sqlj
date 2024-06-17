@@ -52,7 +52,9 @@ public class SQL_PASO8 extends Object {
     String            v_fecha_c          = " ";
     vint_retiros      vreg_retiro        = null;
     Date              v_fecha_d          = null;
-    TBCL_Validacion   i_valusu           = new TBCL_Validacion();
+    /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
+ //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
+ //TBCL_Validacion  i_valusu = new TBCL_Validacion()
     String            v_fecha_contrato;
     String            v_fecha_unidad;
     double[]          v_vector;
@@ -71,7 +73,7 @@ public class SQL_PASO8 extends Object {
       
        //Conexion con la base de datos
       v_valusu = new String[3];
-      v_valusu = i_valusu.TBFL_ValidarUsuario();
+      v_valusu = TBCL_Validacion.TBFL_ValidarUsuario();
       DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
       Connection t_tax =DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
       DefaultContext.setDefaultContext(new DefaultContext( v_valusu[0],v_valusu[1],v_valusu[2],false));
