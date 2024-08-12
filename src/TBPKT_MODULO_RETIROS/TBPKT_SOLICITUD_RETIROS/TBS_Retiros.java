@@ -1,5 +1,7 @@
 package TBPKT_MODULO_RETIROS.TBPKT_SOLICITUD_RETIROS;
 
+import TBPKT_UTILIDADES.TBPKT_CONEXIONBASEDATOS.TBCL_Validacion;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.*;
@@ -81,7 +83,35 @@ public class TBS_Retiros extends HttpServlet
         } //INT20131108
       
       session.removeAttribute("s_fecefectiva");
-      session.setAttribute("s_fecefectiva",(java.lang.Object)v_fecefe );        
+      session.setAttribute("s_fecefectiva",(java.lang.Object)v_fecefe );       
+        
+        
+        
+        
+                
+        String[] v_valusu            = new String[3];
+        Connection v_conexion_taxb   = null;
+        CallableStatement t_cst8i_1 = null;
+             
+               
+          v_valusu                     = TBCL_Validacion.TBFL_ValidarUsuario();
+          Class.forName("oracle.jdbc.driver.OracleDriver");
+          v_conexion_taxb   = DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
+          t_cst8i_1 = v_conexion_taxb.prepareCall("{ call TBPBD_INS_TBINTERFACE_LOGS( 'EG'\n" + 
+          "                               ,TO_DATE(sysdate,'RRRR-MM-DD')\n" + 
+          "                               , 'VU'\n" + 
+          "                               , ?\n" + 
+          "                               , ?\n" + 
+          "                               , 'MFUND'\n" + 
+          "                               , null) }");
+          t_cst8i_1.setString(1, "ASW CONTROL LOG EN TBS_Retiros doPost");
+          t_cst8i_1.setString(2, "session.getAttribute(\"s_producto\").toString() " + session.getAttribute("s_producto").toString());
+          t_cst8i_1.execute();
+          t_cst8i_1.close();
+          v_conexion_taxb.close();
+            
+        
+        
  
       if (session.getAttribute("s_producto").toString().equals("FPOB") || session.getAttribute("s_producto").toString().equals("FPAL")) {
               TBCL_RetiroOperativo_Oblig i_solicitud = new TBCL_RetiroOperativo_Oblig ();
@@ -95,6 +125,8 @@ public class TBS_Retiros extends HttpServlet
     }
     catch(Exception ex)
     {            
+        
+        
        String v_pintar="";
       String error = ex.toString();
        if(error.trim().equals("java.sql.SQLException: Io exception: End of TNS data channel") ||  error.trim().equals("java.sql.SQLException: ORA-01034: ORACLE not available"))

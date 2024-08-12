@@ -1,13 +1,13 @@
 package TBPKT_UTILIDADES.TBPKT_VALOR_UNIDAD;
 
-import java.io.*;
-import java.util.*;
-import java.math.*;
-import java.lang.Thread.*;
-import java.sql.*;
-import java.text.DecimalFormat;
-import com.ibm.as400.access.*;
-import TBPKT_UTILIDADES.TBPKT_AS400_APORTES.*;
+import TBPKT_UTILIDADES.TBPKT_AS400_APORTES.TBCL_FUNCIONES_AS400_APORTES;
+
+import com.ibm.as400.access.AS400;
+import com.ibm.as400.access.AS400Text;
+import com.ibm.as400.access.ProgramCall;
+import com.ibm.as400.access.ProgramParameter;
+
+
 /*
  * Modificado 09/04/2008
  * Marcela Ortiz Sandoval
@@ -15,6 +15,7 @@ import TBPKT_UTILIDADES.TBPKT_AS400_APORTES.*;
  */
 
 public class TBCL_AS400 extends Object {
+    
 
   //Metodo que calcula el saldo del contrato del AS400
   public static double TBF_SALDO_CONTRATO(String v_contrato, String v_fecha){
@@ -23,9 +24,11 @@ public class TBCL_AS400 extends Object {
     //TBCL_FUNCIONES_AS400_APORTES saldo_entero        = new TBCL_FUNCIONES_AS400_APORTES();
     String cadenaT;
     long saldo_as400 = 0;
+       
     try{
       //Llamado a la funcion del As400
       cadenaT = TBCL_FUNCIONES_AS400_APORTES.TBFL_Saldos_por_Contrato(v_contrato, v_fecha, "E");
+      
       //Si ocurre un error al retornar el saldo del contrato en el AS400
       //retornar -1
       if (cadenaT != "ERROR"){
@@ -36,7 +39,6 @@ public class TBCL_AS400 extends Object {
       else{
         saldo_as400 = -2;
       }
-
       if(saldo_as400 != -1 && saldo_as400 != -2)
       {
        Long    l1 = new Long(saldo_as400);

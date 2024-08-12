@@ -4,6 +4,8 @@ import TBPKT_UTILIDADES.TBPKT_CONEXIONBASEDATOS.*;
 import com.ibm.as400.access.*;
 import java.sql.*;
 
+import oracle.jdbc.driver.OracleDriver;
+
 public class TBCL_FUNCIONES_AS400_APORTES extends Object
 {
 //*************************************************************************************************************************
@@ -26,16 +28,15 @@ public static String[] TBFL_Grupo_Empresa(String grupoid)
 String informacion_empresa[] = new String[5];
 try
 {
-//conexion para ejecucion de parametros de funciones
- 
- 
- //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
-
-
+//conexion para ejecucion de parametros de funciones 
+ //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion();   
+ /*
  String[] v_valusu            = new String[3];
  v_valusu                     = TBCL_Validacion.TBFL_ValidarUsuario();
+ */    
  Class.forName("oracle.jdbc.driver.OracleDriver");
- Connection v_conexion_taxb   = DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
+ //Connection v_conexion_taxb   = DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
+ Connection v_conexion_taxb   = new OracleDriver().defaultConnection();
  CallableStatement t_cst8i_1 = v_conexion_taxb.prepareCall("{ call TBPBD_Parametros_FuncionesAS(?,?,?,?) }");
  t_cst8i_1.registerOutParameter(1,Types.VARCHAR);
  t_cst8i_1.registerOutParameter(2,Types.VARCHAR);
@@ -98,11 +99,13 @@ public static String TBFL_Saldos_por_Contrato(String numero_contrato,String fech
  
  //TBCL_Validacion TBCL_Validacion.= new TBCL_Validacion1();   
 
-
+    /*
      String[] v_valusu            = new String[3];
      v_valusu                     = TBCL_Validacion.TBFL_ValidarUsuario();
+    */
      Class.forName("oracle.jdbc.driver.OracleDriver");
-     Connection v_conexion_taxb   = DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
+     //Connection v_conexion_taxb   = DriverManager.getConnection(v_valusu[0],v_valusu[1],v_valusu[2]);
+     Connection v_conexion_taxb   = new OracleDriver().defaultConnection();
      String ruta      = new String();
      String sistema   = new String();
      String usuario   = new String();
@@ -118,7 +121,7 @@ public static String TBFL_Saldos_por_Contrato(String numero_contrato,String fech
      usuario  = t_cst8i_1.getString(3);
      password = t_cst8i_1.getString(4);
      t_cst8i_1.close();
-     v_conexion_taxb.close();
+     //v_conexion_taxb.close();
       //realizo la conexión al sistema sadc2 con un userid y un password
      //estos parametros serán leidos desde tbrefencias des sistema taxb
      AS400 sadc2 = new AS400(sistema);sadc2.setUserId(usuario);sadc2.setPassword(password);

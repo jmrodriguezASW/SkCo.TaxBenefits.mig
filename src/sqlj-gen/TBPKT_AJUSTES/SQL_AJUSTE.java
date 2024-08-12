@@ -1059,9 +1059,9 @@ public static boolean TBPBD_ConexionBD()
 try
   {
    /*[SO_396] Se realiza modificación de llamado por ser método estático TBFL_ValidarUsuario de la clase TBCL_Validacion, no es necesaria la instancia nueva*/ 
- //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
- //TBCL_Validacion  i_valusu = new TBCL_Validacion()
+   //TBCL_Validacion i_valusu = new TBCL_Validacion(); 
    String[] v_valusu          = new String[3];
+   //v_valusu                   = i_valusu.TBFL_ValidarUsuario();
    v_valusu                   = TBCL_Validacion.TBFL_ValidarUsuario();
    DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
    DefaultContext.setDefaultContext(new DefaultContext(v_valusu[0],v_valusu[1],v_valusu[2],false));

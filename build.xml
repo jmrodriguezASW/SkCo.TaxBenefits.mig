@@ -140,7 +140,7 @@
   
   <target name="sqlj-tool">
     <echo message="Translating .sqlj file: ${sqljfile}" />
-    <java fork="yes" classname="sqlj.tools.Sqlj">
+    <java fork="yes" classname="sqlj.tools.Sqlj" jvm="C:\Program Files\Java\jdk1.7.0_80\bin\java.exe">
       <classpath>
         <path refid="library.SQLJ.Runtime"/>
         <path refid="library.Oracle.JDBC"/>
@@ -156,7 +156,7 @@
   
   <target name="compile" description="Compile Java source files" depends="init,clean,sqlj-translate">
     <javac destdir="${output.dir}" classpathref="classpath" debug="${javac.debug}" nowarn="${javac.nowarn}"
-           deprecation="${javac.deprecation}" encoding="Cp1252" source="1.7" target="1.7" includeantruntime="false">
+           deprecation="${javac.deprecation}" encoding="Cp1252" source="1.8" target="1.8" includeantruntime="false">
       <src path="${sources.dir}"/>
     </javac>
   </target>
