@@ -686,8 +686,7 @@ public class TBCS_Informacion_Traslados extends HttpServlet {
                 aRendimientos = aRendimientos+v_diferencia;
                 v_diferencia =0;
               }
-              /**Fin agregado MOS*/
-                          
+              /**Fin agregado MOS*/                          
               /** Agrega YCOP **/
               periodoaporte="";          
               annio = Integer.parseInt(fecha_consignacion.substring(fecha_consignacion.length()-8,4));;
@@ -706,7 +705,7 @@ public class TBCS_Informacion_Traslados extends HttpServlet {
               }               
              /** Fin YCOP **/
                           
-             registro3= "3"+ tipo_documento+ documento+ fecha_consignacion+ tipo_aporte+ capital+ retencion_capital+ rendimientos+ signo;
+             registro3= "3"+ tipo_documento+ documento+ fecha_consignacion+ tipo_aporte+ capital+ retencion_capital+ rendimientos+ signo + periodoaporte;
              fileOut.println(registro3);
 
 		        oldDocumento= documento;
