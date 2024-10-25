@@ -190,6 +190,11 @@ public class TBCS_Informacion_Traslados extends HttpServlet {
         LinkedList Resultado3 = null;
     /**Fin Agregado PMT**/
         
+    /** Agregado YCOP campo Periodo de aporte **/
+    int annio= 1900;
+    String periodoaporte="";
+    /** Fin Agrega YCOP campo Periodo de aporte **/
+        
     String nit_afpOrigen;
     String tipo_documento, documento, fecha_traslado, apellidos, nombres;
     String oldNit_afpOrigen= "", oldDocumento= "", oldFecha_traslado= "";
@@ -682,6 +687,25 @@ public class TBCS_Informacion_Traslados extends HttpServlet {
                 v_diferencia =0;
               }
               /**Fin agregado MOS*/
+                          
+              /** Agrega YCOP **/
+              periodoaporte="";          
+              annio = Integer.parseInt(fecha_consignacion.substring(fecha_consignacion.length()-8,4));;
+                                     
+              if ( annio <= 2012)
+                 {
+                  periodoaporte= "0";
+                 } else if (annio >= 2013 &&  annio <= 2016){
+                  periodoaporte= "1";
+                 } else if (annio >= 2017 ){
+                 if(tipo_aporte.trim().equals("E")){
+                  periodoaporte= "2";
+                 } else if (tipo_aporte.trim().equals("A")) {
+                   periodoaporte= "3";
+                 }
+              }               
+             /** Fin YCOP **/
+                          
              registro3= "3"+ tipo_documento+ documento+ fecha_consignacion+ tipo_aporte+ capital+ retencion_capital+ rendimientos+ signo;
              fileOut.println(registro3);
 
